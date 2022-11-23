@@ -55,6 +55,12 @@
             <version>2.4.5</version>
         </dependency>
 
+        <!-- Thymeleaf -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
         <!-- FRONTEND -->
         <dependency>
             <groupId>org.webjars</groupId>
