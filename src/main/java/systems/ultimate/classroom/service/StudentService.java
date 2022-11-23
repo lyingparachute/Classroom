@@ -19,14 +19,26 @@ public class StudentService {
         this.mapper = mapper;
     }
 
+    @Transactional
     public StudentDto create(StudentDto dto){
         Student student = mapper.map(dto, Student.class);
         Student saved = repository.save(student);
         return mapper.map(saved, StudentDto.class);
     }
 
+    @Transactional
+    public StudentDto update(StudentDto dto){
+        Optional<Student> byId = repository.findById(dto.getId());
+        if(byId.isPresent()){
+            Student student = byId.get();
+            mapper.map(dto, student);
+            Student saved = repository.save(student);
+            return mapper.map(saved, StudentDto.class);
+        }
+        return null;
+    }
 
-    public List<StudentDto> getAll() {
+    public List<StudentDto> fetchAll() {
         List<Student> allStudents = repository.findAll();
         return allStudents.stream().map(student -> mapper.map(student, StudentDto.class)).collect(Collectors.toList());
     }
