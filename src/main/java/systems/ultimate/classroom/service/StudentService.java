@@ -42,4 +42,18 @@ public class StudentService {
         List<Student> allStudents = repository.findAll();
         return allStudents.stream().map(student -> mapper.map(student, StudentDto.class)).collect(Collectors.toList());
     }
+
+    @Transactional
+    public StudentDto fetchById(Long id) {
+        Optional<Student> byId = repository.findById(id);
+        return byId.isPresent() ?
+                mapper.map(byId, StudentDto.class) : null;
+    }
+
+    @Transactional
+    public void remove(Long id) {
+        Student student = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product id: " + id));
+        repository.delete(student);
+    }
 }
