@@ -4,6 +4,8 @@ import systems.ultimate.classroom.enums.FieldOfStudy;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.List;
 
 @Entity
 public class Student {
@@ -21,4 +23,6 @@ public class Student {
 
     private FieldOfStudy fieldOfStudy;
 
+    @ManyToMany
+    private List<Teacher> teachersList;
 }

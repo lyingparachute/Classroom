@@ -4,6 +4,8 @@ import systems.ultimate.classroom.enums.Subject;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.List;
 
 @Entity
 public class Teacher {
@@ -20,4 +22,7 @@ public class Teacher {
     private String email;
 
     private Subject subject;
+
+    @ManyToMany
+    private List<Student> studentsList;
 }
