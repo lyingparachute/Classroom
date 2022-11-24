@@ -1,6 +1,9 @@
 package systems.ultimate.classroom.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import systems.ultimate.classroom.dto.StudentDto;
 import systems.ultimate.classroom.entity.Student;
@@ -44,6 +47,12 @@ public class StudentService {
     public List<StudentDto> fetchAll() {
         List<Student> allStudents = repository.findAll();
         return allStudents.stream().map(student -> mapper.map(student, StudentDto.class)).collect(Collectors.toList());
+    }
+
+    public Page<StudentDto> fetchAllPaginated(int pageNo, int pageSize){
+        Pageable pagable = PageRequest.of(pageNo - 1, pageSize);
+        Page<Student> all = repository.findAll(pagable);
+        return all.map(student -> mapper.map(student, StudentDto.class));
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 package systems.ultimate.classroom.controller;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import systems.ultimate.classroom.service.StudentService;
 import systems.ultimate.classroom.service.TeacherService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("students")
@@ -30,6 +32,18 @@ public class StudentController {
     @GetMapping
     public String getStudents(Model model) {
         model.addAttribute("students", studentService.fetchAll());
+        return "students";
+    }
+
+    @GetMapping("/page/{pageNo}")
+    public String getPaginatedStudents(@PathVariable(value = "pageNo") int pageNo, Model model) {
+        int pageSize = 2;
+        Page<StudentDto> page = studentService.fetchAllPaginated(pageNo, pageSize);
+        List<StudentDto> students = page.getContent();
+        model.addAttribute("students", students);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
         return "students";
     }
 
