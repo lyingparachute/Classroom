@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import systems.ultimate.classroom.dto.StudentDto;
+import systems.ultimate.classroom.dto.TeacherDto;
 import systems.ultimate.classroom.entity.Student;
+import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.repository.StudentRepository;
 
 import javax.transaction.Transactional;
@@ -77,7 +79,9 @@ public class StudentService {
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).collect(Collectors.toList());
     }
 
-    public void assignTeacher() {
-        // TODO
+    @Transactional
+    public void assignTeacher(StudentDto studentDto,TeacherDto teacherDto) {
+        studentDto.getTeachersList().add(mapper.map(teacherDto, Teacher.class));
+        repository.save(mapper.map(studentDto, Student.class));
     }
 }

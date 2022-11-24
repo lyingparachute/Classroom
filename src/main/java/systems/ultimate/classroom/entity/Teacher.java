@@ -6,7 +6,8 @@ import lombok.Setter;
 import systems.ultimate.classroom.enums.Subject;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -29,6 +30,13 @@ public class Teacher {
     @Enumerated(EnumType.STRING)
     private Subject subject;
 
-    @ManyToMany
-    private List<Student> studentsList;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE })
+    @JoinTable(name = "teacher_students",
+            joinColumns = { @JoinColumn(name = "teacher_id") },
+            inverseJoinColumns = { @JoinColumn(name = "student_id") })
+    private Set<Student> studentsList = new HashSet<>();
+
 }

@@ -91,6 +91,7 @@ public class StudentController {
     @GetMapping("delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
         studentService.remove(id);
+
         return "redirect:/students";
     }
 
@@ -100,5 +101,12 @@ public class StudentController {
         model.addAttribute("student", byId);
         model.addAttribute("studentTeachers", byId.getTeachersList());
         return "student-teachers";
+    }
+
+    @GetMapping("edit/{id}")
+    public String editStudent(@PathVariable Long id, Model model) {
+        StudentDto dto = studentService.fetchById(id);
+        model.addAttribute("student", dto);
+        return "student-edit";
     }
 }

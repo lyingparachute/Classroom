@@ -7,7 +7,7 @@ import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.enums.Subject;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -19,7 +19,7 @@ public class TeacherDto implements Serializable {
     private int age;
     private String email;
     private Subject subject;
-    private List<Student> studentsList;
+    private Set<Student> studentsList;
 
     @Override
     public String toString() {

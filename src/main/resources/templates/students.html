@@ -62,6 +62,9 @@
                                 <th rowspan="1" colspan="1" scope="col">
                                     <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=fieldOfStudy&sortDir=' + ${reverseSortDir}}" th:text="#{student.fieldOfStudy}"></a>
                                 </th>
+                                <th rowspan="1" colspan="1" scope="col">
+                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=fieldOfStudy&sortDir=' + ${reverseSortDir}}" th:text="#{student.teachersList}"></a>
+                                </th>
                                 <th rowspan="2" colspan="1" scope="col" th:text="#{students.action}"
                                     class="align-middle"/>
                             </tr>
@@ -74,10 +77,11 @@
                                 <td th:text="${student.age}"/>
                                 <td th:text="${student.email}"/>
                                 <td th:text="${student.fieldOfStudy}"/>
+                                <td th:text="${student.teachersList}"/>
                                 <td>
                                     <a class="btn btn-outline-primary"
                                        th:href="@{/students/{id}/teachers(id=${student.id})}"
-                                       th:text="#{students.viewTeachers}"></a>
+                                       th:text="#{students.view}"></a>
                                     <a class="btn btn-outline-primary"
                                        th:href="@{/students/edit/{id}(id=${student.id})}"
                                        th:text="#{students.edit}"></a>

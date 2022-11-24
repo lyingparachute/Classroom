@@ -11,7 +11,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -45,6 +46,11 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private FieldOfStudy fieldOfStudy;
 
-    @ManyToMany
-    private List<Teacher> teachersList;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "studentsList")
+    private Set<Teacher> teachersList = new HashSet<>();
 }
