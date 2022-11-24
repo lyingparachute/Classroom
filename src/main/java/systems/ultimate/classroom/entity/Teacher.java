@@ -1,5 +1,8 @@
 package systems.ultimate.classroom.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import systems.ultimate.classroom.enums.Subject;
 
 import javax.persistence.Entity;
@@ -9,6 +12,9 @@ import javax.persistence.ManyToMany;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@Getter
+@Setter
 public class Teacher {
 
     @Id
