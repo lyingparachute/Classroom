@@ -11,7 +11,7 @@ public enum FieldOfStudy {
         this.desc = desc;
     }
 
-    public String description() {
+    public String getDesc() {
         return desc;
     }
 
