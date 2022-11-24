@@ -15,6 +15,7 @@ import systems.ultimate.classroom.repository.StudentRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,5 +84,10 @@ public class StudentService {
     public void assignTeacher(StudentDto studentDto,TeacherDto teacherDto) {
         studentDto.getTeachersList().add(mapper.map(teacherDto, Teacher.class));
         repository.save(mapper.map(studentDto, Student.class));
+    }
+
+    public void assignTeachers(Student student, Set<Teacher> teachersList) {
+        teachersList.forEach(teacher -> teacher.addStudent(student));
+        repository.save(student);
     }
 }

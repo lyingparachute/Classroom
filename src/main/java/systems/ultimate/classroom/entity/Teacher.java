@@ -39,4 +39,7 @@ public class Teacher {
             inverseJoinColumns = { @JoinColumn(name = "student_id") })
     private Set<Student> studentsList = new HashSet<>();
 
+    public void addStudent(Student student){
+        this.studentsList.add(student);
+    }
 }

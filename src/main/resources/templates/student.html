@@ -25,7 +25,7 @@
                             <li class="list-group-item" th:text="'Email: ' + ${student.email}"></li>
                             <li class="list-group-item" th:text="'Age: ' + ${student.age}"></li>
                             <li class="list-group-item" th:text="'Field of study: ' + ${student.fieldOfStudy.desc}"></li>
-                            <li class="list-group-item" th:text="'Teachers: ' + ${student.teachersList}"></li>
+                            <li class="list-group-item" th:text="'Teachers: ' + ${student.teachersList.size()}"></li>
                         </ul>
 
                         <div class="row m-2">

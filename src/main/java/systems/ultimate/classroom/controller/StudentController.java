@@ -84,6 +84,8 @@ public class StudentController {
         if (result.hasErrors()){
             return "student-form";
         }
+        student.getTeachersList();
+        studentService.assignTeachers(student, student.getTeachersList());
         studentService.create(mapper.map(student, StudentDto.class));
         return "student";
     }
