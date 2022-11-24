@@ -31,19 +31,28 @@ public class StudentController {
 
     @GetMapping
     public String getStudents(Model model) {
-        model.addAttribute("students", studentService.fetchAll());
-        return "students";
+//        Page<StudentDto> studentDtos = studentService.fetchAllPaginated(1, 2, "firstName", "asc");
+//        model.addAttribute("students", studentDtos);
+        return getPaginatedStudents(1, "firstName", "asc", model);
     }
 
     @GetMapping("/page/{pageNo}")
-    public String getPaginatedStudents(@PathVariable(value = "pageNo") int pageNo, Model model) {
+    public String getPaginatedStudents(@PathVariable(value = "pageNo") int pageNo,
+                                       @RequestParam("sortField") String sortField,
+                                       @RequestParam("sortDir") String sortDir,
+                                       Model model) {
         int pageSize = 2;
-        Page<StudentDto> page = studentService.fetchAllPaginated(pageNo, pageSize);
+        Page<StudentDto> page = studentService.fetchAllPaginated(pageNo, pageSize, sortField, sortDir);
         List<StudentDto> students = page.getContent();
         model.addAttribute("students", students);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
         return "students";
     }
 
