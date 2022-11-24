@@ -53,8 +53,4 @@ public class Student {
             },
             mappedBy = "studentsList")
     private Set<Teacher> teachersList = new HashSet<>();
-
-    public void addTeacher (Teacher teacher){
-        this.teachersList.add(teacher);
-    }
 }

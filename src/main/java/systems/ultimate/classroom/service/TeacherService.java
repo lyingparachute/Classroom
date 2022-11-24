@@ -2,7 +2,6 @@ package systems.ultimate.classroom.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import systems.ultimate.classroom.dto.StudentDto;
 import systems.ultimate.classroom.dto.TeacherDto;
 import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.entity.Teacher;
@@ -11,6 +10,7 @@ import systems.ultimate.classroom.repository.TeacherRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,10 +61,12 @@ public class TeacherService {
         repository.delete(teacher);
     }
 
-    public void assignStudent(TeacherDto teacherDto, StudentDto studentDto) {
-        teacherDto.getStudentsList().add(mapper.map(studentDto, Student.class));
-        repository.save(mapper.map(teacherDto, Teacher.class));
+    public void assignStudent(Teacher teacher, Student student) {
+        teacher.addStudent(student);
+        repository.save(teacher);
     }
-
-
+    public void assignStudents(Teacher teacher, Set<Student> students) {
+        students.forEach(teacher::addStudent);
+        repository.save(teacher);
+    }
 }
