@@ -31,8 +31,6 @@ public class StudentController {
 
     @GetMapping
     public String getStudents(Model model) {
-//        Page<StudentDto> studentDtos = studentService.fetchAllPaginated(1, 2, "firstName", "asc");
-//        model.addAttribute("students", studentDtos);
         return getPaginatedStudents(1, "firstName", "asc", model);
     }
 
