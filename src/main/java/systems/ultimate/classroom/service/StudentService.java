@@ -40,6 +40,7 @@ public class StudentService {
         return null;
     }
 
+    @Transactional
     public List<StudentDto> fetchAll() {
         List<Student> allStudents = repository.findAll();
         return allStudents.stream().map(student -> mapper.map(student, StudentDto.class)).collect(Collectors.toList());
@@ -48,8 +49,7 @@ public class StudentService {
     @Transactional
     public StudentDto fetchById(Long id) {
         Optional<Student> byId = repository.findById(id);
-        return byId.isPresent() ?
-                mapper.map(byId, StudentDto.class) : null;
+        return byId.map(student -> mapper.map(student, StudentDto.class)).orElse(null);
     }
 
     @Transactional
@@ -57,5 +57,14 @@ public class StudentService {
         Student student = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product id: " + id));
         repository.delete(student);
+    }
+
+    public List<StudentDto> findByFirstOrLastName(String searched){
+        List<Student> found = repository.findAllByFirstNameOrLastName(searched);
+        return found.stream().map(s -> mapper.map(s, StudentDto.class)).collect(Collectors.toList());
+    }
+
+    public void assignTeacher() {
+        // TODO
     }
 }
