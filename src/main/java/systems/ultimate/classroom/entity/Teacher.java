@@ -18,9 +18,9 @@ public class Teacher {
     @GeneratedValue
     private Long id;
 
-    private String FirstName;
+    private String firstName;
 
-    private String LastName;
+    private String lastName;
 
     private int age;
 

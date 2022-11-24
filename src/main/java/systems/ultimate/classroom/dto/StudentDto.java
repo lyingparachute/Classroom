@@ -14,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class StudentDto implements Serializable {
     private Long id;
-    private String FirstName;
-    private String LastName;
+    private String firstName;
+    private String lastName;
     private int age;
     private String email;
     private FieldOfStudy fieldOfStudy;
@@ -23,6 +23,6 @@ public class StudentDto implements Serializable {
 
     @Override
     public String toString() {
-        return FirstName + " " + LastName;
+        return firstName + " " + lastName;
     }
 }
