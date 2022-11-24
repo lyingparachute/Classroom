@@ -1,6 +1,9 @@
 package systems.ultimate.classroom.enums;
 
 
+import lombok.Getter;
+
+@Getter
 public enum Subject {
     MATHS("Mathematics"),
     SCIENCE("Science"),
@@ -12,7 +15,7 @@ public enum Subject {
         this.desc = desc;
     }
 
-    public String description() {
+    public String getDesc() {
         return desc;
     }
 }

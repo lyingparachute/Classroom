@@ -86,6 +86,7 @@ public class StudentService {
         repository.save(mapper.map(studentDto, Student.class));
     }
 
+    @Transactional
     public void assignTeachers(Student student, Set<Teacher> teachersList) {
         teachersList.forEach(teacher -> teacher.addStudent(student));
         repository.save(student);

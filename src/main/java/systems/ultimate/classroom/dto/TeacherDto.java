@@ -24,6 +24,6 @@ public class TeacherDto implements Serializable {
     @Override
     public String toString() {
         return firstName + " " + lastName +
-                ", subject=" + subject.description();
+                ", subject=" + subject.getDesc();
     }
 }

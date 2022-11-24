@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Classroom</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.15.4/css/all.min.css}" type="text/css"/>
+</head>
+<body>
+<section class="py-5 mt-0 align-items-start d-flex bg-light"
+         style="min-height: 75vh;
+                min-width: 75vh">
+    <div class="container-fluid text-center">
+        <div class="d-flex justify-content-center">
+            <div class="card ">
+                <h2 class="card-header my-3"
+                    th:text="#{teachers.header}"></h2>
+                <div class="card-body">
+                    <div class="h4 m-auto" th:text="${description}"></div>
+
+                    <form th:action="@{/teachers/search}"
+                          method="get">
+                        <div class="row justify-content-end mb-1 mt-3">
+                            <div class="col-8 col-sm-8">
+                                <div class="form-group input-group">
+                                    <input type="search" name="name" size="10"
+                                           class="form-control"
+                                           th:placeholder="#{teachers.input}" required
+                                           th:value="${name}"/>
+                                    <input type="submit"
+                                           value="Search"
+                                           class="btn btn-outline-success"
+                                           th:value="#{teachers.search}"/>
+                                </div>
+                            </div>
+                            <div class="col-2 col-sm-2">
+                                <a class="btn btn-light"
+                                   th:href="@{/teachers}"
+                                   th:text="#{teachers.clear}"></a>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-start mb-1 mt-3">
+                            <div class="col-4 col-sm-4">
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{/teachers/new}"
+                                   th:text="#{teachers.new}"></a>
+                            </div>
+                        </div>
+
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <caption th:text="${tableDesc}">
+                                <thead>
+                                <tr>
+                                    <th rowspan="2" colspan="1" scope="col" th:text="#{teacher.firstName}"
+                                        class="align-middle"></th>
+                                    <th rowspan="1" colspan="1" scope="col" th:text="#{teacher.lastName}"></th>
+                                    <th rowspan="1" colspan="1" scope="col" th:text="#{teacher.age}"></th>
+                                    <th rowspan="1" colspan="1" scope="col" th:text="#{teacher.email}"></th>
+                                    <th rowspan="1" colspan="1" scope="col" th:text="#{teacher.fieldOfStudy}"></th>
+                                    <th rowspan="2" colspan="1" scope="col" th:text="#{teachers.action}"
+                                        class="align-middle"/>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="teacher: ${teachers}">
+                                    <td th:text="${teacher.firstName}"/>
+                                    <td th:text="${teacher.lastName}"/>
+                                    <td th:text="${teacher.age}"/>
+                                    <td th:text="${teacher.email}"/>
+                                    <td th:text="${teacher.fieldOfStudy}"/>
+                                    <td>
+                                        <a class="btn btn-outline-primary"
+                                           th:href="@{/teachers/{id}/teachers(id=${teacher.id})}"
+                                           th:text="#{teachers.view}"></a>
+                                        <a class="btn btn-outline-primary"
+                                           th:href="@{/teachers/edit/{id}(id=${teacher.id})}"
+                                           th:text="#{teachers.edit}"></a>
+                                        <a class="btn btn-outline-danger"
+                                           th:href="@{/teachers/delete/{id}(id=${teacher.id})}"
+                                           th:text="#{teachers.delete}"></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- Scripts -->
+<script th:src="@{/webjars/jquery/3.6.0/dist/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
+</body>
+</html>
