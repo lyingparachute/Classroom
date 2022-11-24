@@ -43,42 +43,72 @@
                         </div>
 
                     </form>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th rowspan="2" colspan="1" scope="col" th:text="#{student.firstName}"
-                                        class="align-middle"></th>
-                                    <th rowspan="1" colspan="1" scope="col" th:text="#{student.lastName}"></th>
-                                    <th rowspan="1" colspan="1" scope="col" th:text="#{student.age}"></th>
-                                    <th rowspan="1" colspan="1" scope="col" th:text="#{student.email}"></th>
-                                    <th rowspan="1" colspan="1" scope="col" th:text="#{student.fieldOfStudy}"></th>
-                                    <th rowspan="2" colspan="1" scope="col" th:text="#{students.action}"
-                                        class="align-middle"/>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="student: ${students}">
-                                    <td th:text="${student.firstName}"/>
-                                    <td th:text="${student.lastName}"/>
-                                    <td th:text="${student.age}"/>
-                                    <td th:text="${student.email}"/>
-                                    <td th:text="${student.fieldOfStudy}"/>
-                                    <td>
-                                        <a class="btn btn-outline-primary"
-                                           th:href="@{/students/{id}/teachers(id=${student.id})}"
-                                           th:text="#{students.viewTeachers}"></a>
-                                        <a class="btn btn-outline-primary"
-                                           th:href="@{/students/edit/{id}(id=${student.id})}"
-                                           th:text="#{students.edit}"></a>
-                                        <a class="btn btn-outline-danger"
-                                           th:href="@{/students/delete/{id}(id=${student.id})}"
-                                           th:text="#{students.delete}"></a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th rowspan="2" colspan="1" scope="col" th:text="#{student.firstName}"
+                                    class="align-middle"></th>
+                                <th rowspan="1" colspan="1" scope="col" th:text="#{student.lastName}"></th>
+                                <th rowspan="1" colspan="1" scope="col" th:text="#{student.age}"></th>
+                                <th rowspan="1" colspan="1" scope="col" th:text="#{student.email}"></th>
+                                <th rowspan="1" colspan="1" scope="col" th:text="#{student.fieldOfStudy}"></th>
+                                <th rowspan="2" colspan="1" scope="col" th:text="#{students.action}"
+                                    class="align-middle"/>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="student: ${students}">
+                                <td th:text="${student.firstName}"/>
+                                <td th:text="${student.lastName}"/>
+                                <td th:text="${student.age}"/>
+                                <td th:text="${student.email}"/>
+                                <td th:text="${student.fieldOfStudy}"/>
+                                <td>
+                                    <a class="btn btn-outline-primary"
+                                       th:href="@{/students/{id}/teachers(id=${student.id})}"
+                                       th:text="#{students.viewTeachers}"></a>
+                                    <a class="btn btn-outline-primary"
+                                       th:href="@{/students/edit/{id}(id=${student.id})}"
+                                       th:text="#{students.edit}"></a>
+                                    <a class="btn btn-outline-danger"
+                                       th:href="@{/students/delete/{id}(id=${student.id})}"
+                                       th:text="#{students.delete}"></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div th:if="${totalPages > 1}">
+                            <div class="row m-1">
+                                <div class="col-2">
+                                    Total Rows: [[${totalItems}]]
+                                </div>
+                                <div class="col-3">
+                                                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                                    <a th:if="${currentPage != i}"
+                                                       th:href="@{'/students/page/' + ${i}}">[[${i}]]</a>
+                                                    <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                                                </span>
+                                </div>
+                                <div class="col-1">
+                                    <a th:if="${currentPage > 1}"
+                                       th:href="@{'/students/page/' + ${currentPage - 1}}">Previous</a>
+                                    <span th:unless="${currentPage > 1}">Previous</span>
+                                </div>
+                                <div class="col-1">
+                                    <a th:if="${currentPage < totalPages}"
+                                       th:href="@{'/students/page/' + ${currentPage + 1}}">Next</a>
+                                    <span th:unless="${currentPage < totalPages}">Next</span>
+                                </div>
+
+                                <div class="col-1">
+                                    <a th:if="${currentPage < totalPages}"
+                                       th:href="@{'/students/page/' + ${totalPages}}">Last</a>
+                                    <span th:unless="${currentPage < totalPages}">Last</span>
+                                </div>
+                            </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
