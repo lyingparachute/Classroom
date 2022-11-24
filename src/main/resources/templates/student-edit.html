@@ -15,7 +15,7 @@
         <div class="d-flex justify-content-center">
             <div class="card shadow">
                 <h1 class="card-header text-center m-4"
-                    th:text="#{students.new}"></h1>
+                    th:text="#{student.edit.header}"></h1>
                 <div class="card-body mx-4">
                     <form class="form-group needs-validation"
                           th:object="${student}"
@@ -94,7 +94,7 @@
                             <div class="col-sm">
                                 <select class="form-select" id="field_of_study" th:field="*{fieldOfStudy}">
                                     <option th:each="fieldOpt : ${T(systems.ultimate.classroom.enums.FieldOfStudy).values()}"
-                                    th:value="${fieldOpt}" th:text="${fieldOpt.desc}">
+                                            th:value="${fieldOpt}" th:text="${fieldOpt.desc}">
                                     </option>
                                 </select>
                             </div>
@@ -106,21 +106,19 @@
                                 <span th:text="#{student.teachersList}"></span>
                             </label>
                             <div class="col-sm text-left">
-                                <th:block th:each="fieldOpt : ${teachers}">
+                                <th:block th:each="fieldOpt : ${student.teachersList}">
                                     <div>
-                                        <input class="form-check-input m-2" type="checkbox" value="" id="teachers_list" th:field="*{teachersList}"
+                                        <input class="form-check-input m-2" type="checkbox" value="" id="teachers_list"
+                                               th:field="*{teachersList}"
                                                th:value="${fieldOpt.id}" th:text="${fieldOpt}">
                                     </div>
                                 </th:block>
-
-
                             </div>
                         </div>
-
                         <div class="row mb-4 justify-content-center">
                             <div class="col-md-3">
                                 <button type="submit" name="add" class="btn btn-primary"
-                                        th:text="#{student.form.add}"></button>
+                                        th:text="#{student.edit.submit}"></button>
                             </div>
                         </div>
 

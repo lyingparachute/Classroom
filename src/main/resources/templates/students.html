@@ -80,7 +80,7 @@
                                 <td th:text="${student.teachersList}"/>
                                 <td>
                                     <a class="btn btn-outline-primary"
-                                       th:href="@{/students/{id}/teachers(id=${student.id})}"
+                                       th:href="@{/students/{id}(id=${student.id})}"
                                        th:text="#{students.view}"></a>
                                     <a class="btn btn-outline-primary"
                                        th:href="@{/students/edit/{id}(id=${student.id})}"
