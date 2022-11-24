@@ -20,4 +20,9 @@ public class StudentDto implements Serializable {
     private String email;
     private FieldOfStudy fieldOfStudy;
     private List<Teacher> teachersList;
+
+    @Override
+    public String toString() {
+        return FirstName + " " + LastName;
+    }
 }
