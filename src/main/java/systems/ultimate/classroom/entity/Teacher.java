@@ -32,8 +32,7 @@ public class Teacher {
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE })
+                    CascadeType.PERSIST})
     @JoinTable(name = "teacher_students",
             joinColumns = { @JoinColumn(name = "teacher_id") },
             inverseJoinColumns = { @JoinColumn(name = "student_id") })

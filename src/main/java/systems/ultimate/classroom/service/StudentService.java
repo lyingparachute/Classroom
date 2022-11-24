@@ -72,6 +72,7 @@ public class StudentService {
     public void remove(Long id) {
         Student student = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product id: " + id));
+        student.getTeachersList().forEach(student::removeTeacher);
         repository.delete(student);
     }
 
