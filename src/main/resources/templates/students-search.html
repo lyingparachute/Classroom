@@ -26,7 +26,7 @@
                                     <input type="search" name="name" size="10"
                                            class="form-control"
                                            th:placeholder="#{students.input}" required
-                                            th:value="${name}"/>
+                                           th:value="${name}"/>
                                     <input type="submit"
                                            value="Search"
                                            class="btn btn-outline-success"
@@ -40,10 +40,18 @@
                             </div>
                         </div>
 
+                        <div class="row justify-content-start mb-1 mt-3">
+                            <div class="col-4 col-sm-4">
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{/students/new}"
+                                   th:text="#{students.new}"></a>
+                            </div>
+                        </div>
+
                     </form>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <caption th:text="${tableDesc}">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <caption th:text="${tableDesc}">
                                 <thead>
                                 <tr>
                                     <th rowspan="2" colspan="1" scope="col" th:text="#{student.firstName}"
@@ -76,8 +84,8 @@
                                     </td>
                                 </tr>
                                 </tbody>
-                            </table>
-                        </div>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
