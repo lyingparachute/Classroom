@@ -15,87 +15,30 @@
         <div class="d-flex justify-content-center">
             <div class="card shadow">
                 <h1 class="card-header text-center m-4"
-                    th:text="#{student.view} + ${student.firstName} + ${student.firstName} "></h1>
+                    style="color: forestgreen"
+                    th:text="#{student.success}"></h1>
                 <div class="card-body mx-4">
 
-                        <div class="row mb-4">
-                            <label class="col-form-label col-sm-4"
-                                   for="first_name">
-                                <span th:text="#{student.firstName}"></span>
-                            </label>
-                            <div class="col-sm">
-                                <input class="form-control"
-                                       type="text"
-                                       id="first_name"
-                                       th:field="*{firstName}"
-                                />
-                            </div>
-                            <div class="alert alert-danger" th:if="${#fields.hasErrors('firstName')}"
-                                 th:errors="*{firstName}"></div>
+                        <ul class="list-group">
+                            <li class="list-group-item" th:text="'First Name: ' + ${student.firstName}"></li>
+                            <li class="list-group-item" th:text="'Last Name: ' + ${student.lastName}"></li>
+                            <li class="list-group-item" th:text="'Email: ' + ${student.email}"></li>
+                            <li class="list-group-item" th:text="'Age: ' + ${student.age}"></li>
+                            <li class="list-group-item" th:text="'Field of study: ' + ${student.fieldOfStudy.desc}"></li>
+                            <li class="list-group-item" th:text="'Teachers: ' + ${student.teachersList}"></li>
+                        </ul>
+
+                        <div class="row m-2">
+                            <a class="btn btn-primary" th:href="@{/students}" th:text="#{students.back}"></a>
                         </div>
 
-                        <div class="row mb-4">
-                            <label class="col-form-label col-sm-4"
-                                   for="last_name">
-                                <span th:text="#{student.lastName}"></span>
-                            </label>
-                            <div class="col-sm">
-                                <input class="form-control"
-                                       type="text"
-                                       id="last_name"
-                                       th:field="*{lastName}"
-                                />
-                            </div>
-                            <div class="alert alert-danger" th:if="${#fields.hasErrors('lastName')}"
-                                 th:errors="*{lastName}"></div>
+                        <div class="row m-2">
+                            <a class="btn btn-outline-primary" th:href="@{/students/edit/{id}(id=${student.id})}" th:text="#{students.edit}"></a>
                         </div>
 
-                        <div class="row mb-4">
-                            <label class="col-form-label col-sm-4"
-                                   for="email">
-                                <span th:text="#{student.email}"></span>
-                            </label>
-                            <div class="col-sm">
-                                <input class="form-control"
-                                       type="text"
-                                       id="email"
-                                       th:field="*{email}"
-                                />
-                            </div>
-                            <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}"
-                                 th:errors="*{email}"></div>
-                        </div>
-
-
-                        <div class="row mb-4">
-                            <label class="col-sm-4 col-form-label"
-                                   for="age">
-                                <span th:text="#{student.age}"></span>
-                            </label>
-                            <div class="col-sm">
-                                <input class="form-control"
-                                       type="number" id="age"
-                                       th:field="*{age}"/>
-                            </div>
-                            <div class="alert alert-danger" th:if="${#fields.hasErrors('age')}"
-                                 th:errors="*{age}">
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label class="col-form-label col-sm-4"
-                                   for="field_of_study">
-                                <span th:text="#{student.fieldOfStudy}"></span>
-                            </label>
-                            <div class="col-sm">
-                                <select class="form-select" id="field_of_study" th:field="*{fieldOfStudy}">
-                                    <option th:each="fieldOpt : ${T(systems.ultimate.classroom.enums.FieldOfStudy).values()}"
-                                    th:value="${fieldOpt}" th:text="${fieldOpt.desc}">
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
+                    <div class="row m-2">
+                        <a class="btn btn-outline-danger" th:href="@{/students/delete/{id}(id=${student.id})}" th:text="#{students.delete}"></a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -5,10 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import systems.ultimate.classroom.enums.Subject;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -29,6 +26,7 @@ public class Teacher {
 
     private String email;
 
+    @Enumerated(EnumType.STRING)
     private Subject subject;
 
     @ManyToMany
