@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<!--Navigation Bar-->
+<div th:replace="fragments/navBar :: nav"></div>
+
+<section class="py-5 mt-0 align-items-start d-flex bg-light"
+         style="min-height: 75vh;">
+    <div class="container w-50">
+        <div class="d-flex justify-content-center">
+            <div class="card shadow">
+                <h1 class="card-header text-center m-4"
+                    style="color: forestgreen"
+                    th:text="#{teacher.edit.success}"></h1>
+                <div class="card-body mx-4">
+
+                        <ul class="list-group">
+                            <li class="list-group-item" th:text="#{teacher.firstName} + ': ' + ${teacher.firstName}"></li>
+                            <li class="list-group-item" th:text="#{teacher.lastName} + ': ' + ${teacher.lastName}"></li>
+                            <li class="list-group-item" th:text="#{teacher.email} + ': ' + ${teacher.email}"></li>
+                            <li class="list-group-item" th:text="#{teacher.age} + ': ' + ${teacher.age}"></li>
+                            <li class="list-group-item" th:text="#{teacher.subject} + ': '  + ${teacher.subject.desc}"></li>
+                            <li class="list-group-item" th:text="#{teacher.no.of.students} + ': '  + ${teacher.studentsList.size()}"></li>
+                        </ul>
+
+                        <div class="row m-2">
+                            <a class="btn btn-primary" th:href="@{/teachers}" th:text="#{teachers.back}"></a>
+                        </div>
+
+                        <div class="row m-2">
+                            <a class="btn btn-outline-primary" th:href="@{/teachers/edit/{id}(id=${teacher.id})}" th:text="#{teachers.edit}"></a>
+                        </div>
+
+                    <div class="row m-2">
+                        <a class="btn btn-outline-danger" th:href="@{/teachers/delete/{id}(id=${teacher.id})}" th:text="#{teachers.delete}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

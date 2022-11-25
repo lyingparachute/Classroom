@@ -84,7 +84,7 @@ public class TeacherController {
         }
         teacherService.assignStudents(teacher, teacher.getStudentsList());
         teacherService.create(mapper.map(teacher, TeacherDto.class));
-        return "teacher";
+        return "teacher-add-success";
     }
 
     @GetMapping("delete/{id}")
@@ -97,6 +97,7 @@ public class TeacherController {
     public String editTeacher(@PathVariable Long id, Model model) {
         TeacherDto dto = teacherService.fetchById(id);
         model.addAttribute("teacher", dto);
+        model.addAttribute("students", studentService.fetchAll());
         return "teacher-edit-form";
     }
 

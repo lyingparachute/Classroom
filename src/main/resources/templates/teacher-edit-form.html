@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<!--Navigation Bar-->
+<div th:replace="fragments/navBar :: nav"></div>
+
+<section class="py-5 mt-0 align-items-start d-flex bg-light"
+         style="min-height: 75vh;">
+    <div class="container w-50">
+        <div class="d-flex justify-content-center">
+            <div class="card shadow">
+                <h1 class="card-header text-center m-4"
+                    th:text="#{teachers.new}"></h1>
+                <div class="card-body mx-4">
+                    <form class="form-group needs-validation"
+                          th:object="${teacher}"
+                          th:action="@{/teachers/new}"
+                          th:method="post">
+
+                        <div class="row mb-4">
+                            <label class="col-form-label col-sm-4"
+                                   for="first_name">
+                                <span th:text="#{teacher.firstName}"></span>
+                            </label>
+                            <div class="col-sm">
+                                <input class="form-control"
+                                       type="text"
+                                       id="first_name"
+                                       th:field="*{firstName}"
+                                />
+                            </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('firstName')}"
+                                 th:errors="*{firstName}"></div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <label class="col-form-label col-sm-4"
+                                   for="last_name">
+                                <span th:text="#{teacher.lastName}"></span>
+                            </label>
+                            <div class="col-sm">
+                                <input class="form-control"
+                                       type="text"
+                                       id="last_name"
+                                       th:field="*{lastName}"
+                                />
+                            </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('lastName')}"
+                                 th:errors="*{lastName}"></div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <label class="col-form-label col-sm-4"
+                                   for="email">
+                                <span th:text="#{teacher.email}"></span>
+                            </label>
+                            <div class="col-sm">
+                                <input class="form-control"
+                                       type="text"
+                                       id="email"
+                                       th:field="*{email}"
+                                />
+                            </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}"
+                                 th:errors="*{email}"></div>
+                        </div>
+
+
+                        <div class="row mb-4">
+                            <label class="col-sm-4 col-form-label"
+                                   for="age">
+                                <span th:text="#{teacher.age}"></span>
+                            </label>
+                            <div class="col-sm">
+                                <input class="form-control"
+                                       type="number" id="age"
+                                       th:field="*{age}"/>
+                            </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('age')}"
+                                 th:errors="*{age}">
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <label class="col-form-label col-sm-4"
+                                   for="field_of_study">
+                                <span th:text="#{teacher.subject}"></span>
+                            </label>
+                            <div class="col-sm">
+                                <select class="form-select" id="field_of_study" th:field="*{subject}">
+                                    <option th:each="fieldOpt : ${T(systems.ultimate.classroom.enums.Subject).values()}"
+                                    th:value="${fieldOpt}" th:text="${fieldOpt.desc}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <label class="col-form-label col-sm-4"
+                                   for="students_list">
+                                <span th:text="#{teacher.studentList}"></span>
+                            </label>
+                            <div class="col-sm text-left">
+                                <th:block th:each="fieldOpt : ${teachers}">
+                                    <div>
+                                        <input class="form-check-input m-2" type="checkbox" value="" id="students_list" th:field="*{studentsList}"
+                                               th:value="${fieldOpt.id}" th:text="${fieldOpt}">
+                                    </div>
+                                </th:block>
+
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-4 justify-content-center">
+                            <div class="col-md-4">
+                                <button type="submit" name="add" class="btn btn-primary"
+                                        th:text="#{teacher.form.add}"></button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
