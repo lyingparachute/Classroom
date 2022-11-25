@@ -15,12 +15,12 @@
                 <div class="card-body mx-4">
 
                         <ul class="list-group">
-                            <li class="list-group-item" th:text="#{student.firstName} + ' ' + ${student.firstName}"></li>
-                            <li class="list-group-item" th:text="#{student.lastName} + ' ' + ${student.lastName}"></li>
-                            <li class="list-group-item" th:text="#{student.email} + ' ' + ${student.email}"></li>
-                            <li class="list-group-item" th:text="#{student.age} + ' ' + ${student.age}"></li>
-                            <li class="list-group-item" th:text="#{student.fieldOfStudy} + ' '  + ${student.fieldOfStudy.desc}"></li>
-                            <li class="list-group-item" th:text="#{student.no.of.teachers} + ' '  + ${student.teachersList.size()}"></li>
+                            <li class="list-group-item" th:text="#{student.firstName} + ': ' + ${student.firstName}"></li>
+                            <li class="list-group-item" th:text="#{student.lastName} + ': ' + ${student.lastName}"></li>
+                            <li class="list-group-item" th:text="#{student.email} + ': ' + ${student.email}"></li>
+                            <li class="list-group-item" th:text="#{student.age} + ': ' + ${student.age}"></li>
+                            <li class="list-group-item" th:text="#{student.fieldOfStudy} + ': '  + ${student.fieldOfStudy.desc}"></li>
+                            <li class="list-group-item" th:text="#{student.no.of.teachers} + ': '  + ${student.teachersList}"></li>
                         </ul>
 
                         <div class="row m-2">

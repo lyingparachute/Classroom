@@ -61,7 +61,7 @@
                                     <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=fieldOfStudy&sortDir=' + ${reverseSortDir}}" th:text="#{student.fieldOfStudy}"></a>
                                 </th>
                                 <th rowspan="1" colspan="1" scope="col">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=fieldOfStudy&sortDir=' + ${reverseSortDir}}" th:text="#{student.teachersList}"></a>
+                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=fieldOfStudy&sortDir=' + ${reverseSortDir}}" th:text="#{student.no.of.teachers}"></a>
                                 </th>
                                 <th rowspan="2" colspan="1" scope="col" th:text="#{students.action}"
                                     class="align-middle"/>
@@ -75,7 +75,7 @@
                                 <td th:text="${student.age}"/>
                                 <td th:text="${student.email}"/>
                                 <td th:text="${student.fieldOfStudy}"/>
-                                <td th:text="${student.teachersList}"/>
+                                <td th:text="${student.teachersList.size()}"/>
                                 <td>
                                     <a class="btn btn-outline-primary"
                                        th:href="@{/students/{id}(id=${student.id})}"
@@ -105,20 +105,23 @@
                                 </div>
                                 <div class="col-2">
                                     <a th:if="${currentPage > 1}"
-                                       th:href="@{'/students/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}} ">Previous</a>
-                                    <span th:unless="${currentPage > 1}">Previous</span>
+                                       th:href="@{'/students/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                    th:text="#{table.previous}"></a>
+                                    <span th:unless="${currentPage > 1}" th:text="#{table.previous}"></span>
                                 </div>
 
                                 <div class="col-1">
                                     <a th:if="${currentPage < totalPages}"
-                                       th:href="@{'/students/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
-                                    <span th:unless="${currentPage < totalPages}">Next</span>
+                                       th:href="@{'/students/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                       th:text="#{table.next}"></a>
+                                    <span th:unless="${currentPage < totalPages}" th:text="#{table.next}"></span>
                                 </div>
 
                                 <div class="col-1">
                                     <a th:if="${currentPage < totalPages}"
-                                       th:href="@{'/students/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
-                                    <span th:unless="${currentPage < totalPages}">Last</span>
+                                       th:href="@{'/students/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                       th:text="#{table.last}"></a>
+                                    <span th:unless="${currentPage < totalPages}" th:text="#{table.last}"></span>
                                 </div>
                             </div>
                         </div>
