@@ -19,6 +19,7 @@
                           method="post">
 
                         <input hidden="true" type="text" id="id_input_id" th:field="*{id}">
+
                         <div class="row mb-4">
                             <label class="col-form-label col-sm-4"
                                    for="first_name">
@@ -103,9 +104,9 @@
                                 <span th:text="#{student.teachersList}"></span>
                             </label>
                             <div class="col-sm text-left">
-                                <th:block th:each="fieldOpt : ${student.teachersList}">
+                                <th:block th:each="fieldOpt : ${teachers}">
                                     <div>
-                                        <input class="form-check-input m-2" type="checkbox" value="" id="teachers_list"
+                                        <input class="form-check-input m-2" type="checkbox" id="teachers_list"
                                                th:field="*{teachersList}"
                                                th:value="${fieldOpt.id}" th:text="${fieldOpt}">
                                     </div>
