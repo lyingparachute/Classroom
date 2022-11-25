@@ -14,27 +14,75 @@
                     th:text="#{student.view} + ' ' + ${student.id}"></h1>
                 <div class="card-body mx-4">
 
-                        <ul class="list-group">
-                            <li class="list-group-item" th:text="#{student.firstName} + ': ' + ${student.firstName}"></li>
-                            <li class="list-group-item" th:text="#{student.lastName} + ': ' + ${student.lastName}"></li>
-                            <li class="list-group-item" th:text="#{student.email} + ': ' + ${student.email}"></li>
-                            <li class="list-group-item" th:text="#{student.age} + ': ' + ${student.age}"></li>
-                            <li class="list-group-item" th:text="#{student.fieldOfStudy} + ': '  + ${student.fieldOfStudy.desc}"></li>
-                            <li class="list-group-item" th:text="#{student.no.of.teachers} + ': '  + ${student.teachersList}"></li>
-                        </ul>
-
-                        <div class="row m-2">
-                            <a class="btn btn-primary" th:href="@{/students}" th:text="#{students.back}"></a>
+                    <ul class="list-group list-group-root well">
+                        <li class="list-group-item" th:text="#{student.firstName} + ': ' + ${student.firstName}"></li>
+                        <li class="list-group-item" th:text="#{student.lastName} + ': ' + ${student.lastName}"></li>
+                        <li class="list-group-item" th:text="#{student.email} + ': ' + ${student.email}"></li>
+                        <li class="list-group-item" th:text="#{student.age} + ': ' + ${student.age}"></li>
+                        <li class="list-group-item"
+                            th:text="#{student.fieldOfStudy} + ': '  + ${student.fieldOfStudy.desc}"></li>
+                        <li class="list-group-item">List of teachers:
+                            <ul class="list-group">
+                                <a class="list-group-item"
+                                    th:href="@{/teachers/{id}(id=${fieldOpt.id})}"
+                                    th:each="fieldOpt : ${student.teachersList}"
+                                    th:value="${fieldOpt.id}"
+                                    th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
+                                </a>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="list-group list-group-root well">
+                        <a class="list-group-item" th:text="#{student.firstName} + ': ' + ${student.firstName}"></a>
+                        <a class="list-group-item" th:text="#{student.lastName} + ': ' + ${student.lastName}"></a>
+                        <a class="list-group-item" th:text="#{student.email} + ': ' + ${student.email}"></a>
+                        <a class="list-group-item" th:text="#{student.age} + ': ' + ${student.age}"></a>
+                        <a class="list-group-item"
+                           th:text="#{student.fieldOfStudy} + ': '  + ${student.fieldOfStudy.desc}"></a>
+                        <div class="list-group">
+                            <a class="list-group-item">name of something</a>
+                            <div class="list-group">
+                                <a class="list-group-item"
+                                   style="margin-left: 10px"
+                                   th:each="fieldOpt : ${student.teachersList}"
+                                   th:value="${fieldOpt.id}"
+                                   th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
+                                </a>
+                            </div>
                         </div>
-
-                        <div class="row m-2">
-                            <a class="btn btn-outline-primary" th:href="@{/students/edit/{id}(id=${student.id})}" th:text="#{students.edit}"></a>
-                        </div>
-
-                    <div class="row m-2">
-                        <a class="btn btn-outline-danger" th:href="@{/students/delete/{id}(id=${student.id})}" th:text="#{students.delete}"></a>
                     </div>
+
+
+                    <!--                        <div class="list-group list-group-root well">-->
+                    <!--                            <a href="#" class="list-group-item"-->
+                    <!--                               th:text="#{student.teachersList} + ': '"></a>-->
+
+                    <!--                            <div class="list-group">-->
+                    <!--                                <a class="list-group-item" th:each="fieldOpt : ${student.teachersList}"-->
+                    <!--                                   th:href="@{/teachers/{id}(id=${fieldOpt.id})}"-->
+                    <!--                                   th:value="${fieldOpt.id}"-->
+                    <!--                                   th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">-->
+                    <!--                                </a>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+
+
                 </div>
+
+                <div class="row m-2">
+                    <a class="btn btn-primary" th:href="@{/students}" th:text="#{students.back}"></a>
+                </div>
+
+                <div class="row m-2">
+                    <a class="btn btn-outline-primary" th:href="@{/students/edit/{id}(id=${student.id})}"
+                       th:text="#{students.edit}"></a>
+                </div>
+
+                <div class="row m-2">
+                    <a class="btn btn-outline-danger" th:href="@{/students/delete/{id}(id=${student.id})}"
+                       th:text="#{students.delete}"></a>
+                </div>
+
             </div>
         </div>
     </div>
