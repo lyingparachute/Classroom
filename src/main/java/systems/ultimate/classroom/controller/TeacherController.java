@@ -84,7 +84,7 @@ public class TeacherController {
         }
         teacherService.assignStudents(teacher, teacher.getStudentsList());
         teacherService.create(mapper.map(teacher, TeacherDto.class));
-        return "teacher-add-success";
+        return "teacher-create-success";
     }
 
     @GetMapping("delete/{id}")
