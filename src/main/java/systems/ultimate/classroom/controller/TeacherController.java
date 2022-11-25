@@ -97,6 +97,16 @@ public class TeacherController {
     public String editTeacher(@PathVariable Long id, Model model) {
         TeacherDto dto = teacherService.fetchById(id);
         model.addAttribute("teacher", dto);
-        return "teacher-edit";
+        return "teacher-edit-form";
+    }
+
+    @PostMapping(value = "update")
+    public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, Model model) {
+        TeacherDto update = teacherService.update(mapper.map(teacher, TeacherDto.class));
+        if (update == null) {
+            return "error/404";
+        }
+        model.addAttribute("teacher", update);
+        return "teacher-edit-success";
     }
 }
