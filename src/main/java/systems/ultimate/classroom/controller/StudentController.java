@@ -50,7 +50,6 @@ public class StudentController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
         return "students";
     }
 
@@ -85,21 +84,13 @@ public class StudentController {
         student.getTeachersList();
         studentService.assignTeachers(student, student.getTeachersList());
         studentService.create(mapper.map(student, StudentDto.class));
-        return "student";
+        return "student-create-success";
     }
 
     @GetMapping("delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
         studentService.remove(id);
         return "redirect:/students";
-    }
-
-    @GetMapping("{id}/teachers")
-    public String getAllTeachersForStudent(@PathVariable Long id, Model model){
-        StudentDto byId = studentService.fetchById(id);
-        model.addAttribute("student", byId);
-        model.addAttribute("studentTeachers", byId.getTeachersList());
-        return "student-teachers";
     }
 
     @GetMapping("edit/{id}")

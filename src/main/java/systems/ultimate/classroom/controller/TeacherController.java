@@ -93,14 +93,6 @@ public class TeacherController {
         return "redirect:/teachers";
     }
 
-//    @GetMapping("{id}/teachers")
-//    public String getAllS(@PathVariable Long id, Model model){
-//        TeacherDto byId = teacherService.fetchById(id);
-//        model.addAttribute("teacher", byId);
-//        model.addAttribute("studentTeachers", byId.getStudentsList());
-//        return "teacher-teachers";
-//    }
-
     @GetMapping("edit/{id}")
     public String editTeacher(@PathVariable Long id, Model model) {
         TeacherDto dto = teacherService.fetchById(id);
