@@ -1,0 +1,42 @@
+    <!DOCTYPE html>
+    <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"> </head>
+<body>
+<footer class="bg-light text-center text-lg-start mt-auto position-static" th:fragment="footer">
+
+    <!-- Grid container -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                <h5 class="text-uppercase">About me</h5>
+                <p>
+                    This website was made to make management of
+                    Students and Teachers in your University easier!
+                </p>
+            </div>
+
+            <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                <h5 class="text-uppercase">Contact</h5>
+                    <p><i class="fas fa-home me-3"></i>Gdańsk</p>
+                    <p>
+                        <i class="fas fa-envelope me-3"></i>
+                        igor.bykowski1@gmail.com
+                    </p>
+                    <p><i class="fas fa-phone me-3"></i> + 48 234 567 88</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2022 Copyright:
+        <a class="text-dark" href="https://igorbykowski.pl/" style="text-decoration: none">IgorBykowski.pl</a>
+    </div>
+
+    <!-- Scripts -->
+    <script th:src="@{/webjars/jquery/3.6.0/dist/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
+</footer>
+</body>
+</html>
