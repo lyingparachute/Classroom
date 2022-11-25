@@ -102,12 +102,16 @@ public class TeacherController {
     }
 
     @PostMapping(value = "update")
-    public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, Model model) {
-        TeacherDto update = teacherService.update(mapper.map(teacher, TeacherDto.class));
-        if (update == null) {
+    public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher,BindingResult result, Model model) {
+        if (result.hasErrors()){
+            return "teacher-edit-form";
+        }
+        teacherService.assignStudents(teacher, teacher.getStudentsList());
+        TeacherDto updated = teacherService.update(mapper.map(teacher, TeacherDto.class));
+        if (updated == null) {
             return "error/404";
         }
-        model.addAttribute("teacher", update);
+        model.addAttribute("teacher", updated);
         return "teacher-edit-success";
     }
 }
