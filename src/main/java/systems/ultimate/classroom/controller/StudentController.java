@@ -104,9 +104,9 @@ public class StudentController {
     @PostMapping(value = "update")
     public String editStudent(@Valid @ModelAttribute("student") Student student, Model model) {
         StudentDto update = studentService.update(mapper.map(student, StudentDto.class));
-//        if (update == null) {
-//            return "404";
-//        }
+        if (update == null) {
+            return "error/404";
+        }
         model.addAttribute("student", update);
         return "student-edit-success";
     }
