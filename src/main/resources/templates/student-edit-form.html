@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Classroom</title>
+    <title th:text="#{website.title}"></title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.15.4/css/all.min.css}" type="text/css"/>
 </head>
@@ -19,9 +19,10 @@
                 <div class="card-body mx-4">
                     <form class="form-group needs-validation"
                           th:object="${student}"
-                          th:action="@{/students/new}"
-                          th:method="post">
+                          th:action="@{/students/update}"
+                          method="post">
 
+                        <input hidden="true" type="text" id="id_input_id" th:field="*{id}">
                         <div class="row mb-4">
                             <label class="col-form-label col-sm-4"
                                    for="first_name">

@@ -91,7 +91,6 @@ public class StudentController {
     @GetMapping("delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
         studentService.remove(id);
-
         return "redirect:/students";
     }
 
@@ -104,9 +103,21 @@ public class StudentController {
     }
 
     @GetMapping("edit/{id}")
-    public String editStudent(@PathVariable Long id, Model model) {
+    public String editStudentForm(@PathVariable Long id, Model model) {
         StudentDto dto = studentService.fetchById(id);
         model.addAttribute("student", dto);
-        return "student-edit";
+        model.addAttribute("teachers", teacherService.fetchAll());
+        return "student-edit-form";
     }
+
+    @PostMapping(value = "update")
+    public String editStudent(@Valid @ModelAttribute("student") Student student, Model model) {
+        StudentDto update = studentService.update(mapper.map(student, StudentDto.class));
+//        if (update == null) {
+//            return "404";
+//        }
+        model.addAttribute("student", update);
+        return "student-edit-success";
+    }
+
 }

@@ -16,16 +16,16 @@
             <div class="card shadow">
                 <h1 class="card-header text-center m-4"
                     style="color: forestgreen"
-                    th:text="#{student.view} + '' + ${student.id}"></h1>
+                    th:text="#{student.success}"></h1>
                 <div class="card-body mx-4">
 
                         <ul class="list-group">
-                            <li class="list-group-item" th:text="#{student.firstName} + ' ' + ${student.firstName}"></li>
-                            <li class="list-group-item" th:text="#{student.lastName} + ' ' + ${student.lastName}"></li>
-                            <li class="list-group-item" th:text="#{student.email} + ' ' + ${student.email}"></li>
-                            <li class="list-group-item" th:text="#{student.age} + ' ' + ${student.age}"></li>
-                            <li class="list-group-item" th:text="#{student.fieldOfStudy} + ' '  + ${student.fieldOfStudy.desc}"></li>
-                            <li class="list-group-item" th:text="#{student.no.of.teachers} + ' '  + ${student.teachersList.size()}"></li>
+                            <li class="list-group-item" th:text="'First Name: ' + ${student.firstName}"></li>
+                            <li class="list-group-item" th:text="'Last Name: ' + ${student.lastName}"></li>
+                            <li class="list-group-item" th:text="'Email: ' + ${student.email}"></li>
+                            <li class="list-group-item" th:text="'Age: ' + ${student.age}"></li>
+                            <li class="list-group-item" th:text="'Field of study: ' + ${student.fieldOfStudy.desc}"></li>
+                            <li class="list-group-item" th:text="'Teachers: ' + ${student.teachersList.size()}"></li>
                         </ul>
 
                         <div class="row m-2">
