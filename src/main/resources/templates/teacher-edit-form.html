@@ -11,12 +11,13 @@
         <div class="d-flex justify-content-center">
             <div class="card shadow">
                 <h1 class="card-header text-center m-4"
-                    th:text="#{teachers.new}"></h1>
+                    th:text="#{teacher.edit.header}"></h1>
                 <div class="card-body mx-4">
                     <form class="form-group needs-validation"
                           th:object="${teacher}"
-                          th:action="@{/teachers/new}"
-                          th:method="post">
+                          th:action="@{/teachers/update}"
+                          method="post">
+                        <input hidden type="text" id="id_input_id" th:field="*{id}">
 
                         <div class="row mb-4">
                             <label class="col-form-label col-sm-4"
@@ -102,10 +103,12 @@
                                 <span th:text="#{teacher.studentList}"></span>
                             </label>
                             <div class="col-sm text-left">
-                                <th:block th:each="fieldOpt : ${teachers}">
+                                <th:block th:each="fieldOpt : ${students}">
                                     <div>
-                                        <input class="form-check-input m-2" type="checkbox" value="" id="students_list" th:field="*{studentsList}"
-                                               th:value="${fieldOpt.id}" th:text="${fieldOpt}">
+                                        <input class="form-check-input m-2" type="checkbox" value="" id="students_list"
+                                               th:field="*{studentsList}"
+                                               th:value="${fieldOpt.id}"
+                                               th:text="${fieldOpt}">
                                     </div>
                                 </th:block>
 
@@ -119,7 +122,6 @@
                                         th:text="#{teacher.edit.submit}"></button>
                             </div>
                         </div>
-
                     </form>
                 </div>
             </div>

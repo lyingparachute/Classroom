@@ -73,7 +73,7 @@ public class TeacherController {
     @GetMapping("new")
     public String getNewTeacherForm(Model model) {
         model.addAttribute("teacher", new TeacherDto());
-        model.addAttribute("teachers", studentService.fetchAll());
+        model.addAttribute("students", studentService.fetchAll());
         return "teacher-form";
     }
 

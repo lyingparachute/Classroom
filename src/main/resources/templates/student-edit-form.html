@@ -18,7 +18,7 @@
                           th:action="@{/students/update}"
                           method="post">
 
-                        <input hidden="true" type="text" id="id_input_id" th:field="*{id}">
+                        <input hidden type="text" id="id_input_id" th:field="*{id}">
 
                         <div class="row mb-4">
                             <label class="col-form-label col-sm-4"
@@ -108,7 +108,8 @@
                                     <div>
                                         <input class="form-check-input m-2" type="checkbox" id="teachers_list"
                                                th:field="*{teachersList}"
-                                               th:value="${fieldOpt.id}" th:text="${fieldOpt}">
+                                               th:value="${fieldOpt.id}"
+                                               th:text="${fieldOpt}">
                                     </div>
                                 </th:block>
                             </div>

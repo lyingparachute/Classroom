@@ -102,7 +102,7 @@
                                 <span th:text="#{teacher.studentList}"></span>
                             </label>
                             <div class="col-sm text-left">
-                                <th:block th:each="fieldOpt : ${teachers}">
+                                <th:block th:each="fieldOpt : ${students}">
                                     <div>
                                         <input class="form-check-input m-2" type="checkbox" value="" id="students_list" th:field="*{studentsList}"
                                                th:value="${fieldOpt.id}" th:text="${fieldOpt}">
