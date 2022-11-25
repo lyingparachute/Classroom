@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="#{website.title}"></title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}" type="text/css"/>
-    <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.15.4/css/all.min.css}" type="text/css"/>
-</head>
+<head th:replace="fragments/header :: header"></head>
 <body>
-
+<!--Navigation Bar-->
+<div th:replace="fragments/navBar :: nav"></div>
 
 <section class="py-5 mt-0 align-items-start d-flex bg-light"
          style="min-height: 75vh;">
@@ -20,12 +16,12 @@
                 <div class="card-body mx-4">
 
                         <ul class="list-group">
-                            <li class="list-group-item" th:text="'First Name: ' + ${student.firstName}"></li>
-                            <li class="list-group-item" th:text="'Last Name: ' + ${student.lastName}"></li>
-                            <li class="list-group-item" th:text="'Email: ' + ${student.email}"></li>
-                            <li class="list-group-item" th:text="'Age: ' + ${student.age}"></li>
-                            <li class="list-group-item" th:text="'Field of study: ' + ${student.fieldOfStudy.desc}"></li>
-                            <li class="list-group-item" th:text="'Teachers: ' + ${student.teachersList.size()}"></li>
+                            <li class="list-group-item" th:text="#{student.firstName} + ' ' + ${student.firstName}"></li>
+                            <li class="list-group-item" th:text="#{student.lastName} + ' ' + ${student.lastName}"></li>
+                            <li class="list-group-item" th:text="#{student.email} + ' ' + ${student.email}"></li>
+                            <li class="list-group-item" th:text="#{student.age} + ' ' + ${student.age}"></li>
+                            <li class="list-group-item" th:text="#{student.fieldOfStudy} + ' '  + ${student.fieldOfStudy.desc}"></li>
+                            <li class="list-group-item" th:text="#{student.no.of.teachers} + ' '  + ${student.teachersList.size()}"></li>
                         </ul>
 
                         <div class="row m-2">
@@ -45,9 +41,7 @@
     </div>
 </section>
 
-<!-- Scripts -->
-<script th:src="@{/webjars/jquery/3.6.0/dist/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>
