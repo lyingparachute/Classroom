@@ -10,7 +10,6 @@ import systems.ultimate.classroom.dto.StudentDto;
 import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.repository.StudentRepository;
-import systems.ultimate.classroom.repository.TeacherRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -21,12 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
-    private final TeacherRepository teacherRepository;
     private final ModelMapper mapper;
 
-    public StudentService(StudentRepository studentRepository, TeacherRepository teacherRepository, ModelMapper mapper) {
+    public StudentService(StudentRepository studentRepository, ModelMapper mapper) {
         this.studentRepository = studentRepository;
-        this.teacherRepository = teacherRepository;
         this.mapper = mapper;
     }
 
@@ -42,7 +39,9 @@ public class StudentService {
         Optional<Student> byId = studentRepository.findById(dto.getId());
         if(byId.isPresent()){
             Student student = byId.get();
+            removeTeachers(student, student.getTeachersList());
             mapper.map(dto, student);
+            assignTeachers(student, student.getTeachersList());
             Student saved = studentRepository.save(student);
             return mapper.map(saved, StudentDto.class);
         }
