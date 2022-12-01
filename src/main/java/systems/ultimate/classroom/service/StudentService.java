@@ -75,7 +75,7 @@ public class StudentService {
     public void remove(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid student id: " + id));
-        removeTeachers(student, student.getTeachersList());
+        removeTeachers(student, new HashSet<>(student.getTeachersList()));
         studentRepository.delete(student);
     }
 
