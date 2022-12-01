@@ -82,7 +82,6 @@ public class TeacherController {
         if (result.hasErrors()){
             return "teacher-form";
         }
-        teacherService.assignStudents(teacher, teacher.getStudentsList());
         teacherService.create(mapper.map(teacher, TeacherDto.class));
         return "teacher-create-success";
     }
@@ -106,7 +105,6 @@ public class TeacherController {
         if (result.hasErrors()){
             return "teacher-edit-form";
         }
-        teacherService.assignStudents(teacher, teacher.getStudentsList());
         TeacherDto updated = teacherService.update(mapper.map(teacher, TeacherDto.class));
         if (updated == null) {
             return "error/404";
