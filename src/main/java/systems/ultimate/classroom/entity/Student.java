@@ -58,4 +58,9 @@ public class Student {
         this.teachersList.remove(teacher);
         teacher.getStudentsList().remove(this);
     }
+
+    public void assignTeacher(Teacher teacher){
+        this.teachersList.add(teacher);
+        teacher.getStudentsList().add(this);
+    }
 }

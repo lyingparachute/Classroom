@@ -82,12 +82,6 @@ public class TeacherService {
     }
 
     @Transactional
-    public void assignStudent(Teacher teacher, Student student) {
-        teacher.addStudent(student);
-        repository.save(teacher);
-    }
-
-    @Transactional
     public void assignStudents(Teacher teacher, Set<Student> students) {
         students.forEach(teacher::addStudent);
         repository.save(teacher);
