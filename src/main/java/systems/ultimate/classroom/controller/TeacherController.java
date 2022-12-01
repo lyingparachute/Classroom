@@ -82,7 +82,6 @@ public class TeacherController {
         if (result.hasErrors()){
             return "teacher-form";
         }
-        teacherService.assignStudents(teacher, teacher.getStudentsList());
         teacherService.create(mapper.map(teacher, TeacherDto.class));
         return "teacher-create-success";
     }

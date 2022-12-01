@@ -31,6 +31,7 @@ public class TeacherService {
     @Transactional
     public TeacherDto create(TeacherDto dto){
         Teacher teacher = mapper.map(dto, Teacher.class);
+        assignStudents(teacher, teacher.getStudentsList());
         Teacher saved = repository.save(teacher);
         return mapper.map(saved, TeacherDto.class);
     }
@@ -81,10 +82,11 @@ public class TeacherService {
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).collect(Collectors.toList());
     }
 
-    @Transactional
     public void assignStudents(Teacher teacher, Set<Student> students) {
         if (students != null && !students.isEmpty()){
             students.forEach(teacher::addStudent);
         }
     }
+
+
 }
