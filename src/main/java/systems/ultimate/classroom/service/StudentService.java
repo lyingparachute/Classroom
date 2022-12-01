@@ -74,7 +74,7 @@ public class StudentService {
     @Transactional
     public void remove(Long id) {
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid student id: " + id));
         removeTeachers(student, student.getTeachersList());
         studentRepository.delete(student);
     }
@@ -84,15 +84,15 @@ public class StudentService {
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).collect(Collectors.toList());
     }
 
-    public void assignTeachers(Student student, Set<Teacher> teachersList) {
-        if (teachersList != null && !teachersList.isEmpty()){
-            teachersList.forEach(student::assignTeacher);
+    public void assignTeachers(Student student, Set<Teacher> teachers) {
+        if (teachers != null && !teachers.isEmpty()){
+            teachers.forEach(student::assignTeacher);
         }
     }
 
-    public void removeTeachers(Student student, Set<Teacher> teachersList) {
-        if (teachersList != null && !teachersList.isEmpty()){
-            teachersList.forEach(student::removeTeacher);
+    public void removeTeachers(Student student, Set<Teacher> teachers) {
+        if (teachers != null && !teachers.isEmpty()){
+            teachers.forEach(student::removeTeacher);
         }
     }
 
