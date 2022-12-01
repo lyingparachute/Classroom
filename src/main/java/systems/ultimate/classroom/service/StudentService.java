@@ -93,7 +93,6 @@ public class StudentService {
     public void removeTeachers(Student student, Set<Teacher> teachersList) {
         if (teachersList != null && !teachersList.isEmpty()){
             teachersList.forEach(student::removeTeacher);
-//            studentRepository.save(student);
         }
     }
 
