@@ -60,8 +60,8 @@ public class StudentService {
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
 
-        Pageable pagable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Student> all = studentRepository.findAll(pagable);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Student> all = studentRepository.findAll(pageable);
         return all.map(student -> mapper.map(student, StudentDto.class));
     }
 
