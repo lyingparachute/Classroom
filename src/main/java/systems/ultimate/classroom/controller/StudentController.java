@@ -106,7 +106,6 @@ public class StudentController {
         if (result.hasErrors()){
             return "student-edit-form";
         }
-        studentService.assignTeachers(student, student.getTeachersList());
         StudentDto updated = studentService.update(mapper.map(student, StudentDto.class));
         if (updated == null) {
             return "error/404";
