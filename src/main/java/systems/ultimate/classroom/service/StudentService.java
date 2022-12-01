@@ -30,6 +30,7 @@ public class StudentService {
     @Transactional
     public StudentDto create(StudentDto dto){
         Student student = mapper.map(dto, Student.class);
+        assignTeachers(student, student.getTeachersList());
         Student saved = studentRepository.save(student);
         return mapper.map(saved, StudentDto.class);
     }
@@ -86,7 +87,6 @@ public class StudentService {
     @Transactional
     public void assignTeachers(Student student, Set<Teacher> teachersList) {
         teachersList.forEach(student::assignTeacher);
-        studentRepository.save(student);
     }
 
     @Transactional
