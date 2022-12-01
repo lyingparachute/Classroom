@@ -58,5 +58,6 @@ public class Teacher {
 
     public void addStudent(Student student){
         this.studentsList.add(student);
+        student.getTeachersList().add(this);
     }
-}
+ }
