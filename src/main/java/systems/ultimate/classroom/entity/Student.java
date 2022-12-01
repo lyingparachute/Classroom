@@ -48,12 +48,14 @@ public class Student {
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
-                    CascadeType.PERSIST
+                    CascadeType.MERGE,
+                    CascadeType.DETACH
             },
             mappedBy = "studentsList")
     private Set<Teacher> teachersList = new HashSet<>();
 
     public void removeTeacher(Teacher teacher){
         this.teachersList.remove(teacher);
+        teacher.getStudentsList().remove(this);
     }
 }
