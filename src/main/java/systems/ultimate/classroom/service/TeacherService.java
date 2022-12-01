@@ -41,7 +41,9 @@ public class TeacherService {
         Optional<Teacher> byId = repository.findById(dto.getId());
         if(byId.isPresent()){
             Teacher teacher = byId.get();
+            removeStudents(teacher, teacher.getStudentsList());
             mapper.map(dto, teacher);
+            assignStudents(teacher, teacher.getStudentsList());
             Teacher saved = repository.save(teacher);
             return mapper.map(saved, TeacherDto.class);
         }
@@ -73,7 +75,7 @@ public class TeacherService {
     @Transactional
     public void remove(Long id) {
         Teacher teacher = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid teacher id: " + id));
         repository.delete(teacher);
     }
 
@@ -87,6 +89,13 @@ public class TeacherService {
             students.forEach(teacher::addStudent);
         }
     }
+
+    private void removeStudents(Teacher teacher, Set<Student> students) {
+        if (students != null && !students.isEmpty()){
+            students.forEach(teacher::addStudent);
+        }
+    }
+
 
 
 }
