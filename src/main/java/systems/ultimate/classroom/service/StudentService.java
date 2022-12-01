@@ -12,6 +12,7 @@ import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.repository.StudentRepository;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,7 +41,7 @@ public class StudentService {
         Optional<Student> byId = studentRepository.findById(dto.getId());
         if(byId.isPresent()){
             Student student = byId.get();
-            removeTeachers(student, student.getTeachersList());
+            removeTeachers(student, new HashSet<>(student.getTeachersList()));
             mapper.map(dto, student);
             assignTeachers(student, student.getTeachersList());
             Student saved = studentRepository.save(student);
@@ -48,7 +49,6 @@ public class StudentService {
         }
         return null;
     }
-
 
     public List<StudentDto> fetchAll() {
         List<Student> allStudents = studentRepository.findAll();
@@ -84,15 +84,17 @@ public class StudentService {
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).collect(Collectors.toList());
     }
 
-    @Transactional
     public void assignTeachers(Student student, Set<Teacher> teachersList) {
-        teachersList.forEach(student::assignTeacher);
+        if (teachersList != null && !teachersList.isEmpty()){
+            teachersList.forEach(student::assignTeacher);
+        }
     }
 
-    @Transactional
     public void removeTeachers(Student student, Set<Teacher> teachersList) {
-        teachersList.forEach(student::removeTeacher);
-        studentRepository.save(student);
+        if (teachersList != null && !teachersList.isEmpty()){
+            teachersList.forEach(student::removeTeacher);
+//            studentRepository.save(student);
+        }
     }
 
 
