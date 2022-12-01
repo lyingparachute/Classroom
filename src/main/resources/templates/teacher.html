@@ -20,7 +20,16 @@
                             <li class="list-group-item" th:text="#{teacher.email} + ': ' + ${teacher.email}"></li>
                             <li class="list-group-item" th:text="#{teacher.age} + ': ' + ${teacher.age}"></li>
                             <li class="list-group-item" th:text="#{teacher.subject} + ': '  + ${teacher.subject.desc}"></li>
-                            <li class="list-group-item" th:text="#{teacher.no.of.students} + ': '  + ${teacher.studentsList.size()}"></li>
+                            <li class="list-group-item">List of assigned students:
+                                <ul class="list-group">
+                                    <a class="list-group-item"
+                                       th:each="fieldOpt : ${teacher.studentsList}"
+                                       th:href="@{/students/{id}(id=${fieldOpt.id})}"
+                                       th:value="${fieldOpt.id}"
+                                       th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
+                                    </a>
+                                </ul>
+                            </li>
                         </ul>
 
                         <div class="row m-2">
