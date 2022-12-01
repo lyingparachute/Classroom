@@ -83,7 +83,8 @@ public class TeacherService {
 
     @Transactional
     public void assignStudents(Teacher teacher, Set<Student> students) {
-        students.forEach(teacher::addStudent);
-        repository.save(teacher);
+        if (students != null && !students.isEmpty()){
+            students.forEach(teacher::addStudent);
+        }
     }
 }
