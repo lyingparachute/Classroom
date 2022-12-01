@@ -86,12 +86,15 @@ public class StudentService {
 
     @Transactional
     public void assignTeachers(Student student, Set<Teacher> teachersList) {
-        teachersList.forEach(teacher -> teacher.addStudent(student));
+        teachersList.forEach(student::assignTeacher);
         studentRepository.save(student);
     }
 
     @Transactional
     public void removeTeachers(Student student, Set<Teacher> teachersList) {
         teachersList.forEach(student::removeTeacher);
+        studentRepository.save(student);
     }
+
+
 }
