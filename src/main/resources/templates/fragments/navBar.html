@@ -26,42 +26,29 @@
                         </a>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"
-                           id="dishDropdown"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
+                    <li class="nav-item">
+                        <a th:href="@{/students}" class="nav-link">
                             <span th:text="#{navbar.students}"></span>
                         </a>
-                        <ul class="dropdown-menu text-center"
-                            aria-labelledby="dishDropdown">
-                            <li>
-                                <a th:href="@{/students/new}" class="dropdown-item" th:text="#{navbar.student.new}"></a>
-                            </li>
-                            <li>
-                                <a th:href="@{/students}" class="dropdown-item" th:text="#{navbar.students.all}"></a>
-                            </li>
-                        </ul>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"
-                           id="productDropdown"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
+                    <li class="nav-item">
+                        <a th:href="@{/teachers}" class="nav-link">
                             <span th:text="#{navbar.teachers}"></span>
                         </a>
-                        <ul class="dropdown-menu text-center"
-                            aria-labelledby="productDropdown">
-                            <li>
-                                <a th:href="@{/teachers/new}" class="dropdown-item" th:text="#{navbar.teacher.new}"></a>
-                            </li>
-                            <li>
-                                <a th:href="@{/teachers}" class="dropdown-item" th:text="#{navbar.teachers.all}"></a>
-                            </li>
-                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a th:href="@{/students/new}" class="nav-link">
+                            <span th:text="#{navbar.student.new}"></span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a th:href="@{/teachers/new}" class="nav-link">
+                            <span th:text="#{navbar.teacher.new}"></span>
+                        </a>
                     </li>
                 </ul>
             </div>
