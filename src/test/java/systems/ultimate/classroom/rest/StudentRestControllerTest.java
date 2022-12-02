@@ -59,12 +59,7 @@ class StudentRestControllerTest {
     @Test
     void shouldCreateStudent() throws URISyntaxException {
         //given
-        StudentDto studentDto = new StudentDto();
-        studentDto.setFirstName("Weronika");
-        studentDto.setLastName("Romanski");
-        studentDto.setEmail("w.romanski@gmail.com");
-        studentDto.setAge(21);
-        studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
+        StudentDto studentDto = createStudentDto();
         //when
         URI url = createURL("/api/students/create");
         ResponseEntity<StudentDto> response = restTemplate.postForEntity(url, studentDto, StudentDto.class);
@@ -88,13 +83,8 @@ class StudentRestControllerTest {
     void shouldUpdateStudent() throws URISyntaxException {
         //given
         Student student = initData.createFirstStudent();
-        StudentDto studentDto = new StudentDto();
+        StudentDto studentDto = createStudentDto();
         studentDto.setId(student.getId());
-        studentDto.setFirstName("Weronika");
-        studentDto.setLastName("Romanski");
-        studentDto.setEmail("w.romanski@gmail.com");
-        studentDto.setAge(21);
-        studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
 
         //when
         URI url = createURL("/api/students/");
@@ -115,6 +105,16 @@ class StudentRestControllerTest {
         assertThat(actual.getAge()).isEqualTo(studentDto.getAge());
         assertThat(actual.getFieldOfStudy()).isEqualTo(studentDto.getFieldOfStudy());
         assertThat(actual.getTeachersList()).isEqualTo(studentDto.getTeachersList());
+    }
+
+    private static StudentDto createStudentDto() {
+        StudentDto studentDto = new StudentDto();
+        studentDto.setFirstName("Weronika");
+        studentDto.setLastName("Romanski");
+        studentDto.setEmail("w.romanski@gmail.com");
+        studentDto.setAge(21);
+        studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
+        return studentDto;
     }
 
     @Test
