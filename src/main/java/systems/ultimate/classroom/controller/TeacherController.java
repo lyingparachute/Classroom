@@ -1,5 +1,6 @@
 package systems.ultimate.classroom.controller;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +13,6 @@ import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.service.StudentService;
 import systems.ultimate.classroom.service.TeacherService;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -101,7 +101,7 @@ public class TeacherController {
     }
 
     @PostMapping(value = "update")
-    public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher,BindingResult result, Model model) {
+    public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, BindingResult result, Model model) {
         if (result.hasErrors()){
             return "teacher-edit-form";
         }
