@@ -59,7 +59,19 @@ class TeacherRestControllerTest {
     }
 
     @Test
-    void shouldGetTeacher() {
+    void shouldGetAllTeachers() throws URISyntaxException {
+        //given
+        initData.createFirstTeacher();
+        initData.createSecondTeacher();
+        //when
+        URI url = createURL("/api/teachers/");
+        ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Set actual = response.getBody();
+        assertThat(actual).isNotNull();
+        assertThat(actual).isNotEmpty();
+        assertThat(actual).size().isEqualTo(2);
     }
 
     @Test
