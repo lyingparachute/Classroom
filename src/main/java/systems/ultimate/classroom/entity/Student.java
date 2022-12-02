@@ -1,9 +1,5 @@
 package systems.ultimate.classroom.entity;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +7,10 @@ import org.hibernate.validator.constraints.Length;
 import systems.ultimate.classroom.enums.FieldOfStudy;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
