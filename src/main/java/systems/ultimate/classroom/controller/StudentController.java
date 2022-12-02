@@ -78,8 +78,9 @@ public class StudentController {
     }
 
     @PostMapping(value = "new")
-    public String createStudent(@Valid @ModelAttribute("student") Student student, BindingResult result) {
+    public String createStudent(@Valid @ModelAttribute("student") Student student, BindingResult result, Model model) {
         if (result.hasErrors()){
+            model.addAttribute("teachers", teacherService.fetchAll());
             return "student-form";
         }
         studentService.create(mapper.map(student, StudentDto.class));
@@ -101,15 +102,18 @@ public class StudentController {
     }
 
     @PostMapping(value = "update")
-    public String editStudent(@Valid @ModelAttribute("student") Student student, BindingResult result,Model model) {
+    public String editStudent(@Valid @ModelAttribute("student") Student student, BindingResult result, Model model) {
         if (result.hasErrors()){
+            model.addAttribute("teachers", teacherService.fetchAll());
             return "student-edit-form";
         }
+
         StudentDto updated = studentService.update(mapper.map(student, StudentDto.class));
         if (updated == null) {
             return "error/404";
         }
         model.addAttribute("student", updated);
+
         return "student-edit-success";
     }
 
