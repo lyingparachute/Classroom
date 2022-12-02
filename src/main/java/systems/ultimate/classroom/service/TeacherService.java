@@ -13,6 +13,7 @@ import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.repository.TeacherRepository;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,6 +32,7 @@ public class TeacherService {
     @Transactional
     public TeacherDto create(TeacherDto dto){
         Teacher teacher = mapper.map(dto, Teacher.class);
+        assignStudents(teacher, teacher.getStudentsList());
         Teacher saved = repository.save(teacher);
         return mapper.map(saved, TeacherDto.class);
     }
@@ -40,7 +42,9 @@ public class TeacherService {
         Optional<Teacher> byId = repository.findById(dto.getId());
         if(byId.isPresent()){
             Teacher teacher = byId.get();
+            removeStudents(teacher, new HashSet<>(teacher.getStudentsList()));
             mapper.map(dto, teacher);
+            assignStudents(teacher, teacher.getStudentsList());
             Teacher saved = repository.save(teacher);
             return mapper.map(saved, TeacherDto.class);
         }
@@ -49,8 +53,8 @@ public class TeacherService {
 
     @Transactional
     public List<TeacherDto> fetchAll() {
-        List<Teacher> allteachers = repository.findAll();
-        return allteachers.stream().map(teacher -> mapper.map(teacher, TeacherDto.class)).collect(Collectors.toList());
+        List<Teacher> teachers = repository.findAll();
+        return teachers.stream().map(teacher -> mapper.map(teacher, TeacherDto.class)).collect(Collectors.toList());
     }
 
     @Transactional
@@ -72,7 +76,7 @@ public class TeacherService {
     @Transactional
     public void remove(Long id) {
         Teacher teacher = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid teacher id: " + id));
         repository.delete(teacher);
     }
 
@@ -81,9 +85,15 @@ public class TeacherService {
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).collect(Collectors.toList());
     }
 
-    @Transactional
     public void assignStudents(Teacher teacher, Set<Student> students) {
-        students.forEach(teacher::addStudent);
-        repository.save(teacher);
+        if (students != null && !students.isEmpty()){
+            students.forEach(teacher::addStudent);
+        }
+    }
+
+    private void removeStudents(Teacher teacher, Set<Student> students) {
+        if (students != null && !students.isEmpty()){
+            students.forEach(teacher::removeStudent);
+        }
     }
 }
