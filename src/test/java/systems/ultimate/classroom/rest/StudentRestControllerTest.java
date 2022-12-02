@@ -19,6 +19,7 @@ import systems.ultimate.classroom.repository.util.InitData;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -60,6 +61,22 @@ class StudentRestControllerTest {
         assertThat(actual.getAge()).isEqualTo(student.getAge());
         assertThat(actual.getFieldOfStudy()).isEqualTo(student.getFieldOfStudy());
         assertThat(actual.getTeachersList()).isEmpty();
+    }
+
+    @Test
+    void shouldGetAllStudents() throws URISyntaxException {
+        //given
+        Student student1 = initData.createFirstStudent();
+        Student student2 = initData.createSecondStudent();
+        //when
+        URI url = createURL("/api/students/");
+        ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Set actual = response.getBody();
+        assertThat(actual).isNotNull();
+        assertThat(actual).isNotEmpty();
+        assertThat(actual).size().isEqualTo(2);
     }
 
     @Test
