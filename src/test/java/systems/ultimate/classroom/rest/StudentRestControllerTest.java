@@ -39,7 +39,7 @@ class StudentRestControllerTest {
     StudentRepository studentRepository;
 
     @BeforeEach
-    public void cleanUp() {
+    public void setup() {
         initData.cleanUp();
     }
 
@@ -77,7 +77,7 @@ class StudentRestControllerTest {
         assertThat(actual).isNotNull();
         assertThat(actual).isNotEmpty();
         assertThat(actual).size().isEqualTo(2);
-    }
+       }
 
     @Test
     void shouldCreateStudent() throws URISyntaxException {
@@ -130,16 +130,6 @@ class StudentRestControllerTest {
         assertThat(actual.getTeachersList()).isEqualTo(studentDto.getTeachersList());
     }
 
-    private static StudentDto createStudentDto() {
-        StudentDto studentDto = new StudentDto();
-        studentDto.setFirstName("Weronika");
-        studentDto.setLastName("Romanski");
-        studentDto.setEmail("w.romanski@gmail.com");
-        studentDto.setAge(21);
-        studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
-        return studentDto;
-    }
-
     @Test
     void shouldDeleteStudent() throws URISyntaxException {
         //given
@@ -150,6 +140,16 @@ class StudentRestControllerTest {
         //then
         Optional<Student> byId = studentRepository.findById(student.getId());
         assertThat(byId).isNotPresent();
+    }
+
+    private StudentDto createStudentDto() {
+        StudentDto studentDto = new StudentDto();
+        studentDto.setFirstName("Weronika");
+        studentDto.setLastName("Romanski");
+        studentDto.setEmail("w.romanski@gmail.com");
+        studentDto.setAge(21);
+        studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
+        return studentDto;
     }
 
     private URI createURL(String path) throws URISyntaxException {
