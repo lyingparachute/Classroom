@@ -18,6 +18,7 @@ import systems.ultimate.classroom.repository.util.InitData;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -127,7 +128,15 @@ class TeacherRestControllerTest {
     }
 
     @Test
-    void shouldDeleteTeacher() {
+    void shouldDeleteTeacher() throws URISyntaxException {
+        //given
+        Teacher teacher = initData.createFirstTeacher();
+        //when
+        URI url = createURL("/api/teachers/" + teacher.getId());
+        restTemplate.delete(url);
+        //then
+        Optional<Teacher> byId = teacherRepository.findById(teacher.getId());
+        assertThat(byId).isNotPresent();
     }
 
     private TeacherDto createTeacherDto(){
