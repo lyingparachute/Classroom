@@ -21,7 +21,7 @@ import java.util.Set;
 public class Teacher {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
