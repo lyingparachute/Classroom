@@ -1,5 +1,6 @@
 package systems.ultimate.classroom.rest;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +36,11 @@ class StudentRestControllerTest {
 
     @Autowired
     StudentRepository studentRepository;
+
+    @BeforeEach
+    public void cleanUp() {
+        initData.cleanUp();
+    }
 
     @Test
     void shouldGetStudent() throws URISyntaxException {
