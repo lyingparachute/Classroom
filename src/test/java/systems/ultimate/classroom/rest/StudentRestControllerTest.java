@@ -17,6 +17,7 @@ import systems.ultimate.classroom.repository.util.InitData;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -66,7 +67,7 @@ class StudentRestControllerTest {
         studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
         //when
         URI url = createURL("/api/students/create");
-        ResponseEntity<StudentDto> response = restTemplate.postForEntity(url, studentDto ,StudentDto.class);
+        ResponseEntity<StudentDto> response = restTemplate.postForEntity(url, studentDto, StudentDto.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         StudentDto actual = response.getBody();
@@ -117,7 +118,15 @@ class StudentRestControllerTest {
     }
 
     @Test
-    void shouldDeleteStudent() {
+    void shouldDeleteStudent() throws URISyntaxException {
+        //given
+        Student student = initData.createFirstStudent();
+        //when
+        URI url = createURL("/api/students/" + student.getId());
+        restTemplate.delete(url);
+        //then
+        Optional<Student> byId = studentRepository.findById(student.getId());
+        assertThat(byId).isNotPresent();
     }
 
     private URI createURL(String path) throws URISyntaxException {
