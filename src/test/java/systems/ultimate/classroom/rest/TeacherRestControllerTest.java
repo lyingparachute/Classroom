@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import systems.ultimate.classroom.dto.TeacherDto;
@@ -99,7 +101,29 @@ class TeacherRestControllerTest {
     }
 
     @Test
-    void shouldUpdateTeacher() {
+    void shouldUpdateTeacher() throws URISyntaxException {
+        //given
+        Teacher teacher = initData.createFirstTeacher();
+        TeacherDto teacherDto = createTeacherDto();
+        teacherDto.setId(teacher.getId());
+        //when
+        URI url = createURL("/api/teachers/");
+        HttpEntity<TeacherDto> requestUpdate = new HttpEntity<>(teacherDto);
+        ResponseEntity<TeacherDto> response = restTemplate.exchange(url, HttpMethod.PUT, requestUpdate ,TeacherDto.class);
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        TeacherDto actual = response.getBody();
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isNotNull();
+        teacherRepository.findById(actual.getId()).orElseThrow(
+                () -> new IllegalStateException(
+                        "Student with ID= " + actual.getId() + " should not be missing"));
+        assertThat(actual.getFirstName()).isEqualTo(teacherDto.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
+        assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
+        assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
+        assertThat(actual.getSubject()).isEqualTo(teacherDto.getSubject());
+        assertThat(actual.getStudentsList()).isEqualTo(teacherDto.getStudentsList());
     }
 
     @Test
