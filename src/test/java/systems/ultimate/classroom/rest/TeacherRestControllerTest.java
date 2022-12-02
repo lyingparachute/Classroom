@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import systems.ultimate.classroom.dto.TeacherDto;
 import systems.ultimate.classroom.entity.Teacher;
+import systems.ultimate.classroom.enums.Subject;
 import systems.ultimate.classroom.repository.TeacherRepository;
 import systems.ultimate.classroom.repository.util.InitData;
 
@@ -75,7 +76,26 @@ class TeacherRestControllerTest {
     }
 
     @Test
-    void shouldCreateTeacher() {
+    void shouldCreateTeacher() throws URISyntaxException {
+        //given
+        TeacherDto teacherDto = createTeacherDto();
+        //when
+        URI url = createURL("/api/teachers/create");
+        ResponseEntity<TeacherDto> response = restTemplate.postForEntity(url, teacherDto ,TeacherDto.class);
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        TeacherDto actual = response.getBody();
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isNotNull();
+        teacherRepository.findById(actual.getId()).orElseThrow(
+                () -> new IllegalStateException(
+                        "Student with ID= " + actual.getId() + " should not be missing"));
+        assertThat(actual.getFirstName()).isEqualTo(teacherDto.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
+        assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
+        assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
+        assertThat(actual.getSubject()).isEqualTo(teacherDto.getSubject());
+        assertThat(actual.getStudentsList()).isNull();
     }
 
     @Test
@@ -84,6 +104,16 @@ class TeacherRestControllerTest {
 
     @Test
     void shouldDeleteTeacher() {
+    }
+
+    private TeacherDto createTeacherDto(){
+        TeacherDto teacherDto = new TeacherDto();
+        teacherDto.setFirstName("Jagoda");
+        teacherDto.setLastName("Kowalska");
+        teacherDto.setEmail("j.kowalska@gmail.com");
+        teacherDto.setAge(33);
+        teacherDto.setSubject(Subject.SCIENCE);
+        return teacherDto;
     }
 
     private URI createURL(String path) throws URISyntaxException {
