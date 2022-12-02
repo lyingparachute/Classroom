@@ -74,7 +74,7 @@
                                 <td th:text="${student.lastName}"/>
                                 <td th:text="${student.age}"/>
                                 <td th:text="${student.email}"/>
-                                <td th:text="${student.fieldOfStudy}"/>
+                                <td th:text="${student.fieldOfStudy.getDesc()}"/>
                                 <td th:text="${student.teachersList.size()}"/>
                                 <td>
                                     <a class="btn btn-outline-primary"
