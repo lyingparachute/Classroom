@@ -19,7 +19,7 @@ docker ps
 * run command to create
   image: 
 ```bash
-docker run -p 3307:3306 --name mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=classroom --rm -d mysql`
+docker run -p 3307:3306 --name mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=classroom --rm -d mysql
 ```
 ### 2. Build project and perform tests
 
