@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import systems.ultimate.classroom.dto.StudentDto;
@@ -82,7 +84,36 @@ class StudentRestControllerTest {
     }
 
     @Test
-    void shouldUpdateStudent() {
+    void shouldUpdateStudent() throws URISyntaxException {
+        //given
+        Student student = initData.createFirstStudent();
+        StudentDto studentDto = new StudentDto();
+        studentDto.setId(student.getId());
+        studentDto.setFirstName("Weronika");
+        studentDto.setLastName("Romanski");
+        studentDto.setEmail("w.romanski@gmail.com");
+        studentDto.setAge(21);
+        studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
+
+        //when
+        URI url = createURL("/api/students/");
+        final HttpEntity<StudentDto> request = new HttpEntity<>(studentDto);
+        ResponseEntity<StudentDto> response = restTemplate.exchange(url, HttpMethod.PUT, request, StudentDto.class);
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        StudentDto actual = response.getBody();
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isNotNull();
+        studentRepository.findById(actual.getId()).orElseThrow(
+                () -> new IllegalStateException(
+                        "Student with ID= " + actual.getId() + " should not be missing"));
+        assertThat(actual.getId()).isEqualTo(studentDto.getId());
+        assertThat(actual.getFirstName()).isEqualTo(studentDto.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(studentDto.getLastName());
+        assertThat(actual.getEmail()).isEqualTo(studentDto.getEmail());
+        assertThat(actual.getAge()).isEqualTo(studentDto.getAge());
+        assertThat(actual.getFieldOfStudy()).isEqualTo(studentDto.getFieldOfStudy());
+        assertThat(actual.getTeachersList()).isEqualTo(studentDto.getTeachersList());
     }
 
     @Test
