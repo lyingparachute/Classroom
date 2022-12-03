@@ -50,7 +50,6 @@ public class InitData {
     }
 
     public Teacher createTeacherOne(List<Student> students) {
-
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jarosław");
         teacher.setLastName("Adamczuk");

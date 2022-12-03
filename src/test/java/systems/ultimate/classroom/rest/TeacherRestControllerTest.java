@@ -71,7 +71,7 @@ class TeacherRestControllerTest {
         assertThat(actual.getEmail()).isEqualTo(teacher.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacher.getAge());
         assertThat(actual.getSubject()).isEqualTo(teacher.getSubject());
-        assertThat(actual.getStudentsList()).size().isEqualTo(1);
+//        assertThat(actual.getStudentsList()).size().isEqualTo(1);
         assertThat(actual.getStudentsList())
                 .extracting(
                         StudentDto::getId,
@@ -82,9 +82,9 @@ class TeacherRestControllerTest {
                         StudentDto::getFieldOfStudy
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(studentOne.getId(), studentOne.getFirstName(), studentOne.getLastName(),
-                                studentOne.getEmail(), studentOne.getAge(), studentOne.getFieldOfStudy())
-//                        Tuple.tuple(studentTwo.getId(), studentTwo.getFirstName(), studentTwo.getLastName(),
-//                                studentTwo.getEmail(), studentTwo.getAge(), studentTwo.getFieldOfStudy())
+                                studentOne.getEmail(), studentOne.getAge(), studentOne.getFieldOfStudy()),
+                        Tuple.tuple(studentTwo.getId(), studentTwo.getFirstName(), studentTwo.getLastName(),
+                                studentTwo.getEmail(), studentTwo.getAge(), studentTwo.getFieldOfStudy())
                 );
     }
 
@@ -182,6 +182,12 @@ class TeacherRestControllerTest {
         //then
         Optional<Teacher> byId = teacherRepository.findById(teacher.getId());
         assertThat(byId).isNotPresent();
+        teacher.getStudentsList().forEach(i -> {
+            assertThat(studentRepository.findById(i.getId()).isPresent()).isTrue();
+            studentRepository.findById(i.getId()).orElseThrow(() -> new IllegalStateException(
+                    "Student with ID= " + i.getId() + " should not be removed"));
+        });
+        assertThat(studentRepository.findAll().size()).isEqualTo(2);
     }
 
     private TeacherDto createTeacherDto(StudentDto studentOne, StudentDto studentTwo){
