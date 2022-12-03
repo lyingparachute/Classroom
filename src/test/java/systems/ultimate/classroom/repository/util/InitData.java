@@ -28,7 +28,7 @@ public class InitData {
         studentRepository.deleteAll();
     }
 
-    public Student createFirstStudent() {
+    public Student createStudentOne() {
         Student student = new Student();
         student.setFirstName("Maciej");
         student.setLastName("Komaranczuk");
@@ -38,7 +38,7 @@ public class InitData {
         return studentRepository.save(student);
     }
 
-    public Student createSecondStudent() {
+    public Student createStudentTwo() {
         Student student = new Student();
         student.setFirstName("Weronika");
         student.setLastName("Romanski");
@@ -48,17 +48,19 @@ public class InitData {
         return studentRepository.save(student);
     }
 
-    public Teacher createFirstTeacher() {
+    public Teacher createTeacherOne(Student studentOne, Student studentTwo) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jarosław");
         teacher.setLastName("Adamczuk");
         teacher.setEmail("j.adamczuk@gmail.com");
         teacher.setAge(45);
         teacher.setSubject(Subject.IT);
+        teacher.addStudent(studentOne);
+        teacher.addStudent(studentTwo);
         return teacherRepository.save(teacher);
     }
 
-    public Teacher createSecondTeacher() {
+    public Teacher createTeacherTwo() {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jagoda");
         teacher.setLastName("Kowalska");
