@@ -32,7 +32,7 @@ public class TeacherService {
     @Transactional
     public TeacherDto create(TeacherDto dto){
         Teacher teacher = mapper.map(dto, Teacher.class);
-        assignStudents(teacher, teacher.getStudentsList());
+        assignStudents(teacher, new HashSet<>(teacher.getStudentsList()));
         Teacher saved = repository.save(teacher);
         return mapper.map(saved, TeacherDto.class);
     }
