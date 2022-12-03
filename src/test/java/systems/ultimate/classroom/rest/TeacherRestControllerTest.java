@@ -23,6 +23,7 @@ import systems.ultimate.classroom.repository.util.InitData;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -149,27 +150,57 @@ class TeacherRestControllerTest {
     @Test
     void shouldUpdateTeacher() throws URISyntaxException {
         //given
-        Teacher teacher = initData.createTeacherOne(List.of(initData.createStudentOne(), initData.createStudentTwo()));
-        TeacherDto teacherDto = createTeacherDto(createStudentDtoOne(), createStudentDtoTwo());
-        teacherDto.setId(teacher.getId());
+        Student studentEntity = initData.createStudentOne();
+        Student studentEntity2 = initData.createStudentTwo();
+        StudentDto studentDto = createStudentDtoOne();
+        studentDto.setId(studentEntity.getId());
+        StudentDto studentDto2 = createStudentDtoTwo();
+        studentDto2.setId(studentEntity2.getId());
+
+        Teacher teacherEntity = initData.createTeacherOne(new ArrayList<>());
+        TeacherDto teacherDto2 = new TeacherDto();
+        teacherDto2.setId(teacherEntity.getId());
+        teacherDto2.setFirstName("Lionel");
+        teacherDto2.setLastName("Messi");
+        teacherDto2.setEmail("l.messi@gmail.com");
+        teacherDto2.setAge(35);
+        teacherDto2.setSubject(Subject.ART);
+        teacherDto2.setStudentsList(new HashSet<>(List.of(studentDto, studentDto2)));
+
         //when
         URI url = createURL("/api/teachers/");
-        HttpEntity<TeacherDto> requestUpdate = new HttpEntity<>(teacherDto);
+        final HttpEntity<TeacherDto> requestUpdate = new HttpEntity<>(teacherDto2);
         ResponseEntity<TeacherDto> response = restTemplate.exchange(url, HttpMethod.PUT, requestUpdate ,TeacherDto.class);
+
         //then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         TeacherDto actual = response.getBody();
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isNotNull();
         teacherRepository.findById(actual.getId()).orElseThrow(
                 () -> new IllegalStateException(
-                        "Student with ID= " + actual.getId() + " should not be missing"));
-        assertThat(actual.getFirstName()).isEqualTo(teacherDto.getFirstName());
-        assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
-        assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
-        assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
-        assertThat(actual.getSubject()).isEqualTo(teacherDto.getSubject());
-        assertThat(actual.getStudentsList()).isEqualTo(teacherDto.getStudentsList());
+                        "Teacher with ID= " + actual.getId() + " should not be removed"));
+        assertThat(actual.getFirstName()).isEqualTo(teacherDto2.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(teacherDto2.getLastName());
+        assertThat(actual.getEmail()).isEqualTo(teacherDto2.getEmail());
+        assertThat(actual.getAge()).isEqualTo(teacherDto2.getAge());
+        assertThat(actual.getSubject()).isEqualTo(teacherDto2.getSubject());
+        assertThat(actual.getStudentsList()).isEqualTo(teacherDto2.getStudentsList());
+        assertThat(actual.getStudentsList())
+                .extracting(
+                        StudentDto::getId,
+                        StudentDto::getFirstName,
+                        StudentDto::getLastName,
+                        StudentDto::getEmail,
+                        StudentDto::getAge,
+                        StudentDto::getFieldOfStudy,
+                        s -> s.getTeachersList().size()
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(studentDto.getId(), studentDto.getFirstName(), studentDto.getLastName(),
+                                studentDto.getEmail(), studentDto.getAge(), studentDto.getFieldOfStudy(), studentDto.getTeachersList().size()),
+                        Tuple.tuple(studentDto2.getId(), studentDto2.getFirstName(), studentDto2.getLastName(),
+                                studentDto2.getEmail(), studentDto2.getAge(), studentDto2.getFieldOfStudy(), studentDto2.getTeachersList().size())
+                );
     }
 
     @Test
