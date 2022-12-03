@@ -46,7 +46,7 @@ class StudentRestControllerTest {
     @Test
     void shouldGetStudent() throws URISyntaxException {
         //given
-        Student student = initData.createFirstStudent();
+        Student student = initData.createStudentOne();
         //when
         URI url = createURL("/api/students/" + student.getId());
         ResponseEntity<StudentDto> response = restTemplate.getForEntity(url, StudentDto.class);
@@ -66,8 +66,8 @@ class StudentRestControllerTest {
     @Test
     void shouldGetAllStudents() throws URISyntaxException {
         //given
-        Student student1 = initData.createFirstStudent();
-        Student student2 = initData.createSecondStudent();
+        Student student1 = initData.createStudentOne();
+        Student student2 = initData.createStudentTwo();
         //when
         URI url = createURL("/api/students/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
@@ -105,7 +105,7 @@ class StudentRestControllerTest {
     @Test
     void shouldUpdateStudent() throws URISyntaxException {
         //given
-        Student student = initData.createFirstStudent();
+        Student student = initData.createStudentOne();
         StudentDto studentDto = createStudentDto();
         studentDto.setId(student.getId());
 
@@ -133,7 +133,7 @@ class StudentRestControllerTest {
     @Test
     void shouldDeleteStudent() throws URISyntaxException {
         //given
-        Student student = initData.createFirstStudent();
+        Student student = initData.createStudentOne();
         //when
         URI url = createURL("/api/students/" + student.getId());
         restTemplate.delete(url);
