@@ -81,7 +81,14 @@ class TeacherRestControllerTest {
     @Test
     void shouldCreateTeacher() throws URISyntaxException {
         //given
-        TeacherDto teacherDto = createTeacherDto();
+        Long idOne = initData.createStudentOne().getId();
+        StudentDto dto1 = createStudentDtoOne();
+        dto1.setId(idOne);
+        Long idTwo = initData.createStudentTwo().getId();
+        StudentDto dto2 = createStudentDtoTwo();
+        dto2.setId(idTwo);
+
+        TeacherDto teacherDto = createTeacherDto(dto1, dto2);
         //when
         URI url = createURL("/api/teachers/create");
         ResponseEntity<TeacherDto> response = restTemplate.postForEntity(url, teacherDto ,TeacherDto.class);
@@ -98,7 +105,19 @@ class TeacherRestControllerTest {
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
         assertThat(actual.getSubject()).isEqualTo(teacherDto.getSubject());
-        assertThat(actual.getStudentsList()).isNull();
+        assertThat(actual.getStudentsList()).size().isEqualTo(2);
+        assertThat(actual.getStudentsList())
+                .extracting(
+                        StudentDto::getId,
+                        StudentDto::getFirstName,
+                        StudentDto::getLastName,
+                        StudentDto::getEmail,
+                        StudentDto::getAge,
+                        StudentDto::getFieldOfStudy
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(dto1.getId(), dto1.getFirstName(), dto1.getLastName(), dto1.getEmail(), dto1.getAge(), dto1.getFieldOfStudy()),
+                        Tuple.tuple(dto2.getId(), dto2.getFirstName(), dto2.getLastName(), dto2.getEmail(), dto2.getAge(), dto2.getFieldOfStudy())
+                );
     }
 
     @Test
