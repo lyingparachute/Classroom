@@ -9,6 +9,7 @@ import systems.ultimate.classroom.repository.StudentRepository;
 import systems.ultimate.classroom.repository.TeacherRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Component
 public class InitData {
@@ -48,15 +49,18 @@ public class InitData {
         return studentRepository.save(student);
     }
 
-    public Teacher createTeacherOne(Student studentOne, Student studentTwo) {
+    public Teacher createTeacherOne(List<Student> students) {
+
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jarosław");
         teacher.setLastName("Adamczuk");
         teacher.setEmail("j.adamczuk@gmail.com");
         teacher.setAge(45);
         teacher.setSubject(Subject.IT);
-        teacher.addStudent(studentOne);
-        teacher.addStudent(studentTwo);
+        if (students != null && !students.isEmpty()){
+            students.forEach(teacher::addStudent);
+        }
+//        students.forEach(teacher::addStudent);
         return teacherRepository.save(teacher);
     }
 
