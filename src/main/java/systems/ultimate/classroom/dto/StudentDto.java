@@ -7,6 +7,7 @@ import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.enums.FieldOfStudy;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -19,7 +20,7 @@ public class StudentDto implements Serializable {
     private int age;
     private String email;
     private FieldOfStudy fieldOfStudy;
-    private Set<Teacher> teachersList;
+    private Set<Teacher> teachersList = new HashSet<>();
 
     @Override
     public String toString() {
