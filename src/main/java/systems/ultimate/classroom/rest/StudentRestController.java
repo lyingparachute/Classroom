@@ -45,7 +45,7 @@ public class StudentRestController {
     public ResponseEntity<StudentDto> putStudent(@RequestBody StudentDto studentDto){
         StudentDto updated = studentService.update(studentDto);
         return updated != null ?
-                ResponseEntity.status(HttpStatus.CREATED)
+                ResponseEntity.status(HttpStatus.OK)
                         .body(updated) :
                 ResponseEntity.badRequest().build();
     }

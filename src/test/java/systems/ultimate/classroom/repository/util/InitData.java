@@ -29,23 +29,29 @@ public class InitData {
         studentRepository.deleteAll();
     }
 
-    public Student createStudentOne() {
+    public Student createStudentOne(List<Teacher> teachers) {
         Student student = new Student();
         student.setFirstName("Maciej");
         student.setLastName("Komaranczuk");
         student.setEmail("m.komaranczuk@gmail.com");
         student.setAge(25);
         student.setFieldOfStudy(FieldOfStudy.INFORMATICS);
+        if (teachers != null && !teachers.isEmpty()){
+            teachers.forEach(student::assignTeacher);
+        }
         return studentRepository.save(student);
     }
 
-    public Student createStudentTwo() {
+    public Student createStudentTwo(List<Teacher> teachers) {
         Student student = new Student();
         student.setFirstName("Weronika");
         student.setLastName("Romanski");
         student.setEmail("w.romanski@gmail.com");
         student.setAge(21);
         student.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
+        if (teachers != null && !teachers.isEmpty()){
+            teachers.forEach(student::assignTeacher);
+        }
         return studentRepository.save(student);
     }
 

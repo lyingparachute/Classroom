@@ -23,7 +23,6 @@ public class StudentDto implements Serializable {
     private int age;
     private String email;
     private FieldOfStudy fieldOfStudy;
-//    @EqualsAndHashCode.Exclude
     private Set<Teacher> teachersList = new HashSet<>();
 
     @Override

@@ -12,12 +12,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import systems.ultimate.classroom.dto.StudentDto;
-import systems.ultimate.classroom.dto.TeacherDto;
 import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.enums.FieldOfStudy;
-import systems.ultimate.classroom.enums.Subject;
 import systems.ultimate.classroom.repository.StudentRepository;
+import systems.ultimate.classroom.repository.TeacherRepository;
 import systems.ultimate.classroom.repository.util.InitData;
 
 import java.net.URI;
@@ -44,6 +43,9 @@ class StudentRestControllerTest {
     @Autowired
     StudentRepository studentRepository;
 
+    @Autowired
+    TeacherRepository teacherRepository;
+
     @BeforeEach
     public void setup() {
         initData.cleanUp();
@@ -52,7 +54,9 @@ class StudentRestControllerTest {
     @Test
     void shouldGetStudent() throws URISyntaxException {
         //given
-        Student student = initData.createStudentOne();
+        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Student student = initData.createStudentOne(List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/students/" + student.getId());
         ResponseEntity<StudentDto> response = restTemplate.getForEntity(url, StudentDto.class);
@@ -66,14 +70,30 @@ class StudentRestControllerTest {
         assertThat(actual.getEmail()).isEqualTo(student.getEmail());
         assertThat(actual.getAge()).isEqualTo(student.getAge());
         assertThat(actual.getFieldOfStudy()).isEqualTo(student.getFieldOfStudy());
-        assertThat(actual.getTeachersList()).isEmpty();
+        assertThat(actual.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()));
+
     }
 
     @Test
     void shouldGetAllStudents() throws URISyntaxException {
         //given
-        Student student1 = initData.createStudentOne();
-        Student student2 = initData.createStudentTwo();
+        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher2 = initData.createTeacherTwo(List.of());
+
+        Student student1 = initData.createStudentOne(List.of(teacher1));
+        Student student2 = initData.createStudentTwo(List.of(teacher2));
         //when
         URI url = createURL("/api/students/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
@@ -83,6 +103,7 @@ class StudentRestControllerTest {
         assertThat(actual).isNotNull();
         assertThat(actual).isNotEmpty();
         assertThat(actual).size().isEqualTo(2);
+//        assertThat(actual.stream().iterator().next());
        }
 
     @Test
@@ -120,23 +141,30 @@ class StudentRestControllerTest {
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
                                 teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject())
-                );
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()));
     }
 
     @Test
     void shouldUpdateStudent() throws URISyntaxException {
         //given
-        Student student = initData.createStudentOne();
-        StudentDto studentDto = createStudentDto(List.of());
-        studentDto.setId(student.getId());
+        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Student studentEntity = initData.createStudentOne(List.of());
+        StudentDto studentDto = new StudentDto();
+        studentDto.setId(studentEntity.getId());
+        studentDto.setFirstName("Pamela");
+        studentDto.setLastName("Gonzales");
+        studentDto.setEmail("p.gonzales@gmail.com");
+        studentDto.setAge(20);
+        studentDto.setFieldOfStudy(FieldOfStudy.ROBOTICS);
+        studentDto.setTeachersList(new HashSet<>(List.of(teacher1, teacher2)));
 
         //when
         URI url = createURL("/api/students/");
         final HttpEntity<StudentDto> request = new HttpEntity<>(studentDto);
         ResponseEntity<StudentDto> response = restTemplate.exchange(url, HttpMethod.PUT, request, StudentDto.class);
         //then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         StudentDto actual = response.getBody();
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isNotNull();
@@ -149,19 +177,37 @@ class StudentRestControllerTest {
         assertThat(actual.getEmail()).isEqualTo(studentDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(studentDto.getAge());
         assertThat(actual.getFieldOfStudy()).isEqualTo(studentDto.getFieldOfStudy());
-        assertThat(actual.getTeachersList()).isEqualTo(studentDto.getTeachersList());
+        assertThat(actual.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()));
     }
 
     @Test
     void shouldDeleteStudent() throws URISyntaxException {
         //given
-        Student student = initData.createStudentOne();
+        Student student = initData.createStudentOne(List.of(
+                initData.createTeacherOne(List.of()),
+                initData.createTeacherTwo(List.of())));
         //when
         URI url = createURL("/api/students/" + student.getId());
         restTemplate.delete(url);
         //then
         Optional<Student> byId = studentRepository.findById(student.getId());
         assertThat(byId).isNotPresent();
+        student.getTeachersList().forEach(i -> {
+            teacherRepository.findById(i.getId()).orElseThrow(() -> new IllegalStateException(
+                    "Teacher with ID = " + i.getId() + " should not be removed."));
+        });
     }
 
     private StudentDto createStudentDto(List<Teacher> teachers) {
@@ -173,26 +219,6 @@ class StudentRestControllerTest {
         studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
         studentDto.setTeachersList(new HashSet<Teacher>(teachers));
         return studentDto;
-    }
-
-    private TeacherDto createTeacherDtoOne() {
-        TeacherDto dto = new TeacherDto();
-        dto.setFirstName("Jarosław");
-        dto.setLastName("Adamczuk");
-        dto.setEmail("j.adamczuk@gmail.com");
-        dto.setAge(45);
-        dto.setSubject(Subject.IT);
-        return dto;
-        }
-
-    private TeacherDto createTeacherDtoTwo() {
-        TeacherDto dto = new TeacherDto();
-        dto.setFirstName("Jagoda");
-        dto.setLastName("Kowalska");
-        dto.setEmail("j.kowalska@gmail.com");
-        dto.setAge(33);
-        dto.setSubject(Subject.SCIENCE);
-        return dto;
     }
 
     private URI createURL(String path) throws URISyntaxException {

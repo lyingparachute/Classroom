@@ -53,8 +53,8 @@ class TeacherRestControllerTest {
     @Test
     void shouldGetTeacher() throws URISyntaxException {
         //given
-        Student studentOne = initData.createStudentOne();
-        Student studentTwo = initData.createStudentTwo();
+        Student studentOne = initData.createStudentOne(List.of());
+        Student studentTwo = initData.createStudentTwo(List.of());
         Teacher teacher = initData.createTeacherOne(List.of(studentOne, studentTwo));
 
         //when
@@ -70,7 +70,6 @@ class TeacherRestControllerTest {
         assertThat(actual.getEmail()).isEqualTo(teacher.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacher.getAge());
         assertThat(actual.getSubject()).isEqualTo(teacher.getSubject());
-//        assertThat(actual.getStudentsList()).size().isEqualTo(1);
         assertThat(actual.getStudentsList())
                 .extracting(
                         Student::getId,
@@ -106,8 +105,8 @@ class TeacherRestControllerTest {
     @Test
     void shouldCreateTeacher() throws URISyntaxException {
         //given
-        Student student1 = initData.createStudentOne();
-        Student student2 = initData.createStudentTwo();
+        Student student1 = initData.createStudentOne(List.of());
+        Student student2 = initData.createStudentTwo(List.of());
 
         TeacherDto teacherDto = createTeacherDto(student1, student2);
         //when
@@ -144,8 +143,8 @@ class TeacherRestControllerTest {
     @Test
     void shouldUpdateTeacher() throws URISyntaxException {
         //given
-        Student student1 = initData.createStudentOne();
-        Student student2 = initData.createStudentTwo();
+        Student student1 = initData.createStudentOne(List.of());
+        Student student2 = initData.createStudentTwo(List.of());
 
         Teacher teacherEntity = initData.createTeacherOne(new ArrayList<>());
         TeacherDto teacherDto = new TeacherDto();
@@ -195,7 +194,9 @@ class TeacherRestControllerTest {
     @Test
     void shouldDeleteTeacher() throws URISyntaxException {
         //given
-        Teacher teacher = initData.createTeacherOne(List.of(initData.createStudentOne(), initData.createStudentTwo()));
+        Teacher teacher = initData.createTeacherOne(List.of(
+                initData.createStudentOne(List.of()),
+                initData.createStudentTwo(List.of())));
         //when
         URI url = createURL("/api/teachers/" + teacher.getId());
         restTemplate.delete(url);
@@ -203,11 +204,9 @@ class TeacherRestControllerTest {
         Optional<Teacher> byId = teacherRepository.findById(teacher.getId());
         assertThat(byId).isNotPresent();
         teacher.getStudentsList().forEach(i -> {
-            assertThat(studentRepository.findById(i.getId()).isPresent()).isTrue();
             studentRepository.findById(i.getId()).orElseThrow(() -> new IllegalStateException(
-                    "Student with ID= " + i.getId() + " should not be removed"));
+                    "Student with ID= " + i.getId() + " should not be removed."));
         });
-        assertThat(studentRepository.findAll().size()).isEqualTo(2);
     }
 
     private TeacherDto createTeacherDto(Student studentOne, Student studentTwo){
