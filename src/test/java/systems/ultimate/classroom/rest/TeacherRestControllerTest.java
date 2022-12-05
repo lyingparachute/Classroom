@@ -126,7 +126,7 @@ class TeacherRestControllerTest {
         assertThat(actual.getId()).isNotNull();
         teacherRepository.findById(actual.getId()).orElseThrow(
                 () -> new IllegalStateException(
-                        "Student with ID= " + actual.getId() + " should not be missing"));
+                        "Teacher with ID= " + actual.getId() + " should not be missing"));
         assertThat(actual.getFirstName()).isEqualTo(teacherDto.getFirstName());
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
