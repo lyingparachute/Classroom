@@ -148,18 +148,18 @@ class TeacherRestControllerTest {
         Student student2 = initData.createStudentTwo();
 
         Teacher teacherEntity = initData.createTeacherOne(new ArrayList<>());
-        TeacherDto teacherDto2 = new TeacherDto();
-        teacherDto2.setId(teacherEntity.getId());
-        teacherDto2.setFirstName("Lionel");
-        teacherDto2.setLastName("Messi");
-        teacherDto2.setEmail("l.messi@gmail.com");
-        teacherDto2.setAge(35);
-        teacherDto2.setSubject(Subject.ART);
-        teacherDto2.setStudentsList(new HashSet<>(List.of(student1, student2)));
+        TeacherDto teacherDto = new TeacherDto();
+        teacherDto.setId(teacherEntity.getId());
+        teacherDto.setFirstName("Lionel");
+        teacherDto.setLastName("Messi");
+        teacherDto.setEmail("l.messi@gmail.com");
+        teacherDto.setAge(35);
+        teacherDto.setSubject(Subject.ART);
+        teacherDto.setStudentsList(new HashSet<>(List.of(student1, student2)));
 
         //when
         URI url = createURL("/api/teachers/");
-        final HttpEntity<TeacherDto> requestUpdate = new HttpEntity<>(teacherDto2);
+        final HttpEntity<TeacherDto> requestUpdate = new HttpEntity<>(teacherDto);
         ResponseEntity<TeacherDto> response = restTemplate.exchange(url, HttpMethod.PUT, requestUpdate ,TeacherDto.class);
 
         //then
@@ -170,11 +170,11 @@ class TeacherRestControllerTest {
         teacherRepository.findById(actual.getId()).orElseThrow(
                 () -> new IllegalStateException(
                         "Teacher with ID= " + actual.getId() + " should not be removed"));
-        assertThat(actual.getFirstName()).isEqualTo(teacherDto2.getFirstName());
-        assertThat(actual.getLastName()).isEqualTo(teacherDto2.getLastName());
-        assertThat(actual.getEmail()).isEqualTo(teacherDto2.getEmail());
-        assertThat(actual.getAge()).isEqualTo(teacherDto2.getAge());
-        assertThat(actual.getSubject()).isEqualTo(teacherDto2.getSubject());
+        assertThat(actual.getFirstName()).isEqualTo(teacherDto.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
+        assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
+        assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
+        assertThat(actual.getSubject()).isEqualTo(teacherDto.getSubject());
         assertThat(actual.getStudentsList())
                 .extracting(
                         Student::getId,
