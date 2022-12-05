@@ -1,18 +1,20 @@
 package systems.ultimate.classroom.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import systems.ultimate.classroom.entity.Teacher;
+import lombok.Setter;
 import systems.ultimate.classroom.enums.FieldOfStudy;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+//@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode
 public class StudentDto implements Serializable {
     private Long id;
     private String firstName;
@@ -20,7 +22,8 @@ public class StudentDto implements Serializable {
     private int age;
     private String email;
     private FieldOfStudy fieldOfStudy;
-    private Set<Teacher> teachersList = new HashSet<>();
+    @EqualsAndHashCode.Exclude
+    private Set<TeacherDto> teachersList = new HashSet<>();
 
     @Override
     public String toString() {

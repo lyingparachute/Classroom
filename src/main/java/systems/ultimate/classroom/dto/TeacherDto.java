@@ -1,17 +1,20 @@
 package systems.ultimate.classroom.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import systems.ultimate.classroom.enums.Subject;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+//@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode
 public class TeacherDto implements Serializable {
     private Long id;
     private String firstName;
