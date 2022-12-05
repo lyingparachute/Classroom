@@ -152,6 +152,26 @@ class StudentRestControllerTest {
         return studentDto;
     }
 
+    private TeacherDto createTeacherDtoOne() {
+        TeacherDto dto = new TeacherDto();
+        dto.setFirstName("Waldemar");
+        dto.setLastName("Pawlak");
+        dto.setEmail("w.pawlak@gmail.com");
+        dto.setAge(34);
+        dto.setSubject(Subject.MATHS);
+        return dto;
+        }
+
+    private TeacherDto createTeacherDtoTwo() {
+        TeacherDto dto = new TeacherDto();
+        dto.setFirstName("Romuald");
+        dto.setLastName("Paszkiewicz");
+        dto.setEmail("r.paszkiewicz@gmail.com");
+        dto.setAge(40);
+        dto.setSubject(Subject.ART);
+        return dto;
+    }
+
     private URI createURL(String path) throws URISyntaxException {
         return new URI("http://localhost:" + randomServerPort + path);
     }
