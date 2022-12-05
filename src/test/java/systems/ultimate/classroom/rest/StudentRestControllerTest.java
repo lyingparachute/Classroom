@@ -1,5 +1,6 @@
 package systems.ultimate.classroom.rest;
 
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,18 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import systems.ultimate.classroom.dto.StudentDto;
+import systems.ultimate.classroom.dto.TeacherDto;
 import systems.ultimate.classroom.entity.Student;
+import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.enums.FieldOfStudy;
+import systems.ultimate.classroom.enums.Subject;
 import systems.ultimate.classroom.repository.StudentRepository;
 import systems.ultimate.classroom.repository.util.InitData;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -82,7 +88,9 @@ class StudentRestControllerTest {
     @Test
     void shouldCreateStudent() throws URISyntaxException {
         //given
-        StudentDto studentDto = createStudentDto();
+        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        StudentDto studentDto = createStudentDto(List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/students/create");
         ResponseEntity<StudentDto> response = restTemplate.postForEntity(url, studentDto, StudentDto.class);
@@ -99,14 +107,28 @@ class StudentRestControllerTest {
         assertThat(actual.getEmail()).isEqualTo(studentDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(studentDto.getAge());
         assertThat(actual.getFieldOfStudy()).isEqualTo(studentDto.getFieldOfStudy());
-        assertThat(actual.getTeachersList()).isNull();
+        assertThat(actual.getTeachersList()).size().isEqualTo(2);
+        assertThat(actual.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject())
+                );
     }
 
     @Test
     void shouldUpdateStudent() throws URISyntaxException {
         //given
         Student student = initData.createStudentOne();
-        StudentDto studentDto = createStudentDto();
+        StudentDto studentDto = createStudentDto(List.of());
         studentDto.setId(student.getId());
 
         //when
@@ -142,33 +164,34 @@ class StudentRestControllerTest {
         assertThat(byId).isNotPresent();
     }
 
-    private StudentDto createStudentDto() {
+    private StudentDto createStudentDto(List<Teacher> teachers) {
         StudentDto studentDto = new StudentDto();
         studentDto.setFirstName("Weronika");
         studentDto.setLastName("Romanski");
         studentDto.setEmail("w.romanski@gmail.com");
         studentDto.setAge(21);
         studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
+        studentDto.setTeachersList(new HashSet<Teacher>(teachers));
         return studentDto;
     }
 
     private TeacherDto createTeacherDtoOne() {
         TeacherDto dto = new TeacherDto();
-        dto.setFirstName("Waldemar");
-        dto.setLastName("Pawlak");
-        dto.setEmail("w.pawlak@gmail.com");
-        dto.setAge(34);
-        dto.setSubject(Subject.MATHS);
+        dto.setFirstName("Jarosław");
+        dto.setLastName("Adamczuk");
+        dto.setEmail("j.adamczuk@gmail.com");
+        dto.setAge(45);
+        dto.setSubject(Subject.IT);
         return dto;
         }
 
     private TeacherDto createTeacherDtoTwo() {
         TeacherDto dto = new TeacherDto();
-        dto.setFirstName("Romuald");
-        dto.setLastName("Paszkiewicz");
-        dto.setEmail("r.paszkiewicz@gmail.com");
-        dto.setAge(40);
-        dto.setSubject(Subject.ART);
+        dto.setFirstName("Jagoda");
+        dto.setLastName("Kowalska");
+        dto.setEmail("j.kowalska@gmail.com");
+        dto.setAge(33);
+        dto.setSubject(Subject.SCIENCE);
         return dto;
     }
 
