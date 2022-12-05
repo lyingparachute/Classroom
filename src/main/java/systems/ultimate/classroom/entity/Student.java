@@ -63,4 +63,9 @@ public class Student {
         this.teachersList.add(teacher);
         teacher.getStudentsList().add(this);
     }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
 }
