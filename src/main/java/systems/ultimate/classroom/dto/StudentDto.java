@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.enums.FieldOfStudy;
 
 import java.io.Serializable;
@@ -23,7 +24,7 @@ public class StudentDto implements Serializable {
     private String email;
     private FieldOfStudy fieldOfStudy;
     @EqualsAndHashCode.Exclude
-    private Set<TeacherDto> teachersList = new HashSet<>();
+    private Set<Teacher> teachersList = new HashSet<>();
 
     @Override
     public String toString() {

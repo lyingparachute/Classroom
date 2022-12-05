@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.enums.Subject;
 
 import java.io.Serializable;
@@ -22,7 +23,7 @@ public class TeacherDto implements Serializable {
     private int age;
     private String email;
     private Subject subject;
-    private Set<StudentDto> studentsList = new HashSet<>();
+    private Set<Student> studentsList = new HashSet<>();
 
     @Override
     public String toString() {
