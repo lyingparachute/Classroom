@@ -59,17 +59,19 @@ public class InitData {
         if (students != null && !students.isEmpty()){
             students.forEach(teacher::addStudent);
         }
-//        students.forEach(teacher::addStudent);
         return teacherRepository.save(teacher);
     }
 
-    public Teacher createTeacherTwo() {
+    public Teacher createTeacherTwo(List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jagoda");
         teacher.setLastName("Kowalska");
         teacher.setEmail("j.kowalska@gmail.com");
         teacher.setAge(33);
         teacher.setSubject(Subject.SCIENCE);
+        if (students != null && !students.isEmpty()){
+            students.forEach(teacher::addStudent);
+        }
         return teacherRepository.save(teacher);
     }
 }
