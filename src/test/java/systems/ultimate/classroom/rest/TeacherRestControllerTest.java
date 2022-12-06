@@ -21,10 +21,7 @@ import systems.ultimate.classroom.repository.util.InitData;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -86,21 +83,21 @@ class TeacherRestControllerTest {
                 );
     }
 
-//    @Test
-//    void shouldGetAllTeachers() throws URISyntaxException {
-//        //given
-//        initData.createTeacherOne( List.of(initData.createStudentOne(), initData.createStudentTwo()));
-//        initData.createTeacherTwo();
-//        //when
-//        URI url = createURL("/api/teachers/");
-//        ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
-//        //then
-//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-//        Set actual = response.getBody();
-//        assertThat(actual).isNotNull();
-//        assertThat(actual).isNotEmpty();
-//        assertThat(actual).size().isEqualTo(2);
-//    }
+    @Test
+    void shouldGetAllTeachers() throws URISyntaxException {
+        //given
+        initData.createTeacherOne(List.of(initData.createStudentOne(List.of())));
+        initData.createTeacherTwo(List.of(initData.createStudentTwo(List.of())));
+        //when
+        URI url = createURL("/api/teachers/");
+        ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Set actual = response.getBody();
+        assertThat(actual).isNotNull();
+        assertThat(actual).isNotEmpty();
+        assertThat(actual).size().isEqualTo(2);
+    }
 
     @Test
     void shouldCreateTeacher() throws URISyntaxException {

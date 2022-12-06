@@ -103,7 +103,6 @@ class StudentRestControllerTest {
         assertThat(actual).isNotNull();
         assertThat(actual).isNotEmpty();
         assertThat(actual).size().isEqualTo(2);
-//        assertThat(actual.stream().iterator().next());
        }
 
     @Test
