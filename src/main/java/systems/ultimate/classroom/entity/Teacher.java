@@ -1,5 +1,6 @@
 package systems.ultimate.classroom.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -47,6 +48,7 @@ public class Teacher {
     @Enumerated(EnumType.STRING)
     private Subject subject;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.MERGE,
