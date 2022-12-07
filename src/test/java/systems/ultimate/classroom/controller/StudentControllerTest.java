@@ -63,7 +63,6 @@ class StudentControllerTest {
         studentDto.setEmail("m.mostowiak@gmail.com");
         studentDto.setAge(22);
         studentDto.setFieldOfStudy(FieldOfStudy.INFORMATICS);
-
         //when
         this.mockMvc.perform(post("/students/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -79,12 +78,10 @@ class StudentControllerTest {
                         "&add="))
                 .andDo(print())
                 .andExpect(status().isOk());
-
         //then
         Optional<Student> byId = studentRepository.findAll().stream().findFirst();
-        assertThat(byId.isPresent()).isTrue();
+        assertThat(byId).isPresent();
         Student actual = byId.get();
-
         assertThat(actual.getFirstName()).isEqualTo(studentDto.getFirstName());
         assertThat(actual.getLastName()).isEqualTo(studentDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(studentDto.getEmail());
@@ -138,7 +135,6 @@ class StudentControllerTest {
         studentDto.setEmail("m.mostowiak@gmail.com");
         studentDto.setAge(22);
         studentDto.setFieldOfStudy(FieldOfStudy.INFORMATICS);
-
         //when
         this.mockMvc.perform(post("/students/update")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
