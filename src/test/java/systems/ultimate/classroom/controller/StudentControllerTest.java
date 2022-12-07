@@ -52,15 +52,6 @@ class StudentControllerTest {
     }
 
     @Test
-    void getPaginatedStudents() {
-    }
-
-    @Test
-    void shouldGetStudent() {
-
-    }
-
-    @Test
     void shouldCreateStudent() throws Exception {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
