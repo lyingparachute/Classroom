@@ -30,7 +30,7 @@ public class TeacherController {
     }
 
     @GetMapping
-    public String getStudents(Model model) {
+    public String getTeachers(Model model) {
         return getPaginatedTeachers(1, "firstName", "asc", model);
     }
 
