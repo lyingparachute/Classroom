@@ -95,4 +95,17 @@ public class InitData {
         }
         return teacherRepository.save(teacher);
     }
+
+    public Teacher createTeacherThree(List<Student> students) {
+        Teacher teacher = new Teacher();
+        teacher.setFirstName("Grzegorz");
+        teacher.setLastName("Bartosiewicz");
+        teacher.setEmail("g.bartosiewicz@gmail.com");
+        teacher.setAge(51);
+        teacher.setSubject(Subject.ART);
+        if (students != null && !students.isEmpty()){
+            students.forEach(teacher::addStudent);
+        }
+        return teacherRepository.save(teacher);
+    }
 }
