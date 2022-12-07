@@ -55,6 +55,21 @@ public class InitData {
         return studentRepository.save(student);
     }
 
+    public Student createStudentThree(List<Teacher> teachers) {
+        Student student = new Student();
+        student.setFirstName("Agnieszka");
+        student.setLastName("Sernatowicz");
+        student.setEmail("a.sernatowicz@gmail.com");
+        student.setAge(18);
+        student.setFieldOfStudy(FieldOfStudy.ROBOTICS);
+        if (teachers != null && !teachers.isEmpty()){
+            teachers.forEach(student::assignTeacher);
+        }
+        return studentRepository.save(student);
+    }
+
+
+
     public Teacher createTeacherOne(List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jarosław");
