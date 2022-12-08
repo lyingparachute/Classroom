@@ -69,8 +69,8 @@
                                     <td th:text="${teacher.lastName}"/>
                                     <td th:text="${teacher.age}"/>
                                     <td th:text="${teacher.email}"/>
-                                    <td th:text="${teacher.fieldOfStudy}"/>
-                                    <td th:text="${teacher.teachersList}"/>
+                                    <td th:text="${teacher.subject.desc}"/>
+                                    <td th:text="${teacher.studentsList.size()}"/>
                                     <td>
                                         <a class="btn btn-outline-primary"
                                            th:href="@{/teachers/{id}(id=${teacher.id})}"
