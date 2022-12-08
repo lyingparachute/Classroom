@@ -11,8 +11,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.entity.Teacher;
-import systems.ultimate.classroom.repository.StudentRepository;
-import systems.ultimate.classroom.repository.TeacherRepository;
 import systems.ultimate.classroom.repository.util.InitData;
 
 import javax.transaction.Transactional;
@@ -29,12 +27,6 @@ class StudentGetControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
-
-    @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private TeacherRepository teacherRepository;
 
     @Autowired
     private InitData initData;
@@ -101,7 +93,7 @@ class StudentGetControllerTest {
     }
 
     @Test
-    void shouldGetStudentsAndContainStudents() throws Exception {
+    void shouldGetStudentsAndContainParticularStudents() throws Exception {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -175,7 +167,16 @@ class StudentGetControllerTest {
     }
 
     @Test
-    void shouldSearchStudentsByFirstOrLastName() throws Exception {
+    void shouldGetStudentsSearchView() throws Exception {
+        this.mockMvc.perform(get("/students/search?name=w"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                .andExpect(view().name("students-search"));
+    }
+
+    @Test
+    void shouldGetResultOfSearchStudentsByFirstOrLastName() throws Exception {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
