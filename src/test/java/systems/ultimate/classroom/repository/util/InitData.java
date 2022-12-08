@@ -36,10 +36,12 @@ public class InitData {
         student.setEmail("m.komaranczuk@gmail.com");
         student.setAge(25);
         student.setFieldOfStudy(FieldOfStudy.INFORMATICS);
+        studentRepository.save(student);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
+            studentRepository.save(student);
         }
-        return studentRepository.save(student);
+        return student;
     }
 
     public Student createStudentTwo(List<Teacher> teachers) {
@@ -49,10 +51,12 @@ public class InitData {
         student.setEmail("w.romanski@gmail.com");
         student.setAge(21);
         student.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
+        studentRepository.save(student);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
+            studentRepository.save(student);
         }
-        return studentRepository.save(student);
+        return student;
     }
 
     public Student createStudentThree(List<Teacher> teachers) {
@@ -62,10 +66,12 @@ public class InitData {
         student.setEmail("a.sernatowicz@gmail.com");
         student.setAge(18);
         student.setFieldOfStudy(FieldOfStudy.ROBOTICS);
+        studentRepository.save(student);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
+            studentRepository.save(student);
         }
-        return studentRepository.save(student);
+        return student;
     }
 
 
