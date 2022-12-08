@@ -84,15 +84,19 @@ public class StudentService {
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).collect(Collectors.toList());
     }
 
+    @Transactional
     public void assignTeachers(Student student, Set<Teacher> teachers) {
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
+            studentRepository.save(student);
         }
     }
 
+    @Transactional
     public void removeTeachers(Student student, Set<Teacher> teachers) {
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::removeTeacher);
+            studentRepository.save(student);
         }
     }
 
