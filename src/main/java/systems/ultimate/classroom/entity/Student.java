@@ -48,7 +48,7 @@ public class Student {
     private FieldOfStudy fieldOfStudy;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.MERGE,
                     CascadeType.DETACH

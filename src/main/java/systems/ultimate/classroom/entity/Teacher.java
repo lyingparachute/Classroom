@@ -49,7 +49,7 @@ public class Teacher {
     private Subject subject;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.MERGE,
                     CascadeType.DETACH})
