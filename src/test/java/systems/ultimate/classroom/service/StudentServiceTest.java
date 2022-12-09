@@ -11,6 +11,7 @@ import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.enums.FieldOfStudy;
 import systems.ultimate.classroom.repository.StudentRepository;
+import systems.ultimate.classroom.repository.TeacherRepository;
 import systems.ultimate.classroom.repository.util.InitData;
 
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 @SpringBootTest
 @Transactional
@@ -33,6 +35,9 @@ class StudentServiceTest {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     @Autowired
     private ModelMapper mapper;
@@ -103,7 +108,32 @@ class StudentServiceTest {
 
     @Test
     void shouldRemoveStudent_givenId() {
+        //given
+        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher3 = initData.createTeacherThree(List.of());
 
+        Student student = initData.createStudentOne(List.of(teacher1, teacher2, teacher3));
+        //when
+        studentService.remove(student.getId());
+        //then
+        Optional<Student> byId = studentRepository.findById(student.getId());
+        assertThat(byId).isNotPresent();
+        assertThat(teacherRepository.findById(teacher1.getId())).isPresent();
+        assertThat(teacherRepository.findById(teacher2.getId())).isPresent();
+        assertThat(teacherRepository.findById(teacher3.getId())).isPresent();
+    }
+
+    @Test
+    void throwsIllegalArgumentException_givenWrongId() {
+        //given
+        Long id = 1L;
+        //when
+        Throwable thrown = catchThrowable(() -> studentService.remove(id));
+        //then
+        assertThat(thrown)
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid student id: " + id);
     }
 
     @Test
