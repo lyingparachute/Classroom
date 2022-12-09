@@ -71,7 +71,8 @@ public class StudentService {
 
     public StudentDto fetchById(Long id) {
         Optional<Student> byId = studentRepository.findById(id);
-        return byId.map(student -> mapper.map(student, StudentDto.class)).orElse(null);
+        return byId.map(student -> mapper.map(student, StudentDto.class))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid student id: " + id));
     }
 
     @Transactional
