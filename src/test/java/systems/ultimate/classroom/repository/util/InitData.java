@@ -29,6 +29,7 @@ public class InitData {
         studentRepository.deleteAll();
     }
 
+    @Transactional
     public Student createStudentOne(List<Teacher> teachers) {
         Student student = new Student();
         student.setFirstName("Maciej");
@@ -44,6 +45,7 @@ public class InitData {
         return student;
     }
 
+    @Transactional
     public Student createStudentTwo(List<Teacher> teachers) {
         Student student = new Student();
         student.setFirstName("Weronika");
@@ -51,14 +53,15 @@ public class InitData {
         student.setEmail("w.romanski@gmail.com");
         student.setAge(21);
         student.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
-        studentRepository.save(student);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
             studentRepository.save(student);
         }
+        studentRepository.save(student);
         return student;
     }
 
+    @Transactional
     public Student createStudentThree(List<Teacher> teachers) {
         Student student = new Student();
         student.setFirstName("Agnieszka");
@@ -66,16 +69,15 @@ public class InitData {
         student.setEmail("a.sernatowicz@gmail.com");
         student.setAge(18);
         student.setFieldOfStudy(FieldOfStudy.ROBOTICS);
-        studentRepository.save(student);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
             studentRepository.save(student);
         }
+        studentRepository.save(student);
         return student;
     }
 
-
-
+    @Transactional
     public Teacher createTeacherOne(List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jarosław");
@@ -89,6 +91,7 @@ public class InitData {
         return teacherRepository.save(teacher);
     }
 
+    @Transactional
     public Teacher createTeacherTwo(List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jagoda");
@@ -102,6 +105,7 @@ public class InitData {
         return teacherRepository.save(teacher);
     }
 
+    @Transactional
     public Teacher createTeacherThree(List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Grzegorz");
