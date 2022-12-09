@@ -142,12 +142,27 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldRemoveTeachersFromStudent_givenTeachersList() {
+    void shouldRemoveTeachersFromStudent_givenTeachersSet() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
-        HashSet<Teacher> teachers = new HashSet<>(List.of(teacher1, teacher2));
         Student student = initData.createStudentOne(List.of(teacher1, teacher2));
+        Optional<Student> byId2 = studentRepository.findById(student.getId());
+        assertThat(byId2).isPresent();
+        Student actual2 = byId2.get();
+        assertThat(actual2.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).contains(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()));
         //when
         studentService.removeTeachers(student, new HashSet<>(student.getTeachersList()));
         Student saved = studentRepository.save(student);
