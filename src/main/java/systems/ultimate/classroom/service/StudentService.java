@@ -10,6 +10,7 @@ import systems.ultimate.classroom.dto.StudentDto;
 import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.repository.StudentRepository;
+import systems.ultimate.classroom.repository.TeacherRepository;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
@@ -21,10 +22,12 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
     private final ModelMapper mapper;
 
-    public StudentService(StudentRepository studentRepository, ModelMapper mapper) {
+    public StudentService(StudentRepository studentRepository, TeacherRepository teacherRepository, ModelMapper mapper) {
         this.studentRepository = studentRepository;
+        this.teacherRepository = teacherRepository;
         this.mapper = mapper;
     }
 
@@ -96,6 +99,7 @@ public class StudentService {
     public void removeTeachers(Student student, Set<Teacher> teachers) {
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::removeTeacher);
+            teacherRepository.saveAll(teachers);
             studentRepository.save(student);
         }
     }
