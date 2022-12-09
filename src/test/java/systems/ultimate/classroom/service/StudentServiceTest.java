@@ -102,12 +102,52 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldFindStudent_givenId_returnsStudentDto() {
+    void fetchById_shouldFindStudent_givenId_returnsStudentDto() {
+        //given
+        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher3 = initData.createTeacherThree(List.of());
 
+        Student student = initData.createStudentOne(List.of(teacher1, teacher2, teacher3));
+        //when
+        StudentDto actual = studentService.fetchById(student.getId());
+        //then
+        assertThat(actual.getFirstName()).isEqualTo(student.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(student.getLastName());
+        assertThat(actual.getEmail()).isEqualTo(student.getEmail());
+        assertThat(actual.getAge()).isEqualTo(student.getAge());
+        assertThat(actual.getFieldOfStudy()).isEqualTo(student.getFieldOfStudy());
+        assertThat(actual.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()),
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubject()));
     }
 
     @Test
-    void shouldRemoveStudent_givenId() {
+    void fetchById_throwsIllegalArgumentException_givenWrongId(){
+        //given
+        Long id = 1L;
+        //when
+        Throwable thrown = catchThrowable(() -> studentService.fetchById(id));
+        //then
+        assertThat(thrown)
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid student id: " + id);
+    }
+
+    @Test
+    void remove_shouldRemoveStudent_givenId() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -125,7 +165,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void throwsIllegalArgumentException_givenWrongId() {
+    void remove_throwsIllegalArgumentException_givenWrongId() {
         //given
         Long id = 1L;
         //when
@@ -137,7 +177,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldFindStudentsByFirstOrLastName_givenName() {
+    void findByFirstOrLastName_returnsStudentsSearchedByFirstOrLastName_givenName() {
         //given
         String name = "w";
         Teacher teacher1 = initData.createTeacherOne(List.of());
@@ -197,7 +237,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldAssignTeachersToStudent_givenTeachersSet() {
+    void assignTeachers_shouldAssignTeachersToStudent_givenTeachersSet() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -230,7 +270,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldRemoveTeachersFromStudent_givenTeachersSet() {
+    void removeTeachers_shouldRemoveTeachersFromStudent_givenTeachersSet() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
