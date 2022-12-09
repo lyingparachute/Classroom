@@ -32,7 +32,7 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentDto create(StudentDto dto){
+    public StudentDto create(StudentDto dto) {
         Student student = mapper.map(dto, Student.class);
         assignTeachers(student, student.getTeachersList());
         Student saved = studentRepository.save(student);
@@ -40,17 +40,15 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentDto update(StudentDto dto){
-        Optional<Student> byId = studentRepository.findById(dto.getId());
-        if(byId.isPresent()){
-            Student student = byId.get();
-            removeTeachers(student, new HashSet<>(student.getTeachersList()));
-            mapper.map(dto, student);
-            assignTeachers(student, student.getTeachersList());
-            Student saved = studentRepository.save(student);
-            return mapper.map(saved, StudentDto.class);
-        }
-        return null;
+    public StudentDto update(StudentDto dto) {
+        Student student = studentRepository.findById(dto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid student '" + dto + "' with ID: " + dto.getId()));
+        removeTeachers(student, new HashSet<>(student.getTeachersList()));
+        mapper.map(dto, student);
+        assignTeachers(student, student.getTeachersList());
+        Student saved = studentRepository.save(student);
+        return mapper.map(saved, StudentDto.class);
+
     }
 
     public List<StudentDto> fetchAll() {
@@ -58,7 +56,7 @@ public class StudentService {
         return allStudents.stream().map(student -> mapper.map(student, StudentDto.class)).collect(Collectors.toList());
     }
 
-    public Page<StudentDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection){
+    public Page<StudentDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
@@ -83,14 +81,14 @@ public class StudentService {
         studentRepository.delete(student);
     }
 
-    public List<StudentDto> findByFirstOrLastName(String searched){
+    public List<StudentDto> findByFirstOrLastName(String searched) {
         List<Student> found = studentRepository.findAllByFirstNameOrLastName(searched);
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).collect(Collectors.toList());
     }
 
     @Transactional
     public void assignTeachers(Student student, Set<Teacher> teachers) {
-        if (teachers != null && !teachers.isEmpty()){
+        if (teachers != null && !teachers.isEmpty()) {
             teachers.forEach(student::assignTeacher);
             studentRepository.save(student);
         }
@@ -98,7 +96,7 @@ public class StudentService {
 
     @Transactional
     public void removeTeachers(Student student, Set<Teacher> teachers) {
-        if (teachers != null && !teachers.isEmpty()){
+        if (teachers != null && !teachers.isEmpty()) {
             teachers.forEach(student::removeTeacher);
             teacherRepository.saveAll(teachers);
             studentRepository.save(student);
