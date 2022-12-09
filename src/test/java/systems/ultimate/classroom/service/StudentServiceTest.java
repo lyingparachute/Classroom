@@ -48,7 +48,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldSaveStudent_givenStudentDto_returnsStudentDto() {
+    void create_shouldSaveStudent_givenStudentDto_returnsStudentDto() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -87,17 +87,70 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldUpdateStudent_GivenStudentDto_returnsStudentDto() {
+    void update_shouldUpdateStudent_GivenStudentDto() {
+        //given
+        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Student student = initData.createStudentOne(List.of());
+        StudentDto dto = new StudentDto();
+        dto.setId(student.getId());
+        dto.setFirstName("Pamela");
+        dto.setLastName("Gonzales");
+        dto.setEmail("p.gonzales@gmail.com");
+        dto.setAge(20);
+        dto.setFieldOfStudy(FieldOfStudy.ROBOTICS);
+        dto.setTeachersList(new HashSet<>(List.of(teacher1, teacher2)));
+        //when
+        studentService.update(dto);
+        //then
+        Optional<Student> byId = studentRepository.findById(dto.getId());
+        assertThat(byId).isPresent();
+        Student actual = byId.get();
+        assertThat(actual.getFirstName()).isEqualTo(dto.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(dto.getLastName());
+        assertThat(actual.getEmail()).isEqualTo(dto.getEmail());
+        assertThat(actual.getAge()).isEqualTo(dto.getAge());
+        assertThat(actual.getFieldOfStudy()).isEqualTo(dto.getFieldOfStudy());
+        assertThat(actual.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()));
+    }
+
+    @Test
+    void update_throwsIllegalArgumentException_givenWrongStudentDto() {
+        //given
+        StudentDto dto = new StudentDto();
+        dto.setId(1L);
+        dto.setFirstName("Alison");
+        dto.setLastName("Becker");
+        dto.setEmail("a.becker@gmail.com");
+        dto.setAge(29);
+        dto.setFieldOfStudy(FieldOfStudy.ROBOTICS);
+        //when
+        Throwable thrown = catchThrowable(() -> studentService.update(dto));
+        //then
+        assertThat(thrown)
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid student '" + dto + "' with ID: " + dto.getId());
+    }
+
+    @Test
+    void fetchAll_shouldReturnAllStudents() {
 
     }
 
     @Test
-    void shouldReturnAllStudents() {
-
-    }
-
-    @Test
-    void shouldReturnAllStudentsPaginated() {
+    void fetchAllPaginated_shouldReturnAllStudentsPaginated() {
 
     }
 
