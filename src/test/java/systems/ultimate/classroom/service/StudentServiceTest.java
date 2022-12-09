@@ -3,6 +3,7 @@ package systems.ultimate.classroom.service;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import systems.ultimate.classroom.dto.StudentDto;
@@ -10,9 +11,9 @@ import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.enums.FieldOfStudy;
 import systems.ultimate.classroom.repository.StudentRepository;
-import systems.ultimate.classroom.repository.TeacherRepository;
 import systems.ultimate.classroom.repository.util.InitData;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
 class StudentServiceTest {
 
     @Autowired
@@ -33,7 +35,7 @@ class StudentServiceTest {
     private StudentRepository studentRepository;
 
     @Autowired
-    private TeacherRepository teacherRepository;
+    private ModelMapper mapper;
 
     @BeforeEach
     public void setup() {
@@ -41,7 +43,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void create_savesStudentDto_givenStudentDto() {
+    void shouldSaveStudent_givenStudentDto_returnsStudentDto() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -80,36 +82,92 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldUpdateStudent_GivenStudentDto_returnStudentDto() {
+    void shouldUpdateStudent_GivenStudentDto_returnsStudentDto() {
 
     }
 
     @Test
-    void shouldReturnAllStudentDtos() {
+    void shouldReturnAllStudents() {
 
     }
 
     @Test
-    void shouldReturnAllStudentDtosPaginated() {
-    }
-
-    @Test
-    void shouldReturnStudentGivenId() {
+    void shouldReturnAllStudentsPaginated() {
 
     }
 
     @Test
-    void shouldRemoveStudentGivenId() {
+    void shouldFindStudent_givenId_returnsStudentDto() {
 
     }
 
     @Test
-    void shouldReturnStudentListResultOfSearchByFirstOrLastName() {
+    void shouldRemoveStudent_givenId() {
 
     }
 
     @Test
-    void shouldAssignTeachersToStudent() {
+    void shouldFindStudentsByFirstOrLastName_givenName() {
+        //given
+        String name = "w";
+        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher3 = initData.createTeacherThree(List.of());
+
+        Student student1 = initData.createStudentOne(List.of(teacher1, teacher2));
+        Student student2 = initData.createStudentTwo(List.of(teacher3));
+        Student student3 = initData.createStudentThree(List.of(teacher1, teacher2, teacher3));
+
+        StudentDto dto1 = mapper.map(student1, StudentDto.class);
+        StudentDto dto2 = mapper.map(student2, StudentDto.class);
+        StudentDto dto3 = mapper.map(student3, StudentDto.class);
+        //when
+        List<StudentDto> actual = studentService.findByFirstOrLastName(name);
+        //then
+        assertThat(actual.size()).isEqualTo(2);
+        StudentDto actualStudent1 = actual.get(0);
+        StudentDto actualStudent2 = actual.get(1);
+
+        assertThat(actualStudent1.getFirstName()).isEqualTo(dto2.getFirstName());
+        assertThat(actualStudent1.getLastName()).isEqualTo(dto2.getLastName());
+        assertThat(actualStudent1.getEmail()).isEqualTo(dto2.getEmail());
+        assertThat(actualStudent1.getAge()).isEqualTo(dto2.getAge());
+        assertThat(actualStudent1.getFieldOfStudy()).isEqualTo(dto2.getFieldOfStudy());
+        assertThat(actualStudent1.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubject()));
+        assertThat(actualStudent2.getFirstName()).isEqualTo(dto3.getFirstName());
+        assertThat(actualStudent2.getLastName()).isEqualTo(dto3.getLastName());
+        assertThat(actualStudent2.getEmail()).isEqualTo(dto3.getEmail());
+        assertThat(actualStudent2.getAge()).isEqualTo(dto3.getAge());
+        assertThat(actualStudent2.getFieldOfStudy()).isEqualTo(dto3.getFieldOfStudy());
+        assertThat(actualStudent2.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()),
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubject()));
+    }
+
+    @Test
+    void shouldAssignTeachersToStudent_givenTeachersSet() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -165,8 +223,6 @@ class StudentServiceTest {
                                 teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()));
         //when
         studentService.removeTeachers(student, new HashSet<>(student.getTeachersList()));
-        Student saved = studentRepository.save(student);
-
         //then
         Optional<Student> byId = studentRepository.findById(student.getId());
         assertThat(byId).isPresent();
