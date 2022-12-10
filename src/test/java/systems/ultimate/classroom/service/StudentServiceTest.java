@@ -3,7 +3,6 @@ package systems.ultimate.classroom.service;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -41,16 +40,13 @@ class StudentServiceTest {
     @Autowired
     private TeacherRepository teacherRepository;
 
-    @Autowired
-    private ModelMapper mapper;
-
     @BeforeEach
     public void setup() {
         initData.cleanUp();
     }
 
     @Test
-    void create_shouldSaveStudent_givenStudentDto_returnsStudentDto() {
+    void create_shouldSaveStudent_givenStudentDto() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -89,7 +85,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void update_shouldUpdateStudent_GivenStudentDto() {
+    void update_shouldUpdateStudent_givenStudentDto() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -262,7 +258,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void fetchById_shouldFindStudent_givenId_returnsStudentDto() {
+    void fetchById_shouldFindStudent_givenId() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -295,7 +291,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void fetchById_throwsIllegalArgumentException_givenWrongId(){
+    void fetchById_throwsIllegalArgumentException_givenWrongId() {
         //given
         Long id = 1L;
         //when
@@ -347,10 +343,6 @@ class StudentServiceTest {
         Student student1 = initData.createStudentOne(List.of(teacher1, teacher2));
         Student student2 = initData.createStudentTwo(List.of(teacher3));
         Student student3 = initData.createStudentThree(List.of(teacher1, teacher2, teacher3));
-
-        StudentDto dto1 = mapper.map(student1, StudentDto.class);
-        StudentDto dto2 = mapper.map(student2, StudentDto.class);
-        StudentDto dto3 = mapper.map(student3, StudentDto.class);
         //when
         List<StudentDto> actual = studentService.findByFirstOrLastName(name);
         //then
@@ -358,11 +350,11 @@ class StudentServiceTest {
         StudentDto actualStudent1 = actual.get(0);
         StudentDto actualStudent2 = actual.get(1);
 
-        assertThat(actualStudent1.getFirstName()).isEqualTo(dto2.getFirstName());
-        assertThat(actualStudent1.getLastName()).isEqualTo(dto2.getLastName());
-        assertThat(actualStudent1.getEmail()).isEqualTo(dto2.getEmail());
-        assertThat(actualStudent1.getAge()).isEqualTo(dto2.getAge());
-        assertThat(actualStudent1.getFieldOfStudy()).isEqualTo(dto2.getFieldOfStudy());
+        assertThat(actualStudent1.getFirstName()).isEqualTo(student2.getFirstName());
+        assertThat(actualStudent1.getLastName()).isEqualTo(student2.getLastName());
+        assertThat(actualStudent1.getEmail()).isEqualTo(student2.getEmail());
+        assertThat(actualStudent1.getAge()).isEqualTo(student2.getAge());
+        assertThat(actualStudent1.getFieldOfStudy()).isEqualTo(student2.getFieldOfStudy());
         assertThat(actualStudent1.getTeachersList())
                 .extracting(
                         Teacher::getId,
@@ -374,11 +366,11 @@ class StudentServiceTest {
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
                                 teacher3.getEmail(), teacher3.getAge(), teacher3.getSubject()));
-        assertThat(actualStudent2.getFirstName()).isEqualTo(dto3.getFirstName());
-        assertThat(actualStudent2.getLastName()).isEqualTo(dto3.getLastName());
-        assertThat(actualStudent2.getEmail()).isEqualTo(dto3.getEmail());
-        assertThat(actualStudent2.getAge()).isEqualTo(dto3.getAge());
-        assertThat(actualStudent2.getFieldOfStudy()).isEqualTo(dto3.getFieldOfStudy());
+        assertThat(actualStudent2.getFirstName()).isEqualTo(student3.getFirstName());
+        assertThat(actualStudent2.getLastName()).isEqualTo(student3.getLastName());
+        assertThat(actualStudent2.getEmail()).isEqualTo(student3.getEmail());
+        assertThat(actualStudent2.getAge()).isEqualTo(student3.getAge());
+        assertThat(actualStudent2.getFieldOfStudy()).isEqualTo(student3.getFieldOfStudy());
         assertThat(actualStudent2.getTeachersList())
                 .extracting(
                         Teacher::getId,

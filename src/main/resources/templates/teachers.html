@@ -60,8 +60,7 @@
                                 <th rowspan="1" colspan="1" scope="col">
                                     <a th:href="@{'/teachers/page/' + ${currentPage} + '?sortField=fieldOfStudy&sortDir=' + ${reverseSortDir}}" th:text="#{teacher.subject}"></a>
                                 </th>
-                                <th rowspan="1" colspan="1" scope="col">
-                                    <a th:href="@{'/teachers/page/' + ${currentPage} + '?sortField=fieldOfStudy&sortDir=' + ${reverseSortDir}}" th:text="#{teacher.no.of.students}"></a>
+                                <th rowspan="1" colspan="1" scope="col" th:text="#{teacher.no.of.students}">
                                 </th>
                                 <th rowspan="2" colspan="1" scope="col" th:text="#{teachers.action}"
                                     class="align-middle"/>
