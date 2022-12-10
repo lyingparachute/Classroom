@@ -146,7 +146,75 @@ class StudentServiceTest {
 
     @Test
     void fetchAll_shouldReturnAllStudents() {
+        //given
+        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher3 = initData.createTeacherThree(List.of());
+        Student student1 = initData.createStudentOne(List.of(teacher1, teacher2));
+        Student student2 = initData.createStudentTwo(List.of(teacher3));
+        Student student3 = initData.createStudentThree(List.of(teacher1, teacher2, teacher3));
+        //when
+        List<StudentDto> actual = studentService.fetchAll();
+        //then
+        assertThat(actual).size().isEqualTo(3);
+        StudentDto actualStudent1 = actual.get(0);
+        StudentDto actualStudent2 = actual.get(1);
+        StudentDto actualStudent3 = actual.get(2);
 
+        assertThat(actualStudent1.getFirstName()).isEqualTo(student1.getFirstName());
+        assertThat(actualStudent1.getLastName()).isEqualTo(student1.getLastName());
+        assertThat(actualStudent1.getEmail()).isEqualTo(student1.getEmail());
+        assertThat(actualStudent1.getAge()).isEqualTo(student1.getAge());
+        assertThat(actualStudent1.getFieldOfStudy()).isEqualTo(student1.getFieldOfStudy());
+        assertThat(actualStudent1.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()));
+        assertThat(actualStudent2.getFirstName()).isEqualTo(student2.getFirstName());
+        assertThat(actualStudent2.getLastName()).isEqualTo(student2.getLastName());
+        assertThat(actualStudent2.getEmail()).isEqualTo(student2.getEmail());
+        assertThat(actualStudent2.getAge()).isEqualTo(student2.getAge());
+        assertThat(actualStudent2.getFieldOfStudy()).isEqualTo(student2.getFieldOfStudy());
+        assertThat(actualStudent2.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubject()));
+        assertThat(actualStudent3.getFirstName()).isEqualTo(student3.getFirstName());
+        assertThat(actualStudent3.getLastName()).isEqualTo(student3.getLastName());
+        assertThat(actualStudent3.getEmail()).isEqualTo(student3.getEmail());
+        assertThat(actualStudent3.getAge()).isEqualTo(student3.getAge());
+        assertThat(actualStudent3.getFieldOfStudy()).isEqualTo(student3.getFieldOfStudy());
+        assertThat(actualStudent3.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()),
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubject()));
     }
 
     @Test
