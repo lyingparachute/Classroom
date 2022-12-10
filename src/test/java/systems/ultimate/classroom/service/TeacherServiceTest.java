@@ -293,6 +293,19 @@ class TeacherServiceTest {
     }
 
     @Test
+    void fetchById_throwsIllegalArgumentException_givenWrongId(){
+        //given
+        Long id = 1L;
+        //when
+        Throwable thrown = catchThrowable(() -> teacherService.fetchById(id));
+        //then
+        assertThat(thrown)
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid teacher ID: " + id);
+    }
+
+
+    @Test
     void remove() {
     }
 
