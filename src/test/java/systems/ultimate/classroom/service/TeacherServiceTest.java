@@ -331,14 +331,14 @@ class TeacherServiceTest {
         //then
         assertThat(thrown)
                 .isExactlyInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid teacher id: " + id);
+                .hasMessage("Invalid teacher ID: " + id);
     }
 
     @Test
-    void findByFirstOrLastName() {
+    void findByFirstOrLastName_returnsTeachersSearchedByFirstOrLastName_givenName() {
     }
 
     @Test
-    void assignStudents() {
+    void assignStudents_shouldAssignStudentsToTeacher_givenStudentsSet() {
     }
 }
