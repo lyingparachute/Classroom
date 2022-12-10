@@ -220,7 +220,44 @@ class TeacherServiceTest {
     }
 
     @Test
-    void fetchAllPaginated() {
+    void fetchAllPaginated_shouldReturnAllTeachersPaginated_givenPageNo_PageSize_SortDir() {
+        //given
+        Student student1 = initData.createStudentOne(List.of());
+        Student student2 = initData.createStudentTwo(List.of());
+        Student student3 = initData.createStudentThree(List.of());
+        Teacher teacher1 = initData.createTeacherOne(List.of(student1, student2));
+        Teacher teacher2 = initData.createTeacherTwo(List.of(student3));
+        Teacher teacher3 = initData.createTeacherThree(List.of(student1, student2, student3));
+        int pageNo = 2;
+        int pageSize = 2;
+        String sortField = "firstName";
+        String sortDirection = Sort.Direction.DESC.name();
+        //when
+        Page<TeacherDto> actual = teacherService.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
+        //then
+        List<TeacherDto> actualContent = actual.getContent();
+        assertThat(actualContent).size().isEqualTo(1);
+        TeacherDto actualTeacher = actualContent.get(0);
+        assertThat(actualTeacher.getFirstName()).isEqualTo(teacher3.getFirstName());
+        assertThat(actualTeacher.getLastName()).isEqualTo(teacher3.getLastName());
+        assertThat(actualTeacher.getEmail()).isEqualTo(teacher3.getEmail());
+        assertThat(actualTeacher.getAge()).isEqualTo(teacher3.getAge());
+        assertThat(actualTeacher.getSubject()).isEqualTo(teacher3.getSubject());
+        assertThat(actualTeacher.getStudentsList())
+                .extracting(
+                        Student::getId,
+                        Student::getFirstName,
+                        Student::getLastName,
+                        Student::getEmail,
+                        Student::getAge,
+                        Student::getFieldOfStudy
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(),
+                                student1.getEmail(), student1.getAge(), student1.getFieldOfStudy()),
+                        Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(),
+                                student2.getEmail(), student2.getAge(), student2.getFieldOfStudy()),
+                        Tuple.tuple(student3.getId(), student3.getFirstName(), student3.getLastName(),
+                                student3.getEmail(), student3.getAge(), student3.getFieldOfStudy()));
     }
 
     @Test
