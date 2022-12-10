@@ -90,7 +90,43 @@ class TeacherServiceTest {
     }
 
     @Test
-    void update() {
+    void update_shouldUpdateTeacher_givenTeacherDto() {
+        //given
+        Student student1 = initData.createStudentOne(List.of());
+        Student student2 = initData.createStudentTwo(List.of());
+        Teacher teacher = initData.createTeacherTwo(List.of());
+        TeacherDto dto = new TeacherDto();
+        dto.setId(teacher.getId());
+        dto.setFirstName("Fabian");
+        dto.setLastName("Graczyk");
+        dto.setEmail("f.graczyk@gmail.com");
+        dto.setAge(55);
+        dto.setSubject(Subject.MATHS);
+        dto.setStudentsList(new HashSet<>(List.of(student1, student2)));
+        //when
+        teacherService.update(dto);
+        //then
+        Optional<Teacher> byId = teacherRepository.findById(dto.getId());
+        assertThat(byId).isPresent();
+        Teacher actual = byId.get();
+        assertThat(actual.getFirstName()).isEqualTo(dto.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(dto.getLastName());
+        assertThat(actual.getEmail()).isEqualTo(dto.getEmail());
+        assertThat(actual.getAge()).isEqualTo(dto.getAge());
+        assertThat(actual.getSubject()).isEqualTo(dto.getSubject());
+        assertThat(actual.getStudentsList())
+                .extracting(
+                        Student::getId,
+                        Student::getFirstName,
+                        Student::getLastName,
+                        Student::getEmail,
+                        Student::getAge,
+                        Student::getFieldOfStudy
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(),
+                                student1.getEmail(), student1.getAge(), student1.getFieldOfStudy()),
+                        Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(),
+                                student2.getEmail(), student2.getAge(), student2.getFieldOfStudy()));
     }
 
     @Test
