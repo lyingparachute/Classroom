@@ -261,7 +261,35 @@ class TeacherServiceTest {
     }
 
     @Test
-    void fetchById() {
+    void fetchById_shouldFindStudent_givenId() {
+        //given
+        Student student1 = initData.createStudentOne(List.of());
+        Student student2 = initData.createStudentTwo(List.of());
+        Student student3 = initData.createStudentThree(List.of());
+        Teacher teacher = initData.createTeacherThree(List.of(student1, student2, student3));
+        //when
+        TeacherDto actual = teacherService.fetchById(teacher.getId());
+        //then
+        assertThat(actual.getFirstName()).isEqualTo(teacher.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(teacher.getLastName());
+        assertThat(actual.getEmail()).isEqualTo(teacher.getEmail());
+        assertThat(actual.getAge()).isEqualTo(teacher.getAge());
+        assertThat(actual.getSubject()).isEqualTo(teacher.getSubject());
+        assertThat(actual.getStudentsList())
+                .extracting(
+                        Student::getId,
+                        Student::getFirstName,
+                        Student::getLastName,
+                        Student::getEmail,
+                        Student::getAge,
+                        Student::getFieldOfStudy
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(),
+                                student1.getEmail(), student1.getAge(), student1.getFieldOfStudy()),
+                        Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(),
+                                student2.getEmail(), student2.getAge(), student2.getFieldOfStudy()),
+                        Tuple.tuple(student3.getId(), student3.getFirstName(), student3.getLastName(),
+                                student3.getEmail(), student3.getAge(), student3.getFieldOfStudy()));
     }
 
     @Test
