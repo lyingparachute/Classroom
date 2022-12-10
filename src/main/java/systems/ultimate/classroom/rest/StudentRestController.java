@@ -21,7 +21,9 @@ public class StudentRestController {
     @GetMapping()
     public ResponseEntity<List<StudentDto>> getStudents() {
         List<StudentDto> students = studentService.fetchAll();
-        return students.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(students);
+        return students.isEmpty() ?
+                ResponseEntity.notFound().build() :
+                ResponseEntity.ok(students);
     }
 
     @PostMapping("create")
@@ -45,8 +47,7 @@ public class StudentRestController {
     public ResponseEntity<StudentDto> putStudent(@RequestBody StudentDto studentDto){
         StudentDto updated = studentService.update(studentDto);
         return updated != null ?
-                ResponseEntity.status(HttpStatus.OK)
-                        .body(updated) :
+                ResponseEntity.ok(updated) :
                 ResponseEntity.badRequest().build();
     }
 

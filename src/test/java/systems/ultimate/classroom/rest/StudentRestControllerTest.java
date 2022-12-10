@@ -60,6 +60,10 @@ class StudentRestControllerTest {
         //when
         URI url = createURL("/api/students/" + student.getId());
         ResponseEntity<StudentDto> response = restTemplate.getForEntity(url, StudentDto.class);
+        Optional<Student> byId = studentRepository.findById(student.getId());
+        assertThat(byId).isPresent();
+        List<Teacher> all = teacherRepository.findAll();
+        Set<Teacher> student1 = byId.get().getTeachersList();
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         StudentDto actual = response.getBody();
@@ -83,7 +87,6 @@ class StudentRestControllerTest {
                                 teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
                                 teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()));
-
     }
 
     @Test
