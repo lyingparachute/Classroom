@@ -1,5 +1,6 @@
 package systems.ultimate.classroom.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -46,7 +47,8 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private FieldOfStudy fieldOfStudy;
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.MERGE,
                     CascadeType.DETACH
@@ -62,5 +64,10 @@ public class Student {
     public void assignTeacher(Teacher teacher){
         this.teachersList.add(teacher);
         teacher.getStudentsList().add(this);
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
     }
 }

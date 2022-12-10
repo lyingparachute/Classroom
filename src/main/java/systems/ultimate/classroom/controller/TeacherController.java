@@ -30,7 +30,7 @@ public class TeacherController {
     }
 
     @GetMapping
-    public String getStudents(Model model) {
+    public String getTeachers(Model model) {
         return getPaginatedTeachers(1, "firstName", "asc", model);
     }
 
@@ -102,7 +102,7 @@ public class TeacherController {
     }
 
     @PostMapping(value = "update")
-    public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher,BindingResult result, Model model) {
+    public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, BindingResult result, Model model) {
         if (result.hasErrors()){
             model.addAttribute("students", studentService.fetchAll());
             return "teacher-edit-form";

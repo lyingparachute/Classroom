@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import systems.ultimate.classroom.dto.StudentDto;
 import systems.ultimate.classroom.dto.TeacherDto;
 import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.entity.Teacher;
@@ -32,7 +31,7 @@ public class TeacherService {
     @Transactional
     public TeacherDto create(TeacherDto dto){
         Teacher teacher = mapper.map(dto, Teacher.class);
-        assignStudents(teacher, teacher.getStudentsList());
+        assignStudents(teacher, new HashSet<>(teacher.getStudentsList()));
         Teacher saved = repository.save(teacher);
         return mapper.map(saved, TeacherDto.class);
     }
@@ -80,9 +79,9 @@ public class TeacherService {
         repository.delete(teacher);
     }
 
-    public List<StudentDto> findByFirstOrLastName(String searched){
+    public List<TeacherDto> findByFirstOrLastName(String searched){
         List<Teacher> found = repository.findAllByFirstNameOrLastName(searched);
-        return found.stream().map(s -> mapper.map(s, StudentDto.class)).collect(Collectors.toList());
+        return found.stream().map(s -> mapper.map(s, TeacherDto.class)).collect(Collectors.toList());
     }
 
     public void assignStudents(Teacher teacher, Set<Student> students) {

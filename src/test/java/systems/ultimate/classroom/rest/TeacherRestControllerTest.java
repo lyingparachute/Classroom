@@ -1,5 +1,6 @@
 package systems.ultimate.classroom.rest;
 
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,16 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import systems.ultimate.classroom.dto.TeacherDto;
+import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.entity.Teacher;
 import systems.ultimate.classroom.enums.Subject;
+import systems.ultimate.classroom.repository.StudentRepository;
 import systems.ultimate.classroom.repository.TeacherRepository;
 import systems.ultimate.classroom.repository.util.InitData;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,6 +37,9 @@ class TeacherRestControllerTest {
     int randomServerPort;
 
     @Autowired
+    StudentRepository studentRepository;
+
+    @Autowired
     TeacherRepository teacherRepository;
 
     @BeforeEach
@@ -45,7 +50,10 @@ class TeacherRestControllerTest {
     @Test
     void shouldGetTeacher() throws URISyntaxException {
         //given
-        Teacher teacher = initData.createFirstTeacher();
+        Student studentOne = initData.createStudentOne(List.of());
+        Student studentTwo = initData.createStudentTwo(List.of());
+        Teacher teacher = initData.createTeacherOne(List.of(studentOne, studentTwo));
+
         //when
         URI url = createURL("/api/teachers/" + teacher.getId());
         ResponseEntity<TeacherDto> response = restTemplate.getForEntity(url, TeacherDto.class);
@@ -59,14 +67,27 @@ class TeacherRestControllerTest {
         assertThat(actual.getEmail()).isEqualTo(teacher.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacher.getAge());
         assertThat(actual.getSubject()).isEqualTo(teacher.getSubject());
-        assertThat(actual.getStudentsList()).isEmpty();
+        assertThat(actual.getStudentsList())
+                .extracting(
+                        Student::getId,
+                        Student::getFirstName,
+                        Student::getLastName,
+                        Student::getEmail,
+                        Student::getAge,
+                        Student::getFieldOfStudy
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(studentOne.getId(), studentOne.getFirstName(), studentOne.getLastName(),
+                                studentOne.getEmail(), studentOne.getAge(), studentOne.getFieldOfStudy()),
+                        Tuple.tuple(studentTwo.getId(), studentTwo.getFirstName(), studentTwo.getLastName(),
+                                studentTwo.getEmail(), studentTwo.getAge(), studentTwo.getFieldOfStudy())
+                );
     }
 
     @Test
     void shouldGetAllTeachers() throws URISyntaxException {
         //given
-        initData.createFirstTeacher();
-        initData.createSecondTeacher();
+        initData.createTeacherOne(List.of(initData.createStudentOne(List.of())));
+        initData.createTeacherTwo(List.of(initData.createStudentTwo(List.of())));
         //when
         URI url = createURL("/api/teachers/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
@@ -81,7 +102,10 @@ class TeacherRestControllerTest {
     @Test
     void shouldCreateTeacher() throws URISyntaxException {
         //given
-        TeacherDto teacherDto = createTeacherDto();
+        Student student1 = initData.createStudentOne(List.of());
+        Student student2 = initData.createStudentTwo(List.of());
+
+        TeacherDto teacherDto = createTeacherDto(student1, student2);
         //when
         URI url = createURL("/api/teachers/create");
         ResponseEntity<TeacherDto> response = restTemplate.postForEntity(url, teacherDto ,TeacherDto.class);
@@ -92,60 +116,107 @@ class TeacherRestControllerTest {
         assertThat(actual.getId()).isNotNull();
         teacherRepository.findById(actual.getId()).orElseThrow(
                 () -> new IllegalStateException(
-                        "Student with ID= " + actual.getId() + " should not be missing"));
+                        "Teacher with ID= " + actual.getId() + " should not be missing"));
         assertThat(actual.getFirstName()).isEqualTo(teacherDto.getFirstName());
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
         assertThat(actual.getSubject()).isEqualTo(teacherDto.getSubject());
-        assertThat(actual.getStudentsList()).isNull();
+        assertThat(actual.getStudentsList()).size().isEqualTo(2);
+        assertThat(actual.getStudentsList())
+                .extracting(
+                        Student::getId,
+                        Student::getFirstName,
+                        Student::getLastName,
+                        Student::getEmail,
+                        Student::getAge,
+                        Student::getFieldOfStudy
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(), student1.getEmail(), student1.getAge(), student1.getFieldOfStudy()),
+                        Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(), student2.getEmail(), student2.getAge(), student2.getFieldOfStudy())
+                );
     }
 
     @Test
     void shouldUpdateTeacher() throws URISyntaxException {
         //given
-        Teacher teacher = initData.createFirstTeacher();
-        TeacherDto teacherDto = createTeacherDto();
-        teacherDto.setId(teacher.getId());
+        Student student1 = initData.createStudentOne(List.of());
+        Student student2 = initData.createStudentTwo(List.of());
+
+        Teacher teacherEntity = initData.createTeacherOne(new ArrayList<>());
+        TeacherDto teacherDto = new TeacherDto();
+        teacherDto.setId(teacherEntity.getId());
+        teacherDto.setFirstName("Lionel");
+        teacherDto.setLastName("Messi");
+        teacherDto.setEmail("l.messi@gmail.com");
+        teacherDto.setAge(35);
+        teacherDto.setSubject(Subject.ART);
+        teacherDto.setStudentsList(new HashSet<>(List.of(student1, student2)));
+
         //when
         URI url = createURL("/api/teachers/");
-        HttpEntity<TeacherDto> requestUpdate = new HttpEntity<>(teacherDto);
+        final HttpEntity<TeacherDto> requestUpdate = new HttpEntity<>(teacherDto);
         ResponseEntity<TeacherDto> response = restTemplate.exchange(url, HttpMethod.PUT, requestUpdate ,TeacherDto.class);
+
         //then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         TeacherDto actual = response.getBody();
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isNotNull();
         teacherRepository.findById(actual.getId()).orElseThrow(
                 () -> new IllegalStateException(
-                        "Student with ID= " + actual.getId() + " should not be missing"));
+                        "Teacher with ID= " + actual.getId() + " should not be removed"));
         assertThat(actual.getFirstName()).isEqualTo(teacherDto.getFirstName());
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
         assertThat(actual.getSubject()).isEqualTo(teacherDto.getSubject());
-        assertThat(actual.getStudentsList()).isEqualTo(teacherDto.getStudentsList());
+        assertThat(actual.getStudentsList())
+                .extracting(
+                        Student::getId,
+                        Student::getFirstName,
+                        Student::getLastName,
+                        Student::getEmail,
+                        Student::getAge,
+                        Student::getFieldOfStudy,
+                        s -> s.getTeachersList().size()
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(),
+                                student1.getEmail(), student1.getAge(), student1.getFieldOfStudy(), student1.getTeachersList().size()),
+                        Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(),
+                                student2.getEmail(), student2.getAge(), student2.getFieldOfStudy(), student2.getTeachersList().size())
+                );
     }
 
     @Test
     void shouldDeleteTeacher() throws URISyntaxException {
         //given
-        Teacher teacher = initData.createFirstTeacher();
+        Teacher teacher = initData.createTeacherOne(List.of(
+                initData.createStudentOne(List.of()),
+                initData.createStudentTwo(List.of())));
         //when
         URI url = createURL("/api/teachers/" + teacher.getId());
         restTemplate.delete(url);
         //then
         Optional<Teacher> byId = teacherRepository.findById(teacher.getId());
         assertThat(byId).isNotPresent();
+        teacher.getStudentsList().forEach(i -> {
+            studentRepository.findById(i.getId()).orElseThrow(() -> new IllegalStateException(
+                    "Student with ID= " + i.getId() + " should not be removed."));
+        });
     }
 
-    private TeacherDto createTeacherDto(){
+    private TeacherDto createTeacherDto(Student studentOne, Student studentTwo){
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setFirstName("Jagoda");
         teacherDto.setLastName("Kowalska");
         teacherDto.setEmail("j.kowalska@gmail.com");
         teacherDto.setAge(33);
         teacherDto.setSubject(Subject.SCIENCE);
+        HashSet<Student> students = new HashSet<>();
+        students.add(studentOne);
+        students.add(studentTwo);
+        teacherDto.setStudentsList(students);
         return teacherDto;
     }
 

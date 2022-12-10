@@ -66,7 +66,6 @@ public class StudentController {
     public String getStudent(@PathVariable Long id, Model model) {
         StudentDto studentDto = studentService.fetchById(id);
         model.addAttribute("student", studentDto);
-        studentDto.getTeachersList().forEach(Object::toString);
         return "student";
     }
 

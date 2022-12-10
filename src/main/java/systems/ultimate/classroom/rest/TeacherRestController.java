@@ -45,7 +45,7 @@ public class TeacherRestController {
     public ResponseEntity<TeacherDto> putTeacher(@RequestBody TeacherDto teacherDto){
         TeacherDto updated = teacherService.update(teacherDto);
         return updated != null ?
-                ResponseEntity.status(HttpStatus.CREATED)
+                ResponseEntity.status(HttpStatus.OK)
                         .body(updated) :
                 ResponseEntity.badRequest().build();
     }
