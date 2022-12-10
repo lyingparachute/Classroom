@@ -130,6 +130,24 @@ class TeacherServiceTest {
     }
 
     @Test
+    void update_throwsIllegalArgumentException_givenWrongTeacherDto() {
+        //given
+        TeacherDto dto = new TeacherDto();
+        dto.setId(9L);
+        dto.setFirstName("Alison");
+        dto.setLastName("Becker");
+        dto.setEmail("a.becker@gmail.com");
+        dto.setAge(55);
+        dto.setSubject(Subject.MATHS);
+        //when
+        Throwable thrown = catchThrowable(() -> teacherService.update(dto));
+        //then
+        assertThat(thrown)
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid teacher '" + dto.getFirstName() + " " + dto.getLastName() + "' with ID: " + dto.getId());
+    }
+
+    @Test
     void fetchAll() {
     }
 
