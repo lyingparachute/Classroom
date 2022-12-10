@@ -29,6 +29,7 @@ public class InitData {
         studentRepository.deleteAll();
     }
 
+    @Transactional
     public Student createStudentOne(List<Teacher> teachers) {
         Student student = new Student();
         student.setFirstName("Maciej");
@@ -36,12 +37,15 @@ public class InitData {
         student.setEmail("m.komaranczuk@gmail.com");
         student.setAge(25);
         student.setFieldOfStudy(FieldOfStudy.INFORMATICS);
+        studentRepository.save(student);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
+            studentRepository.save(student);
         }
-        return studentRepository.save(student);
+        return student;
     }
 
+    @Transactional
     public Student createStudentTwo(List<Teacher> teachers) {
         Student student = new Student();
         student.setFirstName("Weronika");
@@ -51,10 +55,29 @@ public class InitData {
         student.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
+            studentRepository.save(student);
         }
-        return studentRepository.save(student);
+        studentRepository.save(student);
+        return student;
     }
 
+    @Transactional
+    public Student createStudentThree(List<Teacher> teachers) {
+        Student student = new Student();
+        student.setFirstName("Agnieszka");
+        student.setLastName("Sernatowicz");
+        student.setEmail("a.sernatowicz@gmail.com");
+        student.setAge(18);
+        student.setFieldOfStudy(FieldOfStudy.ROBOTICS);
+        if (teachers != null && !teachers.isEmpty()){
+            teachers.forEach(student::assignTeacher);
+            studentRepository.save(student);
+        }
+        studentRepository.save(student);
+        return student;
+    }
+
+    @Transactional
     public Teacher createTeacherOne(List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jarosław");
@@ -68,6 +91,7 @@ public class InitData {
         return teacherRepository.save(teacher);
     }
 
+    @Transactional
     public Teacher createTeacherTwo(List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jagoda");
@@ -75,6 +99,20 @@ public class InitData {
         teacher.setEmail("j.kowalska@gmail.com");
         teacher.setAge(33);
         teacher.setSubject(Subject.SCIENCE);
+        if (students != null && !students.isEmpty()){
+            students.forEach(teacher::addStudent);
+        }
+        return teacherRepository.save(teacher);
+    }
+
+    @Transactional
+    public Teacher createTeacherThree(List<Student> students) {
+        Teacher teacher = new Teacher();
+        teacher.setFirstName("Grzegorz");
+        teacher.setLastName("Bartosiewicz");
+        teacher.setEmail("g.bartosiewicz@gmail.com");
+        teacher.setAge(51);
+        teacher.setSubject(Subject.ART);
         if (students != null && !students.isEmpty()){
             students.forEach(teacher::addStudent);
         }

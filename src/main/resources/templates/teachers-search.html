@@ -58,6 +58,7 @@
                                     <th rowspan="1" colspan="1" scope="col" th:text="#{teacher.age}"></th>
                                     <th rowspan="1" colspan="1" scope="col" th:text="#{teacher.email}"></th>
                                     <th rowspan="1" colspan="1" scope="col" th:text="#{teacher.subject}"></th>
+                                    <th rowspan="1" colspan="1" scope="col" th:text="#{teacher.no.of.students}"></th>
                                     <th rowspan="2" colspan="1" scope="col" th:text="#{teachers.action}"
                                         class="align-middle"/>
                                 </tr>
@@ -68,10 +69,11 @@
                                     <td th:text="${teacher.lastName}"/>
                                     <td th:text="${teacher.age}"/>
                                     <td th:text="${teacher.email}"/>
-                                    <td th:text="${teacher.fieldOfStudy}"/>
+                                    <td th:text="${teacher.subject.desc}"/>
+                                    <td th:text="${teacher.studentsList.size()}"/>
                                     <td>
                                         <a class="btn btn-outline-primary"
-                                           th:href="@{/teachers/{id}/teachers(id=${teacher.id})}"
+                                           th:href="@{/teachers/{id}(id=${teacher.id})}"
                                            th:text="#{teachers.view}"></a>
                                         <a class="btn btn-outline-primary"
                                            th:href="@{/teachers/edit/{id}(id=${teacher.id})}"

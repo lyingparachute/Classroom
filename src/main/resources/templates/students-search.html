@@ -59,6 +59,7 @@
                                     <th rowspan="1" colspan="1" scope="col" th:text="#{student.age}"></th>
                                     <th rowspan="1" colspan="1" scope="col" th:text="#{student.email}"></th>
                                     <th rowspan="1" colspan="1" scope="col" th:text="#{student.fieldOfStudy}"></th>
+                                    <th rowspan="1" colspan="1" scope="col" th:text="#{student.no.of.teachers}"></th>
                                     <th rowspan="2" colspan="1" scope="col" th:text="#{students.action}"
                                         class="align-middle"/>
                                 </tr>
@@ -69,11 +70,12 @@
                                     <td th:text="${student.lastName}"/>
                                     <td th:text="${student.age}"/>
                                     <td th:text="${student.email}"/>
-                                    <td th:text="${student.fieldOfStudy}"/>
+                                    <td th:text="${student.fieldOfStudy.getDesc()}"/>
+                                    <td th:text="${student.teachersList.size()}"/>
                                     <td>
                                         <a class="btn btn-outline-primary"
-                                           th:href="@{/students/{id}/teachers(id=${student.id})}"
-                                           th:text="#{students.viewTeachers}"></a>
+                                           th:href="@{/students/{id}(id=${student.id})}"
+                                           th:text="#{students.view}"></a>
                                         <a class="btn btn-outline-primary"
                                            th:href="@{/students/edit/{id}(id=${student.id})}"
                                            th:text="#{students.edit}"></a>
