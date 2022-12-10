@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import systems.ultimate.classroom.dto.StudentDto;
 import systems.ultimate.classroom.entity.Student;
 import systems.ultimate.classroom.entity.Teacher;
@@ -218,8 +220,45 @@ class StudentServiceTest {
     }
 
     @Test
-    void fetchAllPaginated_shouldReturnAllStudentsPaginated() {
+    void fetchAllPaginated_shouldReturnAllStudentsPaginated_givenPageNo_PageSize_SortDir() {
+        //given
+        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher3 = initData.createTeacherThree(List.of());
 
+        Student student1 = initData.createStudentOne(List.of(teacher1, teacher2));
+        Student student2 = initData.createStudentTwo(List.of(teacher3));
+        Student student3 = initData.createStudentThree(List.of(teacher1, teacher2, teacher3));
+        int pageNo = 2;
+        int pageSize = 2;
+        String sortField = "firstName";
+        String sortDirection = Sort.Direction.DESC.name();
+        //when
+        Page<StudentDto> actual = studentService.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
+        //then
+        List<StudentDto> actualContent = actual.getContent();
+        assertThat(actualContent).size().isEqualTo(1);
+        StudentDto actualStudent = actualContent.get(0);
+        assertThat(actualStudent.getFirstName()).isEqualTo(student3.getFirstName());
+        assertThat(actualStudent.getLastName()).isEqualTo(student3.getLastName());
+        assertThat(actualStudent.getEmail()).isEqualTo(student3.getEmail());
+        assertThat(actualStudent.getAge()).isEqualTo(student3.getAge());
+        assertThat(actualStudent.getFieldOfStudy()).isEqualTo(student3.getFieldOfStudy());
+        assertThat(actualStudent.getTeachersList())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getSubject
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubject()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubject()),
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubject()));
     }
 
     @Test
