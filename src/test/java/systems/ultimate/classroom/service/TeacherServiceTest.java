@@ -293,7 +293,7 @@ class TeacherServiceTest {
     }
 
     @Test
-    void fetchById_throwsIllegalArgumentException_givenWrongId(){
+    void fetchById_throwsIllegalArgumentException_givenWrongId() {
         //given
         Long id = 1L;
         //when
