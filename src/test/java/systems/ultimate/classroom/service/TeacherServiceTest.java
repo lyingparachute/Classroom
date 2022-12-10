@@ -306,7 +306,20 @@ class TeacherServiceTest {
 
 
     @Test
-    void remove() {
+    void remove_shouldRemoveStudent_givenId() {
+        //given
+        Student student1 = initData.createStudentOne(List.of());
+        Student student2 = initData.createStudentTwo(List.of());
+        Student student3 = initData.createStudentThree(List.of());
+        Teacher teacher = initData.createTeacherThree(List.of(student1, student2, student3));
+        //when
+        teacherService.remove(teacher.getId());
+        //then
+        Optional<Teacher> byId = teacherRepository.findById(teacher.getId());
+        assertThat(byId).isNotPresent();
+        assertThat(studentRepository.findById(student1.getId())).isPresent();
+        assertThat(studentRepository.findById(student2.getId())).isPresent();
+        assertThat(studentRepository.findById(student3.getId())).isPresent();
     }
 
     @Test
