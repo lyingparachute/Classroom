@@ -68,13 +68,14 @@ public class TeacherService {
     @Transactional
     public TeacherDto fetchById(Long id) {
         Optional<Teacher> byId = repository.findById(id);
-        return byId.map(teacher -> mapper.map(teacher, TeacherDto.class)).orElse(null);
+        return byId.map(teacher -> mapper.map(teacher, TeacherDto.class))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid teacher ID: " + id));
     }
 
     @Transactional
     public void remove(Long id) {
         Teacher teacher = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid teacher id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid teacher ID: " + id));
         repository.delete(teacher);
     }
 
