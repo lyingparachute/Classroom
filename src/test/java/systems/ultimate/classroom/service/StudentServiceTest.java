@@ -50,7 +50,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void create_shouldSaveStudent_givenStudentDto_returnsStudentDto() {
+    void create_shouldSaveStudent_givenStudentDto() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -89,7 +89,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void update_shouldUpdateStudent_GivenStudentDto() {
+    void update_shouldUpdateStudent_givenStudentDto() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -262,7 +262,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void fetchById_shouldFindStudent_givenId_returnsStudentDto() {
+    void fetchById_shouldFindStudent_givenId() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
