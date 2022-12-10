@@ -29,7 +29,7 @@ public class TeacherService {
     }
 
     @Transactional
-    public TeacherDto create(TeacherDto dto){
+    public TeacherDto create(TeacherDto dto) {
         Teacher teacher = mapper.map(dto, Teacher.class);
         assignStudents(teacher, new HashSet<>(teacher.getStudentsList()));
         Teacher saved = repository.save(teacher);
@@ -37,17 +37,16 @@ public class TeacherService {
     }
 
     @Transactional
-    public TeacherDto update(TeacherDto dto){
-        Optional<Teacher> byId = repository.findById(dto.getId());
-        if(byId.isPresent()){
-            Teacher teacher = byId.get();
-            removeStudents(teacher, new HashSet<>(teacher.getStudentsList()));
-            mapper.map(dto, teacher);
-            assignStudents(teacher, teacher.getStudentsList());
-            Teacher saved = repository.save(teacher);
-            return mapper.map(saved, TeacherDto.class);
-        }
-        return null;
+    public TeacherDto update(TeacherDto dto) {
+        Teacher teacher = repository.findById(dto.getId())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Invalid teacher '" + dto.getFirstName() + " " + dto.getLastName() + "' with ID: " + dto.getId()));
+        removeStudents(teacher, new HashSet<>(teacher.getStudentsList()));
+        mapper.map(dto, teacher);
+        assignStudents(teacher, teacher.getStudentsList());
+        Teacher saved = repository.save(teacher);
+        return mapper.map(saved, TeacherDto.class);
+
     }
 
     @Transactional
@@ -57,7 +56,7 @@ public class TeacherService {
     }
 
     @Transactional
-    public Page<TeacherDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection){
+    public Page<TeacherDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
 
@@ -79,19 +78,19 @@ public class TeacherService {
         repository.delete(teacher);
     }
 
-    public List<TeacherDto> findByFirstOrLastName(String searched){
+    public List<TeacherDto> findByFirstOrLastName(String searched) {
         List<Teacher> found = repository.findAllByFirstNameOrLastName(searched);
         return found.stream().map(s -> mapper.map(s, TeacherDto.class)).collect(Collectors.toList());
     }
 
     public void assignStudents(Teacher teacher, Set<Student> students) {
-        if (students != null && !students.isEmpty()){
+        if (students != null && !students.isEmpty()) {
             students.forEach(teacher::addStudent);
         }
     }
 
     private void removeStudents(Teacher teacher, Set<Student> students) {
-        if (students != null && !students.isEmpty()){
+        if (students != null && !students.isEmpty()) {
             students.forEach(teacher::removeStudent);
         }
     }
