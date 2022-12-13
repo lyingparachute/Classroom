@@ -4,6 +4,6 @@
                 + ${sortField != null ? '&sortField=' + field : ''}
                 + ${sortDir != null ? '&sortDir=' + (sortField == field ? reverseSortDir : sortDir) : '' }}">
     [[${label}]] </a>
-  <span th:if="${sortField == field}"
-        th:class="${sortDir == 'asc' ? 'fas fa-arrow-down-short-wide' : 'fas fa-arrow-down-wide-short'}"></span>
+  <i th:if="${sortField == field}"
+        th:class="${sortDir == 'asc' ? 'fas fa-arrow-down-short-wide' : 'fas fa-arrow-down-wide-short'}"></i>
 </th>
