@@ -7,28 +7,38 @@
 
 <section class="py-5 mt-0 align-items-start d-flex bg-light"
          style="min-height: 75vh;
-                min-width: 75vh">
+                min-width: 85vh">
     <div class="container-fluid text-center">
         <div class="d-flex justify-content-center">
-            <div class="card ">
+            <div class="card">
                 <h2 class="card-header my-3"
                     th:text="#{students.header}"></h2>
                 <div class="card-body">
                     <div class="text-center h4"
                          th:text="#{students.desc}"></div>
-                    <form th:action="@{/students/search}"
-                          method="get">
+                    <form th:action="@{/students}"
+                          method="get"
+                          id="studentForm">
                         <div class="row justify-content-end mb-1 mt-3">
                             <div class="col-8 col-sm-8">
                                 <div class="form-group input-group">
-                                    <input type="search" name="name" size="10"
+
+                                    <input id="name" type="search" name="name" size="10"
                                            class="form-control"
-                                           th:placeholder="#{students.input}" required/>
+                                           th:placeholder="#{students.input}" required
+                                           th:value="${name}"/>
+                                    <i class="fa fa-search"></i>
                                     <input type="submit"
                                            value="Search"
                                            class="btn btn-outline-success"
                                            th:value="#{students.search}"/>
                                 </div>
+                            </div>
+                            <div class="col-2 col-sm-2">
+                                <button id="btnClear"
+                                        class="btn btn-light"
+                                        th:text="#{students.clear}">
+                                </button>
                             </div>
                         </div>
 
@@ -36,7 +46,9 @@
                             <div class="col-4 col-sm-4">
                                 <a class="btn btn-outline-primary"
                                    th:href="@{/students/new}"
-                                   th:text="#{students.new}"></a>
+                                   th:value="#{students.new}">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                </a>
                             </div>
                         </div>
 
@@ -45,20 +57,15 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th rowspan="2" colspan="1" scope="col" class="align-middle">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}" th:text="#{student.firstName}"></a>
+                                <th th:replace="fragments/sorting :: sorting('firstName','First Name')">
                                 </th>
-                                <th rowspan="1" colspan="1" scope="col">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}" th:text="#{student.lastName}"></a>
+                                <th th:replace="fragments/sorting :: sorting('lastName','Last Name')">
                                 </th>
-                                <th rowspan="1" colspan="1" scope="col">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=age&sortDir=' + ${reverseSortDir}}" th:text="#{student.age}"></a>
+                                <th th:replace="fragments/sorting :: sorting('age','Age')">
                                 </th>
-                                <th rowspan="1" colspan="1" scope="col">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}" th:text="#{student.email}"></a>
+                                <th th:replace="fragments/sorting :: sorting('email','Email')">
                                 </th>
-                                <th rowspan="1" colspan="1" scope="col">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=fieldOfStudy&sortDir=' + ${reverseSortDir}}" th:text="#{student.fieldOfStudy}"></a>
+                                <th th:replace="fragments/sorting :: sorting('fieldOfStudy','Field Of Study')">
                                 </th>
                                 <th rowspan="1" colspan="1" scope="col" th:text="#{student.no.of.teachers}">
                                 </th>
@@ -76,53 +83,64 @@
                                 <td th:text="${student.fieldOfStudy.getDesc()}"/>
                                 <td th:text="${student.teachersList.size()}"/>
                                 <td>
-                                    <a class="btn btn-outline-primary"
+                                    <a id="btnView"
+                                       class="fa fa-diamond-turn-right"
                                        th:href="@{/students/{id}(id=${student.id})}"
-                                       th:text="#{students.view}"></a>
-                                    <a class="btn btn-outline-primary"
+                                       th:title="#{students.view}"></a>
+                                    &nbsp;
+                                    <a id="btnEdit"
+                                       class="fa fa-user-pen"
                                        th:href="@{/students/edit/{id}(id=${student.id})}"
-                                       th:text="#{students.edit}"></a>
-                                    <a class="btn btn-outline-danger"
+                                       th:title="#{students.edit}"
+                                    ></a>
+                                    &nbsp;
+                                    <a id="btnDelete"
+                                       class="fa fa-trash-can icon-dark btn-delete"
+                                       th:studentName="${student.firstName + ' ' + student.lastName}"
                                        th:href="@{/students/delete/{id}(id=${student.id})}"
-                                       th:text="#{students.delete}"></a>
+                                       th:title="#{students.delete}"
+                                      ></a>
+
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-                        <div th:if="${totalPages > 1}">
-                            <div class="row m-1">
-                                <div class="col-2">
-                                    Total Rows: [[${totalItems}]]
-                                </div>
 
-                                <div class="col-3">
-                                                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                                                    <a th:if="${currentPage != i}"
-                                                       th:href="@{'/students/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
-                                                    <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
-                                                </span>
-                                </div>
-                                <div class="col-2">
-                                    <a th:if="${currentPage > 1}"
-                                       th:href="@{'/students/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                                    th:text="#{table.previous}"></a>
-                                    <span th:unless="${currentPage > 1}" th:text="#{table.previous}"></span>
-                                </div>
 
-                                <div class="col-1">
-                                    <a th:if="${currentPage < totalPages}"
-                                       th:href="@{'/students/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                                       th:text="#{table.next}"></a>
-                                    <span th:unless="${currentPage < totalPages}" th:text="#{table.next}"></span>
-                                </div>
-
-                                <div class="col-1">
-                                    <a th:if="${currentPage < totalPages}"
-                                       th:href="@{'/students/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                                       th:text="#{table.last}"></a>
-                                    <span th:unless="${currentPage < totalPages}" th:text="#{table.last}"></span>
-                                </div>
+                        <nav aria-label="Pagination" th:if="${totalPages > 0}">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                    <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
+                                </li>
+                                <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
+                                    <a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"></a>
+                                </li>
+                                <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                                    <a class="page-link" href="#">...</a>
+                                </li>
+                                <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+                                    th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+                                    <a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
+                                </li>
+                                <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+                                    <a class="page-link" href="#">...</a>
+                                </li>
+                                <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                    <a th:replace="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')"></a>
+                                </li>
+                                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                    <a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="col-md-3 input-group mt-2">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="pageSize">Items per page:</label>
                             </div>
+                            <select form="studentForm" name="size" th:value="${pageSize}" onchange="changePageSize()" class="size-select"
+                                    id="pageSize">
+                                <option th:each="s : ${ {3, 6, 9} }" th:value="${s}" th:text="${s}" th:selected="${s == pageSize}"></option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -131,6 +149,29 @@
     </div>
 
 </section>
+
+<div class="modal fade text-center" id="confirmModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <span id="confirmText"></span>
+            </div>
+
+            <div class="modal-footer">
+                <a type="button" id="yesBtn" class="btn btn-danger">Yes</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Footer -->
 <div th:replace="fragments/footer :: footer"></div>
