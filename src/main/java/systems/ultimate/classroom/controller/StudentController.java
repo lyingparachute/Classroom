@@ -2,7 +2,6 @@ package systems.ultimate.classroom.controller;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,36 +29,31 @@ public class StudentController {
     }
 
     @GetMapping
-    public String getStudents(Model model) {
-        return getPaginatedStudents(1, "firstName", "asc", model);
-    }
-
-    @GetMapping("/page/{pageNo}")
-    public String getPaginatedStudents(@PathVariable(value = "pageNo") int pageNo,
-                                       @RequestParam("sortField") String sortField,
-                                       @RequestParam("sortDir") String sortDir,
+    public String getPaginatedStudents(@RequestParam(required = false) String name,
+                                       @RequestParam(defaultValue = "1") int page,
+                                       @RequestParam(defaultValue = "2") int size,
+                                       @RequestParam(defaultValue = "firstName") String sortField,
+                                       @RequestParam(defaultValue = "asc") String sortDir,
                                        Model model) {
-        int pageSize = 2;
-        Page<StudentDto> page = studentService.fetchAllPaginated(pageNo, pageSize, sortField, sortDir);
-        List<StudentDto> students = page.getContent();
-        model.addAttribute("students", students);
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
 
+
+        Page<StudentDto> pageStudents;
+        if (name == null) {
+            pageStudents = studentService.fetchAllPaginated(page, size, sortField, sortDir);
+        } else {
+            pageStudents = studentService.findByFirstOrLastNamePaginated(page, size, sortField, sortDir, name);
+            model.addAttribute("name", name);
+        }
+        List<StudentDto> students = pageStudents.getContent();
+        model.addAttribute("students", students);
+        model.addAttribute("currentPage", pageStudents.getNumber() + 1);
+        model.addAttribute("totalPages", pageStudents.getTotalPages());
+        model.addAttribute("totalItems", pageStudents.getTotalElements());
+        model.addAttribute("pageSize", size);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         return "students";
-    }
-
-    @GetMapping("search")
-    public String searchStudents(@Param("name") String name, Model model){
-        model.addAttribute("students", studentService.findByFirstOrLastName(name));
-        model.addAttribute("name", name);
-        model.addAttribute("description", "Search for '" + name + "' in students list");
-        model.addAttribute("tableDesc", "Students that have '"+ name +"' in their first or last name");
-        return "students-search";
     }
 
     @GetMapping("{id}")
