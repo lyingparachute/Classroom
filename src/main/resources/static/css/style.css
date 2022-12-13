@@ -44,3 +44,14 @@
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
 }
+#btnView {
+}
+
+#btnEdit {
+
+    color: dimgray;
+}
+
+#btnDelete {
+    color: firebrick;
+}
