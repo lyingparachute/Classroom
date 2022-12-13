@@ -1,8 +1,9 @@
 <th scope="col" th:fragment="sorting(field, label)">
-  <a th:href="@{'/tutorials?' + ${keyword!=null && keyword!=''? 'keyword=' + keyword + '&' : ''}
+  <a th:href="@{'/students?' + ${name != null && name!=''? 'keyword=' + name + '&' : ''}
                 + 'page=' + ${currentPage} + '&size=' + ${pageSize}
-                + ${sortField!=null ? '&sort=' + field + ',' + (sortField == field ? reverseSortDirection : sortDirection) : ''}}">
+                + ${sortField != null ? '&sortField=' + field : ''}
+                + ${sortDir != null ? '&sortDir=' + (sortField == field ? reverseSortDir : sortDir) : '' }}">
     [[${label}]] </a>
   <span th:if="${sortField == field}"
-        th:class="${sortDirection == 'asc' ? 'fas fa-arrow-down-short-wide' : 'fas fa-arrow-down-wide-short'}"></span>
+        th:class="${sortDir == 'asc' ? 'fas fa-arrow-down-short-wide' : 'fas fa-arrow-down-wide-short'}"></span>
 </th>
