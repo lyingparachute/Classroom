@@ -22,16 +22,15 @@
                         <div class="row justify-content-end mb-1 mt-3">
                             <div class="col-8 col-sm-8">
                                 <div class="form-group input-group">
-
+                                    <i class="fa fa-search"></i>
                                     <input id="name" type="search" name="name" size="10"
                                            class="form-control"
                                            th:placeholder="#{students.input}" required
                                            th:value="${name}"/>
-                                    <i class="fa fa-search"></i>
-                                    <input type="submit"
+                                    <button type="submit"
                                            value="Search"
                                            class="btn btn-outline-success"
-                                           th:value="#{students.search}"/>
+                                           th:text="#{students.search}"></button>
                                 </div>
                             </div>
                             <div class="col-2 col-sm-2">
@@ -150,7 +149,7 @@
 
 </section>
 
-<div class="modal fade text-center" id="confirmModal">
+<div class="modal fade text-center" id="deleteModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -175,5 +174,30 @@
 
 <!-- Footer -->
 <div th:replace="fragments/footer :: footer"></div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".btn-delete").on("click", function (e) {
+            e.preventDefault();
+            const link = $(this);
+
+            let studentName = link.attr("studentName");
+            $("#yesBtn").attr("href", link.attr("href"));
+            $("#confirmText").html("Do you want to delete Student \<strong\>" + studentName + "\<\/strong\>?");
+            $("#deleteModal").modal();
+        });
+
+        $("#btnClear").on("click", function (e) {
+            e.preventDefault();
+            $("#name").text("");
+            window.location = "[[@{/students}]]";
+        });
+    });
+
+    function changePageSize() {
+        $("#studentForm").submit();
+    }
+</script>
+
 </body>
 </html>
