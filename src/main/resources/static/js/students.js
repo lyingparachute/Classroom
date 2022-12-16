@@ -11,7 +11,7 @@ $(document).ready(function () {
     $('.delBtn').on('click', function (event) {
         event.preventDefault();
         var href = $(this).attr('href');
-        $('#exampleModal #delRef').attr('href', href);
+        $('#studentDeleteModal #delRef').attr('href', href);
     });
 });
 
