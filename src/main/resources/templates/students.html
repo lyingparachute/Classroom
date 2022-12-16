@@ -103,7 +103,7 @@
                                        th:href="@{/students/delete/{id}(id=${student.id})}"
                                        th:title="#{students.delete}"
                                        data-bs-toggle="modal"
-                                       data-bs-target="#exampleModal">
+                                       data-bs-target="#studentDeleteModal">
                                     </a>
                                 </td>
                             </tr>
@@ -155,11 +155,11 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="studentDeleteModal" tabindex="-1" aria-labelledby="studentDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Deletion</h1>
+                <h1 class="modal-title fs-5" id="studentDeleteModalLabel">Confirm Deletion</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -167,8 +167,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger">Delete</button>
-                <a href="" class="btn btn-danger" id="delRef">Delete2</a>
+                <a href="" class="btn btn-danger" id="delRef">Delete</a>
             </div>
         </div>
     </div>
@@ -176,27 +175,6 @@
 
 <!-- Footer -->
 <div th:replace="fragments/footer :: footer"></div>
-<!--<script type="text/javascript" src="js/students.js"></script>-->
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#btnClear").on("click", function (e) {
-            e.preventDefault();
-            $("#name").text("");
-            window.location = "[[@{/students}]]";
-        });
-
-        $('.delBtn').on('click', function (event) {
-            event.preventDefault();
-            var href = $(this).attr('href');
-            $('#exampleModal #delRef').attr('href', href);
-        });
-    });
-
-    function changePageSize() {
-        $("#studentForm").submit();
-    }
-</script>
-
+<script type="text/javascript" src="js/students.js"></script>
 </body>
 </html>
