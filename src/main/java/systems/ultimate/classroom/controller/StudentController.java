@@ -31,7 +31,7 @@ public class StudentController {
     @GetMapping
     public String getPaginatedStudents(@RequestParam(required = false) String name,
                                        @RequestParam(defaultValue = "1") int page,
-                                       @RequestParam(defaultValue = "2") int size,
+                                       @RequestParam(defaultValue = "6") int size,
                                        @RequestParam(defaultValue = "firstName") String sortField,
                                        @RequestParam(defaultValue = "asc") String sortDir,
                                        Model model) {
