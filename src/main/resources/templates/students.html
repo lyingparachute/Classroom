@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="fragments/header :: header"></head>
+<head th:replace="fragments/header :: header">
+
+
+</head>
 <body>
 <!--Navigation Bar-->
 <div th:replace="fragments/navBar :: nav"></div>
@@ -83,23 +86,25 @@
                                 <td th:text="${student.teachersList.size()}"/>
                                 <td>
                                     <a id="btnView"
-                                       class="fa fa-diamond-turn-right"
+                                       class="fa fa-eye"
                                        th:href="@{/students/{id}(id=${student.id})}"
-                                       th:title="#{students.view}"></a>
+                                       th:title="#{students.view}">
+                                    </a>
                                     &nbsp;
                                     <a id="btnEdit"
                                        class="fa fa-user-pen"
                                        th:href="@{/students/edit/{id}(id=${student.id})}"
-                                       th:title="#{students.edit}"
-                                    ></a>
+                                       th:title="#{students.edit}">
+                                    </a>
                                     &nbsp;
                                     <a id="btnDelete"
-                                       class="fa fa-trash-can icon-dark btn-delete"
+                                       class="fa fa-trash-can icon-dark delBtn"
                                        th:studentName="${student.firstName + ' ' + student.lastName}"
                                        th:href="@{/students/delete/{id}(id=${student.id})}"
                                        th:title="#{students.delete}"
-                                      ></a>
-
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#exampleModal">
+                                    </a>
                                 </td>
                             </tr>
                             </tbody>
@@ -146,51 +151,45 @@
             </div>
         </div>
     </div>
-
 </section>
 
-<div class="modal fade text-center" id="deleteModal">
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete Confirmation</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Deletion</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <div class="modal-body">
-                <span id="confirmText"></span>
+                Are you sure you want to delete student?
             </div>
-
             <div class="modal-footer">
-                <a type="button" id="yesBtn" class="btn btn-danger">Yes</a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+                <a href="" class="btn btn-danger" id="delRef">Delete2</a>
             </div>
         </div>
     </div>
 </div>
 
-
 <!-- Footer -->
 <div th:replace="fragments/footer :: footer"></div>
+<!--<script type="text/javascript" src="js/students.js"></script>-->
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $(".btn-delete").on("click", function (e) {
-            e.preventDefault();
-            const link = $(this);
-
-            let studentName = link.attr("studentName");
-            $("#yesBtn").attr("href", link.attr("href"));
-            $("#confirmText").html("Do you want to delete Student \<strong\>" + studentName + "\<\/strong\>?");
-            $("#deleteModal").modal();
-        });
-
         $("#btnClear").on("click", function (e) {
             e.preventDefault();
             $("#name").text("");
             window.location = "[[@{/students}]]";
+        });
+
+        $('.delBtn').on('click', function (event) {
+            event.preventDefault();
+            var href = $(this).attr('href');
+            $('#exampleModal #delRef').attr('href', href);
         });
     });
 
