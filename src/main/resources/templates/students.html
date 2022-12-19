@@ -31,9 +31,9 @@
                                            th:placeholder="#{students.input}" required
                                            th:value="${name}"/>
                                     <button type="submit"
-                                           value="Search"
-                                           class="btn btn-outline-success"
-                                           th:text="#{students.search}"></button>
+                                            value="Search"
+                                            class="btn btn-outline-success"
+                                            th:text="#{students.search}"></button>
                                 </div>
                             </div>
                             <div class="col-2 col-sm-2">
@@ -88,7 +88,10 @@
                                     <a id="btnView"
                                        class="fa fa-eye"
                                        th:href="@{/students/{id}(id=${student.id})}"
-                                       th:title="#{students.view}">
+                                       th:title="#{students.view}"
+                                       th:onClick="'javascript:openStudentViewModal(\''+ ${student.id} + '\');'"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#studentViewModal">
                                     </a>
                                     &nbsp;
                                     <a id="btnEdit"
@@ -96,15 +99,49 @@
                                        th:href="@{/students/edit/{id}(id=${student.id})}"
                                        th:title="#{students.edit}">
                                     </a>
-                                    &nbsp;
+                                    &nbsp;&nbsp;
                                     <a id="btnDelete"
                                        class="fa fa-trash-can icon-dark delBtn"
-                                       th:studentName="${student.firstName + ' ' + student.lastName}"
+                                       th:studentName="${student.firstName + '&nbsp;' + student.lastName}"
                                        th:href="@{/students/delete/{id}(id=${student.id})}"
                                        th:title="#{students.delete}"
                                        data-bs-toggle="modal"
                                        data-bs-target="#studentDeleteModal">
                                     </a>
+
+                                    <!-- View Modal -->
+                                    <div class="modal fade" id="studentViewModal" tabindex="-1"
+                                         aria-labelledby="studentViewModalLabel" aria-hidden="true"
+                                         th:fragment="modalContents">
+                                        <div class="modal-dialog modal-confirm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="studentViewModalLabel"
+                                                        th:text="#{view.modal.header}"></h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p id="studentFirstName">Details</p>
+                                                    <p id="studentLastName">Details</p>
+                                                    <p id="studentEmail">Details</p>
+                                                    <p id="studentAge">Details</p>
+                                                    <p id="studentFieldOfStudy">Details</p>
+                                                    <a class="list-group-item"
+                                                       th:href="@{/teachers/{id}(id=${fieldOpt.id})}"
+                                                       th:each="fieldOpt : ${student.teachersList}"
+                                                       th:value="${fieldOpt.id}"
+                                                       th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
+                                                    </a>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="" class="btn btn-info" data-bs-dismiss="modal"
+                                                       th:text="#{view.modal.btnClose}"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End View modal -->
                                 </td>
                             </tr>
                             </tbody>
@@ -116,7 +153,8 @@
                                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                                     <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
                                 </li>
-                                <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
+                                <li class="page-item font-weight-bold"
+                                    th:classappend="${currentPage == 1} ? 'disabled'">
                                     <a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"></a>
                                 </li>
                                 <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
@@ -129,7 +167,8 @@
                                 <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
                                     <a class="page-link" href="#">...</a>
                                 </li>
-                                <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                <li class="page-item font-weight-bold"
+                                    th:classappend="${currentPage == totalPages} ? 'disabled'">
                                     <a th:replace="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')"></a>
                                 </li>
                                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
@@ -137,16 +176,30 @@
                                 </li>
                             </ul>
                         </nav>
-                        <div class="col-md-3 input-group mt-2">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="pageSize">Items per page:</label>
+
+                    </div>
+
+                    <div class="row align-items-start">
+                        <div class="col-auto mt-2">
+                            <div
+                                 th:text="'Total items: ' + ${totalItems}">
                             </div>
-                            <select form="studentForm" name="size" th:value="${pageSize}" onchange="changePageSize()" class="size-select"
+                        </div>
+                        <div class="col-auto mt-2">
+                            <div class="input-group-prepend">
+                                Items per page:
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <select form="studentForm" name="size" th:value="${pageSize}" onchange="changePageSize()"
+                                    class="size-select"
                                     id="pageSize">
-                                <option th:each="s : ${ {3, 6, 9} }" th:value="${s}" th:text="${s}" th:selected="${s == pageSize}"></option>
+                                <option th:each="s : ${ {3, 6, 9} }" th:value="${s}" th:text="${s}"
+                                        th:selected="${s == pageSize}"></option>
                             </select>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -154,8 +207,9 @@
 </section>
 
 
-<!-- Modal -->
-<div class="modal fade" id="studentDeleteModal" tabindex="-1" aria-labelledby="studentDeleteModalLabel" aria-hidden="true">
+<!-- Delete Modal -->
+<div class="modal fade" id="studentDeleteModal" tabindex="-1" aria-labelledby="studentDeleteModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-confirm">
         <div class="modal-content ">
             <div class="modal-header">
@@ -172,6 +226,7 @@
         </div>
     </div>
 </div>
+<!-- End delete modal -->
 
 <!-- Footer -->
 <div th:replace="fragments/footer :: footer"></div>
