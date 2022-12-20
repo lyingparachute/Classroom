@@ -26,25 +26,15 @@ function openStudentViewModal(id) {
     $.ajax({
         url: "/api/students/"+ id,
         success: function(data){
-            //alert(id);
-            //alert(data);
             const myJSON = JSON.stringify(data);
-
-            //alert(myJSON);
-
             const tmpData = JSON.parse(myJSON);
             const formattedJson = JSON.stringify(tmpData, null, ' ');
-
-            //alert(formattedJson);
-
             $('#studentViewModal .modal-title').html('Viewing student with ID: ' + data.id);
             $('#studentFirstName').html('First Name: ' + data.firstName);
             $('#studentLastName').html('LastName : ' + data.lastName);
             $('#studentEmail').html('Email: ' + data.email);
             $('#studentAge').html('Age: ' + data.age);
             $('#studentFieldOfStudy').html('Field of study: ' + data.fieldOfStudy);
-
         }
-
     });
 }
