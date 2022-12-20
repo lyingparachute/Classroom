@@ -2,11 +2,27 @@ INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VA
 INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (2, 'Maciej', 'Komaranczuk', 'm.komaranczuk@gmail.com', 25, 'INFORMATICS');
 INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (3, 'Weronika', 'Romanski', 'w.romanski@gmail.com', 20, 'ELECTRICAL');
 INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (4, 'Robert', 'Kaczuk', 'r.kaczuk@gmail.com', 21, 'ELECTRONICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (5, 'Alojzy', 'Adach', 'a.adach@gmail.com', 22, 'ROBOTICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (6, 'Bogdan', 'Agaciński', 'b.agaciński@gmail.com', 25, 'INFORMATICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (7, 'Cyryl', 'Badach', 'c.badach@gmail.com', 20, 'ELECTRICAL');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (8, 'Emanuel', 'Żyra', 'e.żyra@gmail.com', 21, 'ELECTRONICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (9, 'Gniewomir', 'Żygłowicz', 'g.żygłowicz@gmail.com', 22, 'ROBOTICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (10, 'Jacenty', 'Zwierzyński', 'j.zwierzyński@gmail.com', 25, 'INFORMATICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (11, 'Karol', 'Zimerman', 'k.zimerman@gmail.com', 20, 'ELECTRICAL');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (12, 'Kosma', 'Wyrwicz', 'k.wyrwicz@gmail.com', 21, 'ELECTRONICS');
 
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (1, 'Grzegorz', 'Kostro', 'g.kostro@gmail.com', 48, 'MATHS');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (2, 'Jagoda', 'Kowalska', 'j.kowalska@gmail.com', 33, 'SCIENCE');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (3, 'Adam', 'Batista', 'a.batista@gmail.com', 40, 'ART');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (4, 'Jarosław', 'Adamczuk', 'j.adamczuk@gmail.com', 55, 'IT');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (1, 'Grzegorz', 'Wrzyszcz', 'g.wrzyszcz@gmail.com', 48, 'MATHS');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (2, 'Jagoda', 'Wosz', 'j.wosz@gmail.com', 33, 'SCIENCE');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (3, 'Adam', 'Wojtyna', 'a.wojtyna@gmail.com', 40, 'ART');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (4, 'Jarosław', 'Widera', 'j.widera@gmail.com', 55, 'IT');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (5, 'Ludwik', 'Kostro', 'l.kostro@gmail.com', 48, 'MATHS');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (6, 'Marian', 'Kowalska', 'm.kowalska@gmail.com', 33, 'SCIENCE');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (7, 'Maximilian', 'Batista', 'm.batista@gmail.com', 40, 'ART');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (8, 'Nikolas', 'Adamczuk', 'n.adamczuk@gmail.com', 55, 'IT');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (9, 'Orest', 'Szafarczyk', 'o.szafarczyk@gmail.com', 48, 'MATHS');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (10, 'Oskar', 'Trzaskoma', 'o.trzaskoma@gmail.com', 33, 'SCIENCE');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (11, 'Petroniusz', 'Tarczewski', 'p.tarczewski@gmail.com', 40, 'ART');
+INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (12, 'Remigiusz', 'Śliwa', 'r.śliwa@gmail.com', 55, 'IT');
 
 INSERT INTO teacher_students (teacher_id, student_id) VALUES (1, 1);
 INSERT INTO teacher_students (teacher_id, student_id) VALUES (1, 2);
