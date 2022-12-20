@@ -45,6 +45,20 @@ public class StudentController {
             model.addAttribute("name", name);
         }
         List<StudentDto> students = pageStudents.getContent();
+        int firstItemShownOnPage = 1;
+        int lastItemShownOnPage;
+        if (page == 1 && pageStudents.getTotalElements() <= size) {
+            lastItemShownOnPage = Math.toIntExact(pageStudents.getTotalElements());
+        } else if (page == 1 && pageStudents.getTotalElements() > size) {
+            lastItemShownOnPage = size * page;
+        } else if (page != 1 && pageStudents.getTotalElements() <= ((long) size * page)) {
+            firstItemShownOnPage = size * (page - 1) + 1;
+            lastItemShownOnPage = Math.toIntExact(pageStudents.getTotalElements());
+        } else {
+            firstItemShownOnPage = size * (page - 1) + 1;
+            lastItemShownOnPage = size * (page - 1) + size;
+        }
+
         model.addAttribute("students", students);
         model.addAttribute("currentPage", pageStudents.getNumber() + 1);
         model.addAttribute("totalPages", pageStudents.getTotalPages());
@@ -53,6 +67,8 @@ public class StudentController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
+        model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
         return "students";
     }
 
@@ -72,7 +88,7 @@ public class StudentController {
 
     @PostMapping(value = "new")
     public String createStudent(@Valid @ModelAttribute("student") Student student, BindingResult result, Model model) {
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             model.addAttribute("teachers", teacherService.fetchAll());
             return "student-form";
         }
@@ -96,7 +112,7 @@ public class StudentController {
 
     @PostMapping(value = "update")
     public String editStudent(@Valid @ModelAttribute("student") Student student, BindingResult result, Model model) {
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             model.addAttribute("teachers", teacherService.fetchAll());
             return "student-edit-form";
         }
