@@ -16,20 +16,30 @@ $(document).ready(function () {
         $('#studentDeleteModal #delRef').attr('href', href);
         $("#confirmText").html("Are you sure you want to delete student with name \<strong\>" + studentName + "\<\/strong\>? This action cannot be undone and you will be unable to recover any data. ");
     });
-
-    $("#studentViewModal").on("hidden.bs.modal", function(){
-        $(".modal-body").html("<p id=\"studentFirstName\">Details</p>\n" +
-            "                <p id=\"studentLastName\">Details</p>\n" +
-            "                <p id=\"studentEmail\">Details</p>\n" +
-            "                <p id=\"studentAge\">Details</p>\n" +
-            "                <p id=\"studentFieldOfStudy\">Details</p>\n" +
-            "                <p id=\"studentTeachers\">List of assigned teachers:</p>\n" +
-            "                <div class=\"col-lg-12\" id=\"list-puntate\">\n" +
-            "                </div>");
-    });
-
 });
 
+$("#studentDeleteModal").on("hidden.bs.modal", function(){
+    $(".modal-delete-body").html("<span id=\"confirmText\"></span>");
+    $(".modal-view-body").html("<p id=\"studentFirstName\">Details</p>\n" +
+        "                <p id=\"studentLastName\">Details</p>\n" +
+        "                <p id=\"studentEmail\">Details</p>\n" +
+        "                <p id=\"studentAge\">Details</p>\n" +
+        "                <p id=\"studentFieldOfStudy\">Details</p>\n" +
+        "                <p id=\"studentTeachers\">List of assigned teachers:</p>\n" +
+        "                <div class=\"col-lg-12\" id=\"teachers-list\">\n" +
+        "                </div>");
+});
+
+$("#studentViewModal").on("hidden.bs.modal", function(){
+    $(".modal-view-body").html("<p id=\"studentFirstName\">Details</p>\n" +
+        "                <p id=\"studentLastName\">Details</p>\n" +
+        "                <p id=\"studentEmail\">Details</p>\n" +
+        "                <p id=\"studentAge\">Details</p>\n" +
+        "                <p id=\"studentFieldOfStudy\">Details</p>\n" +
+        "                <p id=\"studentTeachers\">List of assigned teachers:</p>\n" +
+        "                <div class=\"col-lg-12\" id=\"teachers-list\">\n" +
+        "                </div>");
+});
 function changePageSize() {
     $("#studentForm").submit();
 }
@@ -48,7 +58,7 @@ function openStudentViewModal(id) {
             $('#studentAge').html('Age: ' + data.age);
             $('#studentFieldOfStudy').html('Field of study: ' + data.fieldOfStudy);
 
-            let listDiv = document.getElementById('list-puntate');
+            let listDiv = document.getElementById('teachers-list');
             let ul = document.createElement('ul');
             for (let i = 0; i < tmpData.teachersList.length; i++) {
                 let counter = tmpData.teachersList[i];
