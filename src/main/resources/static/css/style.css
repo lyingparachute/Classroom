@@ -1,39 +1,46 @@
+.container-fluid {
+    min-height: 75vh;
+    min-width: 85vh;
+}
+
+#tableCard {
+    min-height: 75vh;
+    min-width: 1100px;
+}
+
 *.icon-dark {
     color: grey;
 }
 
-.message {
-    position: absolute;
-    top: 40px;
-    right:5px;
-}
-
 .search {
     position: relative;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1);
 }
 
 .search input {
+    height: 48px;
     text-indent: 25px;
     border: 2px solid #d6d4d4;
 }
 
 .search input:focus {
     box-shadow: none;
-    border: 1px solid grey;
+    border: 2px solid blue;
 }
 
 .search .fa-search {
     position: absolute;
-    top: 12px;
-    left: 10px;
+    top: 16px;
+    left: 16px;
 }
 
 .search button {
     position: absolute;
-    top: 0px;
-    right: 0px;
-    width: 80px;
-    background: grey;
+    top: 5px;
+    right: 5px;
+    height: 38px;
+    width: 110px;
+    background: white;
 }
 
 .size-select {
@@ -43,6 +50,10 @@
     padding: 6px 12px;
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
+}
+#btnAddStudent{
+    position: absolute;
+    left: 40px;
 }
 #btnView {
 }
