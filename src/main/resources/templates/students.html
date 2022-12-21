@@ -82,7 +82,7 @@
                                 <td th:text="${student.lastName}"/>
                                 <td th:text="${student.age}"/>
                                 <td th:text="${student.email}"/>
-                                <td th:text="${student.fieldOfStudy.getDesc()}"/>
+                                <td th:text="${student.fieldOfStudy.desc}"/>
                                 <td th:text="${student.teachersList.size()}"/>
                                 <td>
                                     <a id="btnView"
@@ -90,6 +90,7 @@
                                        th:href="@{/students/{id}(id=${student.id})}"
                                        th:title="#{students.view}"
                                        th:onClick="'javascript:openStudentViewModal(\''+ ${student.id} + '\');'"
+
                                        data-bs-toggle="modal"
                                        data-bs-target="#studentViewModal">
                                     </a>
@@ -109,44 +110,11 @@
                                        data-bs-target="#studentDeleteModal">
                                     </a>
 
-                                    <!-- View Modal -->
-                                    <div class="modal fade" id="studentViewModal" tabindex="-1"
-                                         aria-labelledby="studentViewModalLabel" aria-hidden="true"
-                                         th:fragment="modalContents">
-                                        <div class="modal-dialog modal-confirm">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title" id="studentViewModalLabel"
-                                                        th:text="#{view.modal.header}"></h4>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p id="studentFirstName">Details</p>
-                                                    <p id="studentLastName">Details</p>
-                                                    <p id="studentEmail">Details</p>
-                                                    <p id="studentAge">Details</p>
-                                                    <p id="studentFieldOfStudy">Details</p>
-                                                    <a class="list-group-item"
-                                                       th:href="@{/teachers/{id}(id=${fieldOpt.id})}"
-                                                       th:each="fieldOpt : ${student.teachersList}"
-                                                       th:value="${fieldOpt.id}"
-                                                       th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
-                                                    </a>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a href="" class="btn btn-info" data-bs-dismiss="modal"
-                                                       th:text="#{view.modal.btnClose}"></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End View modal -->
                                 </td>
                             </tr>
                             </tbody>
                             <caption>
-                                <div class="container ">
+                                <div class="container">
                                     <div class="row">
                                         <div class="col text-start">
                                             <span th:text="${firstItemShownOnPage} + ' - ' + ${lastItemShownOnPage} + ' of ' + ${totalItems}"></span>
@@ -206,6 +174,37 @@
     </div>
 </section>
 
+<!-- View Modal -->
+<div class="modal fade" id="studentViewModal"
+     tabindex="-1"
+     aria-labelledby="studentViewModalLabel" aria-hidden="true"
+     th:fragment="modalContents">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="studentViewModalLabel"
+                    th:text="#{view.modal.header}"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="studentFirstName">Details</p>
+                <p id="studentLastName">Details</p>
+                <p id="studentEmail">Details</p>
+                <p id="studentAge">Details</p>
+                <p id="studentFieldOfStudy">Details</p>
+                <p id="studentTeachers">List of assigned teachers:</p>
+                <div class="col-lg-12" id="list-puntate">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="" class="btn btn-info" data-bs-dismiss="modal"
+                   th:text="#{view.modal.btnClose}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End View modal -->
 
 <!-- Delete Modal -->
 <div class="modal fade" id="studentDeleteModal" tabindex="-1" aria-labelledby="studentDeleteModalLabel"
