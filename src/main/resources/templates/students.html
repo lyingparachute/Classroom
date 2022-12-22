@@ -10,9 +10,7 @@
 <!--Navigation Bar-->
 <div th:replace="fragments/navBar :: nav"></div>
 
-<section class="py-5 mt-0 align-items-start d-flex bg-light"
-         style="min-height: 75vh;
-                min-width: 85vh">
+<section class="py-5 mt-0 align-items-start d-flex bg-light">
     <div class="container-fluid text-center">
         <div class="d-flex justify-content-center">
             <div id="tableCard" class="card">
@@ -85,7 +83,8 @@
 
                             </thead>
                             <tbody>
-                            <tr th:each="student: ${students}" th:onClick="'javascript:openStudentViewModal(\''+ ${student.id} + '\');'"
+                            <tr th:each="student: ${students}"
+                                th:onClick="'javascript:openStudentViewModal(\''+ ${student.id} + '\');'"
                                 data-bs-toggle="modal"
                                 data-bs-target="#studentViewModal">
                                 <td th:text="${student.firstName}"/>
@@ -96,19 +95,19 @@
                                 <td th:text="${student.teachersList.size()}"/>
                                 <td>
                                     <a id="btnView"
-                                       class="fa fa-eye"
+                                       class="fa fa-eye fa-lg"
                                        th:href="@{/students/{id}(id=${student.id})}"
                                        th:title="#{students.view}">
                                     </a>
                                     &nbsp;
                                     <a id="btnEdit"
-                                       class="fa fa-user-pen"
+                                       class="fa fa-user-pen fa-lg"
                                        th:href="@{/students/edit/{id}(id=${student.id})}"
                                        th:title="#{students.edit}">
                                     </a>
-                                    &nbsp;&nbsp;
+                                    &nbsp;
                                     <a id="btnDelete"
-                                       class="fa fa-trash-can icon-dark delBtn"
+                                       class="fa fa-trash-can fa-lg icon-dark delBtn"
                                        th:href="@{/students/delete/{id}(id=${student.id})}"
                                        th:title="#{students.delete}"
                                        th:studentName="${student.firstName + '&nbsp;' + student.lastName}"
@@ -160,12 +159,15 @@
                                             </nav>
                                         </div>
                                         <div class="col text-end">
-                                            <label for="pageSize2" th:text="#{students.per.page}"></label>
-                                            <select form="studentForm" name="size" th:value="${pageSize}"
+                                            <label for="pageSize" th:text="#{students.per.page}"></label>
+                                            <select id="pageSize"
+                                                    form="studentForm"
+                                                    name="size"
+                                                    th:value="${pageSize}"
                                                     onchange="changePageSize()"
                                                     class="size-select"
-                                                    id="pageSize2">
-                                                <option th:each="s : ${ {3, 6, 9} }" th:value="${s}" th:text="${s}"
+                                                    >
+                                                <option th:each="s : ${ {3, 6, 9, 12} }" th:value="${s}" th:text="${s}"
                                                         th:selected="${s == pageSize}"></option>
                                             </select>
                                         </div>
@@ -175,7 +177,7 @@
                         </table>
 
                         <div th:unless="${totalItems != 0}">
-                            <span>No data to show</span>
+                            <span id="signTableEmpty" class="h4 mt-5" th:text="#{students.empty.table}"></span>
                         </div>
 
                     </div>
