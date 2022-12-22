@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <header th:replace="fragments/header :: header"></header>
-    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
 </head>
 <body>
 <!--Navigation Bar-->
@@ -10,9 +9,9 @@
 
 <section class="py-5 mt-0 align-items-start d-flex bg-light"
          style="min-height: 75vh;">
-    <div class="container w-50">
+    <div class="container">
         <div class="d-flex justify-content-center">
-            <div class="card shadow">
+            <div id="itemCard" class="card shadow">
                 <h1 class="card-header text-center m-4"
                     th:text="#{students.new}"></h1>
                 <div class="card-body mx-4">

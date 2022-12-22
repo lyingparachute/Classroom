@@ -2,7 +2,9 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <header th:replace="fragments/header :: header"></header>
-    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/delete-modal.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/view-modal.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css"/>
 </head>
 <body>
 <!--Navigation Bar-->
@@ -13,7 +15,7 @@
                 min-width: 75vh">
     <div class="container-fluid text-center">
         <div class="d-flex justify-content-center">
-            <div class="card ">
+            <div id="tableCard" class="card">
                 <h2 class="card-header my-3"
                     th:text="#{teachers.header}"></h2>
                 <div class="card-body">
