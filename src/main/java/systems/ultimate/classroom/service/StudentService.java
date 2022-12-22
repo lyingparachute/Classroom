@@ -113,5 +113,11 @@ public class StudentService {
         }
     }
 
-
+    @Transactional
+    public void removeAll() {
+        for (Student student : studentRepository.findAll()){
+            teacherRepository.findAll().forEach(t -> t.removeStudent(student));
+        }
+        studentRepository.deleteAll();
+    }
 }
