@@ -56,6 +56,7 @@ public class StudentRestController {
         studentService.remove(id);
         return ResponseEntity.accepted().build();
     }
+
     @DeleteMapping
     public ResponseEntity<Void> deleteAllStudents() {
         studentService.removeAll();

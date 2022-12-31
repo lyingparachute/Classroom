@@ -65,23 +65,23 @@
                         <table class="table table-hover" th:if="${totalItems != 0}">
                             <thead>
                             <tr>
-                                <th th:replace="fragments/sorting :: sorting('firstName','First Name')">
+                                <th th:replace="fragments/students-sorting :: sorting('firstName','First Name')">
                                 </th>
-                                <th th:replace="fragments/sorting :: sorting('lastName','Last Name')">
+                                <th th:replace="fragments/students-sorting :: sorting('lastName','Last Name')">
                                 </th>
-                                <th th:replace="fragments/sorting :: sorting('age','Age')">
+                                <th th:replace="fragments/students-sorting :: sorting('age','Age')">
                                 </th>
-                                <th th:replace="fragments/sorting :: sorting('email','Email')">
+                                <th th:replace="fragments/students-sorting :: sorting('email','Email')">
                                 </th>
-                                <th th:replace="fragments/sorting :: sorting('fieldOfStudy','Field Of Study')">
+                                <th th:replace="fragments/students-sorting :: sorting('fieldOfStudy','Field Of Study')">
                                 </th>
                                 <th rowspan="1" colspan="1" scope="col" th:text="#{student.no.of.teachers}">
                                 </th>
                                 <th rowspan="2" colspan="1" scope="col" th:text="#{students.action}"
                                     class="align-middle"/>
                             </tr>
-
                             </thead>
+
                             <tbody>
                             <tr th:each="student: ${students}"
                                 th:onClick="'javascript:openStudentViewModal(\''+ ${student.id} + '\');'"
@@ -114,7 +114,6 @@
                                        data-bs-toggle="modal"
                                        data-bs-target="#studentDeleteModal">
                                     </a>
-
                                 </td>
                             </tr>
                             </tbody>
@@ -129,11 +128,11 @@
                                                 <ul class="pagination justify-content-center">
                                                     <li class="page-item"
                                                         th:classappend="${currentPage == 1} ? 'disabled'">
-                                                        <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
+                                                        <a th:replace="fragments/students-paging :: paging(1, '<<', 'First Page')"></a>
                                                     </li>
                                                     <li class="page-item font-weight-bold"
                                                         th:classappend="${currentPage == 1} ? 'disabled'">
-                                                        <a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"></a>
+                                                        <a th:replace="fragments/students-paging :: paging(${currentPage - 1}, '<', 'Previous Page')"></a>
                                                     </li>
                                                     <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
                                                         <a class="page-link" href="#">...</a>
@@ -141,7 +140,7 @@
                                                     <li class="page-item"
                                                         th:classappend="${page == currentPage} ? 'active'"
                                                         th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
-                                                        <a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
+                                                        <a th:replace="fragments/students-paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
                                                     </li>
                                                     <li class="page-item disabled"
                                                         th:if="${currentPage + 2 < totalPages}">
@@ -149,17 +148,17 @@
                                                     </li>
                                                     <li class="page-item font-weight-bold"
                                                         th:classappend="${currentPage == totalPages} ? 'disabled'">
-                                                        <a th:replace="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')"></a>
+                                                        <a th:replace="fragments/students-paging :: paging(${currentPage + 1},'>', 'Next Page')"></a>
                                                     </li>
                                                     <li class="page-item"
                                                         th:classappend="${currentPage == totalPages} ? 'disabled'">
-                                                        <a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
+                                                        <a th:replace="fragments/students-paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
                                                     </li>
                                                 </ul>
                                             </nav>
                                         </div>
                                         <div class="col text-end">
-                                            <label for="pageSize" th:text="#{students.per.page}"></label>
+                                            <label for="pageSize" th:text="#{table.rows.per.page}"></label>
                                             <select id="pageSize"
                                                     form="studentForm"
                                                     name="size"
@@ -225,7 +224,7 @@
     <div class="modal-dialog modal-confirm">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="studentDeleteModalLabel" th:text="#{delete.modal.header}">Confirmation</h4>
+                <h4 class="modal-title" id="studentDeleteModalLabel" th:text="#{delete.modal.header}"></h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" th:aria-label="Close"></button>
             </div>
             <div class="modal-body modal-delete-body" id="deleteModalBody">

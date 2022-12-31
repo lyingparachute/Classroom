@@ -21,7 +21,9 @@ public class TeacherRestController {
     @GetMapping()
     public ResponseEntity<List<TeacherDto>> getTeachers() {
         List<TeacherDto> teacher = teacherService.fetchAll();
-        return teacher.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(teacher);
+        return teacher.isEmpty() ?
+                ResponseEntity.notFound().build() :
+                ResponseEntity.ok(teacher);
     }
 
     @PostMapping("create")
@@ -53,6 +55,12 @@ public class TeacherRestController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteTeacher(@PathVariable Long id) {
         teacherService.remove(id);
+        return ResponseEntity.accepted().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAllStudents() {
+        teacherService.removeAll();
         return ResponseEntity.accepted().build();
     }
 }
