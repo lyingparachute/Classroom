@@ -1,138 +1,246 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="fragments/header :: header"></head>
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <link rel="stylesheet" th:href="@{/css/delete-modal.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/view-modal.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css"/>
+</head>
 <body>
 <!--Navigation Bar-->
 <div th:replace="fragments/navBar :: nav"></div>
 
-<section class="py-5 mt-0 align-items-start d-flex bg-light"
-         style="min-height: 75vh;
-                min-width: 75vh">
+<section class="py-5 mt-0 align-items-start d-flex bg-light">
     <div class="container-fluid text-center">
         <div class="d-flex justify-content-center">
-            <div class="card ">
-                <h2 class="card-header my-3"
-                    th:text="#{students.header}"></h2>
+            <div id="tableCard" class="card">
+                <h1 class="card-header my-3"
+                    th:text="#{students.header}"></h1>
                 <div class="card-body">
-                    <div class="text-center h4"
-                         th:text="#{students.desc}"></div>
-                    <form th:action="@{/students/search}"
-                          method="get">
+                    <div class="text-center h3"
+                         th:text="#{students.desc}">
+                    </div>
+                    <form th:action="@{/students}"
+                          method="get"
+                          id="studentForm">
                         <div class="row justify-content-end mb-1 mt-3">
-                            <div class="col-8 col-sm-8">
-                                <div class="form-group input-group">
-                                    <input type="search" name="name" size="10"
+                            <div class="col-auto">
+                                <a id="btnAddStudent"
+                                   class="btn btn-outline-primary btn-lg"
+                                   th:href="@{/students/new}"
+                                   th:value="#{students.new}">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                    <span th:text="#{students.new}"></span>
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <div class="search">
+                                    <i class="fa fa-search"></i>
+                                    <input id="name" type="search" name="name"
                                            class="form-control"
-                                           th:placeholder="#{students.input}" required/>
-                                    <input type="submit"
-                                           value="Search"
-                                           class="btn btn-outline-success"
-                                           th:value="#{students.search}"/>
+                                           th:placeholder="#{students.input}" required
+                                           th:value="${name}"/>
+                                    <button type="submit"
+                                            value="Search"
+                                            class="btn btn-outline-success"
+                                            th:text="#{students.search}"></button>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row justify-content-start mb-1 mt-3">
-                            <div class="col-4 col-sm-4">
-                                <a class="btn btn-outline-primary"
-                                   th:href="@{/students/new}"
-                                   th:text="#{students.new}"></a>
+                            <div class="col-auto">
+                                <button th:if="${name != null && !name.isEmpty()}"
+                                        id="btnClear"
+                                        class="btn btn-lg btn-light"
+                                        th:text="#{students.clear}">
+                                </button>
+                                <button th:unless="${name != null && !name.isEmpty()}"
+                                        id="btnClearDisabled"
+                                        class="btn btn-lg btn-light"
+                                        th:text="#{students.clear}"
+                                        disabled>
+                                </button>
                             </div>
                         </div>
-
                     </form>
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover" th:if="${totalItems != 0}">
                             <thead>
                             <tr>
-                                <th rowspan="2" colspan="1" scope="col" class="align-middle">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}" th:text="#{student.firstName}"></a>
+                                <th th:replace="fragments/students-sorting :: sorting('firstName','First Name')">
                                 </th>
-                                <th rowspan="1" colspan="1" scope="col">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}" th:text="#{student.lastName}"></a>
+                                <th th:replace="fragments/students-sorting :: sorting('lastName','Last Name')">
                                 </th>
-                                <th rowspan="1" colspan="1" scope="col">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=age&sortDir=' + ${reverseSortDir}}" th:text="#{student.age}"></a>
+                                <th th:replace="fragments/students-sorting :: sorting('age','Age')">
                                 </th>
-                                <th rowspan="1" colspan="1" scope="col">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}" th:text="#{student.email}"></a>
+                                <th th:replace="fragments/students-sorting :: sorting('email','Email')">
                                 </th>
-                                <th rowspan="1" colspan="1" scope="col">
-                                    <a th:href="@{'/students/page/' + ${currentPage} + '?sortField=fieldOfStudy&sortDir=' + ${reverseSortDir}}" th:text="#{student.fieldOfStudy}"></a>
+                                <th th:replace="fragments/students-sorting :: sorting('fieldOfStudy','Field Of Study')">
                                 </th>
                                 <th rowspan="1" colspan="1" scope="col" th:text="#{student.no.of.teachers}">
                                 </th>
                                 <th rowspan="2" colspan="1" scope="col" th:text="#{students.action}"
                                     class="align-middle"/>
                             </tr>
-
                             </thead>
+
                             <tbody>
-                            <tr th:each="student: ${students}">
+                            <tr th:each="student: ${students}"
+                                th:onClick="'javascript:openStudentViewModal(\''+ ${student.id} + '\');'"
+                                data-bs-toggle="modal"
+                                data-bs-target="#studentViewModal">
                                 <td th:text="${student.firstName}"/>
                                 <td th:text="${student.lastName}"/>
                                 <td th:text="${student.age}"/>
                                 <td th:text="${student.email}"/>
-                                <td th:text="${student.fieldOfStudy.getDesc()}"/>
+                                <td th:text="${student.fieldOfStudy.desc}"/>
                                 <td th:text="${student.teachersList.size()}"/>
                                 <td>
-                                    <a class="btn btn-outline-primary"
+                                    <a id="btnView"
+                                       class="fa fa-eye fa-lg"
                                        th:href="@{/students/{id}(id=${student.id})}"
-                                       th:text="#{students.view}"></a>
-                                    <a class="btn btn-outline-primary"
+                                       th:title="#{students.view}">
+                                    </a>
+                                    &nbsp;
+                                    <a id="btnEdit"
+                                       class="fa fa-user-pen fa-lg"
                                        th:href="@{/students/edit/{id}(id=${student.id})}"
-                                       th:text="#{students.edit}"></a>
-                                    <a class="btn btn-outline-danger"
+                                       th:title="#{students.edit}">
+                                    </a>
+                                    &nbsp;
+                                    <a id="btnDelete"
+                                       class="fa fa-trash-can fa-lg icon-dark delBtn"
                                        th:href="@{/students/delete/{id}(id=${student.id})}"
-                                       th:text="#{students.delete}"></a>
+                                       th:title="#{students.delete}"
+                                       th:studentName="${student.firstName + '&nbsp;' + student.lastName}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#studentDeleteModal">
+                                    </a>
                                 </td>
                             </tr>
                             </tbody>
+                            <caption>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col text-start">
+                                            <span th:text="${firstItemShownOnPage} + ' - ' + ${lastItemShownOnPage} + ' of ' + ${totalItems}"></span>
+                                        </div>
+                                        <div class="col text-center">
+                                            <nav aria-label="Pagination" th:if="${totalPages > 0}">
+                                                <ul class="pagination justify-content-center">
+                                                    <li class="page-item"
+                                                        th:classappend="${currentPage == 1} ? 'disabled'">
+                                                        <a th:replace="fragments/students-paging :: paging(1, '<<', 'First Page')"></a>
+                                                    </li>
+                                                    <li class="page-item font-weight-bold"
+                                                        th:classappend="${currentPage == 1} ? 'disabled'">
+                                                        <a th:replace="fragments/students-paging :: paging(${currentPage - 1}, '<', 'Previous Page')"></a>
+                                                    </li>
+                                                    <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                                                        <a class="page-link" href="#">...</a>
+                                                    </li>
+                                                    <li class="page-item"
+                                                        th:classappend="${page == currentPage} ? 'active'"
+                                                        th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+                                                        <a th:replace="fragments/students-paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
+                                                    </li>
+                                                    <li class="page-item disabled"
+                                                        th:if="${currentPage + 2 < totalPages}">
+                                                        <a class="page-link" href="#">...</a>
+                                                    </li>
+                                                    <li class="page-item font-weight-bold"
+                                                        th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                                        <a th:replace="fragments/students-paging :: paging(${currentPage + 1},'>', 'Next Page')"></a>
+                                                    </li>
+                                                    <li class="page-item"
+                                                        th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                                        <a th:replace="fragments/students-paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                        <div class="col text-end">
+                                            <label for="pageSize" th:text="#{table.rows.per.page}"></label>
+                                            <select id="pageSize"
+                                                    form="studentForm"
+                                                    name="size"
+                                                    th:value="${pageSize}"
+                                                    onchange="changePageSize()"
+                                                    class="size-select"
+                                                    >
+                                                <option th:each="s : ${ {3, 6, 9, 12} }" th:value="${s}" th:text="${s}"
+                                                        th:selected="${s == pageSize}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </caption>
                         </table>
-                        <div th:if="${totalPages > 1}">
-                            <div class="row m-1">
-                                <div class="col-2">
-                                    Total Rows: [[${totalItems}]]
-                                </div>
 
-                                <div class="col-3">
-                                                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                                                    <a th:if="${currentPage != i}"
-                                                       th:href="@{'/students/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
-                                                    <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
-                                                </span>
-                                </div>
-                                <div class="col-2">
-                                    <a th:if="${currentPage > 1}"
-                                       th:href="@{'/students/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                                    th:text="#{table.previous}"></a>
-                                    <span th:unless="${currentPage > 1}" th:text="#{table.previous}"></span>
-                                </div>
-
-                                <div class="col-1">
-                                    <a th:if="${currentPage < totalPages}"
-                                       th:href="@{'/students/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                                       th:text="#{table.next}"></a>
-                                    <span th:unless="${currentPage < totalPages}" th:text="#{table.next}"></span>
-                                </div>
-
-                                <div class="col-1">
-                                    <a th:if="${currentPage < totalPages}"
-                                       th:href="@{'/students/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                                       th:text="#{table.last}"></a>
-                                    <span th:unless="${currentPage < totalPages}" th:text="#{table.last}"></span>
-                                </div>
-                            </div>
+                        <div th:unless="${totalItems != 0}">
+                            <div id="signTableEmpty" class="h4" th:text="#{students.empty.table}"></div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </section>
+
+<!-- View Modal -->
+<div class="modal fade" id="studentViewModal"
+     tabindex="-1"
+     aria-labelledby="studentViewModalLabel" aria-hidden="true"
+     th:fragment="modalContents">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="studentViewModalLabel"
+                    th:text="#{view.modal.header}"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body modal-view-body" id="viewModalBody">
+                <p id="studentFirstName">Details</p>
+                <p id="studentLastName">Details</p>
+                <p id="studentEmail">Details</p>
+                <p id="studentAge">Details</p>
+                <p id="studentFieldOfStudy">Details</p>
+                <p id="studentTeachers" th:text="#{student.teachersList}"></p>
+                <div class="col-lg-12" id="teachers-list">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="" class="btn btn-info" data-bs-dismiss="modal"
+                   th:text="#{view.modal.btnClose}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End View modal -->
+
+<!-- Delete Modal -->
+<div class="modal fade" id="studentDeleteModal" tabindex="-1" aria-labelledby="studentDeleteModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="studentDeleteModalLabel" th:text="#{delete.modal.header}"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" th:aria-label="Close"></button>
+            </div>
+            <div class="modal-body modal-delete-body" id="deleteModalBody">
+                <span id="confirmText"></span>
+            </div>
+            <div class="modal-footer">
+                <a href="" class="btn btn-info" data-bs-dismiss="modal" th:text="#{delete.modal.btnCancel}"></a>
+                <a href="" class="btn btn-danger" id="delRef" th:text="#{delete.modal.btnDelete}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End delete modal -->
 
 <!-- Footer -->
 <div th:replace="fragments/footer :: footer"></div>
+<script type="text/javascript" src="js/students.js"></script>
 </body>
 </html>

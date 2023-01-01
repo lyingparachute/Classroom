@@ -86,6 +86,16 @@ public class StudentService {
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).collect(Collectors.toList());
     }
 
+    public Page<StudentDto> findByFirstOrLastNamePaginated(int pageNo, int pageSize, String sortField, String sortDirection, String searched) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Student> all = studentRepository.findAllByFirstNameOrLastName(searched, pageable);
+        return all.map(student -> mapper.map(student, StudentDto.class));
+    }
+
     @Transactional
     public void assignTeachers(Student student, Set<Teacher> teachers) {
         if (teachers != null && !teachers.isEmpty()) {
@@ -103,5 +113,11 @@ public class StudentService {
         }
     }
 
-
+    @Transactional
+    public void removeAll() {
+        for (Student student : studentRepository.findAll()){
+            teacherRepository.findAll().forEach(t -> t.removeStudent(student));
+        }
+        studentRepository.deleteAll();
+    }
 }

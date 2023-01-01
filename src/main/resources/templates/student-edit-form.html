@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="fragments/header :: header"></head>
+<head>
+    <header th:replace="fragments/header :: header"></header>
+</head>
 <body>
 <!--Navigation Bar-->
 <div th:replace="fragments/navBar :: nav"></div>
@@ -9,7 +11,7 @@
          style="min-height: 75vh;">
     <div class="container w-50">
         <div class="d-flex justify-content-center">
-            <div class="card shadow">
+            <div id="itemCard" class="card shadow">
                 <h1 class="card-header text-center m-4"
                     th:text="#{student.edit.header}"></h1>
                 <div class="card-body mx-4">
@@ -100,25 +102,32 @@
 
                         <div class="row mb-4">
                             <label class="col-form-label col-sm-4"
-                                   for="teachers_list">
+                                   for="teachers_list_select">
                                 <span th:text="#{student.teachersList}"></span>
                             </label>
                             <div class="col-sm text-left">
-                                <th:block th:each="fieldOpt : ${teachers}">
-                                    <div>
-                                        <input class="form-check-input m-2" type="checkbox" id="teachers_list"
-                                               th:field="*{teachersList}"
-                                               th:value="${fieldOpt.id}"
-                                               th:text="${fieldOpt}">
-                                    </div>
-                                </th:block>
+                                <select id="teachers_list_select"
+                                        class="form-select"
+                                        multiple
+                                        th:size="${teachers.size()}"
+                                        th:field="*{teachersList}">
+                                    <option th:each="fieldOpt, iter : ${teachers}"
+                                            th:value="${fieldOpt.id}"
+                                            th:text="${iter.count} + '. ' + ${fieldOpt}">
+                                    </option>
+                                </select>
                             </div>
                         </div>
-                        <div class="row mb-4 justify-content-center">
-                            <div class="col-md-3">
+
+                        <div class="row m-2 ">
+
                                 <button type="submit" name="add" class="btn btn-primary"
                                         th:text="#{student.edit.submit}"></button>
-                            </div>
+
+                        </div>
+                        <div class="row m-2">
+                            <a class="btn btn-outline-danger" th:href="@{/students}"
+                               th:text="#{student.cancel}"></a>
                         </div>
 
                     </form>

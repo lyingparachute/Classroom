@@ -1,0 +1,13 @@
+.container-fluid {
+    min-height: 75vh;
+    min-width: 85vh;
+}
+
+#tableCard {
+    min-height: 70vh;
+    min-width: 1200px;
+}
+
+#itemCard {
+    min-width: 650px;
+}

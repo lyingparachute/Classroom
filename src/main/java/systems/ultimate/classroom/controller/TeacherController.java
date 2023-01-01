@@ -2,7 +2,6 @@ package systems.ultimate.classroom.controller;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,37 +29,45 @@ public class TeacherController {
     }
 
     @GetMapping
-    public String getTeachers(Model model) {
-        return getPaginatedTeachers(1, "firstName", "asc", model);
-    }
-
-    @GetMapping("/page/{pageNo}")
-    public String getPaginatedTeachers(@PathVariable(value = "pageNo") int pageNo,
-                                       @RequestParam("sortField") String sortField,
-                                       @RequestParam("sortDir") String sortDir,
+    public String getPaginatedTeachers(@RequestParam(required = false) String name,
+                                       @RequestParam(defaultValue = "1") int page,
+                                       @RequestParam(defaultValue = "6") int size,
+                                       @RequestParam(defaultValue = "firstName") String sortField,
+                                       @RequestParam(defaultValue = "asc") String sortDir,
                                        Model model) {
-        int pageSize = 2;
-        Page<TeacherDto> page = teacherService.fetchAllPaginated(pageNo, pageSize, sortField, sortDir);
-        List<TeacherDto> teachers = page.getContent();
-        model.addAttribute("teachers", teachers);
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
+        Page<TeacherDto> pageTeachers;
+        if (name == null) {
+            pageTeachers = teacherService.fetchAllPaginated(page, size, sortField, sortDir);
+        } else {
+            pageTeachers = teacherService.findByFirstOrLastNamePaginated(page, size, sortField, sortDir, name);
+            model.addAttribute("name", name);
+        }
+        List<TeacherDto> teachers = pageTeachers.getContent();
+        int firstItemShownOnPage = 1;
+        int lastItemShownOnPage;
+        if (page == 1 && pageTeachers.getTotalElements() <= size) {
+            lastItemShownOnPage = Math.toIntExact(pageTeachers.getTotalElements());
+        } else if (page == 1 && pageTeachers.getTotalElements() > size) {
+            lastItemShownOnPage = size * page;
+        } else if (page != 1 && pageTeachers.getTotalElements() <= ((long) size * page)) {
+            firstItemShownOnPage = size * (page - 1) + 1;
+            lastItemShownOnPage = Math.toIntExact(pageTeachers.getTotalElements());
+        } else {
+            firstItemShownOnPage = size * (page - 1) + 1;
+            lastItemShownOnPage = size * (page - 1) + size;
+        }
 
+        model.addAttribute("teachers", teachers);
+        model.addAttribute("currentPage", pageTeachers.getNumber() + 1);
+        model.addAttribute("totalPages", pageTeachers.getTotalPages());
+        model.addAttribute("totalItems", pageTeachers.getTotalElements());
+        model.addAttribute("pageSize", size);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
+        model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
+        model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
         return "teachers";
-    }
-
-    @GetMapping("search")
-    public String searchTeachers(@Param("name") String name, Model model){
-        model.addAttribute("teachers", teacherService.findByFirstOrLastName(name));
-        model.addAttribute("name", name);
-        model.addAttribute("description", "Search for '" + name + "' in teachers list");
-        model.addAttribute("tableDesc", "Teachers that have '"+ name +"' in their first or last name");
-        return "teachers-search";
     }
 
     @GetMapping("{id}")
