@@ -134,7 +134,7 @@ class TeacherGetControllerTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of(student3));
         Teacher teacher3 = initData.createTeacherThree(List.of(student1, student2, student3));
         //when
-        MvcResult mvcResult = this.mockMvc.perform(get("/teachers/page/2?sortField=firstName&sortDir=asc"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/teachers?page=2&size=2&sortField=firstName&sortDir=asc"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -167,11 +167,11 @@ class TeacherGetControllerTest {
 
     @Test
     void shouldGetTeachersSearchView() throws Exception {
-        this.mockMvc.perform(get("/teachers/search?name=w"))
+        this.mockMvc.perform(get("/teachers?name=w"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                .andExpect(view().name("teachers-search"));
+                .andExpect(view().name("teachers"));
     }
 
     @Test
@@ -184,7 +184,7 @@ class TeacherGetControllerTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of(student3));
         Teacher teacher3 = initData.createTeacherThree(List.of(student1, student2, student3));
         //when
-        MvcResult mvcResult = this.mockMvc.perform(get("/teachers/search?name=ja"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/teachers?name=ja"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -192,26 +192,26 @@ class TeacherGetControllerTest {
         //then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
-                .contains("                                    <td>" + teacher1.getFirstName()+ "</td>\n" +
-                        "                                    <td>" + teacher1.getLastName() + "</td>\n" +
-                        "                                    <td>" + teacher1.getAge() + "</td>\n" +
-                        "                                    <td>" + teacher1.getEmail() + "</td>\n" +
-                        "                                    <td>" + teacher1.getSubject().getDesc() + "</td>\n" +
-                        "                                    <td>" + teacher1.getStudentsList().size() + "</td>\n");
+                .contains("                                <td>" + teacher1.getFirstName()+ "</td>\n" +
+                        "                                <td>" + teacher1.getLastName() + "</td>\n" +
+                        "                                <td>" + teacher1.getAge() + "</td>\n" +
+                        "                                <td>" + teacher1.getEmail() + "</td>\n" +
+                        "                                <td>" + teacher1.getSubject().getDesc() + "</td>\n" +
+                        "                                <td>" + teacher1.getStudentsList().size() + "</td>\n");
         assertThat(contentAsString)
-                .contains("                                    <td>" + teacher2.getFirstName()+ "</td>\n" +
-                        "                                    <td>" + teacher2.getLastName() + "</td>\n" +
-                        "                                    <td>" + teacher2.getAge() + "</td>\n" +
-                        "                                    <td>" + teacher2.getEmail() + "</td>\n" +
-                        "                                    <td>" + teacher2.getSubject().getDesc() + "</td>\n" +
-                        "                                    <td>" + teacher2.getStudentsList().size() + "</td>\n");
+                .contains("                                <td>" + teacher2.getFirstName()+ "</td>\n" +
+                        "                                <td>" + teacher2.getLastName() + "</td>\n" +
+                        "                                <td>" + teacher2.getAge() + "</td>\n" +
+                        "                                <td>" + teacher2.getEmail() + "</td>\n" +
+                        "                                <td>" + teacher2.getSubject().getDesc() + "</td>\n" +
+                        "                                <td>" + teacher2.getStudentsList().size() + "</td>\n");
         assertThat(contentAsString)
-                .doesNotContain("                                    <td>" + student3.getFirstName()+ "</td>\n" +
-                        "                                    <td>" + teacher3.getLastName() + "</td>\n" +
-                        "                                    <td>" + teacher3.getAge() + "</td>\n" +
-                        "                                    <td>" + teacher3.getEmail() + "</td>\n" +
-                        "                                    <td>" + teacher3.getSubject().getDesc() + "</td>\n" +
-                        "                                    <td>" + teacher3.getStudentsList().size() + "</td>\n");
+                .doesNotContain("                                <td>" + student3.getFirstName()+ "</td>\n" +
+                        "                                <td>" + teacher3.getLastName() + "</td>\n" +
+                        "                                <td>" + teacher3.getAge() + "</td>\n" +
+                        "                                <td>" + teacher3.getEmail() + "</td>\n" +
+                        "                                <td>" + teacher3.getSubject().getDesc() + "</td>\n" +
+                        "                                <td>" + teacher3.getStudentsList().size() + "</td>\n");
     }
 
 }
