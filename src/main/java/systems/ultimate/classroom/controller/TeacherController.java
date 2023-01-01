@@ -2,7 +2,6 @@ package systems.ultimate.classroom.controller;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -69,15 +68,6 @@ public class TeacherController {
         model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
         model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
         return "teachers";
-    }
-
-    @GetMapping("search")
-    public String searchTeachers(@Param("name") String name, Model model){
-        model.addAttribute("teachers", teacherService.findByFirstOrLastName(name));
-        model.addAttribute("name", name);
-        model.addAttribute("description", "Search for '" + name + "' in teachers list");
-        model.addAttribute("tableDesc", "Teachers that have '"+ name +"' in their first or last name");
-        return "teachers-search";
     }
 
     @GetMapping("{id}")
