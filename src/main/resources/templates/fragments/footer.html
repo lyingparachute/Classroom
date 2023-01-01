@@ -1,36 +1,55 @@
-<footer class="bg-light text-center text-lg-start mt-auto position-static" th:fragment="footer">
+<div th:fragment="footer">
+        <div class="footer-dark">
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <!-- Footer navigation-->
+                        <div class="col-sm-6 col-md-3 item">
+                            <h3 th:text="#{footer.navigation.title}"></h3>
+                            <ul>
+                                <li><a th:href="@{/}" th:text="#{footer.navigation.item1}"></a></li>
+                                <li><a th:href="@{/teachers}"  th:text="#{footer.navigation.item2}"></a></li>
+                                <li><a th:href="@{/students}"  th:text="#{footer.navigation.item3}"></a></li>
+                                <li><a th:href="@{/teachers/new}"  th:text="#{footer.navigation.item4}"></a></li>
+                                <li><a th:href="@{/students/new}"  th:text="#{footer.navigation.item5}"></a></li>
 
-    <!-- Grid container -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-                <h5 class="text-uppercase">About me</h5>
-                <p>
-                    This website was made to make management of
-                    Students and Teachers in your University easier!
-                </p>
-            </div>
-
-            <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-                <h5 class="text-uppercase">Contact</h5>
-                    <p><i class="fas fa-home me-3"></i>Gdańsk</p>
-                    <p>
-                        <i class="fas fa-envelope me-3"></i>
-                        igor.bykowski1@gmail.com
-                    </p>
-                    <p><i class="fas fa-phone me-3"></i> + 48 234 567 88</p>
-            </div>
+                            </ul>
+                        </div>
+                        <!-- Footer About-->
+                        <div class="col-sm-6 col-md-3 item">
+                            <h3>About</h3>
+                            <ul>
+                                <li><a href="#">Company</a></li>
+                                <li><a href="#">Team</a></li>
+                                <li><a href="#">Careers</a></li>
+                            </ul>
+                        </div>
+                        <!-- Footer Company Name -->
+                        <div class="col-md-6 item text">
+                            <h3 th:text="#{footer.company.name}"></h3>
+                            <p th:text="#{footer.company.desc.one}"></p>
+                            <p th:text="#{footer.company.desc.two}"></p>
+                        </div>
+                        <!-- Social icons -->
+                        <div class="col item social">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://github.com/lyingparachute"><i class="fa-brands fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/igor-bykowski/"><i class="fab fa-fw fa-linkedin-in"></i></a>
+                            <a href="https://igorbykowski.pl/"><i class="fab fa-fw fa-dribbble"></i></a>
+                        </div>
+                    </div>
+                    <!-- Copyright Section-->
+                    <div class="copyright">
+                        <div class="container"> <span th:text="#{footer.copyright.text}"></span>
+                            &copy;
+                            <a href="https://igorbykowski.pl/" th:text="#{footer.copyright.site}"></a></div>
+                    </div>
+                </div>
+            </footer>
         </div>
-    </div>
 
-    <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-        © 2022 Copyright:
-        <a class="text-dark" href="https://igorbykowski.pl/" style="text-decoration: none">IgorBykowski.pl</a>
-    </div>
-
-    <!-- Scripts -->
-    <script th:src="@{/webjars/jquery/3.6.1/dist/jquery.min.js}"></script>
-    <script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>
-    <script th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.min.js}"></script>
-</footer>
+        <!-- Scripts -->
+        <script th:src="@{/webjars/jquery/3.6.1/dist/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.min.js}"></script>
+</div>
