@@ -13,6 +13,26 @@ public class DashboardController {
         return "dashboard/dashboard";
     }
 
+    @GetMapping("/students")
+    public String getStudents(){
+        return "dashboard/students";
+    }
+
+    @GetMapping("/teachers")
+    public String getTeachers(){
+        return "dashboard/teachers";
+    }
+
+    @GetMapping("/calendar")
+    public String getCalendar(){
+        return "dashboard/calendar";
+    }
+
+    @GetMapping("/settings")
+    public String getSettings(){
+        return "dashboard/settings";
+    }
+
     @GetMapping("/help")
     public String getHelp(){
         return "dashboard/help";
