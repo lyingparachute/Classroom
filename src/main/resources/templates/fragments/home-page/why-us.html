@@ -1,0 +1,62 @@
+<section id="why-us" class="why-us section-bg">
+    <div class="container-fluid" data-aos="fade-up">
+
+        <div class="row">
+
+            <div class="col-lg-5 align-items-stretch video-box" style='background-image: url("/img/why-us.jpg");'
+                 data-aos="zoom-in" data-aos-delay="100">
+
+            </div>
+
+            <div class="col-lg-7 d-flex flex-column justify-content-center align-items-stretch">
+
+                <div class="content">
+                    <h3><span th:text="#{home.whyUs.heading.h3}"></span> <strong
+                            th:text="#{home.whyUs.heading.h3.strong}"></strong></h3>
+                    <p th:text="#{home.whyUs.heading.desc}">
+                    </p>
+                </div>
+
+                <div class="accordion-list">
+                    <ul>
+                        <li>
+                            <a data-bs-toggle="collapse" class="collapse"
+                               data-bs-target="#accordion-list-1"><span th:text="#{home.whyUs.list.item1.no}"></span>
+                                <em th:text="#{home.whyUs.list.item1.header}"></em>
+                                <i class="bx bx-chevron-down icon-show"></i><i
+                                        class="bx bx-chevron-up icon-close"></i></a>
+                            <div id="accordion-list-1" class="collapse show" data-bs-parent=".accordion-list">
+                                <p th:text="#{home.whyUs.list.item1.desc}">
+                                </p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a data-bs-toggle="collapse" data-bs-target="#accordion-list-2"
+                               class="collapsed"><span th:text="#{home.whyUs.list.item2.no}"></span>
+                                <em th:text="#{home.whyUs.list.item2.header}"></em>
+                                <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                            <div id="accordion-list-2" class="collapse" data-bs-parent=".accordion-list">
+                                <p th:text="#{home.whyUs.list.item2.desc}"></p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a data-bs-toggle="collapse" data-bs-target="#accordion-list-3"
+                               class="collapsed"><span th:text="#{home.whyUs.list.item3.no}"></span>
+                                <em th:text="#{home.whyUs.list.item3.header}"></em>
+                                <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                            <div id="accordion-list-3" class="collapse" data-bs-parent=".accordion-list">
+                                <p th:text="#{home.whyUs.list.item3.desc}"></p>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>

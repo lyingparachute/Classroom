@@ -3,7 +3,7 @@
 <head>
     <header th:replace="fragments/header :: header"></header>
     <link rel="stylesheet" th:href="@{/css/home-unauthorized.css}" type="text/css"/>
-    <!-- Vendor CSS Files -->
+    <!--/* Vendor CSS Files */-->
     <link rel="stylesheet" th:href="@{/assets/animate.css/animate.min.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/assets/aos/aos.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/assets/bootstrap-icons/bootstrap-icons.css}" type="text/css"/>
@@ -17,367 +17,38 @@
 <div th:replace="fragments/navBar-white :: nav-white"></div>
 
 <!-- ======= Hero Section ======= -->
-<section id="hero">
-    <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
-        <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
-        <div class="carousel-inner" role="listbox">
-            <!-- Slide 1 -->
-            <div class="carousel-item active" style="background-image: url(/img/slide/slide-1.jpg)">
-                <div class="carousel-container">
-                    <div class="container">
-                        <h2 class="animate__animated animate__fadeInDown" th:text="#{home.hero.slide1.welcome}"></h2>
-                        <p class="animate__animated animate__fadeInUp" th:text="#{home.hero.slide1.desc}"></p>
-                        <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto"
-                           th:text="#{home.hero.learn}"></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 2 -->
-            <div class="carousel-item" style="background-image: url(/img/slide/slide-2.jpg)">
-                <div class="carousel-container">
-                    <div class="container">
-                        <h2 class="animate__animated animate__fadeInDown" th:text="#{home.hero.slide2.welcome}"></h2>
-                        <p class="animate__animated animate__fadeInUp" th:text="#{home.hero.slide2.desc}"></p>
-                        <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto"
-                           th:text="#{home.hero.learn}"></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 3 -->
-            <div class="carousel-item" style="background-image: url(/img/slide/slide-3.jpg)">
-                <div class="carousel-container">
-                    <div class="container">
-                        <h2 class="animate__animated animate__fadeInDown" th:text="#{home.hero.slide3.welcome}"></h2>
-                        <p class="animate__animated animate__fadeInUp" th:text="#{home.hero.slide3.desc}"></p>
-                        <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto"
-                           th:text="#{home.hero.learn}"></a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
-        </a>
-        <a class="carousel-control-next" href="#heroCarousel" role="button" data-bs-slide="next">
-            <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
-        </a>
-    </div>
-</section>
-<!-- End Hero -->
+<div th:replace="fragments/home-page/hero :: #hero"></div>
 
 <!-- ======= About Section ======= -->
-<section id="about" class="about">
-    <div class="container" data-aos="fade-up">
-        <div class="section-title">
-            <h2 th:text="#{home.about.heading}"></h2>
-            <p th:text="#{home.about.us}"></p>
-        </div>
-        <div class="row content">
-            <div class="col-lg-6">
-                <p th:text="#{home.about.col1.desc}"></p>
-                <ul>
-                    <li><i class="fas fa-check"></i><span th:text="#{home.about.col1.check1}"></span>
-                    </li>
-                    <li><i class="fas fa-check"></i><span th:text="#{home.about.col1.check2}"></span>
-                    </li>
-                    <li><i class="fas fa-check"></i><span th:text="#{home.about.col1.check3}"></span>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-lg-6 pt-4 pt-lg-0">
-                <p th:text="#{home.about.col2.desc}"></p>
-                <a href="#" class="btn-learn-more" th:text="#{home.about.col2.button}"></a>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End About Section -->
+<div th:replace="fragments/home-page/about :: #about"></div>
 
 <!-- ======= Counts Section ======= -->
-<section id="counts" class="counts">
-    <div class="container" data-aos="fade-up">
-
-        <div class="row no-gutters">
-
-            <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch">
-                <div class="count-box">
-                    <i class="far fa-smile"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
-                    <p><strong th:text="#{home.counts.box1.heading}"></strong>
-                        <div th:text="#{home.counts.box1.desc}"></div></p>
-                    <a href="#" th:text="#{home.counts.button} + ' &raquo;'"></a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch">
-                <div class="count-box">
-                    <i class="fas fa-book-open"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
-                    <p><strong th:text="#{home.counts.box2.heading}"></strong>
-                        <div th:text="#{home.counts.box2.desc}"></div></p>
-                    <a href="#" th:text="#{home.counts.button} + ' &raquo;'"></a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch">
-                <div class="count-box">
-                    <i class="fas fa-headset"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1" class="purecounter"></span>
-                    <p><strong th:text="#{home.counts.box3.heading}"></strong>
-                        <div th:text="#{home.counts.box3.desc}"></div></p>
-                    <a href="#" th:text="#{home.counts.button} + ' &raquo;'"></a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch">
-                <div class="count-box">
-                    <i class="fas fa-users"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
-                    <p><strong th:text="#{home.counts.box4.heading}"></strong>
-                        <div th:text="#{home.counts.box4.desc}"></div></p>
-                    <a href="#" th:text="#{home.counts.button} + ' &raquo;'"></a>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</section><!-- End Counts Section -->
+<div th:replace="fragments/home-page/counts :: #counts"></div>
 
 <!-- ======= Why Us Section ======= -->
-<section id="why-us" class="why-us section-bg">
-    <div class="container-fluid" data-aos="fade-up">
-
-        <div class="row">
-
-            <div class="col-lg-5 align-items-stretch video-box" style='background-image: url("/img/why-us.jpg");'
-                 data-aos="zoom-in" data-aos-delay="100">
-
-            </div>
-
-            <div class="col-lg-7 d-flex flex-column justify-content-center align-items-stretch">
-
-                <div class="content">
-                    <h3> <span th:text="#{home.whyUs.heading.h3}"></span> <strong th:text="#{home.whyUs.heading.h3.strong}"></strong></h3>
-                    <p th:text="#{home.whyUs.heading.desc}">
-                    </p>
-                </div>
-
-                <div class="accordion-list">
-                    <ul>
-                        <li>
-                            <a data-bs-toggle="collapse" class="collapse"
-                               data-bs-target="#accordion-list-1"><span th:text="#{home.whyUs.list.item1.no}"></span>
-                                <em th:text="#{home.whyUs.list.item1.header}"></em>
-                                <i class="bx bx-chevron-down icon-show"></i><i
-                                        class="bx bx-chevron-up icon-close"></i></a>
-                            <div id="accordion-list-1" class="collapse show" data-bs-parent=".accordion-list">
-                                <p th:text="#{home.whyUs.list.item1.desc}">
-                                </p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <a data-bs-toggle="collapse" data-bs-target="#accordion-list-2"
-                               class="collapsed"><span th:text="#{home.whyUs.list.item2.no}"></span>
-                                <em th:text="#{home.whyUs.list.item2.header}"></em>
-                                <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                            <div id="accordion-list-2" class="collapse" data-bs-parent=".accordion-list">
-                                <p th:text="#{home.whyUs.list.item2.desc}"></p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <a data-bs-toggle="collapse" data-bs-target="#accordion-list-3"
-                               class="collapsed"><span th:text="#{home.whyUs.list.item3.no}"></span>
-                                <em th:text="#{home.whyUs.list.item3.header}"></em>
-                                <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                            <div id="accordion-list-3" class="collapse" data-bs-parent=".accordion-list">
-                                <p th:text="#{home.whyUs.list.item3.desc}"></p>
-                            </div>
-                        </li>
-
-                    </ul>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-</section>
-<!-- End Why Us Section -->
+<div th:replace="fragments/home-page/why-us :: #why-us"></div>
 
 <!-- ======= Cta Section ======= -->
-<section id="cta" class="cta">
-    <div class="container" data-aos="zoom-in">
-
-        <div class="text-center">
-            <h3 th:text="#{home.cta.h3}"></h3>
-            <p th:text="#{home.cta.desc}"></p>
-            <a class="cta-btn" href="#" th:text="#{home.cta.button}"></a>
-        </div>
-
-    </div>
-</section>
-<!-- End Cta Section -->
+<div th:replace="fragments/home-page/cta :: #cta"></div>
 
 <!-- ======= Services Section ======= -->
-<section id="services" class="services">
-    <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-            <h2 th:text="#{home.services.header.h2}"></h2>
-            <p th:text="#{home.services.header.desc}"></p>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-                <div class="icon-box">
-                    <div class="icon"><i class="bx bxl-dribbble"></i></div>
-                    <h4><a href="" th:text="#{home.services.card1.header}"></a></h4>
-                    <p th:text="#{home.services.card1.desc}"></p>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in"
-                 data-aos-delay="200">
-                <div class="icon-box">
-                    <div class="icon"><i class="bx bx-file"></i></div>
-                    <h4><a href="" th:text="#{home.services.card2.header}"></a></h4>
-                    <p th:text="#{home.services.card2.desc}"></p>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in"
-                 data-aos-delay="300">
-                <div class="icon-box">
-                    <div class="icon"><i class="bx bx-tachometer"></i></div>
-                    <h4><a href="" th:text="#{home.services.card3.header}"></a></h4>
-                    <p th:text="#{home.services.card3.desc}"></p>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="100">
-                <div class="icon-box">
-                    <div class="icon"><i class="bx bx-world"></i></div>
-                    <h4><a href="" th:text="#{home.services.card4.header}"></a></h4>
-                    <p th:text="#{home.services.card4.desc}"></p>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
-                <div class="icon-box">
-                    <div class="icon"><i class="bx bx-slideshow"></i></div>
-                    <h4><a href="" th:text="#{home.services.card5.header}"></a></h4>
-                    <p th:text="#{home.services.card5.desc}"></p>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="300">
-                <div class="icon-box">
-                    <div class="icon"><i class="bx bx-arch"></i></div>
-                    <h4><a href="" th:text="#{home.services.card6.header}"></a></h4>
-                    <p th:text="#{home.services.card6.desc}"></p>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-<!-- End Services Section -->
+<div th:replace="fragments/home-page/services :: #services"></div>
 
 <!-- ======= Cta Section ======= -->
-<section id="cta" class="cta">
-    <div class="container" data-aos="zoom-in">
-
-        <div class="text-center">
-            <h3 th:text="#{home.cta.h3}"></h3>
-            <p th:text="#{home.cta.desc}"></p>
-            <a class="cta-btn" href="#" th:text="#{home.cta.button}"></a>
-        </div>
-
-    </div>
-</section>
-<!-- End Cta Section -->
+<div th:replace="fragments/home-page/cta :: #cta"></div>
 
 <!-- ======= Pricing Section ======= -->
-<section id="pricing" class="pricing">
-    <div class="container" data-aos="fade-up">
+<div th:replace="fragments/home-page/pricing :: #pricing"></div>
 
-        <div class="section-title">
-            <h2 th:text="#{home.pricing.header.h2}"></h2>
-            <p th:text="#{home.pricing.header.desc}"></p>
-        </div>
-
-        <div class="row align-items-center">
-
-            <div class="col-lg-4">
-                <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                    <h3 th:text="#{home.pricing.card1.name}"></h3>
-                    <h4> <div th:text="#{home.pricing.card1.price}"></div> <span th:text="#{home.pricing.per.month}"></span></h4>
-                    <ul>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box1}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card1.box2}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box3}"></span></li>
-                        <li class="na"><i class="bx bx-x"></i><span th:text="#{home.pricing.card.box4}"></span></li>
-                        <li class="na"><i class="bx bx-x"></i><span th:text="#{home.pricing.card.box5}"></span></li>
-                        <li class="na"><i class="bx bx-x"></i><span th:text="#{home.pricing.card.box6}"></span></li>
-                        <li class="na"><i class="bx bx-x"></i><span th:text="#{home.pricing.card.box7}"></span></li>
-                    </ul>
-                    <a href="#" class="get-started-btn" th:text="#{home.pricing.get.started}"></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="box featured" data-aos="zoom-in" data-aos-delay="100">
-                    <h3 th:text="#{home.pricing.card2.name}"></h3>
-                    <h4> <div th:text="#{home.pricing.card2.price}"></div> <span th:text="#{home.pricing.per.month}"></span></h4>
-                    <ul>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box1}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card2.box2}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box3}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box4}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box5}"></span></li>
-                        <li class="na"><i class="bx bx-x"></i><span th:text="#{home.pricing.card.box6}"></span></li>
-                        <li class="na"><i class="bx bx-x"></i><span th:text="#{home.pricing.card.box7}"></span></li>
-                    </ul>
-                    <a href="#" class="get-started-btn" th:text="#{home.pricing.get.started}"></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                    <h3 th:text="#{home.pricing.card3.name}"></h3>
-                    <h4> <div th:text="#{home.pricing.card3.price}"></div> <span th:text="#{home.pricing.per.month}"></span></h4>
-                    <ul>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box1}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card3.box2}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box3}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box4}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box5}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box6}"></span></li>
-                        <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box7}"></span></li>
-                    </ul>
-                    <a href="#hero" class="get-started-btn" th:text="#{home.pricing.get.started}"></a>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</section><!-- End Pricing Section -->
-
-<!-- Footer -->
+<!-- ======= Footer ======= -->
 <div th:replace="fragments/home-footer :: footer"></div>
-<!-- JS Scripts -->
-<div th:replace="fragments/imports/scripts :: scripts"></div>
-<!-- Custom Script -->
-<script type="text/javascript" th:src="@{/js/home-unauthorized.js}"></script>
 
+<div th:replace="fragments/back-to-top :: back-to-top"></div>
+
+<!--/* JS Scripts */-->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+
+<!--/* Custom Script */-->
+<script type="text/javascript" th:src="@{/js/home-unauthorized.js}"></script>
 </body>
 </html>
