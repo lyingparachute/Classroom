@@ -10,18 +10,28 @@
                     <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
                     <li><a class="nav-link scrollto" href="#about">About</a></li>
                     <li><a class="nav-link scrollto" href="#services">Services</a></li>
-                    <li class="dropdown"><a href="#"><span>Actions</span> <i class="bi bi-chevron-down"></i></a>
+                    <li class="dropdown"><a href="#"><span>Actions</span> <i class="fa-light fa-chevron-down"></i></a>
                         <ul>
-                            <li class="dropdown"><a href=""><span>Students</span> <i class="bi bi-chevron-right"></i></a>
+                            <li class="dropdown">
+                                <a th:href="@{/students}" class="nav-link">
+                                    <span th:text="#{navbar.students}"></span>
+                                    <i class="fa-light fa-chevron-right"></i>
+                                </a>
                                 <ul>
-                                    <li><a href="#">View students</a></li>
-                                    <li><a href="#">Add student</a></li>
+                                    <li><a th:href="@{/students/new}" class="nav-link">
+                                        <span th:text="#{navbar.student.new}"></span>
+                                    </a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown"><a href=""><span>Teachers</span> <i class="bi bi-chevron-right"></i></a>
+                            <li class="dropdown">
+                                <a th:href="@{/teachers}" class="nav-link">
+                                    <span th:text="#{navbar.teachers}"></span>
+                                    <i class="fa-light fa-chevron-right"></i>
+                                </a>
                                 <ul>
-                                    <li><a href="#">View teachers</a></li>
-                                    <li><a href="#">Add teacher</a></li>
+                                    <li><a th:href="@{/teachers/new}" class="nav-link">
+                                        <span th:text="#{navbar.teacher.new}"></span>
+                                    </a></li>
                                 </ul>
                             </li>
                         </ul>
