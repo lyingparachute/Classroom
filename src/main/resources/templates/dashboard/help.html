@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" type="text/css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+            integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+            crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <!-- ======= Navigation ======= -->
+    <div th:replace="dashboard/fragments/main-navigation :: #navigation"></div>
+
+    <div class="container-fluid" id="mainFill" style=""><div class="container my-5 text-center">
+        <h3 class="my-2"><a class="text-muted" href="../_download/instrukcja.pdf" target="_blank"><i class="fa fa-book mx-2"></i>Instrukcja</a></h3>
+        <p>Wszelkie uwagi odnośnie funkcjonalności programu prosimy zgłaszać na adres <code>serwis@edp-poradnia.pl</code></p>
+    </div>
+        <div class="container my-5 text-center">
+            <h3 class="my-2"><a class="text-primary" href="../_download/TeamViewerQS.exe" download="TeamViewerQS.exe"><i class="fa fa-tools mx-2"></i>TeamViewer</a></h3>
+            <p>Zdalne wsparcie techniczne przy użyciu aplikacji TeamViewer QuickSupport</p>
+        </div>
+    </div>
+</body>
+</html>
