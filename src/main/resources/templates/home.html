@@ -374,14 +374,9 @@
 
 <!-- Footer -->
 <div th:replace="fragments/home-footer :: footer"></div>
-<!-- Vendor JS Files -->
-<script type="text/javascript" th:src="@{/assets/purecounter/purecounter_vanilla.js}"></script>
-<script type="text/javascript" th:src="@{/assets/aos/aos.js}"></script>
-<script type="text/javascript" th:src="@{/assets/glightbox/js/glightbox.min.js}"></script>
-<script type="text/javascript" th:src="@{/assets/isotope-layout/isotope.pkgd.min.js}"></script>
-<script type="text/javascript" th:src="@{/assets/swiper/swiper-bundle.min.js}"></script>
-
-<!-- Template Main JS File -->
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+<!-- Custom Script -->
 <script type="text/javascript" th:src="@{/js/home-unauthorized.js}"></script>
 
 </body>

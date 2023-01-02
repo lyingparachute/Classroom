@@ -237,6 +237,9 @@
 
 <!-- Footer -->
 <div th:replace="fragments/footer :: footer"></div>
-<script type="text/javascript" src="js/teachers.js"></script>
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+<!-- Custom script -->
+<script type="text/javascript" th:src="@{/js/teachers.js}"></script>
 </body>
 </html>
