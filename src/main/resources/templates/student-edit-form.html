@@ -19,7 +19,7 @@
                 <div class="card-body mx-4">
                     <form class="form-group needs-validation"
                           th:object="${student}"
-                          th:action="@{/students/update}"
+                          th:action="@{/dashboard/students/update}"
                           method="post">
 
                         <input hidden type="text" id="id_input_id" th:field="*{id}">
@@ -125,7 +125,7 @@
 
                         </div>
                         <div class="row m-2">
-                            <a class="btn btn-outline-danger" th:href="@{/students}"
+                            <a class="btn btn-outline-danger" th:href="@{/dashboard/students}"
                                th:text="#{student.cancel}"></a>
                         </div>
 
