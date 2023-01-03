@@ -102,20 +102,17 @@
 
                         <div class="row mb-4">
                             <label class="col-form-label col-sm-4"
-                                   for="teachers_list_select">
+                                   for="teachers_list">
                                 <span th:text="#{student.teachersList}"></span>
                             </label>
                             <div class="col-sm text-left">
-                                <select id="teachers_list_select"
-                                        class="form-select"
-                                        multiple
-                                        th:size="${teachers.size()}"
-                                        th:field="*{teachersList}">
-                                    <option th:each="fieldOpt, iter : ${teachers}"
-                                            th:value="${fieldOpt.id}"
-                                            th:text="${iter.count} + '. ' + ${fieldOpt}">
-                                    </option>
-                                </select>
+                                <th:block th:each="fieldOpt : ${teachers}">
+                                    <div>
+                                        <input class="form-check-input m-2" type="checkbox" value="" id="teachers_list"
+                                               th:field="*{teachersList}"
+                                               th:value="${fieldOpt.id}" th:text="${fieldOpt}">
+                                    </div>
+                                </th:block>
                             </div>
                         </div>
 
@@ -137,8 +134,6 @@
     </div>
 </section>
 
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
 <!-- JS Scripts -->
 <div th:replace="fragments/imports/scripts :: scripts"></div>
 </body>
