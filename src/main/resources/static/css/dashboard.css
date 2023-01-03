@@ -41,3 +41,7 @@ main {
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
+
+.mr-2 {
+    margin-right: 0.5rem!important;
+}
