@@ -19,6 +19,7 @@
 
                 <div class="card-body mx-4">
                     <ul class="list-group">
+                        <li class="list-group-item" th:text="#{student.id} + ': ' + ${student.id}"></li>
                         <li class="list-group-item" th:text="#{student.firstName} + ': ' + ${student.firstName}"></li>
                         <li class="list-group-item" th:text="#{student.lastName} + ': ' + ${student.lastName}"></li>
                         <li class="list-group-item" th:text="#{student.email} + ': ' + ${student.email}"></li>
@@ -29,19 +30,8 @@
                             th:text="#{student.no.of.teachers} + ': '  + ${student.teachersList.size()}"></li>
                     </ul>
 
-                    <div class="row m-2">
-                        <a class="btn btn-primary" th:href="@{/dashboard/students}" th:text="#{students.back}"></a>
-                    </div>
-
-                    <div class="row m-2">
-                        <a class="btn btn-outline-primary" th:href="@{/dashboard/students/edit/{id}(id=${student.id})}"
-                           th:text="#{students.edit}"></a>
-                    </div>
-
-                    <div class="row m-2">
-                        <a class="btn btn-outline-danger" th:href="@{/dashboard/students/delete/{id}(id=${student.id})}"
-                           th:text="#{students.delete}"></a>
-                    </div>
+                    <!-- ======= Buttons ======= -->
+                    <div th:replace="fragments/buttons :: #student-edit-delete"></div>
                 </div>
             </div>
         </section>

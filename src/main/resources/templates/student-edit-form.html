@@ -118,16 +118,7 @@
                             </div>
                         </div>
 
-                        <div class="row m-2 ">
-
-                            <button type="submit" name="add" class="btn btn-primary"
-                                    th:text="#{student.edit.submit}"></button>
-
-                        </div>
-                        <div class="row m-2">
-                            <a class="btn btn-outline-danger" th:href="@{/dashboard/students}"
-                               th:text="#{student.cancel}"></a>
-                        </div>
+                        <div th:replace="fragments/buttons :: #student-discard-submit"></div>
 
                     </form>
                 </div>

@@ -19,6 +19,7 @@
                 </div>
                 <div class="card-body mx-4">
                     <ul class="list-group list-group-root well">
+                        <li class="list-group-item" th:text="#{student.id} + ': ' + ${student.id}"></li>
                         <li class="list-group-item" th:text="#{student.firstName} + ': ' + ${student.firstName}"></li>
                         <li class="list-group-item" th:text="#{student.lastName} + ': ' + ${student.lastName}"></li>
                         <li class="list-group-item" th:text="#{student.email} + ': ' + ${student.email}"></li>
@@ -36,21 +37,28 @@
                             </ul>
                         </li>
                     </ul>
+                    <!-- ======= Buttons ======= -->
+                    <div th:replace="fragments/buttons :: #student-edit-delete"></div>
 
-                    <div class="row m-2">
-                        <a class="btn btn-outline-primary" th:href="@{/dashboard/students/edit/{id}(id=${student.id})}"
-                           th:text="#{students.edit}"></a>
-                    </div>
-
-                    <div class="row m-2">
-                        <a class="btn btn-outline-danger" th:href="@{/dashboard/students/delete/{id}(id=${student.id})}"
-                           th:text="#{students.delete}"></a>
-                    </div>
                 </div>
             </div>
         </section>
     </div>
 </main>
+<div th:replace="fragments/modals :: #studentDeleteModal"></div>
+
+<script>
+    $(document).ready(function () {
+        $('.delBtn').on('click', function (event) {
+            event.preventDefault();
+            let link = $(this);
+            let studentName = link.attr("studentName");
+            let href = $(this).attr('href');
+            $('#studentDeleteModal #delRef').attr('href', href);
+            $("#confirmText").html("Are you sure you want to delete student with name \<strong\>" + studentName + "\<\/strong\>? This action cannot be undone and you will be unable to recover any data. ");
+        });
+    });
+</script>
 
 <!-- JS Scripts -->
 <div th:replace="fragments/imports/scripts :: scripts"></div>
