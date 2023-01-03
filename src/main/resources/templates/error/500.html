@@ -1,29 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title th:text="#{notFound.title}"></title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}" type="text/css"/>
-    <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.15.4/css/all.min.css}" type="text/css"/>
+    <header th:replace="fragments/header :: header"></header>
 </head>
 <body>
-<div class="page-wrap d-flex flex-row align-items-center"
-     style="min-height: 50vh;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12 text-center">
-                <span class="display-1 d-block" th:text="#{notFound.status500}"></span>
-                <div class="mb-4 lead" th:text="#{notFound.desc}"></div>
-                <a th:href="@{/}"
-                   class="btn btn-link"
-                   th:text="#{notFound.home}"></a>
+<section class="d-flex align-items-center min-vh-100 py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="page-wrap d-flex flex-row align-items-center"
+                 style="min-height: 50vh;">
+                <div class="col-md-6 text-center text-md-start ">
+                    <div class="lc-block mb-3">
+                        <div editable="rich">
+                            <h1 class="fw-bold h4" th:text="#{error.server.header}"><br></h1>
+                        </div>
+                    </div>
+                    <div class="lc-block mb-3">
+                        <div editable="rich">
+                            <h1 class="display-1 fw-bold text-muted" th:text="#{error.server.code}"></h1>
+                        </div>
+                    </div><!-- /lc-block -->
+                    <div class="lc-block mb-5">
+                        <div editable="rich">
+                            <p class="rfs-11 fw-light" th:text="#{error.server.desc}"></p>
+                        </div>
+                    </div><!-- /lc-block -->
+                    <div class="lc-block">
+                        <a class="btn btn-lg btn-primary" th:href="@{/}" role="button" th:text="#{error.homepage}"></a>
+                    </div><!-- /lc-block -->
+                </div><!-- /col -->
             </div>
         </div>
     </div>
-</div>
-
-<script th:src="@{/webjars/jquery/3.6.0/dist/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
+</section>
+<div th:replace="fragments/imports/scripts :: scripts"></div>
 </body>
 </html>
