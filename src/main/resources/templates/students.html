@@ -7,27 +7,33 @@
     <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css"/>
 </head>
 <body>
-<!--Navigation Bar-->
-<div th:replace="fragments/navBar :: nav"></div>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
 
-<section class="py-5 mt-0 align-items-start d-flex bg-light">
-    <div id="containerTable" class="container-fluid text-center">
-        <div class="d-flex justify-content-center">
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+
+
             <div id="tableCard" class="card">
-                <h1 class="card-header my-3"
-                    th:text="#{students.header}"></h1>
+                <div class="card-header text-center py-3">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{students.header}"></strong>
+                    </h3>
+                </div>
                 <div class="card-body">
                     <div class="text-center h3"
                          th:text="#{students.desc}">
                     </div>
-                    <form th:action="@{/students}"
+                    <form th:action="@{/dashboard/students}"
                           method="get"
                           id="studentForm">
                         <div class="row justify-content-end mb-1 mt-3">
                             <div class="col-auto">
                                 <a id="btnAddStudent"
                                    class="btn btn-outline-primary btn-lg"
-                                   th:href="@{/students/new}"
+                                   th:href="@{/dashboard/students/new}"
                                    th:value="#{students.new}">
                                     <i class="fa-solid fa-user-plus"></i>
                                     <span th:text="#{students.new}"></span>
@@ -61,7 +67,7 @@
                             </div>
                         </div>
                     </form>
-                    <div class="table-responsive">
+                    <div id="studentsTable" class="table-responsive">
                         <table class="table table-hover" th:if="${totalItems != 0}">
                             <thead>
                             <tr>
@@ -96,19 +102,19 @@
                                 <td>
                                     <a id="btnView"
                                        class="fa fa-eye fa-lg"
-                                       th:href="@{/students/{id}(id=${student.id})}"
+                                       th:href="@{/dashboard/students/{id}(id=${student.id})}"
                                        th:title="#{students.view}">
                                     </a>
                                     &nbsp;
                                     <a id="btnEdit"
                                        class="fa fa-user-pen fa-lg"
-                                       th:href="@{/students/edit/{id}(id=${student.id})}"
+                                       th:href="@{/dashboard/students/edit/{id}(id=${student.id})}"
                                        th:title="#{students.edit}">
                                     </a>
                                     &nbsp;
                                     <a id="btnDelete"
                                        class="fa fa-trash-can fa-lg icon-dark delBtn"
-                                       th:href="@{/students/delete/{id}(id=${student.id})}"
+                                       th:href="@{/dashboard/students/delete/{id}(id=${student.id})}"
                                        th:title="#{students.delete}"
                                        th:studentName="${student.firstName + '&nbsp;' + student.lastName}"
                                        data-bs-toggle="modal"
@@ -134,7 +140,8 @@
                                                         th:classappend="${currentPage == 1} ? 'disabled'">
                                                         <a th:replace="fragments/students-paging :: paging(${currentPage - 1}, '<', 'Previous Page')"></a>
                                                     </li>
-                                                    <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                                                    <li class="page-item disabled"
+                                                        th:if="${currentPage - 2 > 1}">
                                                         <a class="page-link" href="#">...</a>
                                                     </li>
                                                     <li class="page-item"
@@ -165,8 +172,9 @@
                                                     th:value="${pageSize}"
                                                     onchange="changePageSize()"
                                                     class="size-select"
-                                                    >
-                                                <option th:each="s : ${ {3, 6, 9, 12} }" th:value="${s}" th:text="${s}"
+                                            >
+                                                <option th:each="s : ${ {3, 6, 9, 12} }" th:value="${s}"
+                                                        th:text="${s}"
                                                         th:selected="${s == pageSize}"></option>
                                             </select>
                                         </div>
@@ -182,10 +190,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-</section>
-
+</main>
 <!-- View Modal -->
 <div class="modal fade" id="studentViewModal"
      tabindex="-1"
@@ -239,8 +246,6 @@
 </div>
 <!-- End delete modal -->
 
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
 <!-- JS Scripts -->
 <div th:replace="fragments/imports/scripts :: scripts"></div>
 <!-- Custom script -->
