@@ -27,14 +27,7 @@
                    class="list-group-item list-group-item-action py-2 ripple">
                     <i class="fas fa-user fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item3}"></span>
                 </a>
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('password')}" th:href="@{/dashboard/password}"
-                   class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-lock fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item4}"></span>
-                </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('password')}" th:href="@{/dashboard/password}"
-                   class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-lock fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item4}"></span>
-                </a>
+
                 <a th:if="${#httpServletRequest.requestURL.toString().contains('analytics')}" th:href="@{/dashboard/analytics}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
                         class="fas fa-chart-line fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item5}"></span>
@@ -43,21 +36,21 @@
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-chart-line fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item5}"></span>
                 </a>
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('seo')}" th:href="@{/dashboard/SEO}"
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('subjects')}" th:href="@{/dashboard/subjects}"
                    class="list-group-item list-group-item-action py-2 ripple active">
-                    <i class="fas fa-chart-pie fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item6}"></span>
+                    <i class="fas fa-microscope fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item6}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('seo')}" th:href="@{/dashboard/SEO}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('subjects')}" th:href="@{/dashboard/subjects}"
                    class="list-group-item list-group-item-action py-2 ripple">
-                    <i class="fas fa-chart-pie fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item6}"></span>
+                    <i class="fas fa-microscope fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item6}"></span>
                 </a>
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('orders')}" th:href="@{/dashboard/orders}"
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('fieldsOfStudy')}" th:href="@{/dashboard/fieldsOfStudy}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-chart-bar fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
+                        class="fas fa-graduation-cap fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('orders')}" th:href="@{/dashboard/orders}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('fieldsOfStudy')}" th:href="@{/dashboard/fieldsOfStudy}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-chart-bar fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
+                        class="fas fa-graduation-cap  fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
                 <a th:if="${#httpServletRequest.requestURL.toString().contains('library')}" th:href="@{/dashboard/library}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
@@ -67,13 +60,13 @@
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-book-open fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item8}"></span>
                 </a>
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('partners')}" th:href="@{/dashboard/partners}"
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('facilities')}" th:href="@{/dashboard/facilities}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-book-open fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item9}"></span>
+                        class="fas fa-school fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item9}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('partners')}" th:href="@{/dashboard/partners}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('facilities')}" th:href="@{/dashboard/facilities}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-building fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item9}"></span>
+                        class="fas fa-school fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item9}"></span>
                 </a>
                 <a th:if="${#httpServletRequest.requestURL.toString().contains('calendar')}" th:href="@{/dashboard/calendar}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
@@ -90,6 +83,14 @@
                 <a th:unless="${#httpServletRequest.requestURL.toString().contains('sales')}" th:href="@{/dashboard/sales}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-money-bill fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item11}"></span>
+                </a>
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('settings')}" th:href="@{/dashboard/settings}"
+                   class="list-group-item list-group-item-action py-2 ripple active"><i
+                        class="fas fa-cog fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item4}"></span>
+                </a>
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('settings')}" th:href="@{/dashboard/settings}"
+                   class="list-group-item list-group-item-action py-2 ripple"><i
+                        class="fas fa-cog fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item4}"></span>
                 </a>
                 <a th:if="${#httpServletRequest.requestURL.toString().contains('help')}" th:href="@{/dashboard/help}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
