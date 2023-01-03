@@ -3,17 +3,10 @@ package systems.ultimate.classroom.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import systems.ultimate.classroom.service.StudentService;
 
 @Controller
 @RequestMapping("dashboard")
 public class DashboardController {
-
-    private final StudentService studentService;
-
-    public DashboardController(StudentService studentService) {
-        this.studentService = studentService;
-    }
 
     @GetMapping
     public String getDashboard(){
