@@ -64,7 +64,7 @@ class StudentControllerTest {
         studentDto.setAge(22);
         studentDto.setFieldOfStudy(FieldOfStudy.INFORMATICS);
         //when
-        this.mockMvc.perform(post("/students/new")
+        this.mockMvc.perform(post("/dashboard/students/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("firstName=" + studentDto.getFirstName() +
                         "&lastName=" + studentDto.getLastName() +
@@ -110,7 +110,7 @@ class StudentControllerTest {
         Student student = initData.createStudentOne(List.of(teacher1, teacher2));
 
         //when
-        this.mockMvc.perform(get("/students/delete/" + student.getId()))
+        this.mockMvc.perform(get("/dashboard/students/delete/" + student.getId()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
         //then
@@ -136,7 +136,7 @@ class StudentControllerTest {
         studentDto.setAge(22);
         studentDto.setFieldOfStudy(FieldOfStudy.INFORMATICS);
         //when
-        this.mockMvc.perform(post("/students/update")
+        this.mockMvc.perform(post("/dashboard/students/update")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                         .content("id=" + studentEntity.getId() +
                                 "&firstName=" + studentDto.getFirstName() +

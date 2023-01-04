@@ -42,7 +42,7 @@ class TeacherGetControllerTest {
     @Test
     void shouldGetTeacherView() throws Exception {
         Teacher teacher1 = initData.createTeacherOne(List.of());
-        this.mockMvc.perform(get("/teachers/" + teacher1.getId()))
+        this.mockMvc.perform(get("/dashboard/teachers/" + teacher1.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -57,35 +57,38 @@ class TeacherGetControllerTest {
         Teacher teacher = initData.createTeacherOne(List.of(student1, student2));
 
         //when
-        MvcResult mvcResult = this.mockMvc.perform(get("/teachers/" + teacher.getId()))
+        MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers/" + teacher.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
         //then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
-                .contains("<h1 class=\"card-header text-center m-4\">Viewing teacher with ID: " +  teacher.getId() +"</h1>");
+                .contains("                <div class=\"card-header py-3 bg-secondary bg-gradient bg-opacity-25\">\n" +
+                        "                    <h3 class=\"mb-0 text-center\">\n" +
+                        "                        <strong>Viewing teacher with ID: " +  teacher.getId() + "</strong>");
         assertThat(contentAsString)
-                .contains("                            <li class=\"list-group-item\">First Name: " + teacher.getFirstName() + "</li>\n" +
-                        "                            <li class=\"list-group-item\">Last Name: " + teacher.getLastName() + "</li>\n" +
-                        "                            <li class=\"list-group-item\">Email: " + teacher.getEmail() + "</li>\n" +
-                        "                            <li class=\"list-group-item\">Age: " + teacher.getAge() + "</li>\n" +
-                        "                            <li class=\"list-group-item\">Classes: " + teacher.getSubject().getDesc() + "</li>\n" +
-                        "                            <li class=\"list-group-item\">List of assigned students:\n" +
-                        "                                <ul class=\"list-group\">"
+                .contains("                        <li class=\"list-group-item\">ID number: " + teacher.getId() + "</li>\n" +
+                        "                        <li class=\"list-group-item\">First Name: " + teacher.getFirstName() + "</li>\n" +
+                        "                        <li class=\"list-group-item\">Last Name: " + teacher.getLastName() + "</li>\n" +
+                        "                        <li class=\"list-group-item\">Email: " + teacher.getEmail() + "</li>\n" +
+                        "                        <li class=\"list-group-item\">Age: " + teacher.getAge() + "</li>\n" +
+                        "                        <li class=\"list-group-item\">Classes: " + teacher.getSubject().getDesc() + "</li>\n" +
+                        "                        <li class=\"list-group-item\">List of assigned students:\n" +
+                        "                            <ul class=\"list-group\">"
                 );
         assertThat(contentAsString)
-                .contains("                                       href=\"/students/" + student1.getId() + "\"\n" +
+                .containsIgnoringWhitespaces("                                       href=\"/students/" + student1.getId() + "\"\n" +
                         "                                       value=\"" + student1.getId() + "\">" + student1.getFirstName() + " " + student1.getLastName());
         assertThat(contentAsString)
-                .contains("                                       href=\"/students/" + student2.getId() + "\"\n" +
+                .containsIgnoringWhitespaces("                                       href=\"/students/" + student2.getId() + "\"\n" +
                         "                                       value=\"" + student2.getId() + "\">" + student2.getFirstName() + " " + student2.getLastName());
 
     }
 
     @Test
     void shouldGetTeachersView() throws Exception {
-        this.mockMvc.perform(get("/teachers"))
+        this.mockMvc.perform(get("/dashboard/teachers"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -102,7 +105,7 @@ class TeacherGetControllerTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of(student3));
 
         //when
-        MvcResult mvcResult = this.mockMvc.perform(get("/teachers"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -134,7 +137,7 @@ class TeacherGetControllerTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of(student3));
         Teacher teacher3 = initData.createTeacherThree(List.of(student1, student2, student3));
         //when
-        MvcResult mvcResult = this.mockMvc.perform(get("/teachers?page=2&size=2&sortField=firstName&sortDir=asc"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers?page=2&size=2&sortField=firstName&sortDir=asc"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -167,7 +170,7 @@ class TeacherGetControllerTest {
 
     @Test
     void shouldGetTeachersSearchView() throws Exception {
-        this.mockMvc.perform(get("/teachers?name=w"))
+        this.mockMvc.perform(get("/dashboard/teachers?name=w"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -184,7 +187,7 @@ class TeacherGetControllerTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of(student3));
         Teacher teacher3 = initData.createTeacherThree(List.of(student1, student2, student3));
         //when
-        MvcResult mvcResult = this.mockMvc.perform(get("/teachers?name=ja"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers?name=ja"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
