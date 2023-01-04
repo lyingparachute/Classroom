@@ -11,14 +11,14 @@ $(document).ready(function () {
     $('.delBtn').on('click', function (event) {
         event.preventDefault();
         let link = $(this);
-        let teacherName = link.attr("teacherName");
+        let teacherName = link.attr("name");
         let href = $(this).attr('href');
-        $('#teacherDeleteModal #delRef').attr('href', href);
+        $('#deleteModal #delRef').attr('href', href);
         $("#confirmText").html("Are you sure you want to delete teacher with name \<strong\>" + teacherName + "\<\/strong\>? This action cannot be undone and you will be unable to recover any data. ");
     });
 });
 
-$("#teacherDeleteModal").on("hidden.bs.modal", function(){
+$("#deleteModal").on("hidden.bs.modal", function(){
     $(".modal-delete-body").html("<span id=\"confirmText\"></span>");
     $(".modal-view-body").html("<p id=\"teacherFirstName\">Details</p>\n" +
         "                <p id=\"teacherLastName\">Details</p>\n" +

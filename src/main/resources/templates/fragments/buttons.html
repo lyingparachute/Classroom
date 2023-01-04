@@ -79,3 +79,25 @@
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
           class="bi bi-arrow-up-short"></i></a>
 </div>
+
+<!-- ======= Modals buttons ======= -->
+<!-- delete modal buttons -->
+<div th:fragment="deleteModalButtons" id="deleteModalButtons" class="row my-2 justify-content-end">
+  <div class="col-auto">
+    <a class="btn btn-secondary" href="" data-bs-dismiss="modal">
+      <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
+  </div>
+  <div class="col-auto">
+    <a id="delRef" class="btn btn-danger"
+       href="">
+      <i class="fa fa-trash-can fa-lg mr-2"></i><span th:text="#{button.delete}"></span></a>
+  </div>
+</div>
+
+<!-- view modal button -->
+<div th:fragment="viewModalButtons" id="viewModalButtons" class="row my-2 justify-content-end">
+  <div class="col-auto">
+    <a class="btn btn-secondary" href="" data-bs-dismiss="modal">
+      <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.close}"></span></a>
+  </div>
+</div>
