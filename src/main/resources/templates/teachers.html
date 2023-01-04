@@ -28,7 +28,7 @@
                           method="get">
                         <div class="row justify-content-end mb-1 mt-3">
                             <div class="col-auto">
-                                <a id="btnAddTeacher"
+                                <a id="btnAddItem"
                                    class="btn btn-outline-primary btn-lg"
                                    th:href="@{/dashboard/teachers/new}"
                                    th:value="#{teachers.new}">
@@ -36,7 +36,7 @@
                                     <span th:text="#{teachers.new}"></span>
                                 </a>
                             </div>
-                            <div class="col-4">
+                            <div class="col-5">
                                 <div class="search">
                                     <i class="fa fa-search"></i>
                                     <input id="name" type="search" name="name"
@@ -99,19 +99,17 @@
                                 <td>
                                     <div>
                                         <a id="btnView"
-                                           class="fa fa-eye fa-lg"
+                                           class="fa fa-eye fa-lg mr-2"
                                            th:href="@{/dashboard/teachers/{id}(id=${teacher.id})}"
                                            th:title="#{teachers.view}">
                                         </a>
-
                                         <a id="btnEdit"
-                                           class="fa fa-user-pen fa-lg"
+                                           class="fa fa-user-pen fa-lg mr-2"
                                            th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}"
                                            th:title="#{teachers.edit}">
                                         </a>
-
                                         <a id="btnDelete"
-                                           class="fa fa-trash-can fa-lg icon-dark delBtn"
+                                           class="fa fa-trash-can fa-lg mr-2 delBtn"
                                            th:href="@{/dashboard/teachers/delete/{id}(id=${teacher.id})}"
                                            th:title="#{teachers.delete}"
                                            th:name="${teacher.firstName + '&nbsp;' + teacher.lastName}"

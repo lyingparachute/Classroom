@@ -29,7 +29,7 @@
                           id="studentForm">
                         <div class="row justify-content-end mb-1 mt-3">
                             <div class="col-auto">
-                                <a id="btnAddStudent"
+                                <a id="btnAddItem"
                                    class="btn btn-outline-primary btn-lg"
                                    th:href="@{/dashboard/students/new}"
                                    th:value="#{students.new}">
@@ -37,7 +37,7 @@
                                     <span th:text="#{students.new}"></span>
                                 </a>
                             </div>
-                            <div class="col-4">
+                            <div class="col-5">
                                 <div class="search">
                                     <i class="fa fa-search"></i>
                                     <input id="name" type="search" name="name"
@@ -99,19 +99,17 @@
                                 <td th:text="${student.teachersList.size()}"/>
                                 <td>
                                     <a id="btnView"
-                                       class="fa fa-eye fa-lg"
+                                       class="fa fa-eye fa-lg mr-2"
                                        th:href="@{/dashboard/students/{id}(id=${student.id})}"
                                        th:title="#{students.view}">
                                     </a>
-                                    &nbsp;
                                     <a id="btnEdit"
-                                       class="fa fa-user-pen fa-lg"
+                                       class="fa fa-user-pen fa-lg mr-2"
                                        th:href="@{/dashboard/students/edit/{id}(id=${student.id})}"
                                        th:title="#{students.edit}">
                                     </a>
-                                    &nbsp;
                                     <a id="btnDelete"
-                                       class="fa fa-trash-can fa-lg icon-dark delBtn"
+                                       class="fa fa-trash-can fa-lg delBtn mr-2"
                                        th:href="@{/dashboard/students/delete/{id}(id=${student.id})}"
                                        th:title="#{students.delete}"
                                        th:name="${student.firstName + '&nbsp;' + student.lastName}"
