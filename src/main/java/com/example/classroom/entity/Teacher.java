@@ -48,6 +48,15 @@ public class Teacher {
     @Enumerated(EnumType.STRING)
     private SubjectEnum subjectEnum;
 
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.MERGE,
+                    CascadeType.DETACH})
+    @JoinTable(name = "teacher_subjects",
+            joinColumns = { @JoinColumn(name = "teacher_id") },
+            inverseJoinColumns = { @JoinColumn(name = "subject_id") })
+    private Set<Subject> subjects = new HashSet<>();
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
