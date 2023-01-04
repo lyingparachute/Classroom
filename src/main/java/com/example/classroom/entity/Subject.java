@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -27,4 +28,33 @@ public class Subject {
             },
             mappedBy = "subjects")
     private Set<Teacher> teachers = new HashSet<>();
+
+
+    public void removeTeacher(Teacher teacher){
+        this.teachers.remove(teacher);
+        teacher.getSubjects().remove(this);
+    }
+
+    public void assignTeacher(Teacher teacher){
+        this.teachers.add(teacher);
+        teacher.getSubjects().add(this);
+    }
+
+    @Override
+    public String toString() {
+        return  "id=" + id + ", name='" + name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Subject subject = (Subject) o;
+        return id.equals(subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && Objects.equals(teachers, subject.teachers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, teachers);
+    }
 }
