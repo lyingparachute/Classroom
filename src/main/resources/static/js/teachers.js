@@ -5,7 +5,7 @@ $(document).ready(function () {
     $("#btnClear").on("click", function (e) {
         e.preventDefault();
         $("#name").text("");
-        window.location = "/teachers";
+        window.location = "/dashboard/teachers";
     });
 
     $('.delBtn').on('click', function (event) {

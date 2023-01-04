@@ -1,5 +1,5 @@
 <a th:fragment="paging(pageNum, label, tooltip)" class="page-link"
-   th:href="@{'/teachers?' + ${name != null && name != '' ? 'name=' + name + '&' : ''}
+   th:href="@{'/dashboard/teachers?' + ${name != null && name != '' ? 'name=' + name + '&' : ''}
                            + 'page=' + ${pageNum} + '&size=' + ${pageSize}
                            + ${sortField != null ? '&sortField=' + sortField : ''}
                            + ${sortDir != null ? '&sortDir=' + sortDir : ''} }"

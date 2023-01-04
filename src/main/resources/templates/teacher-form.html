@@ -4,20 +4,22 @@
     <header th:replace="fragments/header :: header"></header>
 </head>
 <body>
-<!--Navigation Bar-->
-<div th:replace="fragments/navBar :: nav"></div>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
 
-<section class="py-5 mt-0 align-items-start d-flex bg-light"
-         style="min-height: 75vh;">
-    <div class="container w-50">
-        <div class="d-flex justify-content-center">
-            <div id="itemCard" class="card shadow">
-                <h1 class="card-header text-center m-4"
-                    th:text="#{teachers.new}"></h1>
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header text-center py-3">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{teachers.new}"></strong>
+                    </h3>
+                </div>
                 <div class="card-body mx-4">
                     <form class="form-group needs-validation"
                           th:object="${teacher}"
-                          th:action="@{/teachers/new}"
+                          th:action="@{/dashboard/teachers/new}"
                           th:method="post">
 
                         <div class="row mb-4">
@@ -68,7 +70,6 @@
                                  th:errors="*{email}"></div>
                         </div>
 
-
                         <div class="row mb-4">
                             <label class="col-sm-4 col-form-label"
                                    for="age">
@@ -92,7 +93,7 @@
                             <div class="col-sm">
                                 <select class="form-select" id="field_of_study" th:field="*{subject}">
                                     <option th:each="fieldOpt : ${T(systems.ultimate.classroom.enums.Subject).values()}"
-                                    th:value="${fieldOpt}" th:text="${fieldOpt.desc}">
+                                            th:value="${fieldOpt}" th:text="${fieldOpt.desc}">
                                     </option>
                                 </select>
                             </div>
@@ -106,31 +107,24 @@
                             <div class="col-sm text-left">
                                 <th:block th:each="fieldOpt : ${students}">
                                     <div>
-                                        <input class="form-check-input m-2" type="checkbox" value="" id="students_list" th:field="*{studentsList}"
+                                        <input class="form-check-input m-2" type="checkbox" value="" id="students_list"
+                                               th:field="*{studentsList}"
                                                th:value="${fieldOpt.id}" th:text="${fieldOpt}">
                                     </div>
                                 </th:block>
-
-
                             </div>
                         </div>
 
-                        <div class="row mb-4 justify-content-center">
-                            <div class="col-md-4">
-                                <button type="submit" name="add" class="btn btn-primary"
-                                        th:text="#{teacher.form.add}"></button>
-                            </div>
-                        </div>
+                        <!-- ======= Buttons ======= -->
+                        <div th:replace="fragments/buttons :: #teacher-discard-submit"></div>
 
                     </form>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-</section>
+</main>
 
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
 <!-- JS Scripts -->
 <div th:replace="fragments/imports/scripts :: scripts"></div>
 </body>

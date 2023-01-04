@@ -7,27 +7,30 @@
     <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css"/>
 </head>
 <body>
-<!--Navigation Bar-->
-<div th:replace="fragments/navBar :: nav"></div>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
 
-<section class="py-5 mt-0 align-items-start d-flex bg-light">
-    <div id="containerTable" class="container-fluid text-center">
-        <div class="d-flex justify-content-center">
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
             <div id="tableCard" class="card">
-                <h1 class="card-header my-3"
-                    th:text="#{teachers.header}"></h1>
+                <div class="card-header text-center py-3">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{teachers.header}"></strong>
+                    </h3>
+                </div>
                 <div class="card-body">
                     <div class="text-center h3"
                          th:text="#{teachers.desc}">
                     </div>
                     <form id="teacherForm"
-                          th:action="@{/teachers}"
+                          th:action="@{/dashboard/teachers}"
                           method="get">
                         <div class="row justify-content-end mb-1 mt-3">
                             <div class="col-auto">
                                 <a id="btnAddTeacher"
                                    class="btn btn-outline-primary btn-lg"
-                                   th:href="@{/teachers/new}"
+                                   th:href="@{/dashboard/teachers/new}"
                                    th:value="#{teachers.new}">
                                     <i class="fa-solid fa-user-plus"></i>
                                     <span th:text="#{teachers.new}"></span>
@@ -94,26 +97,28 @@
                                 <td th:text="${teacher.subject.getDesc()}"/>
                                 <td th:text="${teacher.studentsList.size()}"/>
                                 <td>
-                                    <a id="btnView"
-                                       class="fa fa-eye fa-lg"
-                                       th:href="@{/teachers/{id}(id=${teacher.id})}"
-                                       th:title="#{teachers.view}">
-                                    </a>
-                                    &nbsp;
-                                    <a id="btnEdit"
-                                       class="fa fa-user-pen fa-lg"
-                                       th:href="@{/teachers/edit/{id}(id=${teacher.id})}"
-                                       th:title="#{teachers.edit}">
-                                    </a>
-                                    &nbsp;
-                                    <a id="btnDelete"
-                                       class="fa fa-trash-can fa-lg icon-dark delBtn"
-                                       th:href="@{/teachers/delete/{id}(id=${teacher.id})}"
-                                       th:title="#{teachers.delete}"
-                                       th:teacherName="${teacher.firstName + '&nbsp;' + teacher.lastName}"
-                                       data-bs-toggle="modal"
-                                       data-bs-target="#teacherDeleteModal">
-                                    </a>
+                                    <div>
+                                        <a id="btnView"
+                                           class="fa fa-eye fa-lg"
+                                           th:href="@{/dashboard/teachers/{id}(id=${teacher.id})}"
+                                           th:title="#{teachers.view}">
+                                        </a>
+
+                                        <a id="btnEdit"
+                                           class="fa fa-user-pen fa-lg"
+                                           th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}"
+                                           th:title="#{teachers.edit}">
+                                        </a>
+
+                                        <a id="btnDelete"
+                                           class="fa fa-trash-can fa-lg icon-dark delBtn"
+                                           th:href="@{/dashboard/teachers/delete/{id}(id=${teacher.id})}"
+                                           th:title="#{teachers.delete}"
+                                           th:teacherName="${teacher.firstName + '&nbsp;' + teacher.lastName}"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#teacherDeleteModal">
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>
@@ -177,9 +182,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-</section>
+</main>
 
 
 <!-- View Modal -->
@@ -235,8 +240,6 @@
 </div>
 <!-- End delete modal -->
 
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
 <!-- JS Scripts -->
 <div th:replace="fragments/imports/scripts :: scripts"></div>
 <!-- Custom script -->

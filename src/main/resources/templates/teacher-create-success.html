@@ -4,47 +4,38 @@
     <header th:replace="fragments/header :: header"></header>
 </head>
 <body>
-<!--Navigation Bar-->
-<div th:replace="fragments/navBar :: nav"></div>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
 
-<section class="py-5 mt-0 align-items-start d-flex bg-light"
-         style="min-height: 75vh;">
-    <div class="container w-50">
-        <div class="d-flex justify-content-center">
-            <div id="itemCard" class="card shadow">
-                <h1 class="card-header text-center m-4"
-                    style="color: forestgreen"
-                    th:text="#{teacher.add.success}"></h1>
-                <div class="card-body mx-4">
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header text-center py-3 color-success">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{teacher.add.success}"></strong>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item" th:text="#{teacher.id} + ': ' + ${teacher.id}"></li>
+                        <li class="list-group-item" th:text="#{teacher.firstName} + ': ' + ${teacher.firstName}"></li>
+                        <li class="list-group-item" th:text="#{teacher.lastName} + ': ' + ${teacher.lastName}"></li>
+                        <li class="list-group-item" th:text="#{teacher.email} + ': ' + ${teacher.email}"></li>
+                        <li class="list-group-item" th:text="#{teacher.age} + ': ' + ${teacher.age}"></li>
+                        <li class="list-group-item" th:text="#{teacher.subject} + ': '  + ${teacher.subject.desc}"></li>
+                        <li class="list-group-item" th:text="#{teacher.no.of.students} + ': '  + ${teacher.studentsList.size()}"></li>
+                    </ul>
 
-                        <ul class="list-group">
-                            <li class="list-group-item" th:text="#{teacher.firstName} + ': ' + ${teacher.firstName}"></li>
-                            <li class="list-group-item" th:text="#{teacher.lastName} + ': ' + ${teacher.lastName}"></li>
-                            <li class="list-group-item" th:text="#{teacher.email} + ': ' + ${teacher.email}"></li>
-                            <li class="list-group-item" th:text="#{teacher.age} + ': ' + ${teacher.age}"></li>
-                            <li class="list-group-item" th:text="#{teacher.subject} + ': '  + ${teacher.subject.desc}"></li>
-                            <li class="list-group-item" th:text="#{teacher.no.of.students} + ': '  + ${teacher.studentsList.size()}"></li>
-                        </ul>
+                    <!-- ======= Buttons ======= -->
+                    <div th:replace="fragments/buttons :: #teacher-edit-delete"></div>
 
-                        <div class="row m-2">
-                            <a class="btn btn-primary" th:href="@{/teachers}" th:text="#{teachers.back}"></a>
-                        </div>
-
-                        <div class="row m-2">
-                            <a class="btn btn-outline-primary" th:href="@{/teachers/edit/{id}(id=${teacher.id})}" th:text="#{teachers.edit}"></a>
-                        </div>
-
-                    <div class="row m-2">
-                        <a class="btn btn-outline-danger" th:href="@{/teachers/delete/{id}(id=${teacher.id})}" th:text="#{teachers.delete}"></a>
-                    </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-</section>
+</main>
 
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
 <!-- JS Scripts -->
 <div th:replace="fragments/imports/scripts :: scripts"></div>
 </body>
