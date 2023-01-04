@@ -2,38 +2,42 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <header th:replace="fragments/header :: header"></header>
-    <link rel="stylesheet" th:href="@{/css/delete-modal.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/modals.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/css/view-modal.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css"/>
 </head>
 <body>
-<!--Navigation Bar-->
-<div th:replace="fragments/navBar :: nav"></div>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
 
-<section class="py-5 mt-0 align-items-start d-flex bg-light">
-    <div id="containerTable" class="container-fluid text-center">
-        <div class="d-flex justify-content-center">
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
             <div id="tableCard" class="card">
-                <h1 class="card-header my-3"
-                    th:text="#{students.header}"></h1>
+                <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{students.header}"></strong>
+                    </h3>
+                </div>
                 <div class="card-body">
-                    <div class="text-center h3"
+                    <div class="text-center h5"
                          th:text="#{students.desc}">
                     </div>
-                    <form th:action="@{/students}"
+                    <form th:action="@{/dashboard/students}"
                           method="get"
                           id="studentForm">
                         <div class="row justify-content-end mb-1 mt-3">
                             <div class="col-auto">
-                                <a id="btnAddStudent"
+                                <a id="btnAddItem"
                                    class="btn btn-outline-primary btn-lg"
-                                   th:href="@{/students/new}"
+                                   th:href="@{/dashboard/students/new}"
                                    th:value="#{students.new}">
-                                    <i class="fa-solid fa-user-plus"></i>
+                                    <i class="fa-solid fa-user-plus mr-2"></i>
                                     <span th:text="#{students.new}"></span>
                                 </a>
                             </div>
-                            <div class="col-4">
+                            <div class="col-5">
                                 <div class="search">
                                     <i class="fa fa-search"></i>
                                     <input id="name" type="search" name="name"
@@ -61,7 +65,7 @@
                             </div>
                         </div>
                     </form>
-                    <div class="table-responsive">
+                    <div id="studentsTable" class="table-responsive">
                         <table class="table table-hover" th:if="${totalItems != 0}">
                             <thead>
                             <tr>
@@ -95,24 +99,22 @@
                                 <td th:text="${student.teachersList.size()}"/>
                                 <td>
                                     <a id="btnView"
-                                       class="fa fa-eye fa-lg"
-                                       th:href="@{/students/{id}(id=${student.id})}"
+                                       class="fa fa-eye fa-lg mr-2"
+                                       th:href="@{/dashboard/students/{id}(id=${student.id})}"
                                        th:title="#{students.view}">
                                     </a>
-                                    &nbsp;
                                     <a id="btnEdit"
-                                       class="fa fa-user-pen fa-lg"
-                                       th:href="@{/students/edit/{id}(id=${student.id})}"
+                                       class="fa fa-user-pen fa-lg mr-2"
+                                       th:href="@{/dashboard/students/edit/{id}(id=${student.id})}"
                                        th:title="#{students.edit}">
                                     </a>
-                                    &nbsp;
                                     <a id="btnDelete"
-                                       class="fa fa-trash-can fa-lg icon-dark delBtn"
-                                       th:href="@{/students/delete/{id}(id=${student.id})}"
+                                       class="fa fa-trash-can fa-lg delBtn mr-2"
+                                       th:href="@{/dashboard/students/delete/{id}(id=${student.id})}"
                                        th:title="#{students.delete}"
-                                       th:studentName="${student.firstName + '&nbsp;' + student.lastName}"
+                                       th:name="${student.firstName + '&nbsp;' + student.lastName}"
                                        data-bs-toggle="modal"
-                                       data-bs-target="#studentDeleteModal">
+                                       data-bs-target="#deleteModal">
                                     </a>
                                 </td>
                             </tr>
@@ -134,7 +136,8 @@
                                                         th:classappend="${currentPage == 1} ? 'disabled'">
                                                         <a th:replace="fragments/students-paging :: paging(${currentPage - 1}, '<', 'Previous Page')"></a>
                                                     </li>
-                                                    <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                                                    <li class="page-item disabled"
+                                                        th:if="${currentPage - 2 > 1}">
                                                         <a class="page-link" href="#">...</a>
                                                     </li>
                                                     <li class="page-item"
@@ -165,8 +168,9 @@
                                                     th:value="${pageSize}"
                                                     onchange="changePageSize()"
                                                     class="size-select"
-                                                    >
-                                                <option th:each="s : ${ {3, 6, 9, 12} }" th:value="${s}" th:text="${s}"
+                                            >
+                                                <option th:each="s : ${ {3, 6, 9, 12} }" th:value="${s}"
+                                                        th:text="${s}"
                                                         th:selected="${s == pageSize}"></option>
                                             </select>
                                         </div>
@@ -182,65 +186,19 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-</section>
+</main>
 
-<!-- View Modal -->
-<div class="modal fade" id="studentViewModal"
-     tabindex="-1"
-     aria-labelledby="studentViewModalLabel" aria-hidden="true"
-     th:fragment="modalContents">
-    <div class="modal-dialog modal-confirm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="studentViewModalLabel"
-                    th:text="#{view.modal.header}"></h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            <div class="modal-body modal-view-body" id="viewModalBody">
-                <p id="studentFirstName">Details</p>
-                <p id="studentLastName">Details</p>
-                <p id="studentEmail">Details</p>
-                <p id="studentAge">Details</p>
-                <p id="studentFieldOfStudy">Details</p>
-                <p id="studentTeachers" th:text="#{student.teachersList}"></p>
-                <div class="col-lg-12" id="teachers-list">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a href="" class="btn btn-info" data-bs-dismiss="modal"
-                   th:text="#{view.modal.btnClose}"></a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End View modal -->
+<!-- Delete modal -->
+<div th:replace="fragments/modals :: deleteModal"></div>
 
-<!-- Delete Modal -->
-<div class="modal fade" id="studentDeleteModal" tabindex="-1" aria-labelledby="studentDeleteModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-confirm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="studentDeleteModalLabel" th:text="#{delete.modal.header}"></h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" th:aria-label="Close"></button>
-            </div>
-            <div class="modal-body modal-delete-body" id="deleteModalBody">
-                <span id="confirmText"></span>
-            </div>
-            <div class="modal-footer">
-                <a href="" class="btn btn-info" data-bs-dismiss="modal" th:text="#{delete.modal.btnCancel}"></a>
-                <a href="" class="btn btn-danger" id="delRef" th:text="#{delete.modal.btnDelete}"></a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End delete modal -->
+<!-- View modal -->
+<div th:replace="fragments/modals :: #studentViewModal"></div>
 
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
-<script type="text/javascript" src="js/students.js"></script>
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+<!-- Custom script -->
+<script type="text/javascript" th:src="@{/js/students.js}"></script>
 </body>
 </html>

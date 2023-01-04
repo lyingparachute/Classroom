@@ -1,0 +1,83 @@
+<footer id="footer">
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-info">
+                        <h3 th:text="#{homeFooter.col1.heading}"></h3>
+                        <p class="pb-3"><em th:text="#{homeFooter.col1.desc}"></em></p>
+                        <p>
+                            <span th:text="#{homeFooter.col1.address1}"></span>
+                            <br>
+                            <span th:text="#{homeFooter.col1.address2}"></span>
+                            <br>
+                            <span th:text="#{homeFooter.col1.address3}"></span>
+                            <br><br>
+                            <strong th:text="#{homeFooter.col1.email}"></strong>
+                            <span th:text="#{homeFooter.col1.email.address}"></span><br>
+                        </p>
+                        <div class="social-links mt-3">
+                            <a th:href="@{https://igorbykowski.pl/}" class="portfolio" target="_blank"><i
+                                    class="fas fa-regular fa-globe"></i></a>
+                            <a th:href="@{https://github.com/lyingparachute/}" class="github" target="_blank"><i
+                                    class="fa-brands fa-github"></i></a>
+                            <a th:href="@{https://www.linkedin.com/in/igor-bykowski/}" class="linkedin" target="_blank"><i
+                                    class="fa-brands fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6 footer-links">
+                    <h4 th:text="#{homeFooter.col2.heading}"></h4>
+                    <ul>
+                        <li><i class="bx bx-chevron-right "></i>
+                            <a class="scrollto" href="#hero" th:text="#{homeFooter.col2.item1}"></a></li>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a class="scrollto" href="#about" th:text="#{homeFooter.col2.item2}"></a></li>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a class="scrollto" href="#services" th:text="#{homeFooter.col2.item3}"></a></li>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a class="scrollto" href="#pricing" th:text="#{homeFooter.col2.item4}"></a></li>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a class="scrollto" href="#hero" th:text="#{homeFooter.col2.item5}"></a></li>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a class="scrollto" href="#hero" th:text="#{homeFooter.col2.item6}"></a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 footer-links">
+                    <h4 th:text="#{homeFooter.col3.heading}"></h4>
+                    <ul>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#" th:text="#{homeFooter.col3.item1}"></a>
+                        </li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#" th:text="#{homeFooter.col3.item2}"></a>
+                        </li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#" th:text="#{homeFooter.col3.item3}"></a>
+                        </li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#" th:text="#{homeFooter.col3.item4}"></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 footer-newsletter">
+                    <h4 th:text="#{homeFooter.col4.heading}"></h4>
+                    <p th:text="#{homeFooter.col4.desc}"></p>
+                    <form action="" method="post">
+                        <input type="email" name="email">
+                        <input type="submit" th:value="#{homeFooter.button.subscribe}">
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="copyright">
+            &copy; Copyright <strong>
+            <span><a href="https://igorbykowski.pl/" th:text="#{footer.copyright.site}"></a></span></strong>
+            . All Rights Reserved
+        </div>
+    </div>
+</footer><!-- End Footer -->

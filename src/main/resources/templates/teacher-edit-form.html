@@ -4,20 +4,22 @@
     <header th:replace="fragments/header :: header"></header>
 </head>
 <body>
-<!--Navigation Bar-->
-<div th:replace="fragments/navBar :: nav"></div>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
 
-<section class="py-5 mt-0 align-items-start d-flex bg-light"
-         style="min-height: 75vh;">
-    <div class="container w-50">
-        <div class="d-flex justify-content-center">
-            <div id="itemCard" class="card shadow">
-                <h1 class="card-header text-center m-4"
-                    th:text="#{teacher.edit.header}"></h1>
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{teacher.edit.header}"></strong>
+                    </h3>
+                </div>
                 <div class="card-body mx-4">
                     <form class="form-group needs-validation"
                           th:object="${teacher}"
-                          th:action="@{/teachers/update}"
+                          th:action="@{/dashboard/teachers/update}"
                           method="post">
                         <input hidden type="text" id="id_input_id" th:field="*{id}">
 
@@ -93,7 +95,7 @@
                             <div class="col-sm">
                                 <select class="form-select" id="field_of_study" th:field="*{subject}">
                                     <option th:each="fieldOpt : ${T(systems.ultimate.classroom.enums.Subject).values()}"
-                                    th:value="${fieldOpt}" th:text="${fieldOpt.desc}">
+                                            th:value="${fieldOpt}" th:text="${fieldOpt.desc}">
                                     </option>
                                 </select>
                             </div>
@@ -118,20 +120,17 @@
                             </div>
                         </div>
 
-                        <div class="row mb-4 justify-content-center">
-                            <div class="col-md-4">
-                                <button type="submit" name="add" class="btn btn-primary"
-                                        th:text="#{teacher.edit.submit}"></button>
-                            </div>
-                        </div>
+                        <!-- ======= Buttons ======= -->
+                        <div th:replace="fragments/buttons :: #teacherDiscardSubmitBtn"></div>
+
                     </form>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-</section>
+</main>
 
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
 </body>
 </html>

@@ -1,0 +1,119 @@
+/* General css */
+.modal {
+    font-family: 'Varela Round', sans-serif;
+}
+
+/*--------------------------------------------------------------
+# Delete Modal
+--------------------------------------------------------------*/
+#deleteModal .modal-confirm {
+     color: #636363;
+     width: 550px;
+ }
+#deleteModal .modal-confirm .modal-content {
+    padding: 20px;
+    border-radius: 5px;
+    border: none;
+}
+#deleteModal .modal-confirm .modal-header {
+    padding: 0 15px;
+    border-bottom: none;
+    position: relative;
+}
+#deleteModal .modal-confirm h4 {
+    display: inline-block;
+    font-size: 26px;
+}
+#deleteModal .modal-confirm .btn-close {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+#deleteModal .modal-confirm .modal-body {
+    color: #999;
+}
+#deleteModal .modal-confirm .modal-footer {
+    background: #ecf0f1;
+    border-color: #e6eaec;
+    text-align: right;
+    margin: 0 -20px -20px;
+    border-radius: 0 0 5px 5px;
+}
+#deleteModal .modal-confirm .btn {
+    color: #fff;
+    border-radius: 4px;
+    transition: all 0.4s;
+    border: none;
+    padding: 8px 20px;
+    outline: none !important;
+}
+#deleteModal .modal-confirm .btn-secondary {
+    background: #b0c1c6;
+}
+#deleteModal .modal-confirm .btn-secondary:hover, .modal-confirm .btn-secondary:focus {
+    background: #92a9af;
+}
+#deleteModal .modal-confirm .btn-danger {
+    background: #f15e5e;
+}
+#deleteModal .modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
+    background: #ee3535;
+}
+#deleteModal .modal-confirm .modal-footer .btn + .btn {
+    margin-left: 10px;
+}
+
+/*--------------------------------------------------------------
+# View Modal
+--------------------------------------------------------------*/
+.view-modal .modal-confirm {
+    color: #636363;
+    width: 550px;
+}
+.view-modal .modal-confirm .modal-content {
+    padding: 20px;
+    border-radius: 5px;
+    border: none;
+}
+.view-modal .modal-confirm .modal-header {
+    padding: 0 15px;
+    border-bottom: none;
+    position: relative;
+}
+.view-modal .modal-confirm h4 {
+    display: inline-block;
+    font-size: 26px;
+}
+.view-modal .modal-confirm .btn-close {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.view-modal .modal-confirm .modal-body {
+    color: #888787;
+}
+.view-modal .modal-confirm .modal-footer {
+    background: #ecf0f1;
+    border-color: #e6eaec;
+    text-align: right;
+    margin: 0 -20px -20px;
+    border-radius: 0 0 5px 5px;
+}
+.view-modal .modal-confirm .btn {
+    color: #fff;
+    border-radius: 4px;
+    transition: all 0.4s;
+    border: none;
+    padding: 8px 20px;
+    outline: none !important;
+}
+.view-modal .modal-confirm .btn-secondary {
+    background: #a4b4b9;
+}
+.view-modal .modal-confirm .btn-secondary:hover, .modal-confirm .btn-info:focus {
+    background: #92a9af;
+}
+
+.view-modal .modal-confirm .modal-footer .btn .btn {
+    margin-left: 10px;
+}

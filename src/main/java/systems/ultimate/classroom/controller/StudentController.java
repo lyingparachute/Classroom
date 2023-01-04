@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("students")
+@RequestMapping("dashboard/students")
 public class StudentController {
 
     private final StudentService studentService;
@@ -99,7 +99,7 @@ public class StudentController {
     @GetMapping("delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
         studentService.remove(id);
-        return "redirect:/students";
+        return "redirect:/dashboard/students";
     }
 
     @GetMapping("edit/{id}")

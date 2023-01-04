@@ -4,20 +4,22 @@
     <header th:replace="fragments/header :: header"></header>
 </head>
 <body>
-<!--Navigation Bar-->
-<div th:replace="fragments/navBar :: nav"></div>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
 
-<section class="py-5 mt-0 align-items-start d-flex bg-light"
-         style="min-height: 75vh;">
-    <div class="container w-50">
-        <div class="d-flex justify-content-center">
-            <div id="itemCard" class="card shadow">
-                <h1 class="card-header text-center m-4"
-                    th:text="#{student.edit.header}"></h1>
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{student.edit.header}"></strong>
+                    </h3>
+                </div>
                 <div class="card-body mx-4">
                     <form class="form-group needs-validation"
                           th:object="${student}"
-                          th:action="@{/students/update}"
+                          th:action="@{/dashboard/students/update}"
                           method="post">
 
                         <input hidden type="text" id="id_input_id" th:field="*{id}">
@@ -102,42 +104,31 @@
 
                         <div class="row mb-4">
                             <label class="col-form-label col-sm-4"
-                                   for="teachers_list_select">
+                                   for="teachers_list">
                                 <span th:text="#{student.teachersList}"></span>
                             </label>
                             <div class="col-sm text-left">
-                                <select id="teachers_list_select"
-                                        class="form-select"
-                                        multiple
-                                        th:size="${teachers.size()}"
-                                        th:field="*{teachersList}">
-                                    <option th:each="fieldOpt, iter : ${teachers}"
-                                            th:value="${fieldOpt.id}"
-                                            th:text="${iter.count} + '. ' + ${fieldOpt}">
-                                    </option>
-                                </select>
+                                <th:block th:each="fieldOpt : ${teachers}">
+                                    <div>
+                                        <input class="form-check-input m-2" type="checkbox" value="" id="teachers_list"
+                                               th:field="*{teachersList}"
+                                               th:value="${fieldOpt.id}" th:text="${fieldOpt}">
+                                    </div>
+                                </th:block>
                             </div>
                         </div>
 
-                        <div class="row m-2 ">
-
-                                <button type="submit" name="add" class="btn btn-primary"
-                                        th:text="#{student.edit.submit}"></button>
-
-                        </div>
-                        <div class="row m-2">
-                            <a class="btn btn-outline-danger" th:href="@{/students}"
-                               th:text="#{student.cancel}"></a>
-                        </div>
+                        <!-- ======= Buttons ======= -->
+                        <div th:replace="fragments/buttons :: #studentCancelSubmitBtn"></div>
 
                     </form>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-</section>
+</main>
 
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
 </body>
 </html>

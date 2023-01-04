@@ -43,7 +43,7 @@ class StudentGetControllerTest {
     void shouldGetStudentView() throws Exception {
         Student student = initData.createStudentOne(List.of());
 
-        this.mockMvc.perform(get("/students/" + student.getId()))
+        this.mockMvc.perform(get("/dashboard/students/" + student.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -58,16 +58,19 @@ class StudentGetControllerTest {
         Student student = initData.createStudentOne(List.of(teacher1, teacher2));
 
         //when
-        MvcResult mvcResult = this.mockMvc.perform(get("/students/" + student.getId()))
+        MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students/" + student.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
         //then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
-                .contains("<h1 class=\"card-header text-center m-4\">Viewing Student with ID: " +  student.getId() +"</h1>");
+                .contains("                <div class=\"card-header py-3 bg-secondary bg-gradient bg-opacity-25\">\n" +
+                        "                    <h3 class=\"mb-0 text-center\">\n" +
+                        "                        <strong>Viewing Student with ID: "  +  student.getId() + "</strong>");
         assertThat(contentAsString)
-                .contains("                        <li class=\"list-group-item\">First Name: " + student.getFirstName() + "</li>\n" +
+                .contains("                        <li class=\"list-group-item\">ID number: " + student.getId() + "</li>\n" +
+                        "                        <li class=\"list-group-item\">First Name: " + student.getFirstName() + "</li>\n" +
                         "                        <li class=\"list-group-item\">Last Name: " + student.getLastName() + "</li>\n" +
                         "                        <li class=\"list-group-item\">Email: " + student.getEmail() + "</li>\n" +
                         "                        <li class=\"list-group-item\">Age: " + student.getAge() + "</li>\n" +
@@ -85,7 +88,7 @@ class StudentGetControllerTest {
 
     @Test
     void shouldGetStudentsView() throws Exception {
-        this.mockMvc.perform(get("/students"))
+        this.mockMvc.perform(get("/dashboard/students"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -101,7 +104,7 @@ class StudentGetControllerTest {
         Student student2 = initData.createStudentTwo(List.of(teacher1));
 
         //when
-        MvcResult mvcResult = this.mockMvc.perform(get("/students"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -134,7 +137,7 @@ class StudentGetControllerTest {
         Student student3 = initData.createStudentThree(List.of(teacher1, teacher2));
 
         //when
-        MvcResult mvcResult = this.mockMvc.perform(get("/students?page=2&size=2&sortField=firstName&sortDir=asc"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students?page=2&size=2&sortField=firstName&sortDir=asc"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -168,7 +171,7 @@ class StudentGetControllerTest {
 
     @Test
     void shouldGetStudentsSearchView() throws Exception {
-        this.mockMvc.perform(get("/students?name=w"))
+        this.mockMvc.perform(get("/dashboard/students?name=w"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -186,7 +189,7 @@ class StudentGetControllerTest {
 
         //when
         // Searching for letter 'w' in first name or last name
-        MvcResult mvcResult = this.mockMvc.perform(get("/students?name=w"))
+        MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students?name=w"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
