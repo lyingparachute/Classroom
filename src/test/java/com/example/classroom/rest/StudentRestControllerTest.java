@@ -63,8 +63,6 @@ class StudentRestControllerTest {
         ResponseEntity<StudentDto> response = restTemplate.getForEntity(url, StudentDto.class);
         Optional<Student> byId = studentRepository.findById(student.getId());
         assertThat(byId).isPresent();
-        List<Teacher> all = teacherRepository.findAll();
-        Set<Teacher> student1 = byId.get().getTeachersList();
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         StudentDto actual = response.getBody();
@@ -96,8 +94,8 @@ class StudentRestControllerTest {
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
 
-        Student student1 = initData.createStudentOne(List.of(teacher1));
-        Student student2 = initData.createStudentTwo(List.of(teacher2));
+        initData.createStudentOne(List.of(teacher1));
+        initData.createStudentTwo(List.of(teacher2));
         //when
         URI url = createURL("/api/students/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
