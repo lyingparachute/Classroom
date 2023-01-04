@@ -2,14 +2,18 @@ package com.example.classroom.entity;
 
 
 import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "subjects")
 public class Subject {
 
@@ -19,7 +23,11 @@ public class Subject {
 
     private String name;
 
+    @Length(max = 500)
     private String description;
+
+    @PositiveOrZero
+    private int hoursInSemester;
 
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
