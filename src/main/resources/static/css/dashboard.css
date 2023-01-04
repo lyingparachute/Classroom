@@ -2,7 +2,7 @@ body {
     background-color: #fbfbfb;
 }
 main {
-    margin-top: 58px;
+    margin-top: 60px;
 }
 
 @media (min-width: 991.98px) {
@@ -17,7 +17,7 @@ main {
     top: 0;
     bottom: 0;
     left: 0;
-    padding: 58px 0 0; /* Height of navbar */
+    padding: 63px 0 0; /* Height of navbar */
     box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
     width: 240px;
     z-index: 600;
@@ -41,7 +41,27 @@ main {
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
+/* Navbar */
+#main-navbar {
+    transition: all 0.5s;
+    z-index: 997;
+    padding: 15px 0;
+}
 
+#main-navbar.navbar-scrolled {
+    padding: 7px 0;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+#main-navbar .navbar-brand {
+    font-size: 26px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Button icons */
 .mr-2 {
     margin-right: 0.5rem!important;
 }
