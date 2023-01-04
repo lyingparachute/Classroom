@@ -1,6 +1,7 @@
 package com.example.classroom.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -31,6 +32,7 @@ public class Subject {
     @PositiveOrZero
     private int hoursInSemester;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.MERGE,
@@ -40,19 +42,19 @@ public class Subject {
     private Set<Teacher> teachers = new HashSet<>();
 
 
-    public void removeTeacher(Teacher teacher){
+    public void removeTeacher(Teacher teacher) {
         this.teachers.remove(teacher);
         teacher.getSubjects().remove(this);
     }
 
-    public void assignTeacher(Teacher teacher){
+    public void assignTeacher(Teacher teacher) {
         this.teachers.add(teacher);
         teacher.getSubjects().add(this);
     }
 
     @Override
     public String toString() {
-        return  "id=" + id + ", name='" + shortName;
+        return "id=" + id + ", name='" + shortName;
     }
 
     @Override
