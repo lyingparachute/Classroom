@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
-    @Query("select s from Subject s where s.name like %?1%")
+    @Query("select s from Subject s where s.shortName like %?1%")
     List<Subject> findAllByName(String name);
-    @Query("select s from Subject s where s.name like %?1%")
+    @Query("select s from Subject s where s.shortName like %?1%")
     Page<Subject> findAllByName(String name, Pageable pageable);
 
 }

@@ -1,10 +1,12 @@
 package com.example.classroom.repository.util;
 
 import com.example.classroom.entity.Student;
+import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.enums.FieldOfStudy;
 import com.example.classroom.enums.SubjectEnum;
 import com.example.classroom.repository.StudentRepository;
+import com.example.classroom.repository.SubjectRepository;
 import com.example.classroom.repository.TeacherRepository;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +18,13 @@ public class InitData {
 
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
+    private final SubjectRepository subjectRepository;
 
 
-    public InitData(StudentRepository studentRepository, TeacherRepository teacherRepository) {
+    public InitData(StudentRepository studentRepository, TeacherRepository teacherRepository, SubjectRepository subjectRepository) {
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
+        this.subjectRepository = subjectRepository;
     }
 
     @Transactional
@@ -117,5 +121,41 @@ public class InitData {
             students.forEach(teacher::addStudent);
         }
         return teacherRepository.save(teacher);
+    }
+
+    @Transactional
+    public Subject createSubjectMaths(){
+        Subject subject = new Subject();
+        subject.setShortName("MATHS");
+        subject.setDescription("Mathematics");
+        subject.setHoursInSemester(100);
+        return subjectRepository.save(subject);
+    }
+
+    @Transactional
+    public Subject createSubjectArt(){
+        Subject subject = new Subject();
+        subject.setShortName("ART");
+        subject.setDescription("Art");
+        subject.setHoursInSemester(120);
+        return subjectRepository.save(subject);
+    }
+
+    @Transactional
+    public Subject createSubjectScience(){
+        Subject subject = new Subject();
+        subject.setShortName("SCIENCE");
+        subject.setDescription("Science");
+        subject.setHoursInSemester(150);
+        return subjectRepository.save(subject);
+    }
+
+    @Transactional
+    public Subject createSubjectIT(){
+        Subject subject = new Subject();
+        subject.setShortName("IT");
+        subject.setDescription("Computer Science");
+        subject.setHoursInSemester(360);
+        return subjectRepository.save(subject);
     }
 }
