@@ -75,6 +75,10 @@ public class Teacher {
         this.studentsList.remove(student);
     }
 
+    public void removeSubject(Subject subject) {
+        this.subjects.remove(subject);
+    }
+
     @Override
     public String toString() {
         return firstName + " " + lastName;
