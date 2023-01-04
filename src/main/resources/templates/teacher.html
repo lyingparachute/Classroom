@@ -23,7 +23,7 @@
                         <li class="list-group-item" th:text="#{teacher.lastName} + ': ' + ${teacher.lastName}"></li>
                         <li class="list-group-item" th:text="#{teacher.email} + ': ' + ${teacher.email}"></li>
                         <li class="list-group-item" th:text="#{teacher.age} + ': ' + ${teacher.age}"></li>
-                        <li class="list-group-item" th:text="#{teacher.subject} + ': '  + ${teacher.subject.desc}"></li>
+                        <li class="list-group-item" th:text="#{teacher.subject} + ': '  + ${teacher.getSubjectEnum.desc}"></li>
                         <li class="list-group-item">List of assigned students:
                             <ul class="list-group">
                                 <a class="list-group-item"
