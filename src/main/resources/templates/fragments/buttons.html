@@ -1,64 +1,80 @@
 <!-- ======= Student buttons ======= -->
-<!-- Discard Changes and Submit form buttons -->
-<div id="student-discard-submit" class="row my-2 justify-content-end">
+<!-- Cancel and Submit form buttons -->
+<div id="studentCancelSubmitBtn" class="row my-2 justify-content-end">
   <div class="col-auto">
     <a class="btn btn-secondary" th:href="@{/dashboard/students}">
-      <i class="fa fa-times-circle mr-2"></i><span th:text="#{student.cancel}"></span></a>
+      <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
   </div>
   <div class="col-auto">
     <button type="submit" name="add" class="btn btn-primary">
-      <i class="fas fa-check mr-2"></i><span th:text="#{student.edit.submit}"></span></button>
+      <i class="fas fa-check mr-2"></i><span th:text="#{button.submit}"></span></button>
   </div>
 </div>
 
 <!-- Edit and Delete buttons -->
-<div id="student-edit-delete" class="row my-2 justify-content-end">
+<div id="studentEditDeleteBtn" class="row my-2 justify-content-end">
   <div class="col-auto">
     <a class="btn btn-outline-primary" th:href="@{/dashboard/students/edit/{id}(id=${student.id})}">
-      <i class="fas fa-pen mr-2"></i><span th:text="#{students.edit}"></span>
+      <i class="fas fa-pen mr-2"></i><span th:text="#{button.edit}"></span>
     </a>
   </div>
   <div class="col-auto">
     <a class="btn btn-outline-danger delBtn"
        th:href="@{/dashboard/students/delete/{id}(id=${student.id})}">
-      <i class="fa fa-trash-can fa-lg mr-2"></i><span th:text="#{students.delete}"></span>
+      <i class="fa fa-trash-can fa-lg mr-2"></i><span th:text="#{button.delete}"></span>
     </a>
   </div>
 </div>
 
-
+<!-- Go Back button -->
+<div id="studentGoBackBtn" class="row my-2 justify-content-center">
+  <div class="col-auto">
+    <a class="btn btn-primary" th:href="@{/dashboard/students}">
+      <i class="fas fa-home mr-2"></i><span th:text="#{button.go.back}"></span>
+    </a>
+  </div>
+</div>
 
 
 <!-- ======= Teacher buttons ======= -->
 <!-- Discard Changes and Submit form buttons -->
-<div id="teacher-discard-submit" class="row my-2 justify-content-end">
+<div id="teacherDiscardSubmitBtn" class="row my-2 justify-content-end">
   <div class="col-auto">
     <a class="btn btn-secondary" th:href="@{/dashboard/teachers}">
-      <i class="fa fa-times-circle mr-2"></i><span th:text="#{student.cancel}"></span></a>
+      <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
   </div>
   <div class="col-auto">
     <button type="submit" name="add" class="btn btn-primary">
-      <i class="fas fa-check mr-2"></i><span th:text="#{teacher.edit.submit}"></span></button>
+      <i class="fas fa-check mr-2"></i><span th:text="#{button.submit}"></span></button>
   </div>
 </div>
 
 <!-- Edit and Delete buttons -->
-<div id="teacher-edit-delete" class="row my-2 justify-content-end">
+<div id="teacherEditDeleteBtn" class="row my-2 justify-content-end">
   <div class="col-auto">
     <a class="btn btn-outline-primary" th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}">
-      <i class="fas fa-pen mr-2"></i><span th:text="#{teachers.edit}"></span>
+      <i class="fas fa-pen mr-2"></i><span th:text="#{button.edit}"></span>
     </a>
   </div>
   <div class="col-auto">
     <a class="btn btn-outline-danger" th:href="@{/dashboard/teachers/delete/{id}(id=${teacher.id})}">
-      <i class="fa fa-trash-can fa-lg mr-2"></i><span th:text="#{teachers.delete}"></span>
+      <i class="fa fa-trash-can fa-lg mr-2"></i><span th:text="#{button.delete}"></span>
+    </a>
+  </div>
+</div>
+
+<!-- Go Back button -->
+<div id="teacherGoBackBtn" class="row my-2 justify-content-center">
+  <div class="col-auto">
+    <a class="btn btn-primary" th:href="@{/dashboard/teachers}">
+      <i class="fas fa-home mr-2"></i><span th:text="#{button.go.back}"></span>
     </a>
   </div>
 </div>
 
 <!-- ======= Home-page buttons ======= -->
 <!-- back-to-top buttons -->
-<div th:fragment="back-to-top">
+<div id="backToTopBtn">
   <div id="preloader"></div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
           class="bi bi-arrow-up-short"></i></a>
