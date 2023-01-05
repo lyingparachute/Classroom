@@ -107,10 +107,10 @@ public class SubjectService {
     @Transactional
     public void removeTeachers(Subject subject, Set<Teacher> teachers) {
         if (teachers != null && !teachers.isEmpty()) {
-            teachers.forEach(subject::removeTeacher);
             teachers.forEach(t -> t.removeSubject(subject));
-            teacherRepository.saveAll(teachers);
+            teachers.forEach(subject::removeTeacher);
             subjectRepository.save(subject);
+            teacherRepository.saveAll(teachers);
         }
     }
 
