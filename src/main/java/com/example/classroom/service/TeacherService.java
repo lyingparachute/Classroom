@@ -2,6 +2,7 @@ package com.example.classroom.service;
 
 import com.example.classroom.dto.TeacherDto;
 import com.example.classroom.entity.Student;
+import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.TeacherRepository;
 import org.modelmapper.ModelMapper;
@@ -103,6 +104,18 @@ public class TeacherService {
     private void removeStudents(Teacher teacher, Set<Student> students) {
         if (students != null && !students.isEmpty()) {
             students.forEach(teacher::removeStudent);
+        }
+    }
+
+    public void addSubjects(Teacher teacher, Set<Subject> subjects) {
+        if (subjects != null && !subjects.isEmpty()) {
+            subjects.forEach(teacher::addSubject);
+        }
+    }
+
+    private void removeSubjects(Teacher teacher, Set<Subject> subjects) {
+        if (subjects != null && !subjects.isEmpty()) {
+            subjects.forEach(teacher::removeSubject);
         }
     }
 
