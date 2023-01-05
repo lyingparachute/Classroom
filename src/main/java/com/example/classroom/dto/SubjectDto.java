@@ -22,4 +22,13 @@ public class SubjectDto implements Serializable {
     private int hoursInSemester;
     private String description;
     private Set<Teacher> teachers = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "SubjectDto{" +
+                "id=" + id +
+                ", shortName='" + shortName + '\'' +
+                ", longName='" + longName + '\'' +
+                '}';
+    }
 }
