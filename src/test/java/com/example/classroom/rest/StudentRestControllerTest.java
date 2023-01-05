@@ -205,9 +205,36 @@ class StudentRestControllerTest {
         //then
         Optional<Student> byId = studentRepository.findById(student.getId());
         assertThat(byId).isNotPresent();
-        student.getTeachersList().forEach(i -> {
-            teacherRepository.findById(i.getId()).orElseThrow(() -> new IllegalStateException(
-                    "Teacher with ID = " + i.getId() + " should not be removed."));
+        student.getTeachersList().forEach(teacher -> {
+            teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
+                    "Teacher with ID = " + teacher.getId() + " should not be removed."));
+        });
+    }
+
+    @Test
+    void shouldDeleteAllStudents() throws URISyntaxException {
+        //given
+        Student student1 = initData.createStudentOne(List.of(
+                initData.createTeacherOne(List.of()),
+                initData.createTeacherTwo(List.of())));
+        Student student2 = initData.createStudentOne(List.of(
+                initData.createTeacherOne(List.of()),
+                initData.createTeacherTwo(List.of())));
+        //when
+        URI url = createURL("/api/students");
+        restTemplate.delete(url);
+        //then
+        Optional<Student> byId1 = studentRepository.findById(student1.getId());
+        Optional<Student> byId2 = studentRepository.findById(student1.getId());
+        assertThat(byId1).isNotPresent();
+        assertThat(byId2).isNotPresent();
+        student1.getTeachersList().forEach(teacher -> {
+            teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
+                    "Teacher with ID = " + teacher.getId() + " should not be removed."));
+        });
+        student2.getTeachersList().forEach(teacher -> {
+            teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
+                    "Teacher with ID = " + teacher.getId() + " should not be removed."));
         });
     }
 
