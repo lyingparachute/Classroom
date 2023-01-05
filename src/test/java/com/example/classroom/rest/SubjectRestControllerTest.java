@@ -234,7 +234,7 @@ class SubjectRestControllerTest {
         subjectDto.setLongName("Speech therapy");
         subjectDto.setDescription("Classes with speech therapy specialist.");
         subjectDto.setHoursInSemester(80);
-        subjectDto.setTeachers(new HashSet<Teacher>(teachers));
+        subjectDto.setTeachers(new HashSet<>(teachers));
         return subjectDto;
     }
 

@@ -245,7 +245,7 @@ class StudentRestControllerTest {
         studentDto.setEmail("w.romanski@gmail.com");
         studentDto.setAge(21);
         studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
-        studentDto.setTeachersList(new HashSet<Teacher>(teachers));
+        studentDto.setTeachersList(new HashSet<>(teachers));
         return studentDto;
     }
 
