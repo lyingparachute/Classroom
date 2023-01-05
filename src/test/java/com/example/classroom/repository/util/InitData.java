@@ -31,6 +31,7 @@ public class InitData {
     public void cleanUp(){
         teacherRepository.deleteAll();
         studentRepository.deleteAll();
+        subjectRepository.deleteAll();
     }
 
     @Transactional
@@ -124,38 +125,59 @@ public class InitData {
     }
 
     @Transactional
-    public Subject createSubjectMaths(){
+    public Subject createSubjectMaths(List<Teacher> teachers){
         Subject subject = new Subject();
         subject.setShortName("MATHS");
         subject.setDescription("Mathematics");
         subject.setHoursInSemester(100);
-        return subjectRepository.save(subject);
+        if (teachers != null && !teachers.isEmpty()){
+            teachers.forEach(subject::addTeacher);
+            subjectRepository.save(subject);
+        }
+        subjectRepository.save(subject);
+        return subject;
+
     }
 
     @Transactional
-    public Subject createSubjectArt(){
+    public Subject createSubjectArt(List<Teacher> teachers){
         Subject subject = new Subject();
         subject.setShortName("ART");
         subject.setDescription("Art");
         subject.setHoursInSemester(120);
-        return subjectRepository.save(subject);
+        if (teachers != null && !teachers.isEmpty()){
+            teachers.forEach(subject::addTeacher);
+            subjectRepository.save(subject);
+        }
+        subjectRepository.save(subject);
+        return subject;
     }
 
     @Transactional
-    public Subject createSubjectScience(){
+    public Subject createSubjectScience(List<Teacher> teachers){
         Subject subject = new Subject();
         subject.setShortName("SCIENCE");
         subject.setDescription("Science");
         subject.setHoursInSemester(150);
-        return subjectRepository.save(subject);
+        if (teachers != null && !teachers.isEmpty()){
+            teachers.forEach(subject::addTeacher);
+            subjectRepository.save(subject);
+        }
+        subjectRepository.save(subject);
+        return subject;
     }
 
     @Transactional
-    public Subject createSubjectIT(){
+    public Subject createSubjectIT(List<Teacher> teachers){
         Subject subject = new Subject();
         subject.setShortName("IT");
         subject.setDescription("Computer Science");
         subject.setHoursInSemester(360);
-        return subjectRepository.save(subject);
+        if (teachers != null && !teachers.isEmpty()){
+            teachers.forEach(subject::addTeacher);
+            subjectRepository.save(subject);
+        }
+        subjectRepository.save(subject);
+        return subject;
     }
 }
