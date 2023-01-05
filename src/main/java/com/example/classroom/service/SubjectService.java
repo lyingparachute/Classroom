@@ -81,12 +81,12 @@ public class SubjectService {
         subjectRepository.delete(subject);
     }
 
-    public List<SubjectDto> findByFirstOrLastName(String searched) {
+    public List<SubjectDto> findByShortName(String searched) {
         List<Subject> found = subjectRepository.findAllByName(searched);
         return found.stream().map(s -> mapper.map(s, SubjectDto.class)).collect(Collectors.toList());
     }
 
-    public Page<SubjectDto> findByFirstOrLastNamePaginated(int pageNo, int pageSize, String sortField, String sortDirection, String searched) {
+    public Page<SubjectDto> findByShortNamePaginated(int pageNo, int pageSize, String sortField, String sortDirection, String searched) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
