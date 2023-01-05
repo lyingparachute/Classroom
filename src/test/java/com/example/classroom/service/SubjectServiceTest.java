@@ -51,7 +51,6 @@ class SubjectServiceTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         ArrayList<Teacher> teachers = new ArrayList<>(List.of(teacher1, teacher2));
         SubjectDto expected = createSubjectDto(teachers);
-
         //when
         subjectService.create(expected);
         //then
@@ -140,7 +139,6 @@ class SubjectServiceTest {
         SubjectDto actual1 = actual.get(0);
         SubjectDto actual2 = actual.get(1);
         SubjectDto actual3 = actual.get(2);
-
         assertThat(actual1.getShortName()).isEqualTo(expected1.getShortName());
         assertThat(actual1.getLongName()).isEqualTo(expected1.getLongName());
         assertThat(actual1.getDescription()).isEqualTo(expected1.getDescription());
@@ -200,7 +198,6 @@ class SubjectServiceTest {
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
-
         Subject expected1 = initData.createSubjectIT(List.of(teacher1, teacher2));
         Subject expected2 = initData.createSubjectMaths(List.of(teacher3));
         Subject expected3 = initData.createSubjectScience(List.of(teacher1, teacher2, teacher3));
@@ -239,7 +236,6 @@ class SubjectServiceTest {
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
-
         Subject expected = initData.createSubjectArt(List.of(teacher1, teacher2, teacher3));
         //when
         SubjectDto actual = subjectService.fetchById(expected.getId());
@@ -283,7 +279,6 @@ class SubjectServiceTest {
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
-
         Subject expected = initData.createSubjectArt(List.of(teacher1, teacher2, teacher3));
         //when
         subjectService.remove(expected.getId());
@@ -315,7 +310,6 @@ class SubjectServiceTest {
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
-
         Subject expected1 = initData.createSubjectIT(List.of(teacher1, teacher2));
         Subject expected2 = initData.createSubjectMaths(List.of(teacher3));
         Subject expected3 = initData.createSubjectScience(List.of(teacher1, teacher2, teacher3));
@@ -449,7 +443,7 @@ class SubjectServiceTest {
         subjectDto.setLongName("Speech therapy");
         subjectDto.setDescription("Classes with speech therapy specialist.");
         subjectDto.setHoursInSemester(80);
-        subjectDto.setTeachers(new HashSet<Teacher>(teachers));
+        subjectDto.setTeachers(new HashSet<>(teachers));
         return subjectDto;
     }
 }
