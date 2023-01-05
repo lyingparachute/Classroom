@@ -35,6 +35,7 @@ public class SubjectService {
     @Transactional
     public SubjectDto create(SubjectDto dto) {
         Subject subject = mapper.map(dto, Subject.class);
+        addTeachers(subject, subject.getTeachers());
         Subject saved = subjectRepository.save(subject);
         return mapper.map(saved, SubjectDto.class);
     }
@@ -43,7 +44,9 @@ public class SubjectService {
     public SubjectDto update(SubjectDto dto) {
         Subject subject = subjectRepository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid subject '" + dto + "' with ID: " + dto.getId()));
+        removeTeachers(subject, new HashSet<>(subject.getTeachers()));
         mapper.map(dto, subject);
+        addTeachers(subject, subject.getTeachers());
         Subject saved = subjectRepository.save(subject);
         return mapper.map(saved, SubjectDto.class);
 
@@ -58,7 +61,6 @@ public class SubjectService {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
-
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Subject> all = subjectRepository.findAll(pageable);
         return all.map(subject -> mapper.map(subject, SubjectDto.class));
@@ -95,9 +97,9 @@ public class SubjectService {
     }
 
     @Transactional
-    public void assignTeachers(Subject subject, Set<Teacher> teachers) {
+    public void addTeachers(Subject subject, Set<Teacher> teachers) {
         if (teachers != null && !teachers.isEmpty()) {
-            teachers.forEach(subject::assignTeacher);
+            teachers.forEach(subject::addTeacher);
             subjectRepository.save(subject);
         }
     }
@@ -106,6 +108,7 @@ public class SubjectService {
     public void removeTeachers(Subject subject, Set<Teacher> teachers) {
         if (teachers != null && !teachers.isEmpty()) {
             teachers.forEach(subject::removeTeacher);
+            teachers.forEach(t -> t.removeSubject(subject));
             teacherRepository.saveAll(teachers);
             subjectRepository.save(subject);
         }
