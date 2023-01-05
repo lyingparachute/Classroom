@@ -47,7 +47,7 @@ public class Subject {
         teacher.getSubjects().remove(this);
     }
 
-    public void assignTeacher(Teacher teacher) {
+    public void addTeacher(Teacher teacher) {
         this.teachers.add(teacher);
         teacher.getSubjects().add(this);
     }
