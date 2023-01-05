@@ -128,7 +128,8 @@ public class InitData {
     public Subject createSubjectMaths(List<Teacher> teachers){
         Subject subject = new Subject();
         subject.setShortName("MATHS");
-        subject.setDescription("Mathematics");
+        subject.setLongName("Mathematics");
+        subject.setDescription("Calculating integrals");
         subject.setHoursInSemester(100);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(subject::addTeacher);
@@ -143,7 +144,8 @@ public class InitData {
     public Subject createSubjectArt(List<Teacher> teachers){
         Subject subject = new Subject();
         subject.setShortName("ART");
-        subject.setDescription("Art");
+        subject.setLongName("Art");
+        subject.setDescription("Painting");
         subject.setHoursInSemester(120);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(subject::addTeacher);
@@ -157,7 +159,8 @@ public class InitData {
     public Subject createSubjectScience(List<Teacher> teachers){
         Subject subject = new Subject();
         subject.setShortName("SCIENCE");
-        subject.setDescription("Science");
+        subject.setLongName("Science");
+        subject.setDescription("General Science");
         subject.setHoursInSemester(150);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(subject::addTeacher);
@@ -171,7 +174,8 @@ public class InitData {
     public Subject createSubjectIT(List<Teacher> teachers){
         Subject subject = new Subject();
         subject.setShortName("IT");
-        subject.setDescription("Computer Science");
+        subject.setLongName("Computer Science");
+        subject.setDescription("Learning Java and Spring");
         subject.setHoursInSemester(360);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(subject::addTeacher);
