@@ -54,7 +54,7 @@ public class Subject {
 
     @Override
     public String toString() {
-        return "id=" + id + ", name='" + shortName;
+        return "id=" + id + ", name=" + shortName;
     }
 
     @Override
