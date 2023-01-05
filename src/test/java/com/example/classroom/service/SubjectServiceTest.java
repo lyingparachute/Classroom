@@ -6,7 +6,6 @@ import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.SubjectRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.InitData;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,12 +50,8 @@ class SubjectServiceTest {
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         ArrayList<Teacher> teachers = new ArrayList<>(List.of(teacher1, teacher2));
-        SubjectDto expected = new SubjectDto();
-        expected.setShortName("SPEECH");
-        expected.setLongName("Speech therapy");
-        expected.setDescription("Classes with speech therapy specialist.");
-        expected.setHoursInSemester(80);
-        expected.setTeachers(new HashSet<>(teachers));
+        SubjectDto expected = createSubjectDto(teachers);
+
         //when
         subjectService.create(expected);
         //then
@@ -89,13 +84,8 @@ class SubjectServiceTest {
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Subject subject = initData.createSubjectArt(List.of());
-        SubjectDto expected = new SubjectDto();
+        SubjectDto expected = createSubjectDto(List.of(teacher1, teacher2));
         expected.setId(subject.getId());
-        expected.setShortName("SPEECH");
-        expected.setLongName("Speech therapy");
-        expected.setDescription("Classes with speech therapy specialist.");
-        expected.setHoursInSemester(80);
-        expected.setTeachers(new HashSet<>(List.of(teacher1, teacher2)));
         //when
         subjectService.update(expected);
         //then
@@ -124,12 +114,8 @@ class SubjectServiceTest {
     @Test
     void update_throwsIllegalArgumentException_givenWrongStudentDto() {
         //given
-        SubjectDto dto = new SubjectDto();
+        SubjectDto dto = createSubjectDto(List.of());
         dto.setId(1L);
-        dto.setShortName("SPEECH");
-        dto.setLongName("Speech therapy");
-        dto.setDescription("Classes with speech therapy specialist.");
-        dto.setHoursInSemester(80);
         //when
         Throwable thrown = catchThrowable(() -> subjectService.update(dto));
         //then
@@ -215,9 +201,9 @@ class SubjectServiceTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
 
-        Subject subject1 = initData.createSubjectIT(List.of(teacher1, teacher2));
-        Subject subject2 = initData.createSubjectMaths(List.of(teacher3));
-        Subject subject3 = initData.createSubjectScience(List.of(teacher1, teacher2, teacher3));
+        Subject expected1 = initData.createSubjectIT(List.of(teacher1, teacher2));
+        Subject expected2 = initData.createSubjectMaths(List.of(teacher3));
+        Subject expected3 = initData.createSubjectScience(List.of(teacher1, teacher2, teacher3));
         int pageNo = 2;
         int pageSize = 2;
         String sortField = "shortName";
@@ -228,10 +214,10 @@ class SubjectServiceTest {
         List<SubjectDto> actualContent = actualPage.getContent();
         assertThat(actualContent).size().isEqualTo(1);
         SubjectDto actual = actualContent.get(0);
-        assertThat(actual.getShortName()).isEqualTo(subject1.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(subject1.getLongName());
-        assertThat(actual.getDescription()).isEqualTo(subject1.getDescription());
-        assertThat(actual.getHoursInSemester()).isEqualTo(subject1.getHoursInSemester());
+        assertThat(actual.getShortName()).isEqualTo(expected1.getShortName());
+        assertThat(actual.getLongName()).isEqualTo(expected1.getLongName());
+        assertThat(actual.getDescription()).isEqualTo(expected1.getDescription());
+        assertThat(actual.getHoursInSemester()).isEqualTo(expected1.getHoursInSemester());
         assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
@@ -254,14 +240,14 @@ class SubjectServiceTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
 
-        Subject subject = initData.createSubjectArt(List.of(teacher1, teacher2, teacher3));
+        Subject expected = initData.createSubjectArt(List.of(teacher1, teacher2, teacher3));
         //when
-        SubjectDto actual = subjectService.fetchById(subject.getId());
+        SubjectDto actual = subjectService.fetchById(expected.getId());
         //then
-        assertThat(actual.getShortName()).isEqualTo(subject.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(subject.getLongName());
-        assertThat(actual.getDescription()).isEqualTo(subject.getDescription());
-        assertThat(actual.getHoursInSemester()).isEqualTo(subject.getHoursInSemester());
+        assertThat(actual.getShortName()).isEqualTo(expected.getShortName());
+        assertThat(actual.getLongName()).isEqualTo(expected.getLongName());
+        assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
+        assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
         assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
@@ -298,15 +284,16 @@ class SubjectServiceTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
 
-        Subject subject = initData.createSubjectArt(List.of(teacher1, teacher2, teacher3));
+        Subject expected = initData.createSubjectArt(List.of(teacher1, teacher2, teacher3));
         //when
-        subjectService.remove(subject.getId());
+        subjectService.remove(expected.getId());
         //then
-        Optional<Subject> byId = subjectRepository.findById(subject.getId());
+        Optional<Subject> byId = subjectRepository.findById(expected.getId());
         assertThat(byId).isNotPresent();
-        Assertions.assertThat(teacherRepository.findById(teacher1.getId())).isPresent();
-        Assertions.assertThat(teacherRepository.findById(teacher2.getId())).isPresent();
-        Assertions.assertThat(teacherRepository.findById(teacher3.getId())).isPresent();
+        expected.getTeachers().forEach(teacher -> {
+            teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
+                    "Teacher with ID = " + teacher.getId() + " should not be removed."));
+        });
     }
 
     @Test
@@ -454,5 +441,15 @@ class SubjectServiceTest {
                                 teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
                                 teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()));
+    }
+
+    private SubjectDto createSubjectDto(List<Teacher> teachers) {
+        SubjectDto subjectDto = new SubjectDto();
+        subjectDto.setShortName("SPEECH");
+        subjectDto.setLongName("Speech therapy");
+        subjectDto.setDescription("Classes with speech therapy specialist.");
+        subjectDto.setHoursInSemester(80);
+        subjectDto.setTeachers(new HashSet<Teacher>(teachers));
+        return subjectDto;
     }
 }
