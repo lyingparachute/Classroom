@@ -48,6 +48,7 @@ public class Teacher {
     @Enumerated(EnumType.STRING)
     private SubjectEnum subjectEnum;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.MERGE,
