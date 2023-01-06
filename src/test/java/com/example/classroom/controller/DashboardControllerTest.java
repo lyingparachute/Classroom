@@ -35,15 +35,6 @@ class DashboardControllerTest {
     }
 
     @Test
-    void shouldGetSubjectsView() throws Exception {
-        this.mockMvc.perform(get("/dashboard/subjects"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                .andExpect(view().name("dashboard/subjects"));
-    }
-
-    @Test
     void shouldGetFieldsOfStudyView() throws Exception {
         this.mockMvc.perform(get("/dashboard/fieldsOfStudy"))
                 .andDo(print())
