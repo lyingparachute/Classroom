@@ -1,0 +1,32 @@
+<!-- ======= Subjects sorting ======= -->
+<th scope="col" th:fragment="subjectsSorting(field, label)">
+  <a th:href="@{'/dashboard/subjects?' + ${longName != null && longName!=''? 'keyword=' + longName + '&' : ''}
+                + 'page=' + ${currentPage} + '&size=' + ${pageSize}
+                + ${sortField != null ? '&sortField=' + field : ''}
+                + ${sortDir != null ? '&sortDir=' + (sortField == field ? reverseSortDir : sortDir) : '' }}">
+    [[${label}]] </a>
+  <i th:if="${sortField == field}"
+     th:class="${sortDir == 'asc' ? 'fas fa-arrow-down-short-wide' : 'fas fa-arrow-up-short-wide'}"></i>
+</th>
+
+<!-- ======= Students sorting ======= -->
+<th scope="col" th:fragment="studentsSorting(field, label)">
+  <a th:href="@{'/dashboard/students?' + ${name != null && name!=''? 'keyword=' + name + '&' : ''}
+                + 'page=' + ${currentPage} + '&size=' + ${pageSize}
+                + ${sortField != null ? '&sortField=' + field : ''}
+                + ${sortDir != null ? '&sortDir=' + (sortField == field ? reverseSortDir : sortDir) : '' }}">
+    [[${label}]] </a>
+  <i th:if="${sortField == field}"
+     th:class="${sortDir == 'asc' ? 'fas fa-arrow-down-short-wide' : 'fas fa-arrow-up-short-wide'}"></i>
+</th>
+
+<!-- ======= Teachers sorting ======= -->
+<th scope="col" th:fragment="teachersSorting(field, label)">
+  <a th:href="@{'/dashboard/teachers?' + ${name != null && name!=''? 'keyword=' + name + '&' : ''}
+                + 'page=' + ${currentPage} + '&size=' + ${pageSize}
+                + ${sortField != null ? '&sortField=' + field : ''}
+                + ${sortDir != null ? '&sortDir=' + (sortField == field ? reverseSortDir : sortDir) : '' }}">
+    [[${label}]] </a>
+  <i th:if="${sortField == field}"
+     th:class="${sortDir == 'asc' ? 'fas fa-arrow-down-short-wide' : 'fas fa-arrow-up-short-wide'}"></i>
+</th>

@@ -1,0 +1,29 @@
+<!-- ======= Subjects paging ======= -->
+<a th:fragment="subjectsPaging(pageNum, label, tooltip)" class="page-link"
+   th:href="@{'/dashboard/subjects?' + ${longName != null && longName != '' ? 'name=' + longName + '&' : ''}
+                           + 'page=' + ${pageNum} + '&size=' + ${pageSize}
+                           + ${sortField != null ? '&sortField=' + sortField : ''}
+                           + ${sortDir != null ? '&sortDir=' + sortDir : ''} }"
+   th:title="${tooltip}" rel="tooltip">
+  [[${label}]]
+</a>
+
+<!-- ======= Students paging ======= -->
+<a th:fragment="studentsPaging(pageNum, label, tooltip)" class="page-link"
+   th:href="@{'/dashboard/students?' + ${name != null && name != '' ? 'name=' + name + '&' : ''}
+                           + 'page=' + ${pageNum} + '&size=' + ${pageSize}
+                           + ${sortField != null ? '&sortField=' + sortField : ''}
+                           + ${sortDir != null ? '&sortDir=' + sortDir : ''} }"
+   th:title="${tooltip}" rel="tooltip">
+  [[${label}]]
+</a>
+
+<!-- ======= Teachers paging ======= -->
+<a th:fragment="teachersPaging(pageNum, label, tooltip)" class="page-link"
+   th:href="@{'/dashboard/teachers?' + ${name != null && name != '' ? 'name=' + name + '&' : ''}
+                           + 'page=' + ${pageNum} + '&size=' + ${pageSize}
+                           + ${sortField != null ? '&sortField=' + sortField : ''}
+                           + ${sortDir != null ? '&sortDir=' + sortDir : ''} }"
+   th:title="${tooltip}" rel="tooltip">
+  [[${label}]]
+</a>
