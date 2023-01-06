@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{subjects.new}"></strong>
+                    </h3>
+                </div>
+                <div class="card-body mx-4">
+                    <form class="form-group needs-validation"
+                          th:object="${subject}"
+                          th:action="@{/dashboard/subjects/new}"
+                          th:method="post">
+
+                        <div class="row mb-4">
+                            <label class="col-form-label col-sm-4"
+                                   for="first_name">
+                                <span th:text="#{subject.name}"></span>
+                            </label>
+                            <div class="col-sm">
+                                <input class="form-control"
+                                       type="text"
+                                       id="first_name"
+                                       th:field="*{getName}"
+                                />
+                            </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('firstName')}"
+                                 th:errors="*{firstName}"></div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <label class="col-form-label col-sm-4"
+                                   for="last_name">
+                                <span th:text="#{subject.lastName}"></span>
+                            </label>
+                            <div class="col-sm">
+                                <input class="form-control"
+                                       type="text"
+                                       id="last_name"
+                                       th:field="*{lastName}"
+                                />
+                            </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('lastName')}"
+                                 th:errors="*{lastName}"></div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <label class="col-form-label col-sm-4"
+                                   for="email">
+                                <span th:text="#{subject.email}"></span>
+                            </label>
+                            <div class="col-sm">
+                                <input class="form-control"
+                                       type="text"
+                                       id="email"
+                                       th:field="*{email}"
+                                />
+                            </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}"
+                                 th:errors="*{email}"></div>
+                        </div>
+
+
+                        <div class="row mb-4">
+                            <label class="col-sm-4 col-form-label"
+                                   for="age">
+                                <span th:text="#{subject.hoursInSemester}"></span>
+                            </label>
+                            <div class="col-sm">
+                                <input class="form-control"
+                                       type="number" id="age"
+                                       th:field="*{hoursInSemester}"/>
+                            </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('hoursInSemester')}"
+                                 th:errors="*{hoursInSemester}">
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-4">
+                            <label class="col-form-label col-sm-4"
+                                   for="teachers_list">
+                                <span th:text="#{subject.teachers.list}"></span>
+                            </label>
+                            <div class="col-sm text-left">
+                                <th:block th:each="fieldOpt : ${teachers}">
+                                    <div>
+                                        <input class="form-check-input m-2" type="checkbox" value="" id="teachers_list"
+                                               th:field="*{teachers}"
+                                               th:value="${fieldOpt.id}" th:text="${fieldOpt}">
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+
+                        <!-- ======= Buttons ======= -->
+                        <div th:replace="fragments/buttons :: #subjectCancelSubmitBtn"></div>
+
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+</body>
+</html>

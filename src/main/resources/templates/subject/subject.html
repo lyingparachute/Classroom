@@ -20,11 +20,10 @@
                 <div class="card-body mx-4">
                     <ul class="list-group list-group-root well">
                         <li class="list-group-item" th:text="#{table.id} + ': ' + ${subject.id}"></li>
-                        <li class="list-group-item" th:text="#{subject.shortName} + ': ' + ${subject.shortName}"></li>
-                        <li class="list-group-item" th:text="#{subject.longName} + ': ' + ${subject.longName}"></li>
+                        <li class="list-group-item" th:text="#{subject.name} + ': ' + ${subject.name}"></li>
                         <li class="list-group-item" th:text="#{subject.description} + ': ' + ${subject.description}"></li>
                         <li class="list-group-item" th:text="#{subject.hoursInSemester} + ': ' + ${subject.hoursInSemester}"></li>
-                        <li class="list-group-item" th:text="#{subject.teachers.list}">List of assigned teachers:
+                        <li class="list-group-item" th:text="#{subject.teachers.list}">
                             <ul class="list-group">
                                 <a class="list-group-item"
                                    th:href="@{/teachers/{id}(id=${fieldOpt.id})}"

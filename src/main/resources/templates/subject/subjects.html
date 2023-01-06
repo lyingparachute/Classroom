@@ -68,7 +68,7 @@
                             <tr>
                                 <th th:replace="fragments/sorting :: subjectsSorting('id','ID number')">
                                 </th>
-                                <th th:replace="fragments/sorting :: subjectsSorting('longName','Subject Name')">
+                                <th th:replace="fragments/sorting :: subjectsSorting('name','Subject Name')">
                                 </th>
                                 <th th:replace="fragments/sorting :: subjectsSorting('description','Description')">
                                 </th>
@@ -87,7 +87,7 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#subjectViewModal">
                                 <td th:text="${subject.id}"/>
-                                <td th:text="${subject.longName}"/>
+                                <td th:text="${subject.name}"/>
                                 <td th:text="${subject.description}"/>
                                 <td th:text="${subject.hoursInSemester}"/>
                                 <td th:text="${subject.teachers.size()}"/>
@@ -106,7 +106,7 @@
                                        class="fa fa-trash-can fa-lg delBtn mr-2"
                                        th:href="@{/dashboard/subjects/delete/{id}(id=${subject.id})}"
                                        th:title="#{button.delete}"
-                                       th:name="${subject.longName}"
+                                       th:name="${subject.name}"
                                        data-bs-toggle="modal"
                                        data-bs-target="#deleteModal">
                                     </a>
@@ -183,6 +183,11 @@
     </div>
 </main>
 
+<!-- Delete modal -->
+<div th:replace="fragments/modals :: deleteModal"></div>
+
+<!-- Custom script -->
+<script type="text/javascript" th:src="@{/js/subjects.js}"></script>
 <!-- JS Scripts -->
 <div th:replace="fragments/imports/scripts :: scripts"></div>
 </body>

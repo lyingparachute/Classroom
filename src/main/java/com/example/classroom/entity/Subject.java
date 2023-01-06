@@ -22,9 +22,7 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String shortName;
-
-    private String longName;
+    private String name;
 
     @Length(max = 500)
     private String description;
@@ -56,8 +54,7 @@ public class Subject {
     public String toString() {
         return "Subject{" +
                 "id=" + id +
-                ", shortName='" + shortName + '\'' +
-                ", longName='" + longName + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 
@@ -66,11 +63,11 @@ public class Subject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subject subject = (Subject) o;
-        return id.equals(subject.id) && Objects.equals(shortName, subject.shortName) && Objects.equals(description, subject.description) && Objects.equals(teachers, subject.teachers);
+        return id.equals(subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && Objects.equals(teachers, subject.teachers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, shortName, description, teachers);
+        return Objects.hash(id, name, description, teachers);
     }
 }

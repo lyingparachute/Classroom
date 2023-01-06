@@ -57,8 +57,7 @@ class SubjectServiceTest {
         Optional<Subject> byId = subjectRepository.findAll().stream().findFirst();
         assertThat(byId).isPresent();
         Subject actual = byId.get();
-        assertThat(actual.getShortName()).isEqualTo(expected.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(expected.getLongName());
+        assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
         assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
         assertThat(actual.getTeachers()).size().isEqualTo(2);
@@ -90,8 +89,7 @@ class SubjectServiceTest {
         Optional<Subject> byId = subjectRepository.findById(expected.getId());
         assertThat(byId).isPresent();
         Subject actual = byId.get();
-        assertThat(actual.getShortName()).isEqualTo(expected.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(expected.getLongName());
+        assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
         assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
         assertThat(actual.getTeachers())
@@ -137,8 +135,7 @@ class SubjectServiceTest {
         SubjectDto actual1 = actual.get(0);
         SubjectDto actual2 = actual.get(1);
         SubjectDto actual3 = actual.get(2);
-        assertThat(actual1.getShortName()).isEqualTo(expected1.getShortName());
-        assertThat(actual1.getLongName()).isEqualTo(expected1.getLongName());
+        assertThat(actual1.getName()).isEqualTo(expected1.getName());
         assertThat(actual1.getDescription()).isEqualTo(expected1.getDescription());
         assertThat(actual1.getHoursInSemester()).isEqualTo(expected1.getHoursInSemester());
         assertThat(actual1.getTeachers())
@@ -153,8 +150,7 @@ class SubjectServiceTest {
                                 teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
                                 teacher2.getEmail(), teacher2.getAge()));
-        assertThat(actual2.getShortName()).isEqualTo(expected2.getShortName());
-        assertThat(actual2.getLongName()).isEqualTo(expected2.getLongName());
+        assertThat(actual2.getName()).isEqualTo(expected2.getName());
         assertThat(actual2.getDescription()).isEqualTo(expected2.getDescription());
         assertThat(actual2.getHoursInSemester()).isEqualTo(expected2.getHoursInSemester());
         assertThat(actual2.getTeachers())
@@ -167,8 +163,7 @@ class SubjectServiceTest {
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
                                 teacher3.getEmail(), teacher3.getAge()));
-        assertThat(actual3.getShortName()).isEqualTo(expected3.getShortName());
-        assertThat(actual3.getLongName()).isEqualTo(expected3.getLongName());
+        assertThat(actual3.getName()).isEqualTo(expected3.getName());
         assertThat(actual3.getDescription()).isEqualTo(expected3.getDescription());
         assertThat(actual3.getHoursInSemester()).isEqualTo(expected3.getHoursInSemester());
         assertThat(actual3.getTeachers())
@@ -198,7 +193,7 @@ class SubjectServiceTest {
         Subject expected3 = initData.createSubjectScience(List.of(teacher1, teacher2, teacher3));
         int pageNo = 2;
         int pageSize = 2;
-        String sortField = "shortName";
+        String sortField = "name";
         String sortDirection = Sort.Direction.DESC.name();
         //when
         Page<SubjectDto> actualPage = subjectService.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
@@ -206,8 +201,7 @@ class SubjectServiceTest {
         List<SubjectDto> actualContent = actualPage.getContent();
         assertThat(actualContent).size().isEqualTo(1);
         SubjectDto actual = actualContent.get(0);
-        assertThat(actual.getShortName()).isEqualTo(expected1.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(expected1.getLongName());
+        assertThat(actual.getName()).isEqualTo(expected1.getName());
         assertThat(actual.getDescription()).isEqualTo(expected1.getDescription());
         assertThat(actual.getHoursInSemester()).isEqualTo(expected1.getHoursInSemester());
         assertThat(actual.getTeachers())
@@ -234,8 +228,7 @@ class SubjectServiceTest {
         //when
         SubjectDto actual = subjectService.fetchById(expected.getId());
         //then
-        assertThat(actual.getShortName()).isEqualTo(expected.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(expected.getLongName());
+        assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
         assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
         assertThat(actual.getTeachers())
@@ -304,17 +297,16 @@ class SubjectServiceTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
         Subject expected1 = initData.createSubjectIT(List.of(teacher1, teacher2));
-        Subject expected2 = initData.createSubjectMaths(List.of(teacher3));
+        Subject expected2 = initData.createSubjectArt(List.of(teacher3));
         Subject expected3 = initData.createSubjectScience(List.of(teacher1, teacher2, teacher3));
         //when
-        List<SubjectDto> actual = subjectService.findByShortName(shortName);
+        List<SubjectDto> actual = subjectService.findByName(shortName);
         //then
         assertThat(actual.size()).isEqualTo(2);
         SubjectDto actualSubject1 = actual.get(0);
         SubjectDto actualSubject2 = actual.get(1);
 
-        assertThat(actualSubject1.getShortName()).isEqualTo(expected1.getShortName());
-        assertThat(actualSubject1.getLongName()).isEqualTo(expected1.getLongName());
+        assertThat(actualSubject1.getName()).isEqualTo(expected1.getName());
         assertThat(actualSubject1.getDescription()).isEqualTo(expected1.getDescription());
         assertThat(actualSubject1.getHoursInSemester()).isEqualTo(expected1.getHoursInSemester());
         assertThat(actualSubject1.getTeachers())
@@ -329,8 +321,7 @@ class SubjectServiceTest {
                                 teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
                                 teacher2.getEmail(), teacher2.getAge()));
-        assertThat(actualSubject2.getShortName()).isEqualTo(expected3.getShortName());
-        assertThat(actualSubject2.getLongName()).isEqualTo(expected3.getLongName());
+        assertThat(actualSubject2.getName()).isEqualTo(expected3.getName());
         assertThat(actualSubject2.getDescription()).isEqualTo(expected3.getDescription());
         assertThat(actualSubject2.getHoursInSemester()).isEqualTo(expected3.getHoursInSemester());
         assertThat(actualSubject2.getTeachers())
@@ -362,8 +353,7 @@ class SubjectServiceTest {
         Optional<Subject> byId = subjectRepository.findById(expected.getId());
         assertThat(byId).isPresent();
         Subject actual = byId.get();
-        assertThat(actual.getShortName()).isEqualTo(expected.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(expected.getLongName());
+        assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
         assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
         assertThat(actual.getTeachers())
@@ -407,8 +397,7 @@ class SubjectServiceTest {
         Optional<Subject> byId = subjectRepository.findById(expected.getId());
         assertThat(byId).isPresent();
         Subject actual = byId.get();
-        assertThat(actual.getShortName()).isEqualTo(expected.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(expected.getLongName());
+        assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
         assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
         assertThat(actual.getTeachers())
@@ -427,8 +416,7 @@ class SubjectServiceTest {
 
     private SubjectDto createSubjectDto(List<Teacher> teachers) {
         SubjectDto subjectDto = new SubjectDto();
-        subjectDto.setShortName("SPEECH");
-        subjectDto.setLongName("Speech therapy");
+        subjectDto.setName("Speech therapy");
         subjectDto.setDescription("Classes with speech therapy specialist.");
         subjectDto.setHoursInSemester(80);
         subjectDto.setTeachers(new HashSet<>(teachers));

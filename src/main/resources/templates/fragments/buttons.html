@@ -79,7 +79,7 @@ Subject buttons
 <!-- Cancel and Submit form buttons -->
 <div th:fragment="subjectCancelSubmitBtn" id="subjectCancelSubmitBtn" class="row my-2 justify-content-end">
   <div class="col-auto">
-    <a class="btn btn-secondary" th:href="@{/dashboard/students}">
+    <a class="btn btn-secondary" th:href="@{/dashboard/subjects}">
       <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
   </div>
   <div class="col-auto">
@@ -91,13 +91,13 @@ Subject buttons
 <!-- Edit and Delete buttons -->
 <div th:fragment="subjectEditDeleteBtn" id="subjectEditDeleteBtn" class="row my-2 justify-content-end">
   <div class="col-auto">
-    <a class="btn btn-outline-primary" th:href="@{/dashboard/students/edit/{id}(id=${subject.id})}">
+    <a class="btn btn-outline-primary" th:href="@{/dashboard/subjects/edit/{id}(id=${subject.id})}">
       <i class="fas fa-pen mr-2"></i><span th:text="#{button.edit}"></span>
     </a>
   </div>
   <div class="col-auto">
     <a class="btn btn-outline-danger delBtn"
-       th:href="@{/dashboard/students/delete/{id}(id=${subject.id})}">
+       th:href="@{/dashboard/subjects/delete/{id}(id=${subject.id})}">
       <i class="fa fa-trash-can fa-lg mr-2"></i><span th:text="#{button.delete}"></span>
     </a>
   </div>
@@ -106,7 +106,7 @@ Subject buttons
 <!-- Go Back button -->
 <div th:fragment="subjectGoBackBtn" id="subjectGoBackBtn" class="row my-2 justify-content-center">
   <div class="col-auto">
-    <a class="btn btn-primary" th:href="@{/dashboard/students}">
+    <a class="btn btn-primary" th:href="@{/dashboard/subjects}">
       <i class="fas fa-home mr-2"></i><span th:text="#{button.go.back}"></span>
     </a>
   </div>

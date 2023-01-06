@@ -24,13 +24,13 @@ INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (10, 'Oskar',
 INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (11, 'Petroniusz', 'Tarczewski', 'p.tarczewski@gmail.com', 40);
 INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (12, 'Remigiusz', 'Śliwa', 'r.śliwa@gmail.com', 55);
 
-INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(1, 'COMPUTER SCIENCE', 'Learning Java and Spring', 45);
-INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(2, 'SYSTEMY INŻYNIERII WIEDZY', 'Learning Java and Spring', 30);
-INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(3, 'SYSTEMY STEROWANIA I WSPOMAGANIA DECYZJI', 'Learning Java and Spring', 45);
-INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(4, 'Technika wysokich napięć', 'Learning Java and Spring', 60);
-INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(5, 'Mechanika', 'Learning Java and Spring', 30);
-INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(6, 'Inżynieria materiałowa', 'Learning Java and Spring', 15);
-INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(6, 'Podstawy programowania', 'Learning Java and Spring', 15);
+INSERT INTO subjects (id, name, description, hours_in_semester) VALUES(1, 'COMPUTER SCIENCE', 'Learning Java and Spring', 45);
+INSERT INTO subjects (id, name, description, hours_in_semester) VALUES(2, 'SYSTEMY INŻYNIERII WIEDZY', 'Learning Java and Spring', 30);
+INSERT INTO subjects (id, name, description, hours_in_semester) VALUES(3, 'SYSTEMY STEROWANIA I WSPOMAGANIA DECYZJI', 'Learning Java and Spring', 45);
+INSERT INTO subjects (id, name, description, hours_in_semester) VALUES(4, 'Technika wysokich napięć', 'Learning Java and Spring', 60);
+INSERT INTO subjects (id, name, description, hours_in_semester) VALUES(5, 'Mechanika', 'Learning Java and Spring', 30);
+INSERT INTO subjects (id, name, description, hours_in_semester) VALUES(6, 'Inżynieria materiałowa', 'Learning Java and Spring', 15);
+INSERT INTO subjects (id, name, description, hours_in_semester) VALUES(6, 'Podstawy programowania', 'Learning Java and Spring', 15);
 
 INSERT INTO teacher_students (teacher_id, student_id) VALUES (1, 1);
 INSERT INTO teacher_students (teacher_id, student_id) VALUES (1, 2);

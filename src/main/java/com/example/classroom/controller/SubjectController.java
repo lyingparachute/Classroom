@@ -33,14 +33,14 @@ public class SubjectController {
     public String getSubjects(@RequestParam(required = false) String name,
                               @RequestParam(defaultValue = "1") int page,
                               @RequestParam(defaultValue = "6") int size,
-                              @RequestParam(defaultValue = "shortName") String sortField,
+                              @RequestParam(defaultValue = "name") String sortField,
                               @RequestParam(defaultValue = "asc") String sortDir,
                               Model model) {
         Page<SubjectDto> pageSubjects;
         if (name == null) {
             pageSubjects = subjectService.fetchAllPaginated(page, size, sortField, sortDir);
         } else {
-            pageSubjects = subjectService.findByShortNamePaginated(page, size, sortField, sortDir, name);
+            pageSubjects = subjectService.findByNamePaginated(page, size, sortField, sortDir, name);
             model.addAttribute("name", name);
         }
         List<SubjectDto> students = pageSubjects.getContent();
@@ -76,5 +76,12 @@ public class SubjectController {
         SubjectDto subjectDto = subjectService.fetchById(id);
         model.addAttribute("subject", subjectDto);
         return "subject/subject";
+    }
+
+    @GetMapping("new")
+    public String getNewSubjectForm(Model model) {
+        model.addAttribute("subject", new SubjectDto());
+        model.addAttribute("teachers", teacherService.fetchAll());
+        return "subject/subject-form";
     }
 }

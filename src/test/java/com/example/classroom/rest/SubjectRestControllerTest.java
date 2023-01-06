@@ -66,8 +66,7 @@ class SubjectRestControllerTest {
         SubjectDto actual = response.getBody();
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isEqualTo(subject.getId());
-        assertThat(actual.getShortName()).isEqualTo(subject.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(subject.getLongName());
+        assertThat(actual.getName()).isEqualTo(subject.getName());
         assertThat(actual.getDescription()).isEqualTo(subject.getDescription());
         assertThat(actual.getHoursInSemester()).isEqualTo(subject.getHoursInSemester());
         assertThat(actual.getTeachers())
@@ -120,8 +119,7 @@ class SubjectRestControllerTest {
         subjectRepository.findById(actual.getId()).orElseThrow(
                 () -> new IllegalStateException(
                         "Subject with ID= " + actual.getId() + " should not be missing"));
-        assertThat(actual.getShortName()).isEqualTo(subjectDto.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(subjectDto.getLongName());
+        assertThat(actual.getName()).isEqualTo(subjectDto.getName());
         assertThat(actual.getDescription()).isEqualTo(subjectDto.getDescription());
         assertThat(actual.getHoursInSemester()).isEqualTo(subjectDto.getHoursInSemester());
         assertThat(actual.getTeachers()).size().isEqualTo(2);
@@ -161,8 +159,7 @@ class SubjectRestControllerTest {
                 () -> new IllegalStateException(
                         "Subject with ID= " + actual.getId() + " should not be missing"));
         assertThat(actual.getId()).isEqualTo(subjectDto.getId());
-        assertThat(actual.getShortName()).isEqualTo(subjectDto.getShortName());
-        assertThat(actual.getLongName()).isEqualTo(subjectDto.getLongName());
+        assertThat(actual.getName()).isEqualTo(subjectDto.getName());
         assertThat(actual.getDescription()).isEqualTo(subjectDto.getDescription());
         assertThat(actual.getHoursInSemester()).isEqualTo(subjectDto.getHoursInSemester());
         assertThat(actual.getTeachers()).size().isEqualTo(2);
@@ -227,8 +224,7 @@ class SubjectRestControllerTest {
 
     private SubjectDto createSubjectDto(List<Teacher> teachers) {
         SubjectDto subjectDto = new SubjectDto();
-        subjectDto.setShortName("SPEECH");
-        subjectDto.setLongName("Speech therapy");
+        subjectDto.setName("Speech therapy");
         subjectDto.setDescription("Classes with speech therapy specialist.");
         subjectDto.setHoursInSemester(80);
         subjectDto.setTeachers(new HashSet<>(teachers));

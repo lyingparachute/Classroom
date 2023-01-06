@@ -17,8 +17,7 @@ import java.util.Set;
 public class SubjectDto implements Serializable {
 
     private Long id;
-    private String shortName;
-    private String longName;
+    private String name;
     private int hoursInSemester;
     private String description;
     private Set<Teacher> teachers = new HashSet<>();
@@ -27,8 +26,7 @@ public class SubjectDto implements Serializable {
     public String toString() {
         return "SubjectDto{" +
                 "id=" + id +
-                ", shortName='" + shortName + '\'' +
-                ", longName='" + longName + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }
