@@ -51,7 +51,7 @@
                 <!--* Library *-->
                 <a th:if="${#httpServletRequest.requestURL.toString().contains('library')}" th:href="@{/dashboard/library}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-globe fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item8}"></span>
+                        class="fas fa-book-open fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item8}"></span>
                 </a>
                 <a th:unless="${#httpServletRequest.requestURL.toString().contains('library')}" th:href="@{/dashboard/library}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
