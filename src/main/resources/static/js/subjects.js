@@ -11,13 +11,13 @@ $(document).ready(function () {
     $('.delBtn').on('click', function (event) {
         event.preventDefault();
         let link = $(this);
-        let studentName = link.attr("name");
+        let name = link.attr("name");
         let href = $(this).attr('href');
         $('#deleteModal #delRef').attr('href', href);
-        $("#confirmText").html("Are you sure you want to delete student with name \<strong\>" + studentName + "\<\/strong\>? This action cannot be undone and you will be unable to recover any data. ");
+        $("#confirmText").html("Are you sure you want to delete subject with name \<strong\>" + name + "\<\/strong\>? This action cannot be undone and you will be unable to recover any data. ");
     });
 });
 
 function changePageSize() {
-    $("#studentForm").submit();
+    $("#subjectForm").submit();
 }
