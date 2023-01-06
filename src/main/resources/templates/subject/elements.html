@@ -1,4 +1,6 @@
+<!-- ======= Form for Subject ======= -->
 <div th:fragment="subject-form">
+    <input hidden type="text" id="id_input_id" th:field="*{id}">
     <div class="row mb-4">
         <label class="col-form-label col-sm-4"
                for="first_name">
@@ -8,13 +10,11 @@
             <input class="form-control"
                    type="text"
                    id="first_name"
-                   th:field="*{name}"
-            />
+                   th:field="*{name}"/>
         </div>
         <div class="alert alert-danger" th:if="${#fields.hasErrors('name')}"
              th:errors="*{name}"></div>
     </div>
-
     <div class="row mb-4">
         <label class="col-form-label col-sm-4"
                for="last_name">
@@ -24,14 +24,11 @@
             <input class="form-control"
                    type="text"
                    id="last_name"
-                   th:field="*{description}"
-            />
+                   th:field="*{description}"/>
         </div>
         <div class="alert alert-danger" th:if="${#fields.hasErrors('description')}"
              th:errors="*{description}"></div>
     </div>
-
-
     <div class="row mb-4">
         <label class="col-sm-4 col-form-label"
                for="age">
@@ -46,8 +43,6 @@
              th:errors="*{hoursInSemester}">
         </div>
     </div>
-
-
     <div class="row mb-4">
         <label class="col-form-label col-sm-4"
                for="teachers_list">
@@ -63,12 +58,11 @@
             </th:block>
         </div>
     </div>
-
     <!-- ======= Buttons ======= -->
     <div th:replace="fragments/buttons :: #subjectCancelSubmitBtn"></div>
-
 </div>
 
+<!-- ======= View Subject card body ======= -->
 <div th:fragment="view-subject">
   <ul class="list-group list-group-root well">
     <li class="list-group-item" th:text="#{table.id} + ': ' + ${subject.id}"></li>
@@ -78,14 +72,13 @@
     <li class="list-group-item"> <span th:text="#{subject.teachers.list}"></span>
       <ul class="list-group">
         <a class="list-group-item"
-           th:href="@{/dashboard/teachers/{id}(id=${fieldOpt.id})}"
            th:each="fieldOpt : ${subject.teachers}"
+           th:href="@{/dashboard/teachers/{id}(id=${fieldOpt.id})}"
            th:value="${fieldOpt.id}"
            th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
         </a>
       </ul>
     </li>
   </ul>
-  <!-- ======= Buttons ======= -->
-  <div th:replace="fragments/buttons :: subjectEditDeleteBtn"></div>
+
 </div>
