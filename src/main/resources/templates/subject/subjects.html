@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <form th:action="@{/dashboard/subjects}"
                           method="get"
-                          id="studentForm">
+                          id="subjectForm">
                         <div class="row justify-content-end mb-1 mt-3">
                             <div class="col-auto">
                                 <a id="btnAddItem"
@@ -62,17 +62,17 @@
                             </div>
                         </div>
                     </form>
-                    <div id="studentsTable" class="table-responsive">
+                    <div id="subjectsTable" class="table-responsive">
                         <table class="table table-hover" th:if="${totalItems != 0}">
                             <thead>
                             <tr>
-                                <th th:replace="fragments/subjects-sorting :: sorting('shortName','Short Name')">
+                                <th th:replace="fragments/sorting :: subjectsSorting('id','ID number')">
                                 </th>
-                                <th th:replace="fragments/subjects-sorting :: sorting('longName','Long Name')">
+                                <th th:replace="fragments/sorting :: subjectsSorting('longName','Subject Name')">
                                 </th>
-                                <th th:replace="fragments/subjects-sorting :: sorting('description','Description')">
+                                <th th:replace="fragments/sorting :: subjectsSorting('description','Description')">
                                 </th>
-                                <th th:replace="fragments/subjects-sorting :: sorting('hoursInSemester','Hours In Semester')">
+                                <th th:replace="fragments/sorting :: subjectsSorting('hoursInSemester','Hours In Semester')">
                                 </th>
                                 <th rowspan="1" colspan="1" scope="col" th:text="#{subject.no.of.teachers}">
                                 </th>
@@ -83,10 +83,10 @@
 
                             <tbody>
                             <tr th:each="subject: ${subjects}"
-                                th:onClick="'javascript:openStudentViewModal(\''+ ${subject.id} + '\');'"
+                                th:onClick="'javascript:openSubjectViewModal(\''+ ${subject.id} + '\');'"
                                 data-bs-toggle="modal"
-                                data-bs-target="#studentViewModal">
-                                <td th:text="${subject.shortName}"/>
+                                data-bs-target="#subjectViewModal">
+                                <td th:text="${subject.id}"/>
                                 <td th:text="${subject.longName}"/>
                                 <td th:text="${subject.description}"/>
                                 <td th:text="${subject.hoursInSemester}"/>
@@ -124,7 +124,7 @@
                                                 <ul class="pagination justify-content-center">
                                                     <li class="page-item"
                                                         th:classappend="${currentPage == 1} ? 'disabled'">
-                                                        <a th:replace="fragments/paging :: subjectsPaging(pageNum, label, tooltip)(1, '<<', 'First Page')"></a>
+                                                        <a th:replace="fragments/paging :: subjectsPaging(1, '<<', 'First Page')"></a>
                                                     </li>
                                                     <li class="page-item font-weight-bold"
                                                         th:classappend="${currentPage == 1} ? 'disabled'">
@@ -157,7 +157,7 @@
                                         <div class="col text-end">
                                             <label for="pageSize" th:text="#{table.rows.per.page}"></label>
                                             <select id="pageSize"
-                                                    form="studentForm"
+                                                    form="subjectForm"
                                                     name="size"
                                                     th:value="${pageSize}"
                                                     onchange="changePageSize()"
