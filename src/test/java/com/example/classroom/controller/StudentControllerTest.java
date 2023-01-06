@@ -93,13 +93,12 @@ class StudentControllerTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()));
+                                teacher2.getEmail(), teacher2.getAge()));
     }
 
     @Test
@@ -167,12 +166,11 @@ class StudentControllerTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()));
+                                teacher2.getEmail(), teacher2.getAge()));
     }
 }

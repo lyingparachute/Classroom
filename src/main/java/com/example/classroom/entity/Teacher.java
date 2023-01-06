@@ -1,6 +1,5 @@
 package com.example.classroom.entity;
 
-import com.example.classroom.enums.SubjectEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,9 +43,6 @@ public class Teacher {
     @NotEmpty(message = "{message.empty}")
     @Email(message = "{message.valid.email}")
     private String email;
-
-    @Enumerated(EnumType.STRING)
-    private SubjectEnum subjectEnum;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER,

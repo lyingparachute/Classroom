@@ -3,11 +3,9 @@ package com.example.classroom.controller;
 import com.example.classroom.dto.TeacherDto;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Teacher;
-import com.example.classroom.enums.SubjectEnum;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.InitData;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,7 +60,6 @@ class TeacherControllerTest {
         teacherDto.setLastName("Mostowiak");
         teacherDto.setEmail("m.mostowiak@gmail.com");
         teacherDto.setAge(42);
-        teacherDto.setSubjectEnum(SubjectEnum.MATHS);
         //when
         this.mockMvc.perform(post("/dashboard/teachers/new")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -70,7 +67,6 @@ class TeacherControllerTest {
                                 "&lastName=" + teacherDto.getLastName() +
                                 "&email=" + teacherDto.getEmail() +
                                 "&age=" + teacherDto.getAge() +
-                                "&subject=" + teacherDto.getSubjectEnum() +
                                 "&studentsList=" + student1.getId() +
                                 "&_studentsList=on" +
                                 "&studentsList=" + student2.getId() +
@@ -86,8 +82,7 @@ class TeacherControllerTest {
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
-        Assertions.assertThat(actual.getSubjectEnum()).isEqualTo(teacherDto.getSubjectEnum());
-        Assertions.assertThat(actual.getStudentsList())
+        assertThat(actual.getStudentsList())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -133,7 +128,6 @@ class TeacherControllerTest {
         teacherDto.setLastName("Mostowiak");
         teacherDto.setEmail("m.mostowiak@gmail.com");
         teacherDto.setAge(42);
-        teacherDto.setSubjectEnum(SubjectEnum.MATHS);
         //when
         this.mockMvc.perform(post("/dashboard/teachers/update")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -142,7 +136,6 @@ class TeacherControllerTest {
                                 "&lastName=" + teacherDto.getLastName() +
                                 "&email=" + teacherDto.getEmail() +
                                 "&age=" + teacherDto.getAge() +
-                                "&subject=" + teacherDto.getSubjectEnum() +
                                 "&studentsList=" + student1.getId() +
                                 "&_studentsList=on" +
                                 "&studentsList=" + student2.getId() +
@@ -158,8 +151,7 @@ class TeacherControllerTest {
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
-        Assertions.assertThat(actual.getSubjectEnum()).isEqualTo(teacherDto.getSubjectEnum());
-        Assertions.assertThat(actual.getStudentsList())
+        assertThat(actual.getStudentsList())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,

@@ -1,7 +1,7 @@
 package com.example.classroom.dto;
 
 import com.example.classroom.entity.Student;
-import com.example.classroom.enums.SubjectEnum;
+import com.example.classroom.entity.Subject;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,12 +22,12 @@ public class TeacherDto implements Serializable {
     private String lastName;
     private int age;
     private String email;
-    private SubjectEnum subjectEnum;
     private Set<Student> studentsList = new HashSet<>();
+    private Set<Subject> subjects = new HashSet<>();
 
     @Override
     public String toString() {
         return firstName + " " + lastName +
-                ", subjectEnum=" + subjectEnum.getDesc();
+                ", subjects=" + subjects.size();
     }
 }

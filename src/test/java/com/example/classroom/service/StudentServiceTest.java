@@ -76,13 +76,12 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()));
+                                teacher2.getEmail(), teacher2.getAge()));
     }
 
     @Test
@@ -116,13 +115,12 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()));
+                                teacher2.getEmail(), teacher2.getAge()));
     }
 
     @Test
@@ -171,13 +169,12 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()));
+                                teacher2.getEmail(), teacher2.getAge()));
         assertThat(actualStudent2.getFirstName()).isEqualTo(student2.getFirstName());
         assertThat(actualStudent2.getLastName()).isEqualTo(student2.getLastName());
         assertThat(actualStudent2.getEmail()).isEqualTo(student2.getEmail());
@@ -189,11 +186,10 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubjectEnum()));
+                                teacher3.getEmail(), teacher3.getAge()));
         assertThat(actualStudent3.getFirstName()).isEqualTo(student3.getFirstName());
         assertThat(actualStudent3.getLastName()).isEqualTo(student3.getLastName());
         assertThat(actualStudent3.getEmail()).isEqualTo(student3.getEmail());
@@ -205,15 +201,14 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()),
+                                teacher2.getEmail(), teacher2.getAge()),
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubjectEnum()));
+                                teacher3.getEmail(), teacher3.getAge()));
     }
 
     @Test
@@ -247,15 +242,14 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()),
+                                teacher2.getEmail(), teacher2.getAge()),
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubjectEnum()));
+                                teacher3.getEmail(), teacher3.getAge()));
     }
 
     @Test
@@ -280,15 +274,14 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()),
+                                teacher2.getEmail(), teacher2.getAge()),
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubjectEnum()));
+                                teacher3.getEmail(), teacher3.getAge()));
     }
 
     @Test
@@ -362,11 +355,10 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubjectEnum()));
+                                teacher3.getEmail(), teacher3.getAge()));
         assertThat(actualStudent2.getFirstName()).isEqualTo(student3.getFirstName());
         assertThat(actualStudent2.getLastName()).isEqualTo(student3.getLastName());
         assertThat(actualStudent2.getEmail()).isEqualTo(student3.getEmail());
@@ -378,15 +370,14 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()),
+                                teacher2.getEmail(), teacher2.getAge()),
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                teacher3.getEmail(), teacher3.getAge(), teacher3.getSubjectEnum()));
+                                teacher3.getEmail(), teacher3.getAge()));
     }
 
     @Test
@@ -413,13 +404,12 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()));
+                                teacher2.getEmail(), teacher2.getAge()));
     }
 
     @Test
@@ -437,13 +427,12 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).contains(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()));
+                                teacher2.getEmail(), teacher2.getAge()));
         //when
         studentService.removeTeachers(student, new HashSet<>(student.getTeachersList()));
         //then
@@ -461,12 +450,11 @@ class StudentServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getSubjectEnum
+                        Teacher::getAge
                 ).doesNotContain(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getSubjectEnum()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getSubjectEnum()));
+                                teacher2.getEmail(), teacher2.getAge()));
     }
 }

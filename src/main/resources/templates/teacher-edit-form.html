@@ -89,20 +89,6 @@
 
                         <div class="row mb-4">
                             <label class="col-form-label col-sm-4"
-                                   for="field_of_study">
-                                <span th:text="#{teacher.subject}"></span>
-                            </label>
-                            <div class="col-sm">
-                                <select class="form-select" id="field_of_study" th:field="*{getSubjectEnum}">
-                                    <option th:each="fieldOpt : ${T(systems.ultimate.classroom.enums.SubjectEnum).values()}"
-                                            th:value="${fieldOpt}" th:text="${fieldOpt.desc}">
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label class="col-form-label col-sm-4"
                                    for="students_list">
                                 <span th:text="#{teacher.studentList}"></span>
                             </label>

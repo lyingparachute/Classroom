@@ -3,11 +3,9 @@ package com.example.classroom.rest;
 import com.example.classroom.dto.TeacherDto;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Teacher;
-import com.example.classroom.enums.SubjectEnum;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.InitData;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,7 +65,6 @@ class TeacherRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(teacher.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacher.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacher.getAge());
-        Assertions.assertThat(actual.getSubjectEnum()).isEqualTo(teacher.getSubjectEnum());
         assertThat(actual.getStudentsList())
                 .extracting(
                         Student::getId,
@@ -109,7 +106,7 @@ class TeacherRestControllerTest {
         TeacherDto teacherDto = createTeacherDto(student1, student2);
         //when
         URI url = createURL("/api/teachers/create");
-        ResponseEntity<TeacherDto> response = restTemplate.postForEntity(url, teacherDto ,TeacherDto.class);
+        ResponseEntity<TeacherDto> response = restTemplate.postForEntity(url, teacherDto, TeacherDto.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         TeacherDto actual = response.getBody();
@@ -122,7 +119,6 @@ class TeacherRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
-        Assertions.assertThat(actual.getSubjectEnum()).isEqualTo(teacherDto.getSubjectEnum());
         assertThat(actual.getStudentsList()).size().isEqualTo(2);
         assertThat(actual.getStudentsList())
                 .extracting(
@@ -151,13 +147,12 @@ class TeacherRestControllerTest {
         teacherDto.setLastName("Messi");
         teacherDto.setEmail("l.messi@gmail.com");
         teacherDto.setAge(35);
-        teacherDto.setSubjectEnum(SubjectEnum.ART);
         teacherDto.setStudentsList(new HashSet<>(List.of(student1, student2)));
 
         //when
         URI url = createURL("/api/teachers/");
         final HttpEntity<TeacherDto> requestUpdate = new HttpEntity<>(teacherDto);
-        ResponseEntity<TeacherDto> response = restTemplate.exchange(url, HttpMethod.PUT, requestUpdate ,TeacherDto.class);
+        ResponseEntity<TeacherDto> response = restTemplate.exchange(url, HttpMethod.PUT, requestUpdate, TeacherDto.class);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -171,7 +166,6 @@ class TeacherRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
-        Assertions.assertThat(actual.getSubjectEnum()).isEqualTo(teacherDto.getSubjectEnum());
         assertThat(actual.getStudentsList())
                 .extracting(
                         Student::getId,
@@ -207,13 +201,12 @@ class TeacherRestControllerTest {
         });
     }
 
-    private TeacherDto createTeacherDto(Student studentOne, Student studentTwo){
+    private TeacherDto createTeacherDto(Student studentOne, Student studentTwo) {
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setFirstName("Jagoda");
         teacherDto.setLastName("Kowalska");
         teacherDto.setEmail("j.kowalska@gmail.com");
         teacherDto.setAge(33);
-        teacherDto.setSubjectEnum(SubjectEnum.SCIENCE);
         HashSet<Student> students = new HashSet<>();
         students.add(studentOne);
         students.add(studentTwo);

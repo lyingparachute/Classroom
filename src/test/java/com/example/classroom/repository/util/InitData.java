@@ -4,7 +4,6 @@ import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.enums.FieldOfStudy;
-import com.example.classroom.enums.SubjectEnum;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.SubjectRepository;
 import com.example.classroom.repository.TeacherRepository;
@@ -89,7 +88,6 @@ public class InitData {
         teacher.setLastName("Adamczuk");
         teacher.setEmail("j.adamczuk@gmail.com");
         teacher.setAge(45);
-        teacher.setSubjectEnum(SubjectEnum.IT);
         if (students != null && !students.isEmpty()){
             students.forEach(teacher::addStudent);
         }
@@ -103,7 +101,6 @@ public class InitData {
         teacher.setLastName("Kowalska");
         teacher.setEmail("j.kowalska@gmail.com");
         teacher.setAge(33);
-        teacher.setSubjectEnum(SubjectEnum.SCIENCE);
         if (students != null && !students.isEmpty()){
             students.forEach(teacher::addStudent);
         }
@@ -117,7 +114,6 @@ public class InitData {
         teacher.setLastName("Bartosiewicz");
         teacher.setEmail("g.bartosiewicz@gmail.com");
         teacher.setAge(51);
-        teacher.setSubjectEnum(SubjectEnum.ART);
         if (students != null && !students.isEmpty()){
             students.forEach(teacher::addStudent);
         }

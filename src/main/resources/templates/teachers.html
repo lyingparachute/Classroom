@@ -76,8 +76,6 @@
                                 </th>
                                 <th th:replace="fragments/sorting :: teachersSorting('email','Email')">
                                 </th>
-                                <th th:replace="fragments/sorting :: teachersSorting('subject','Subject')">
-                                </th>
                                 <th rowspan="1" colspan="1" scope="col" th:text="#{teacher.no.of.students}">
                                 </th>
                                 <th rowspan="2" colspan="1" scope="col" th:text="#{button.action}"
@@ -94,7 +92,6 @@
                                 <td th:text="${teacher.lastName}"/>
                                 <td th:text="${teacher.age}"/>
                                 <td th:text="${teacher.email}"/>
-                                <td th:text="${teacher.getSubjectEnum.getDesc()}"/>
                                 <td th:text="${teacher.studentsList.size()}"/>
                                 <td>
                                     <div>

@@ -11,18 +11,26 @@ INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VA
 INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (11, 'Karol', 'Zimerman', 'k.zimerman@gmail.com', 20, 'ELECTRICAL');
 INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (12, 'Kosma', 'Wyrwicz', 'k.wyrwicz@gmail.com', 21, 'ELECTRONICS');
 
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (1, 'Grzegorz', 'Wrzyszcz', 'g.wrzyszcz@gmail.com', 48, 'MATHS');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (2, 'Jagoda', 'Wosz', 'j.wosz@gmail.com', 33, 'SCIENCE');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (3, 'Adam', 'Wojtyna', 'a.wojtyna@gmail.com', 40, 'ART');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (4, 'Jarosław', 'Widera', 'j.widera@gmail.com', 55, 'IT');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (5, 'Ludwik', 'Kostro', 'l.kostro@gmail.com', 48, 'MATHS');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (6, 'Marian', 'Kowalska', 'm.kowalska@gmail.com', 33, 'SCIENCE');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (7, 'Maximilian', 'Batista', 'm.batista@gmail.com', 40, 'ART');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (8, 'Nikolas', 'Adamczuk', 'n.adamczuk@gmail.com', 55, 'IT');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (9, 'Orest', 'Szafarczyk', 'o.szafarczyk@gmail.com', 48, 'MATHS');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (10, 'Oskar', 'Trzaskoma', 'o.trzaskoma@gmail.com', 33, 'SCIENCE');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (11, 'Petroniusz', 'Tarczewski', 'p.tarczewski@gmail.com', 40, 'ART');
-INSERT INTO teacher (id, first_name, last_name, email, age, `subject`) VALUES (12, 'Remigiusz', 'Śliwa', 'r.śliwa@gmail.com', 55, 'IT');
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (1, 'Grzegorz', 'Wrzyszcz', 'g.wrzyszcz@gmail.com', 48);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (2, 'Jagoda', 'Wosz', 'j.wosz@gmail.com', 33);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (3, 'Adam', 'Wojtyna', 'a.wojtyna@gmail.com', 40);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (4, 'Jarosław', 'Widera', 'j.widera@gmail.com', 55);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (5, 'Ludwik', 'Kostro', 'l.kostro@gmail.com', 48);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (6, 'Marian', 'Kowalska', 'm.kowalska@gmail.com', 33);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (7, 'Maximilian', 'Batista', 'm.batista@gmail.com', 40);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (8, 'Nikolas', 'Adamczuk', 'n.adamczuk@gmail.com', 55);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (9, 'Orest', 'Szafarczyk', 'o.szafarczyk@gmail.com', 48);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (10, 'Oskar', 'Trzaskoma', 'o.trzaskoma@gmail.com', 33);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (11, 'Petroniusz', 'Tarczewski', 'p.tarczewski@gmail.com', 40);
+INSERT INTO teacher (id, first_name, last_name, email, age) VALUES (12, 'Remigiusz', 'Śliwa', 'r.śliwa@gmail.com', 55);
+
+INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(1, 'COMPUTER SCIENCE', 'Learning Java and Spring', 45);
+INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(2, 'SYSTEMY INŻYNIERII WIEDZY', 'Learning Java and Spring', 30);
+INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(3, 'SYSTEMY STEROWANIA I WSPOMAGANIA DECYZJI', 'Learning Java and Spring', 45);
+INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(4, 'Technika wysokich napięć', 'Learning Java and Spring', 60);
+INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(5, 'Mechanika', 'Learning Java and Spring', 30);
+INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(6, 'Inżynieria materiałowa', 'Learning Java and Spring', 15);
+INSERT INTO subjects (id, long_name, description, hours_in_semester) VALUES(6, 'Podstawy programowania', 'Learning Java and Spring', 15);
 
 INSERT INTO teacher_students (teacher_id, student_id) VALUES (1, 1);
 INSERT INTO teacher_students (teacher_id, student_id) VALUES (1, 2);
