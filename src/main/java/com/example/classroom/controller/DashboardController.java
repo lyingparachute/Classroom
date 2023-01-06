@@ -13,10 +13,6 @@ public class DashboardController {
         return "dashboard/dashboard";
     }
 
-    @GetMapping("/subjects")
-    public String getSubjects(){
-        return "dashboard/subjects";
-    }
 
     @GetMapping("/fieldsOfStudy")
     public String getFieldsOfStudy(){

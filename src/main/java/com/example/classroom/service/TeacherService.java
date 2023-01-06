@@ -33,6 +33,7 @@ public class TeacherService {
     public TeacherDto create(TeacherDto dto) {
         Teacher teacher = mapper.map(dto, Teacher.class);
         assignStudents(teacher, new HashSet<>(teacher.getStudentsList()));
+        addSubjects(teacher, new HashSet<>(teacher.getSubjects()));
         Teacher saved = teacherRepository.save(teacher);
         return mapper.map(saved, TeacherDto.class);
     }
@@ -43,8 +44,10 @@ public class TeacherService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Invalid teacher '" + dto.getFirstName() + " " + dto.getLastName() + "' with ID: " + dto.getId()));
         removeStudents(teacher, new HashSet<>(teacher.getStudentsList()));
+        removeSubjects(teacher, new HashSet<>(teacher.getSubjects()));
         mapper.map(dto, teacher);
         assignStudents(teacher, teacher.getStudentsList());
+        addSubjects(teacher, teacher.getSubjects());
         Teacher saved = teacherRepository.save(teacher);
         return mapper.map(saved, TeacherDto.class);
 
