@@ -1,6 +1,7 @@
 package com.example.classroom.entity;
 
 
+import com.example.classroom.enums.Semester;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,8 +28,15 @@ public class Subject {
     @Length(max = 500)
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    private Semester semester;
+
     @PositiveOrZero
     private int hoursInSemester;
+
+    @ManyToOne
+    @JoinColumn(name = "field_id")
+    private FieldOfStudy fieldOfStudy;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER,

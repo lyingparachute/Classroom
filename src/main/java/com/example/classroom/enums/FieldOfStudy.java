@@ -14,6 +14,4 @@ public enum FieldOfStudy {
     public String getDesc() {
         return desc;
     }
-
-
 }
