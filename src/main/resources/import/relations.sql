@@ -52,3 +52,16 @@ INSERT INTO teacher_students (teacher_id, student_id) VALUES (11, 9);
 INSERT INTO teacher_students (teacher_id, student_id) VALUES (11, 10);
 INSERT INTO teacher_students (teacher_id, student_id) VALUES (11, 11);
 INSERT INTO teacher_students (teacher_id, student_id) VALUES (11, 12);
+
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (1, 1);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (2, 2);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (3, 3);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (4, 4);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (5, 5);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (6, 6);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (7, 1);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (8, 2);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (9, 3);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (10, 4);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (11, 5);
+INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (12, 5);
