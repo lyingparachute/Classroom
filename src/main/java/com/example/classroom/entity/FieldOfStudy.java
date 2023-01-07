@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class FieldOfStudy {
     private AcademicTitle title;
 
     @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Subject> subjects;
+    private Set<Subject> subjects = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
