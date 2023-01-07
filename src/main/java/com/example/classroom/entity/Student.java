@@ -19,6 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "students")
 public class Student {
 
     @Id
