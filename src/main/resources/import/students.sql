@@ -1,0 +1,12 @@
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (1, 'Jan', 'Wawrzyniak', 'j.wawrzyniak@gmail.com', 22, 'ROBOTICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (2, 'Maciej', 'Komaranczuk', 'm.komaranczuk@gmail.com', 25, 'INFORMATICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (3, 'Weronika', 'Romanski', 'w.romanski@gmail.com', 20, 'ELECTRICAL');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (4, 'Robert', 'Kaczuk', 'r.kaczuk@gmail.com', 21, 'ELECTRONICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (5, 'Alojzy', 'Adach', 'a.adach@gmail.com', 22, 'ROBOTICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (6, 'Bogdan', 'Agaciński', 'b.agaciński@gmail.com', 25, 'INFORMATICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (7, 'Cyryl', 'Badach', 'c.badach@gmail.com', 20, 'ELECTRICAL');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (8, 'Emanuel', 'Żyra', 'e.żyra@gmail.com', 21, 'ELECTRONICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (9, 'Gniewomir', 'Żygłowicz', 'g.żygłowicz@gmail.com', 22, 'ROBOTICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (10, 'Jacenty', 'Zwierzyński', 'j.zwierzyński@gmail.com', 25, 'INFORMATICS');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (11, 'Karol', 'Zimerman', 'k.zimerman@gmail.com', 20, 'ELECTRICAL');
+INSERT INTO student (id, first_name, last_name, email, age, `field_of_study`) VALUES (12, 'Kosma', 'Wyrwicz', 'k.wyrwicz@gmail.com', 21, 'ELECTRONICS');
