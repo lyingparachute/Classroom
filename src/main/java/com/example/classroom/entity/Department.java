@@ -5,7 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,6 +29,9 @@ public class Department {
     @ManyToOne
     @JoinColumn(name = "dean_id")
     private Teacher dean;
+
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<FieldOfStudy> fieldsOfStudy = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

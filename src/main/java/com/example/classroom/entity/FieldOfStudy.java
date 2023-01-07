@@ -33,6 +33,10 @@ public class FieldOfStudy {
     @Enumerated(EnumType.STRING)
     private AcademicTitle title;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
     @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Subject> subjects = new HashSet<>();
 
