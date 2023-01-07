@@ -1,7 +1,7 @@
 package com.example.classroom.enums;
 
 public enum AcademicTitle {
-    NONE("", "Bachelor"),
+    BACH("", "Bachelor"),
     ENG("eng.", "Engineer"),
     MGR("mgr", "Master"),
     MGR_ENG("mgr eng.", "Master Engineer"),
