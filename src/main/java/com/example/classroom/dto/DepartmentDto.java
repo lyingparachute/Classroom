@@ -1,7 +1,10 @@
 package com.example.classroom.dto;
 
 import com.example.classroom.entity.Teacher;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -9,12 +12,15 @@ import java.io.Serializable;
 /**
  * A DTO for the {@link com.example.classroom.entity.Department} entity
  */
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode
 public class DepartmentDto implements Serializable {
-    private final Long id;
-    private final String name;
-    private final String address;
+    private Long id;
+    private String name;
+    private String address;
     @Pattern(regexp = "(\\+48|0)[0-9]{9}")
-    private final int telNumber;
-    private final Teacher dean;
+    private int telNumber;
+    private Teacher dean;
 }
