@@ -47,7 +47,7 @@ class DepartmentRestControllerTest {
     void shouldGetAllDepartments() throws URISyntaxException {
         //given
         Teacher teacher = initData.createTeacherTwo(List.of());
-        initDepartment.createDepartmentOne(teacher);
+        initDepartment.createDepartmentOne(teacher, List.of());
         //when
         URI url = createURL("/api/subjects/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
