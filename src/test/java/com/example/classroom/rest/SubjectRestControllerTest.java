@@ -55,7 +55,7 @@ class SubjectRestControllerTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Subject subject = initData.createSubjectMaths(List.of(teacher1, teacher2));
+        Subject subject = initData.createSubjectOne(List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/subjects/" + subject.getId());
         ResponseEntity<SubjectDto> response = restTemplate.getForEntity(url, SubjectDto.class);
@@ -89,8 +89,8 @@ class SubjectRestControllerTest {
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
 
-        initData.createSubjectArt(List.of(teacher1));
-        initData.createSubjectIT(List.of(teacher2));
+        initData.createSubjectTwo(List.of(teacher1));
+        initData.createSubjectFour(List.of(teacher2));
         //when
         URI url = createURL("/api/subjects/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
@@ -142,7 +142,7 @@ class SubjectRestControllerTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Subject subjectEntity = initData.createSubjectMaths(List.of());
+        Subject subjectEntity = initData.createSubjectOne(List.of());
         SubjectDto subjectDto = createSubjectDto(List.of(teacher1, teacher2));
         subjectDto.setId(subjectEntity.getId());
 
@@ -180,7 +180,7 @@ class SubjectRestControllerTest {
     @Test
     void shouldDeleteSubject() throws URISyntaxException {
         //given
-        Subject subject = initData.createSubjectIT(List.of(
+        Subject subject = initData.createSubjectFour(List.of(
                 initData.createTeacherOne(List.of()),
                 initData.createTeacherTwo(List.of())));
         //when
@@ -198,10 +198,10 @@ class SubjectRestControllerTest {
     @Test
     void shouldDeleteAllSubjects() throws URISyntaxException {
         //given
-        Subject subject1 = initData.createSubjectIT(List.of(
+        Subject subject1 = initData.createSubjectFour(List.of(
                 initData.createTeacherOne(List.of()),
                 initData.createTeacherTwo(List.of())));
-        Subject subject2 = initData.createSubjectMaths(List.of(
+        Subject subject2 = initData.createSubjectOne(List.of(
                 initData.createTeacherThree(List.of()),
                 initData.createTeacherTwo(List.of())));
         //when

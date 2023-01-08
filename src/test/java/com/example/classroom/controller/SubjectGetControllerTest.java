@@ -44,7 +44,7 @@ class SubjectGetControllerTest {
 
     @Test
     void shouldGetSubjectView() throws Exception {
-        Subject subject = initData.createSubjectIT(List.of());
+        Subject subject = initData.createSubjectFour(List.of());
         this.mockMvc.perform(get("/dashboard/subjects/" + subject.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -3,7 +3,6 @@ package com.example.classroom.rest;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.DepartmentRepository;
 import com.example.classroom.repository.util.InitData;
-import com.example.classroom.repository.util.InitDepartment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,22 +31,18 @@ class DepartmentRestControllerTest {
     int randomServerPort;
 
     @Autowired
-    InitDepartment initDepartment;
-
-    @Autowired
     DepartmentRepository departmentRepository;
 
     @BeforeEach
     public void setup() {
         initData.cleanUp();
-        initDepartment.cleanUp();
     }
 
     @Test
     void shouldGetAllDepartments() throws URISyntaxException {
         //given
         Teacher teacher = initData.createTeacherTwo(List.of());
-        initDepartment.createDepartmentOne(teacher, List.of());
+        initData.createDepartmentOne(teacher, List.of());
         //when
         URI url = createURL("/api/subjects/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
