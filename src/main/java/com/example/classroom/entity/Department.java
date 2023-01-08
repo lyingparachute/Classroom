@@ -1,13 +1,10 @@
 package com.example.classroom.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -26,21 +23,17 @@ public class Department {
 
     private String address;
 
-    @Pattern(regexp = "(\\+48|0)[0-9]{9}")
+//    @Pattern(regexp = "(\\+48|0)[0-9]{9}")
     private int telNumber;
 
 
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "dean_id", referencedColumnName = "id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private Teacher dean;
 
     @JsonIgnore
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private Set<FieldOfStudy> fieldsOfStudy = new HashSet<>();
 
     public void addDean(Teacher dean){
