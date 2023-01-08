@@ -45,6 +45,14 @@ public class FieldOfStudy {
     @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Student> students = new HashSet<>();
 
+    public void addSubject(Subject subject) {
+        this.subjects.add(subject);
+    }
+
+    public void removeSubject(Subject subject) {
+        this.subjects.remove(subject);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

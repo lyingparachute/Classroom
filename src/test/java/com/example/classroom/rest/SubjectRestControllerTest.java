@@ -53,8 +53,8 @@ class SubjectRestControllerTest {
     @Test
     void shouldGetSubject() throws URISyntaxException {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         Subject subject = initData.createSubjectOne(null, List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/subjects/" + subject.getId());
@@ -86,8 +86,8 @@ class SubjectRestControllerTest {
     @Test
     void shouldGetAllSubjects() throws URISyntaxException {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
 
         initData.createSubjectTwo(List.of(teacher1));
         initData.createSubjectFour(List.of(teacher2));
@@ -105,8 +105,8 @@ class SubjectRestControllerTest {
     @Test
     void shouldCreateSubject() throws URISyntaxException {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         SubjectDto subjectDto = createSubjectDto(List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/subjects/create");
@@ -140,8 +140,8 @@ class SubjectRestControllerTest {
     @Test
     void shouldUpdateSubject() throws URISyntaxException {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         Subject subjectEntity = initData.createSubjectOne(null, List.of());
         SubjectDto subjectDto = createSubjectDto(List.of(teacher1, teacher2));
         subjectDto.setId(subjectEntity.getId());
@@ -181,8 +181,8 @@ class SubjectRestControllerTest {
     void shouldDeleteSubject() throws URISyntaxException {
         //given
         Subject subject = initData.createSubjectFour(List.of(
-                initData.createTeacherOne(List.of()),
-                initData.createTeacherTwo(List.of())));
+                initData.createTeacherOne(null, List.of(), List.of()),
+                initData.createTeacherTwo(null, List.of(), List.of())));
         //when
         URI url = createURL("/api/subjects/" + subject.getId());
         restTemplate.delete(url);
@@ -199,11 +199,11 @@ class SubjectRestControllerTest {
     void shouldDeleteAllSubjects() throws URISyntaxException {
         //given
         Subject subject1 = initData.createSubjectFour(List.of(
-                initData.createTeacherOne(List.of()),
-                initData.createTeacherTwo(List.of())));
+                initData.createTeacherOne(null, List.of(), List.of()),
+                initData.createTeacherTwo(null, List.of(), List.of())));
         Subject subject2 = initData.createSubjectOne(null, List.of(
-                initData.createTeacherThree(List.of()),
-                initData.createTeacherTwo(List.of())));
+                initData.createTeacherThree(null, List.of(), List.of()),
+                initData.createTeacherTwo(null, List.of(), List.of())));
         //when
         URI url = createURL("/api/subjects");
         restTemplate.delete(url);

@@ -47,8 +47,8 @@ class SubjectServiceTest {
     @Test
     void create_shouldSaveStudent_givenSubjectDto() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         ArrayList<Teacher> teachers = new ArrayList<>(List.of(teacher1, teacher2));
         SubjectDto expected = createSubjectDto(teachers);
         //when
@@ -78,8 +78,8 @@ class SubjectServiceTest {
     @Test
     void update_shouldUpdateSubject_givenSubjectDto() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         Subject subject = initData.createSubjectTwo(List.of());
         SubjectDto expected = createSubjectDto(List.of(teacher1, teacher2));
         expected.setId(subject.getId());
@@ -122,9 +122,9 @@ class SubjectServiceTest {
     @Test
     void fetchAll_shouldReturnAllSubjects() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Teacher teacher3 = initData.createTeacherThree(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
         Subject expected1 = initData.createSubjectFour(List.of(teacher1, teacher2));
         Subject expected2 = initData.createSubjectOne(null, List.of(teacher3));
         Subject expected3 = initData.createSubjectThree(List.of(teacher1, teacher2, teacher3));
@@ -185,9 +185,10 @@ class SubjectServiceTest {
     @Test
     void fetchAllPaginated_shouldReturnAllSubjectsPaginated_givenPageNo_PageSize_SortDir() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Teacher teacher3 = initData.createTeacherThree(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+
         Subject expected1 = initData.createSubjectFour(List.of(teacher1, teacher2));
         Subject expected2 = initData.createSubjectOne(null, List.of(teacher3));
         Subject expected3 = initData.createSubjectThree(List.of(teacher1, teacher2, teacher3));
@@ -221,9 +222,9 @@ class SubjectServiceTest {
     @Test
     void fetchById_shouldFindSubject_givenId() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Teacher teacher3 = initData.createTeacherThree(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
         Subject expected = initData.createSubjectTwo(List.of(teacher1, teacher2, teacher3));
         //when
         SubjectDto actual = subjectService.fetchById(expected.getId());
@@ -262,9 +263,9 @@ class SubjectServiceTest {
     @Test
     void remove_shouldRemoveSubject_givenId() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Teacher teacher3 = initData.createTeacherThree(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
         Subject expected = initData.createSubjectTwo(List.of(teacher1, teacher2, teacher3));
         //when
         subjectService.remove(expected.getId());
@@ -293,9 +294,9 @@ class SubjectServiceTest {
     void findByName_returnsSubjectsSearchedByName_givenName() {
         //given
         String name = "i";
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Teacher teacher3 = initData.createTeacherThree(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
         Subject expected1 = initData.createSubjectFour(List.of(teacher1, teacher2));
         Subject expected2 = initData.createSubjectTwo(List.of(teacher3));
         Subject expected3 = initData.createSubjectThree(List.of(teacher1, teacher2, teacher3));
@@ -343,8 +344,8 @@ class SubjectServiceTest {
     @Test
     void assignTeachers_shouldAssignTeachersToSubject_givenTeachersSet() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         HashSet<Teacher> teachers = new HashSet<>(List.of(teacher1, teacher2));
         Subject expected = initData.createSubjectThree(List.of());
         //when
@@ -373,8 +374,8 @@ class SubjectServiceTest {
     @Test
     void removeTeachers_shouldRemoveTeachersFromSubject_givenTeachersSet() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         Subject expected = initData.createSubjectThree(List.of(teacher1, teacher2));
         Optional<Subject> byId2 = subjectRepository.findById(expected.getId());
         assertThat(byId2).isPresent();

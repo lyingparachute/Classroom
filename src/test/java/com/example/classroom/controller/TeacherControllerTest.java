@@ -53,8 +53,8 @@ class TeacherControllerTest {
     @Test
     void shouldCreateTeacher() throws Exception {
         //given
-        Student student1 = initData.createStudentOne(List.of());
-        Student student2 = initData.createStudentTwo(List.of());
+        Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentTwo(null, List.of());
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setFirstName("Marek");
         teacherDto.setLastName("Mostowiak");
@@ -99,9 +99,9 @@ class TeacherControllerTest {
     @Test
     void shouldDeleteStudent() throws Exception {
         //given
-        Student student1 = initData.createStudentOne(List.of());
-        Student student2 = initData.createStudentTwo(List.of());
-        Teacher teacher = initData.createTeacherTwo(List.of(student1, student2));
+        Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentTwo(null, List.of());
+        Teacher teacher = initData.createTeacherTwo(null, List.of(), List.of(student1, student2));
         //when
         this.mockMvc.perform(get("/dashboard/teachers/delete/" + teacher.getId()))
                 .andDo(print())
@@ -118,9 +118,9 @@ class TeacherControllerTest {
     @Test
     void shouldEditTeacher() throws Exception {
         //given
-        Student student1 = initData.createStudentOne(List.of());
-        Student student2 = initData.createStudentTwo(List.of());
-        Teacher teacherEntity = initData.createTeacherTwo(List.of());
+        Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentTwo(null, List.of());
+        Teacher teacherEntity = initData.createTeacherTwo(null, List.of(), List.of());
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setId(teacherEntity.getId());
         teacherDto.setFirstName("Marek");

@@ -41,7 +41,7 @@ class DepartmentRestControllerTest {
     @Test
     void shouldGetAllDepartments() throws URISyntaxException {
         //given
-        Teacher teacher = initData.createTeacherTwo(List.of());
+        Teacher teacher = initData.createTeacherTwo(null, List.of(), List.of());
         initData.createDepartmentOne(teacher, List.of());
         //when
         URI url = createURL("/api/subjects/");

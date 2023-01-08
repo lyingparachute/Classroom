@@ -45,9 +45,9 @@ class FieldOfStudyServiceTest {
     }
 
     @Test
-    void create_shouldSave_givenDto() {
+    void create_shouldSaveObject_givenObjectDto() {
         //given
-        Student student1 = initData.createStudentOne(List.of());
+        Student student1 = initData.createStudentOne(null, List.of());
         Subject subject1 = initData.createSubjectOne(null, List.of());
         Department department = initData.createDepartmentOne(null, List.of());
         FieldOfStudyDto expected = createFieldOfStudyDto(department, List.of(subject1), List.of(student1));
@@ -89,7 +89,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Test
-    void update_shouldUpdate_givenDto() {
+    void update_shouldUpdateObject_givenObjectDto() {
     }
 
     @Test
@@ -155,12 +155,12 @@ class FieldOfStudyServiceTest {
     }
 
     @Test
-    void removeAll() {
+    void removeAll_shouldRemoveAllObjects() {
     }
 
     private FieldOfStudyDto createFieldOfStudyDto(Department department, List<Subject> subjects, List<Student> students){
         FieldOfStudyDto dto = new FieldOfStudyDto();
-        dto.setName("name");
+        dto.setName("Inżynieria materiałowa");
         dto.setLevelOfEducation(LevelOfEducation.FIRST);
         dto.setMode(ModeOfStudy.PT);
         dto.setTitle(AcademicTitle.ENG);

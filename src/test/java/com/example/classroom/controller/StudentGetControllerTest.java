@@ -41,7 +41,7 @@ class StudentGetControllerTest {
 
     @Test
     void shouldGetStudentView() throws Exception {
-        Student student = initData.createStudentOne(List.of());
+        Student student = initData.createStudentOne(null, List.of());
 
         this.mockMvc.perform(get("/dashboard/students/" + student.getId()))
                 .andDo(print())
@@ -53,9 +53,9 @@ class StudentGetControllerTest {
     @Test
     void shouldGetParticularStudent() throws Exception {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Student student = initData.createStudentOne(List.of(teacher1, teacher2));
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2));
 
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students/" + student.getId()))
@@ -97,10 +97,11 @@ class StudentGetControllerTest {
     @Test
     void shouldGetStudentsAndContainParticularStudents() throws Exception {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Student student1 = initData.createStudentOne(List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(List.of(teacher1));
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+
+        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = initData.createStudentTwo(null, List.of(teacher1));
 
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students"))
@@ -127,12 +128,12 @@ class StudentGetControllerTest {
     @Test
     void shouldGetStudentsSecondPageSortedByFirstName() throws Exception {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Student student1 = initData.createStudentOne(List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(List.of(teacher1));
-        Student student3 = initData.createStudentThree(List.of(teacher1, teacher2));
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
 
+        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = initData.createStudentTwo(null, List.of(teacher1));
+        Student student3 = initData.createStudentThree(null, List.of(teacher1, teacher2));
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students?page=2&size=2&sortField=firstName&sortDir=asc"))
                 .andDo(print())
@@ -175,12 +176,12 @@ class StudentGetControllerTest {
     @Test
     void shouldGetResultOfSearchStudentsByFirstOrLastName() throws Exception {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Student student1 = initData.createStudentOne(List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(List.of(teacher1));
-        Student student3 = initData.createStudentThree(List.of(teacher1, teacher2));
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
 
+        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = initData.createStudentTwo(null, List.of(teacher1));
+        Student student3 = initData.createStudentThree(null, List.of(teacher1, teacher2));
         //when
         // Searching for letter 'w' in first name or last name
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students?name=w"))

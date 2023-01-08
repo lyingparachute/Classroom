@@ -41,7 +41,7 @@ class TeacherGetControllerTest {
 
     @Test
     void shouldGetTeacherView() throws Exception {
-        Teacher teacher1 = initData.createTeacherOne(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         this.mockMvc.perform(get("/dashboard/teachers/" + teacher1.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -52,9 +52,9 @@ class TeacherGetControllerTest {
     @Test
     void shouldGetParticularTeacher() throws Exception {
         //given
-        Student student1 = initData.createStudentOne(List.of());
-        Student student2 = initData.createStudentTwo(List.of());
-        Teacher teacher = initData.createTeacherOne(List.of(student1, student2));
+        Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentTwo(null, List.of());
+        Teacher teacher = initData.createTeacherOne(null, List.of(), List.of(student1, student2));
 
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers/" + teacher.getId()))
@@ -97,11 +97,11 @@ class TeacherGetControllerTest {
     @Test
     void shouldGetTeachersAndContainParticularTeacher() throws Exception {
         //given
-        Student student1 = initData.createStudentOne(List.of());
-        Student student2 = initData.createStudentTwo(List.of());
-        Student student3 = initData.createStudentThree(List.of());
-        Teacher teacher1 = initData.createTeacherOne(List.of(student1, student2));
-        Teacher teacher2 = initData.createTeacherTwo(List.of(student3));
+        Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentTwo(null, List.of());
+        Student student3 = initData.createStudentThree(null, List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of(student1, student2));
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of(student3));
 
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers"))
@@ -127,12 +127,12 @@ class TeacherGetControllerTest {
     @Test
     void shouldGetTeachersSecondPageSortedByFirstName() throws Exception {
         //given
-        Student student1 = initData.createStudentOne(List.of());
-        Student student2 = initData.createStudentTwo(List.of());
-        Student student3 = initData.createStudentThree(List.of());
-        Teacher teacher1 = initData.createTeacherOne(List.of(student1, student2));
-        Teacher teacher2 = initData.createTeacherTwo(List.of(student3));
-        Teacher teacher3 = initData.createTeacherThree(List.of(student1, student2, student3));
+        Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentTwo(null, List.of());
+        Student student3 = initData.createStudentThree(null, List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of(student1, student2));
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of(student3));
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of(student1, student2, student3));
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers?page=2&size=2&sortField=firstName&sortDir=asc"))
                 .andDo(print())
@@ -174,12 +174,12 @@ class TeacherGetControllerTest {
     @Test
     void shouldGetResultOfSearchTeachersByFirstOrLastName() throws Exception {
         //given
-        Student student1 = initData.createStudentOne(List.of());
-        Student student2 = initData.createStudentTwo(List.of());
-        Student student3 = initData.createStudentThree(List.of());
-        Teacher teacher1 = initData.createTeacherOne(List.of(student1, student2));
-        Teacher teacher2 = initData.createTeacherTwo(List.of(student3));
-        Teacher teacher3 = initData.createTeacherThree(List.of(student1, student2, student3));
+        Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentTwo(null, List.of());
+        Student student3 = initData.createStudentThree(null, List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of(student1, student2));
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of(student3));
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of(student1, student2, student3));
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers?name=ja"))
                 .andDo(print())

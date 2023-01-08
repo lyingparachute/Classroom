@@ -20,7 +20,10 @@ import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,9 +52,9 @@ class TeacherRestControllerTest {
     @Test
     void shouldGetTeacher() throws URISyntaxException {
         //given
-        Student studentOne = initData.createStudentOne(List.of());
-        Student studentTwo = initData.createStudentTwo(List.of());
-        Teacher teacher = initData.createTeacherOne(List.of(studentOne, studentTwo));
+        Student studentOne = initData.createStudentOne(null, List.of());
+        Student studentTwo = initData.createStudentTwo(null, List.of());
+        Teacher teacher = initData.createTeacherOne(null, List.of(), List.of(studentOne, studentTwo));
 
         //when
         URI url = createURL("/api/teachers/" + teacher.getId());
@@ -83,8 +86,8 @@ class TeacherRestControllerTest {
     @Test
     void shouldGetAllTeachers() throws URISyntaxException {
         //given
-        initData.createTeacherOne(List.of(initData.createStudentOne(List.of())));
-        initData.createTeacherTwo(List.of(initData.createStudentTwo(List.of())));
+        initData.createTeacherOne(null, List.of(), List.of(initData.createStudentOne(null, List.of())));
+        initData.createTeacherTwo(null, List.of(), List.of(initData.createStudentTwo(null, List.of())));
         //when
         URI url = createURL("/api/teachers/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
@@ -99,8 +102,8 @@ class TeacherRestControllerTest {
     @Test
     void shouldCreateTeacher() throws URISyntaxException {
         //given
-        Student student1 = initData.createStudentOne(List.of());
-        Student student2 = initData.createStudentTwo(List.of());
+        Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentTwo(null, List.of());
 
         TeacherDto teacherDto = createTeacherDto(student1, student2);
         //when
@@ -135,10 +138,10 @@ class TeacherRestControllerTest {
     @Test
     void shouldUpdateTeacher() throws URISyntaxException {
         //given
-        Student student1 = initData.createStudentOne(List.of());
-        Student student2 = initData.createStudentTwo(List.of());
+        Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentTwo(null, List.of());
 
-        Teacher teacherEntity = initData.createTeacherOne(new ArrayList<>());
+        Teacher teacherEntity = initData.createTeacherOne(null, List.of(), List.of());
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setId(teacherEntity.getId());
         teacherDto.setFirstName("Lionel");
@@ -183,9 +186,9 @@ class TeacherRestControllerTest {
     @Test
     void shouldDeleteTeacher() throws URISyntaxException {
         //given
-        Teacher teacher = initData.createTeacherOne(List.of(
-                initData.createStudentOne(List.of()),
-                initData.createStudentTwo(List.of())));
+        Teacher teacher = initData.createTeacherOne(null, List.of(), List.of(
+                initData.createStudentOne(null, List.of()),
+                initData.createStudentTwo(null, List.of())));
         //when
         URI url = createURL("/api/teachers/" + teacher.getId());
         restTemplate.delete(url);

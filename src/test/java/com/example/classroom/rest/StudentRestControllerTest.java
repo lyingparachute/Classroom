@@ -54,9 +54,9 @@ class StudentRestControllerTest {
     @Test
     void shouldGetStudent() throws URISyntaxException {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Student student = initData.createStudentOne(List.of(teacher1, teacher2));
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/students/" + student.getId());
         ResponseEntity<StudentDto> response = restTemplate.getForEntity(url, StudentDto.class);
@@ -88,11 +88,11 @@ class StudentRestControllerTest {
     @Test
     void shouldGetAllStudents() throws URISyntaxException {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
 
-        initData.createStudentOne(List.of(teacher1));
-        initData.createStudentTwo(List.of(teacher2));
+        initData.createStudentOne(null, List.of(teacher1));
+        initData.createStudentTwo(null, List.of(teacher2));
         //when
         URI url = createURL("/api/students/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
@@ -107,8 +107,8 @@ class StudentRestControllerTest {
     @Test
     void shouldCreateStudent() throws URISyntaxException {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         StudentDto studentDto = createStudentDto(List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/students/create");
@@ -143,9 +143,9 @@ class StudentRestControllerTest {
     @Test
     void shouldUpdateStudent() throws URISyntaxException {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Student studentEntity = initData.createStudentOne(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Student studentEntity = initData.createStudentOne(null, List.of());
         StudentDto studentDto = new StudentDto();
         studentDto.setId(studentEntity.getId());
         studentDto.setFirstName("Pamela");
@@ -188,9 +188,9 @@ class StudentRestControllerTest {
     @Test
     void shouldDeleteStudent() throws URISyntaxException {
         //given
-        Student student = initData.createStudentOne(List.of(
-                initData.createTeacherOne(List.of()),
-                initData.createTeacherTwo(List.of())));
+        Student student = initData.createStudentOne(null, List.of(
+                initData.createTeacherOne(null, List.of(), List.of()),
+                initData.createTeacherTwo(null, List.of(), List.of())));
         //when
         URI url = createURL("/api/students/" + student.getId());
         restTemplate.delete(url);
@@ -206,12 +206,12 @@ class StudentRestControllerTest {
     @Test
     void shouldDeleteAllStudents() throws URISyntaxException {
         //given
-        Student student1 = initData.createStudentOne(List.of(
-                initData.createTeacherOne(List.of()),
-                initData.createTeacherTwo(List.of())));
-        Student student2 = initData.createStudentOne(List.of(
-                initData.createTeacherOne(List.of()),
-                initData.createTeacherTwo(List.of())));
+        Student student1 = initData.createStudentOne(null, List.of(
+                initData.createTeacherOne(null, List.of(), List.of()),
+                initData.createTeacherTwo(null, List.of(), List.of())));
+        Student student2 = initData.createStudentOne(null, List.of(
+                initData.createTeacherOne(null, List.of(), List.of()),
+                initData.createTeacherTwo(null, List.of(), List.of())));
         //when
         URI url = createURL("/api/students");
         restTemplate.delete(url);

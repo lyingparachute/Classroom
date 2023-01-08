@@ -48,8 +48,8 @@ class StudentServiceTest {
     @Test
     void create_shouldSaveStudent_givenStudentDto() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         ArrayList<Teacher> teachers = new ArrayList<>(List.of(teacher1, teacher2));
         StudentDto expected = new StudentDto();
         expected.setFirstName("Fabian");
@@ -85,9 +85,9 @@ class StudentServiceTest {
     @Test
     void update_shouldUpdateStudent_givenStudentDto() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Student student = initData.createStudentOne(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Student student = initData.createStudentOne(null, List.of());
         StudentDto dto = new StudentDto();
         dto.setId(student.getId());
         dto.setFirstName("Pamela");
@@ -140,12 +140,12 @@ class StudentServiceTest {
     @Test
     void fetchAll_shouldReturnAllStudents() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Teacher teacher3 = initData.createTeacherThree(List.of());
-        Student student1 = initData.createStudentOne(List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(List.of(teacher3));
-        Student student3 = initData.createStudentThree(List.of(teacher1, teacher2, teacher3));
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = initData.createStudentTwo(null, List.of(teacher3));
+        Student student3 = initData.createStudentThree(null, List.of(teacher1, teacher2, teacher3));
         //when
         List<StudentDto> actual = studentService.fetchAll();
         //then
@@ -210,13 +210,13 @@ class StudentServiceTest {
     @Test
     void fetchAllPaginated_shouldReturnAllStudentsPaginated_givenPageNo_PageSize_SortDir() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Teacher teacher3 = initData.createTeacherThree(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(List.of(teacher3));
-        Student student3 = initData.createStudentThree(List.of(teacher1, teacher2, teacher3));
+        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = initData.createStudentTwo(null, List.of(teacher3));
+        Student student3 = initData.createStudentThree(null, List.of(teacher1, teacher2, teacher3));
         int pageNo = 2;
         int pageSize = 2;
         String sortField = "firstName";
@@ -250,11 +250,11 @@ class StudentServiceTest {
     @Test
     void fetchById_shouldFindStudent_givenId() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Teacher teacher3 = initData.createTeacherThree(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
 
-        Student student = initData.createStudentOne(List.of(teacher1, teacher2, teacher3));
+        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2, teacher3));
         //when
         StudentDto actual = studentService.fetchById(student.getId());
         //then
@@ -293,11 +293,11 @@ class StudentServiceTest {
     @Test
     void remove_shouldRemoveStudent_givenId() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Teacher teacher3 = initData.createTeacherThree(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
 
-        Student student = initData.createStudentOne(List.of(teacher1, teacher2, teacher3));
+        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2, teacher3));
         //when
         studentService.remove(student.getId());
         //then
@@ -324,13 +324,13 @@ class StudentServiceTest {
     void findByFirstOrLastName_returnsStudentsSearchedByFirstOrLastName_givenName() {
         //given
         String name = "w";
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Teacher teacher3 = initData.createTeacherThree(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(List.of(teacher3));
-        Student student3 = initData.createStudentThree(List.of(teacher1, teacher2, teacher3));
+        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = initData.createStudentTwo(null, List.of(teacher3));
+        Student student3 = initData.createStudentThree(null, List.of(teacher1, teacher2, teacher3));
         //when
         List<StudentDto> actual = studentService.findByFirstOrLastName(name);
         //then
@@ -375,10 +375,10 @@ class StudentServiceTest {
     @Test
     void assignTeachers_shouldAssignTeachersToStudent_givenTeachersSet() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         HashSet<Teacher> teachers = new HashSet<>(List.of(teacher1, teacher2));
-        Student student = initData.createStudentOne(List.of());
+        Student student = initData.createStudentOne(null, List.of());
         //when
         studentService.assignTeachers(student, teachers);
         //then
@@ -406,9 +406,9 @@ class StudentServiceTest {
     @Test
     void removeTeachers_shouldRemoveTeachersFromStudent_givenTeachersSet() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(List.of());
-        Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Student student = initData.createStudentOne(List.of(teacher1, teacher2));
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2));
         Optional<Student> byId2 = studentRepository.findById(student.getId());
         assertThat(byId2).isPresent();
         Student actual2 = byId2.get();
