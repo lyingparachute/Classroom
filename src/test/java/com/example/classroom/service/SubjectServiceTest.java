@@ -290,7 +290,7 @@ class SubjectServiceTest {
     }
 
     @Test
-    void findByFirstOrLastName_returnsSubjectsSearchedByName_givenName() {
+    void findByName_returnsSubjectsSearchedByName_givenName() {
         //given
         String name = "i";
         Teacher teacher1 = initData.createTeacherOne(List.of());
