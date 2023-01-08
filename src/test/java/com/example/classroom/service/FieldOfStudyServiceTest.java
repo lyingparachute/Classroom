@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 @SpringBootTest
 @Transactional
@@ -44,7 +45,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Test
-    void create_shouldSaveObject_givenObjectDto() {
+    void create_shouldSave_givenDto() {
         //given
         Student student1 = initData.createStudentOne(List.of());
         Subject subject1 = initData.createSubjectOne(null, List.of());
@@ -88,27 +89,65 @@ class FieldOfStudyServiceTest {
     }
 
     @Test
-    void update() {
+    void update_shouldUpdate_givenDto() {
     }
 
     @Test
-    void fetchAll() {
+    void update_throwsIllegalArgumentException_givenWrongObjectDto() {
+        //given
+        FieldOfStudyDto dto = createFieldOfStudyDto(null, List.of(), List.of());
+        dto.setId(1L);
+        //when
+        Throwable thrown = catchThrowable(() -> service.update(dto));
+        //then
+        assertThat(thrown)
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId());
     }
 
     @Test
-    void fetchAllPaginated() {
+    void fetchAll_shouldReturnAllObjects() {
     }
 
     @Test
-    void fetchById() {
+    void fetchAllPaginated_shouldReturnAllObjectsPaginated_givenPageNo_PageSize_SortDir() {
     }
 
     @Test
-    void remove() {
+    void fetchById_shouldFindObject_givenId() {
     }
 
     @Test
-    void findByName() {
+    void fetchById_throwsIllegalArgumentException_givenWrongId() {
+        //given
+        Long id = 1L;
+        //when
+        Throwable thrown = catchThrowable(() -> service.fetchById(id));
+        //then
+        assertThat(thrown)
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid Field Of Study ID: " + id);
+    }
+
+    @Test
+    void remove_shouldRemoveObject_givenId() {
+
+    }
+
+    @Test
+    void remove_throwsIllegalArgumentException_givenWrongId() {
+        //given
+        Long id = 1L;
+        //when
+        Throwable thrown = catchThrowable(() -> service.remove(id));
+        //then
+        assertThat(thrown)
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid Field Of Study ID: " + id);
+    }
+
+    @Test
+    void findByName_returnsObjectsSearchedByName_givenName() {
     }
 
     @Test
