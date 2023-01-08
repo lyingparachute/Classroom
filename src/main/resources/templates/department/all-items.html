@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <link rel="stylesheet" th:href="@{/css/modals.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css"/>
+</head>
+
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="tableCard" class="card">
+                <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{subjects.header}"></strong>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/dashboard/subjects}"
+                          method="get"
+                          id="subjectForm">
+                        <div class="row justify-content-end mb-1 mt-3">
+                            <div class="col-auto">
+                                <a id="btnAddItem"
+                                   class="btn btn-outline-primary btn-lg"
+                                   th:href="@{/dashboard/subjects/new}"
+                                   th:value="#{subjects.new}">
+                                    <i class="fa-solid fa-user-plus mr-2"></i>
+                                    <span th:text="#{subjects.new}"></span>
+                                </a>
+                            </div>
+                            <div class="col-5">
+                                <div class="search">
+                                    <i class="fa fa-search"></i>
+                                    <input id="name" type="search" name="name"
+                                           class="form-control"
+                                           th:placeholder="#{subjects.input}" required
+                                           th:value="${name}"/>
+                                    <button type="submit"
+                                            value="Search"
+                                            class="btn btn-outline-success"
+                                            th:text="#{button.search}"></button>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <button th:if="${name != null && !name.isEmpty()}"
+                                        id="btnClear"
+                                        class="btn btn-lg btn-light"
+                                        th:text="#{button.clear}">
+                                </button>
+                                <button th:unless="${name != null && !name.isEmpty()}"
+                                        id="btnClearDisabled"
+                                        class="btn btn-lg btn-light"
+                                        th:text="#{button.clear}"
+                                        disabled>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="subjectsTable" class="table-responsive">
+                        <table class="table table-hover" th:if="${totalItems != 0}">
+                            <thead>
+                            <tr>
+                                <th th:replace="fragments/sorting :: subjectsSorting('id','ID number')">
+                                </th>
+                                <th th:replace="fragments/sorting :: subjectsSorting('name','Subject Name')">
+                                </th>
+                                <th th:replace="fragments/sorting :: subjectsSorting('description','Description')">
+                                </th>
+                                <th th:replace="fragments/sorting :: subjectsSorting('hoursInSemester','Hours In Semester')">
+                                </th>
+                                <th rowspan="1" colspan="1" scope="col" th:text="#{subject.no.of.teachers}">
+                                </th>
+                                <th rowspan="2" colspan="1" scope="col" th:text="#{button.action}"
+                                    class="align-middle"/>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="subject: ${subjects}">
+                                <td th:text="${subject.id}"/>
+                                <td th:text="${subject.name}"/>
+                                <td th:text="${subject.description}"/>
+                                <td th:text="${subject.hoursInSemester}"/>
+                                <td th:text="${subject.teachers.size()}"/>
+                                <td>
+                                    <a id="btnView"
+                                       class="fa fa-eye fa-lg mr-2"
+                                       th:href="@{/dashboard/subjects/{id}(id=${subject.id})}"
+                                       th:title="#{button.view}">
+                                    </a>
+                                    <a id="btnEdit"
+                                       class="fa fa-user-pen fa-lg mr-2"
+                                       th:href="@{/dashboard/subjects/edit/{id}(id=${subject.id})}"
+                                       th:title="#{button.edit}">
+                                    </a>
+                                    <a id="btnDelete"
+                                       class="fa fa-trash-can fa-lg delBtn mr-2"
+                                       th:href="@{/dashboard/subjects/delete/{id}(id=${subject.id})}"
+                                       th:title="#{button.delete}"
+                                       th:name="${subject.name}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#deleteModal">
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <caption>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col text-start">
+                                            <span th:text="${firstItemShownOnPage} + ' - ' + ${lastItemShownOnPage} + ' of ' + ${totalItems}"></span>
+                                        </div>
+                                        <div class="col text-center">
+                                            <nav aria-label="Pagination" th:if="${totalPages > 0}">
+                                                <ul class="pagination justify-content-center">
+                                                    <li class="page-item"
+                                                        th:classappend="${currentPage == 1} ? 'disabled'">
+                                                        <a th:replace="fragments/paging :: subjectsPaging(1, '<<', 'First Page')"></a>
+                                                    </li>
+                                                    <li class="page-item font-weight-bold"
+                                                        th:classappend="${currentPage == 1} ? 'disabled'">
+                                                        <a th:replace="fragments/paging :: subjectsPaging(${currentPage - 1}, '<', 'Previous Page')"></a>
+                                                    </li>
+                                                    <li class="page-item disabled"
+                                                        th:if="${currentPage - 2 > 1}">
+                                                        <a class="page-link" href="#">...</a>
+                                                    </li>
+                                                    <li class="page-item"
+                                                        th:classappend="${page == currentPage} ? 'active'"
+                                                        th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+                                                        <a th:replace="fragments/paging :: subjectsPaging(${page}, ${page}, 'Page ' + ${page})"></a>
+                                                    </li>
+                                                    <li class="page-item disabled"
+                                                        th:if="${currentPage + 2 < totalPages}">
+                                                        <a class="page-link" href="#">...</a>
+                                                    </li>
+                                                    <li class="page-item font-weight-bold"
+                                                        th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                                        <a th:replace="fragments/paging :: subjectsPaging(${currentPage + 1},'>', 'Next Page')"></a>
+                                                    </li>
+                                                    <li class="page-item"
+                                                        th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                                        <a th:replace="fragments/paging :: subjectsPaging(${totalPages}, '>>', 'Last Page')"></a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                        <div class="col text-end">
+                                            <label for="pageSize" th:text="#{table.rows.per.page}"></label>
+                                            <select id="pageSize"
+                                                    form="subjectForm"
+                                                    name="size"
+                                                    th:value="${pageSize}"
+                                                    onchange="changePageSize()"
+                                                    class="size-select">
+                                                <option th:each="s : ${ {3, 6, 9, 12} }" th:value="${s}"
+                                                        th:text="${s}"
+                                                        th:selected="${s == pageSize}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </caption>
+                        </table>
+
+                        <div th:unless="${totalItems != 0}">
+                            <div id="signTableEmpty" class="h4" th:text="#{subjects.empty.table}"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- Delete modal -->
+<div th:replace="fragments/modals :: deleteModal"></div>
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+<!-- Custom script -->
+<script type="text/javascript" th:src="@{/js/subjects.js}"></script>
+</body>
+</html>
