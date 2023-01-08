@@ -36,9 +36,9 @@ public class DepartmentRestController {
 
     @GetMapping("{id}")
     public ResponseEntity<DepartmentDto> getDepartment(@PathVariable Long id) {
-        DepartmentDto studentDto = service.fetchById(id);
-        return studentDto != null ?
-                ResponseEntity.ok(studentDto) :
+        DepartmentDto dto = service.fetchById(id);
+        return dto != null ?
+                ResponseEntity.ok(dto) :
                 ResponseEntity.notFound().build();
     }
 
