@@ -1,6 +1,10 @@
 package com.example.classroom.repository.util;
 
 import com.example.classroom.entity.*;
+import com.example.classroom.enums.AcademicTitle;
+import com.example.classroom.enums.LevelOfEducation;
+import com.example.classroom.enums.ModeOfStudy;
+import com.example.classroom.enums.Semester;
 import com.example.classroom.repository.*;
 import org.springframework.stereotype.Component;
 
@@ -123,14 +127,18 @@ public class InitData {
 
     // *** Create Subjects *** //
     @Transactional
-    public Subject createSubjectOne(List<Teacher> teachers) {
+    public Subject createSubjectOne(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setName("Mathematics");
         subject.setDescription("Calculating integrals");
+        subject.setSemester(Semester.FIFTH);
         subject.setHoursInSemester(100);
         if (teachers != null && !teachers.isEmpty()) {
             teachers.forEach(subject::addTeacher);
             subjectRepository.save(subject);
+        }
+        if (fieldOfStudy != null){
+            subject.setFieldOfStudy(fieldOfStudy);
         }
         subjectRepository.save(subject);
         return subject;
@@ -179,7 +187,23 @@ public class InitData {
     }
 
     // *** Create Fields Of Study *** //
-
+    public FieldOfStudy createFieldOfStudyOne(Department department, List<Subject> subjects, List<Student> students) {
+        FieldOfStudy fieldOfStudy = new FieldOfStudy();
+        fieldOfStudy.setName("name");
+        fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
+        fieldOfStudy.setMode(ModeOfStudy.PT);
+        fieldOfStudy.setTitle(AcademicTitle.ENG);
+        if (department != null) {
+            fieldOfStudy.setDepartment(department);
+        }
+        if (subjects != null && !subjects.isEmpty()) {
+            fieldOfStudy.setSubjects(new HashSet<>(subjects));
+        }
+        if (students != null && !students.isEmpty()) {
+            fieldOfStudy.setStudents(new HashSet<>(students));
+        }
+        return fieldOfStudyRepository.save(fieldOfStudy);
+    }
 
     // *** Create Departments *** //
     public Department createDepartmentOne(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {

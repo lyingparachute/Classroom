@@ -68,14 +68,14 @@ public class Teacher {
     @JoinTable(name = "teacher_students",
             joinColumns = { @JoinColumn(name = "teacher_id") },
             inverseJoinColumns = { @JoinColumn(name = "student_id") })
-    private Set<Student> studentsList = new HashSet<>();
+    private Set<Student> students = new HashSet<>();
 
     public void addStudent(Student student){
-        this.studentsList.add(student);
+        this.students.add(student);
     }
 
     public void removeStudent(Student student) {
-        this.studentsList.remove(student);
+        this.students.remove(student);
     }
 
     public void addSubject(Subject subject){

@@ -82,7 +82,7 @@ class TeacherControllerTest {
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
-        assertThat(actual.getStudentsList())
+        assertThat(actual.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -109,7 +109,7 @@ class TeacherControllerTest {
         //then
         Optional<Teacher> byId = teacherRepository.findById(teacher.getId());
         assertThat(byId).isNotPresent();
-        teacher.getStudentsList().forEach(i -> {
+        teacher.getStudents().forEach(i -> {
             studentRepository.findById(i.getId()).orElseThrow(() -> new IllegalStateException(
                     "Student with ID= " + i.getId() + " should not be removed."));
         });
@@ -150,7 +150,7 @@ class TeacherControllerTest {
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
-        assertThat(actual.getStudentsList())
+        assertThat(actual.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,

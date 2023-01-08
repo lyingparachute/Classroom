@@ -171,12 +171,12 @@ class TeacherRestControllerTest {
                         Student::getLastName,
                         Student::getEmail,
                         Student::getAge,
-                        s -> s.getTeachersList().size()
+                        s -> s.getTeachers().size()
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(),
-                                student1.getEmail(), student1.getAge(), student1.getTeachersList().size()),
+                                student1.getEmail(), student1.getAge(), student1.getTeachers().size()),
                         Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(),
-                                student2.getEmail(), student2.getAge(), student2.getTeachersList().size())
+                                student2.getEmail(), student2.getAge(), student2.getTeachers().size())
                 );
     }
 
@@ -192,7 +192,7 @@ class TeacherRestControllerTest {
         //then
         Optional<Teacher> byId = teacherRepository.findById(teacher.getId());
         assertThat(byId).isNotPresent();
-        teacher.getStudentsList().forEach(i -> {
+        teacher.getStudents().forEach(i -> {
             studentRepository.findById(i.getId()).orElseThrow(() -> new IllegalStateException(
                     "Student with ID= " + i.getId() + " should not be removed."));
         });

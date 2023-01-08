@@ -54,17 +54,17 @@ public class Student {
                     CascadeType.MERGE,
                     CascadeType.DETACH
             },
-            mappedBy = "studentsList")
-    private Set<Teacher> teachersList = new HashSet<>();
+            mappedBy = "students")
+    private Set<Teacher> teachers = new HashSet<>();
 
     public void removeTeacher(Teacher teacher){
-        this.teachersList.remove(teacher);
-        teacher.getStudentsList().remove(this);
+        this.teachers.remove(teacher);
+        teacher.getStudents().remove(this);
     }
 
     public void assignTeacher(Teacher teacher){
-        this.teachersList.add(teacher);
-        teacher.getStudentsList().add(this);
+        this.teachers.add(teacher);
+        teacher.getStudents().add(this);
     }
 
     @Override

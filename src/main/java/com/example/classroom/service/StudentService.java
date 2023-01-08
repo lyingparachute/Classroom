@@ -34,7 +34,7 @@ public class StudentService {
     @Transactional
     public StudentDto create(StudentDto dto) {
         Student student = mapper.map(dto, Student.class);
-        assignTeachers(student, student.getTeachersList());
+        assignTeachers(student, student.getTeachers());
         Student saved = studentRepository.save(student);
         return mapper.map(saved, StudentDto.class);
     }
@@ -43,9 +43,9 @@ public class StudentService {
     public StudentDto update(StudentDto dto) {
         Student student = studentRepository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid student '" + dto + "' with ID: " + dto.getId()));
-        removeTeachers(student, new HashSet<>(student.getTeachersList()));
+        removeTeachers(student, new HashSet<>(student.getTeachers()));
         mapper.map(dto, student);
-        assignTeachers(student, student.getTeachersList());
+        assignTeachers(student, student.getTeachers());
         Student saved = studentRepository.save(student);
         return mapper.map(saved, StudentDto.class);
 
@@ -77,7 +77,7 @@ public class StudentService {
     public void remove(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid student id: " + id));
-        removeTeachers(student, new HashSet<>(student.getTeachersList()));
+        removeTeachers(student, new HashSet<>(student.getTeachers()));
         studentRepository.delete(student);
     }
 

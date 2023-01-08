@@ -197,7 +197,7 @@ class StudentRestControllerTest {
         //then
         Optional<Student> byId = studentRepository.findById(student.getId());
         assertThat(byId).isNotPresent();
-        student.getTeachersList().forEach(teacher -> {
+        student.getTeachers().forEach(teacher -> {
             teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
                     "Teacher with ID = " + teacher.getId() + " should not be removed."));
         });
@@ -220,11 +220,11 @@ class StudentRestControllerTest {
         Optional<Student> byId2 = studentRepository.findById(student1.getId());
         assertThat(byId1).isNotPresent();
         assertThat(byId2).isNotPresent();
-        student1.getTeachersList().forEach(teacher -> {
+        student1.getTeachers().forEach(teacher -> {
             teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
                     "Teacher with ID = " + teacher.getId() + " should not be removed."));
         });
-        student2.getTeachersList().forEach(teacher -> {
+        student2.getTeachers().forEach(teacher -> {
             teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
                     "Teacher with ID = " + teacher.getId() + " should not be removed."));
         });

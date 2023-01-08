@@ -68,7 +68,7 @@ class TeacherServiceTest {
         assertThat(actual.getLastName()).isEqualTo(expected.getLastName());
         assertThat(actual.getEmail()).isEqualTo(expected.getEmail());
         assertThat(actual.getAge()).isEqualTo(expected.getAge());
-        Assertions.assertThat(actual.getStudentsList())
+        Assertions.assertThat(actual.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -105,7 +105,7 @@ class TeacherServiceTest {
         assertThat(actual.getLastName()).isEqualTo(dto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(dto.getEmail());
         assertThat(actual.getAge()).isEqualTo(dto.getAge());
-        Assertions.assertThat(actual.getStudentsList())
+        Assertions.assertThat(actual.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -381,7 +381,7 @@ class TeacherServiceTest {
         assertThat(actual.getLastName()).isEqualTo(teacher.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacher.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacher.getAge());
-        assertThat(actual.getStudentsList())
+        assertThat(actual.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,

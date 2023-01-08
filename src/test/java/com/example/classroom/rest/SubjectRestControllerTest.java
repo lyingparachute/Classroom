@@ -55,7 +55,7 @@ class SubjectRestControllerTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Subject subject = initData.createSubjectOne(List.of(teacher1, teacher2));
+        Subject subject = initData.createSubjectOne(null, List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/subjects/" + subject.getId());
         ResponseEntity<SubjectDto> response = restTemplate.getForEntity(url, SubjectDto.class);
@@ -142,7 +142,7 @@ class SubjectRestControllerTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
-        Subject subjectEntity = initData.createSubjectOne(List.of());
+        Subject subjectEntity = initData.createSubjectOne(null, List.of());
         SubjectDto subjectDto = createSubjectDto(List.of(teacher1, teacher2));
         subjectDto.setId(subjectEntity.getId());
 
@@ -201,7 +201,7 @@ class SubjectRestControllerTest {
         Subject subject1 = initData.createSubjectFour(List.of(
                 initData.createTeacherOne(List.of()),
                 initData.createTeacherTwo(List.of())));
-        Subject subject2 = initData.createSubjectOne(List.of(
+        Subject subject2 = initData.createSubjectOne(null, List.of(
                 initData.createTeacherThree(List.of()),
                 initData.createTeacherTwo(List.of())));
         //when

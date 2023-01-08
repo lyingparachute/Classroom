@@ -126,7 +126,7 @@ class SubjectServiceTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
         Subject expected1 = initData.createSubjectFour(List.of(teacher1, teacher2));
-        Subject expected2 = initData.createSubjectOne(List.of(teacher3));
+        Subject expected2 = initData.createSubjectOne(null, List.of(teacher3));
         Subject expected3 = initData.createSubjectThree(List.of(teacher1, teacher2, teacher3));
         //when
         List<SubjectDto> actual = subjectService.fetchAll();
@@ -189,7 +189,7 @@ class SubjectServiceTest {
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
         Subject expected1 = initData.createSubjectFour(List.of(teacher1, teacher2));
-        Subject expected2 = initData.createSubjectOne(List.of(teacher3));
+        Subject expected2 = initData.createSubjectOne(null, List.of(teacher3));
         Subject expected3 = initData.createSubjectThree(List.of(teacher1, teacher2, teacher3));
         int pageNo = 2;
         int pageSize = 2;

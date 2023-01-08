@@ -68,7 +68,7 @@ class StudentServiceTest {
         assertThat(actual.getEmail()).isEqualTo(expected.getEmail());
         assertThat(actual.getAge()).isEqualTo(expected.getAge());
         assertThat(actual.getFieldOfStudy()).isEqualTo(expected.getFieldOfStudy());
-        assertThat(actual.getTeachersList())
+        assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -106,7 +106,7 @@ class StudentServiceTest {
         assertThat(actual.getEmail()).isEqualTo(dto.getEmail());
         assertThat(actual.getAge()).isEqualTo(dto.getAge());
         assertThat(actual.getFieldOfStudy()).isEqualTo(dto.getFieldOfStudy());
-        assertThat(actual.getTeachersList())
+        assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -389,7 +389,7 @@ class StudentServiceTest {
         assertThat(actual.getLastName()).isEqualTo(student.getLastName());
         assertThat(actual.getEmail()).isEqualTo(student.getEmail());
         assertThat(actual.getAge()).isEqualTo(student.getAge());
-        assertThat(actual.getTeachersList())
+        assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -412,7 +412,7 @@ class StudentServiceTest {
         Optional<Student> byId2 = studentRepository.findById(student.getId());
         assertThat(byId2).isPresent();
         Student actual2 = byId2.get();
-        assertThat(actual2.getTeachersList())
+        assertThat(actual2.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -425,7 +425,7 @@ class StudentServiceTest {
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
                                 teacher2.getEmail(), teacher2.getAge()));
         //when
-        studentService.removeTeachers(student, new HashSet<>(student.getTeachersList()));
+        studentService.removeTeachers(student, new HashSet<>(student.getTeachers()));
         //then
         Optional<Student> byId = studentRepository.findById(student.getId());
         assertThat(byId).isPresent();
@@ -434,7 +434,7 @@ class StudentServiceTest {
         assertThat(actual.getLastName()).isEqualTo(student.getLastName());
         assertThat(actual.getEmail()).isEqualTo(student.getEmail());
         assertThat(actual.getAge()).isEqualTo(student.getAge());
-        assertThat(actual.getTeachersList())
+        assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
