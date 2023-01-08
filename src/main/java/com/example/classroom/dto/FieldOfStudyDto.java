@@ -1,5 +1,7 @@
 package com.example.classroom.dto;
 
+import com.example.classroom.entity.Department;
+import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
@@ -26,5 +28,7 @@ public class FieldOfStudyDto implements Serializable {
     private LevelOfEducation levelOfEducation;
     private ModeOfStudy mode;
     private AcademicTitle title;
+    private Department department;
     private Set<Subject> subjects = new HashSet<>();
+    private Set<Student> students = new HashSet<>();
 }
