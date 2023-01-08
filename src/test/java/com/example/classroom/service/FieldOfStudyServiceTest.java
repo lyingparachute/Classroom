@@ -10,14 +10,13 @@ import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.util.InitData;
-import com.example.classroom.repository.util.InitDepartment;
-import com.example.classroom.repository.util.InitSubject;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -25,16 +24,13 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
 class FieldOfStudyServiceTest {
 
     @Autowired
     private InitData initData;
 
-    @Autowired
-    private InitDepartment initDepartment;
 
-    @Autowired
-    private InitSubject initSubject;
 
     @Autowired
     private FieldOfStudyService service;
@@ -50,9 +46,10 @@ class FieldOfStudyServiceTest {
     @Test
     void create_shouldSaveObject_givenObjectDto() {
         //given
-        Subject subject1 = initSubject.createSubjectMaths(List.of());
-        Department department = initDepartment.createDepartmentOne(null, List.of());
-        FieldOfStudyDto expected = createFieldOfStudyDto(department, List.of(), List.of());
+        Student student1 = initData.createStudentOne(List.of());
+        Subject subject1 = initData.createSubjectOne(null, List.of());
+        Department department = initData.createDepartmentOne(null, List.of());
+        FieldOfStudyDto expected = createFieldOfStudyDto(department, List.of(subject1), List.of(student1));
         //when
         service.create(expected);
         //then
@@ -70,10 +67,24 @@ class FieldOfStudyServiceTest {
                         Subject::getName,
                         Subject::getDescription,
                         Subject::getSemester,
-                        Subject::getHoursInSemester
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy,
+                        Subject::getTeachers
                 ).containsExactlyInAnyOrder(
-                        Tuple.tuple(subject1.getId(), subject1.getName(), subject1.getDescription(),
-                                subject1.getSemester(), subject1.getHoursInSemester()));
+                        Tuple.tuple(subject1.getId(), subject1.getName(), subject1.getDescription(), subject1.getSemester(),
+                                subject1.getHoursInSemester(), subject1.getFieldOfStudy(), subject1.getTeachers()));
+        assertThat(actual.getStudents())
+                .extracting(
+                        Student::getId,
+                        Student::getFirstName,
+                        Student::getLastName,
+                        Student::getAge,
+                        Student::getEmail,
+                        Student::getFieldOfStudy,
+                        Student::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(), student1.getAge(),
+                                student1.getEmail(), student1.getFieldOfStudy(), student1.getTeachers()));
     }
 
     @Test
