@@ -74,7 +74,6 @@ class StudentGetControllerTest {
                         "                        <li class=\"list-group-item\">Last Name: " + student.getLastName() + "</li>\n" +
                         "                        <li class=\"list-group-item\">Email: " + student.getEmail() + "</li>\n" +
                         "                        <li class=\"list-group-item\">Age: " + student.getAge() + "</li>\n" +
-                        "                        <li class=\"list-group-item\">Field of study: " + student.getFieldOfStudy().getDesc() + "</li>\n" +
                         "                        <li class=\"list-group-item\">List of assigned teachers:\n" +
                         "                            <ul class=\"list-group\">\n"
                 );
@@ -116,14 +115,12 @@ class StudentGetControllerTest {
                         "                                <td>" + student1.getLastName() + "</td>\n" +
                         "                                <td>" + student1.getAge() + "</td>\n" +
                         "                                <td>" + student1.getEmail() + "</td>\n" +
-                        "                                <td>" + student1.getFieldOfStudy().getDesc() + "</td>\n" +
                         "                                <td>" + student1.getTeachersList().size() + "</td>\n");
         assertThat(contentAsString)
                 .contains("                             <td>" + student2.getFirstName()+ "</td>\n" +
                         "                                <td>" + student2.getLastName() + "</td>\n" +
                         "                                <td>" + student2.getAge() + "</td>\n" +
                         "                                <td>" + student2.getEmail() + "</td>\n" +
-                        "                                <td>" + student2.getFieldOfStudy().getDesc() + "</td>\n" +
                         "                                <td>" + student2.getTeachersList().size() + "</td>\n");
     }
 
@@ -150,21 +147,18 @@ class StudentGetControllerTest {
                         "                                <td>" + student1.getLastName() + "</td>\n" +
                         "                                <td>" + student1.getAge() + "</td>\n" +
                         "                                <td>" + student1.getEmail() + "</td>\n" +
-                        "                                <td>" + student1.getFieldOfStudy().getDesc() + "</td>\n" +
                         "                                <td>" + student1.getTeachersList().size() + "</td>\n");
         assertThat(contentAsString)
                 .contains("                             <td>" + student2.getFirstName()+ "</td>\n" +
                         "                                <td>" + student2.getLastName() + "</td>\n" +
                         "                                <td>" + student2.getAge() + "</td>\n" +
                         "                                <td>" + student2.getEmail() + "</td>\n" +
-                        "                                <td>" + student2.getFieldOfStudy().getDesc() + "</td>\n" +
                         "                                <td>" + student2.getTeachersList().size() + "</td>\n");
         assertThat(contentAsString)
                 .doesNotContain("                             <td>" + student3.getFirstName()+ "</td>\n" +
                         "                                <td>" + student3.getLastName() + "</td>\n" +
                         "                                <td>" + student3.getAge() + "</td>\n" +
                         "                                <td>" + student3.getEmail() + "</td>\n" +
-                        "                                <td>" + student3.getFieldOfStudy().getDesc() + "</td>\n" +
                         "                                <td>" + student3.getTeachersList().size() + "</td>\n");
 
     }
@@ -202,21 +196,18 @@ class StudentGetControllerTest {
                         "                                <td>" + student1.getLastName() + "</td>\n" +
                         "                                <td>" + student1.getAge() + "</td>\n" +
                         "                                <td>" + student1.getEmail() + "</td>\n" +
-                        "                                <td>" + student1.getFieldOfStudy().getDesc() + "</td>\n" +
                         "                                <td>" + student1.getTeachersList().size() + "</td>\n");
         assertThat(contentAsString)
                 .contains("                                <td>" + student2.getFirstName()+ "</td>\n" +
                         "                                <td>" + student2.getLastName() + "</td>\n" +
                         "                                <td>" + student2.getAge() + "</td>\n" +
                         "                                <td>" + student2.getEmail() + "</td>\n" +
-                        "                                <td>" + student2.getFieldOfStudy().getDesc() + "</td>\n" +
                         "                                <td>" + student2.getTeachersList().size() + "</td>\n");
         assertThat(contentAsString)
                 .contains("                                <td>" + student3.getFirstName()+ "</td>\n" +
                         "                                <td>" + student3.getLastName() + "</td>\n" +
                         "                                <td>" + student3.getAge() + "</td>\n" +
                         "                                <td>" + student3.getEmail() + "</td>\n" +
-                        "                                <td>" + student3.getFieldOfStudy().getDesc() + "</td>\n" +
                         "                                <td>" + student3.getTeachersList().size() + "</td>\n");
 
     }

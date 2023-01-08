@@ -3,7 +3,6 @@ package com.example.classroom.controller;
 import com.example.classroom.dto.StudentDto;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Teacher;
-import com.example.classroom.enums.FieldOfStudy;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.InitData;
@@ -62,7 +61,6 @@ class StudentControllerTest {
         studentDto.setLastName("Mostowiak");
         studentDto.setEmail("m.mostowiak@gmail.com");
         studentDto.setAge(22);
-        studentDto.setFieldOfStudy(FieldOfStudy.INFORMATICS);
         //when
         this.mockMvc.perform(post("/dashboard/students/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -70,7 +68,6 @@ class StudentControllerTest {
                         "&lastName=" + studentDto.getLastName() +
                         "&email=" + studentDto.getEmail() +
                         "&age=" + studentDto.getAge() +
-                        "&fieldOfStudy=" + studentDto.getFieldOfStudy() +
                         "&teachersList=" + teacher1.getId() +
                         "&_teachersList=on" +
                         "&teachersList=" + teacher2.getId() +
@@ -133,7 +130,6 @@ class StudentControllerTest {
         studentDto.setLastName("Mostowiak");
         studentDto.setEmail("m.mostowiak@gmail.com");
         studentDto.setAge(22);
-        studentDto.setFieldOfStudy(FieldOfStudy.INFORMATICS);
         //when
         this.mockMvc.perform(post("/dashboard/students/update")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -142,7 +138,6 @@ class StudentControllerTest {
                                 "&lastName=" + studentDto.getLastName() +
                                 "&email=" + studentDto.getEmail() +
                                 "&age=" + studentDto.getAge() +
-                                "&fieldOfStudy=" + studentDto.getFieldOfStudy() +
                                 "&teachersList=" + teacher1.getId() +
                                 "&_teachersList=on" +
                                 "&teachersList=" + teacher2.getId() +

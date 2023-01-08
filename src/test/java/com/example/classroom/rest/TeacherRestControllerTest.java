@@ -71,8 +71,7 @@ class TeacherRestControllerTest {
                         Student::getFirstName,
                         Student::getLastName,
                         Student::getEmail,
-                        Student::getAge,
-                        Student::getFieldOfStudy
+                        Student::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(studentOne.getId(), studentOne.getFirstName(), studentOne.getLastName(),
                                 studentOne.getEmail(), studentOne.getAge(), studentOne.getFieldOfStudy()),
@@ -126,11 +125,10 @@ class TeacherRestControllerTest {
                         Student::getFirstName,
                         Student::getLastName,
                         Student::getEmail,
-                        Student::getAge,
-                        Student::getFieldOfStudy
+                        Student::getAge
                 ).containsExactlyInAnyOrder(
-                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(), student1.getEmail(), student1.getAge(), student1.getFieldOfStudy()),
-                        Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(), student2.getEmail(), student2.getAge(), student2.getFieldOfStudy())
+                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(), student1.getEmail(), student1.getAge()),
+                        Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(), student2.getEmail(), student2.getAge())
                 );
     }
 
@@ -173,13 +171,12 @@ class TeacherRestControllerTest {
                         Student::getLastName,
                         Student::getEmail,
                         Student::getAge,
-                        Student::getFieldOfStudy,
                         s -> s.getTeachersList().size()
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(),
-                                student1.getEmail(), student1.getAge(), student1.getFieldOfStudy(), student1.getTeachersList().size()),
+                                student1.getEmail(), student1.getAge(), student1.getTeachersList().size()),
                         Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(),
-                                student2.getEmail(), student2.getAge(), student2.getFieldOfStudy(), student2.getTeachersList().size())
+                                student2.getEmail(), student2.getAge(), student2.getTeachersList().size())
                 );
     }
 

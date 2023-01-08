@@ -3,7 +3,6 @@ package com.example.classroom.rest;
 import com.example.classroom.dto.StudentDto;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Teacher;
-import com.example.classroom.enums.FieldOfStudy;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.InitData;
@@ -72,8 +71,7 @@ class StudentRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(student.getLastName());
         assertThat(actual.getEmail()).isEqualTo(student.getEmail());
         assertThat(actual.getAge()).isEqualTo(student.getAge());
-        Assertions.assertThat(actual.getFieldOfStudy()).isEqualTo(student.getFieldOfStudy());
-        Assertions.assertThat(actual.getTeachersList())
+        assertThat(actual.getTeachersList())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -127,7 +125,6 @@ class StudentRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(studentDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(studentDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(studentDto.getAge());
-        Assertions.assertThat(actual.getFieldOfStudy()).isEqualTo(studentDto.getFieldOfStudy());
         Assertions.assertThat(actual.getTeachersList()).size().isEqualTo(2);
         Assertions.assertThat(actual.getTeachersList())
                 .extracting(
@@ -155,7 +152,6 @@ class StudentRestControllerTest {
         studentDto.setLastName("Gonzales");
         studentDto.setEmail("p.gonzales@gmail.com");
         studentDto.setAge(20);
-        studentDto.setFieldOfStudy(FieldOfStudy.ROBOTICS);
         studentDto.setTeachersList(new HashSet<>(List.of(teacher1, teacher2)));
 
         //when
@@ -175,8 +171,7 @@ class StudentRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(studentDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(studentDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(studentDto.getAge());
-        Assertions.assertThat(actual.getFieldOfStudy()).isEqualTo(studentDto.getFieldOfStudy());
-        Assertions.assertThat(actual.getTeachersList())
+        assertThat(actual.getTeachersList())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -241,7 +236,6 @@ class StudentRestControllerTest {
         studentDto.setLastName("Romanski");
         studentDto.setEmail("w.romanski@gmail.com");
         studentDto.setAge(21);
-        studentDto.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
         studentDto.setTeachersList(new HashSet<>(teachers));
         return studentDto;
     }

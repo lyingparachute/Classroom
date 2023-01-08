@@ -3,7 +3,6 @@ package com.example.classroom.repository.util;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
-import com.example.classroom.enums.FieldOfStudy;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.SubjectRepository;
 import com.example.classroom.repository.TeacherRepository;
@@ -40,7 +39,6 @@ public class InitData {
         student.setLastName("Komaranczuk");
         student.setEmail("m.komaranczuk@gmail.com");
         student.setAge(25);
-        student.setFieldOfStudy(FieldOfStudy.INFORMATICS);
         studentRepository.save(student);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
@@ -56,7 +54,6 @@ public class InitData {
         student.setLastName("Romanski");
         student.setEmail("w.romanski@gmail.com");
         student.setAge(21);
-        student.setFieldOfStudy(FieldOfStudy.ELECTRICAL);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
             studentRepository.save(student);
@@ -72,7 +69,6 @@ public class InitData {
         student.setLastName("Sernatowicz");
         student.setEmail("a.sernatowicz@gmail.com");
         student.setAge(18);
-        student.setFieldOfStudy(FieldOfStudy.ROBOTICS);
         if (teachers != null && !teachers.isEmpty()){
             teachers.forEach(student::assignTeacher);
             studentRepository.save(student);

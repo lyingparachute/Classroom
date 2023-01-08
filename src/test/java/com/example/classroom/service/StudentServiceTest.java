@@ -3,7 +3,6 @@ package com.example.classroom.service;
 import com.example.classroom.dto.StudentDto;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Teacher;
-import com.example.classroom.enums.FieldOfStudy;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.InitData;
@@ -57,7 +56,6 @@ class StudentServiceTest {
         expected.setLastName("Graczyk");
         expected.setEmail("f.graczyk@gmail.com");
         expected.setAge(22);
-        expected.setFieldOfStudy(FieldOfStudy.INFORMATICS);
         expected.setTeachersList(new HashSet<>(teachers));
         //when
         studentService.create(expected);
@@ -96,7 +94,6 @@ class StudentServiceTest {
         dto.setLastName("Gonzales");
         dto.setEmail("p.gonzales@gmail.com");
         dto.setAge(20);
-        dto.setFieldOfStudy(FieldOfStudy.ROBOTICS);
         dto.setTeachersList(new HashSet<>(List.of(teacher1, teacher2)));
         //when
         studentService.update(dto);
@@ -132,7 +129,6 @@ class StudentServiceTest {
         dto.setLastName("Becker");
         dto.setEmail("a.becker@gmail.com");
         dto.setAge(29);
-        dto.setFieldOfStudy(FieldOfStudy.ROBOTICS);
         //when
         Throwable thrown = catchThrowable(() -> studentService.update(dto));
         //then
@@ -235,7 +231,6 @@ class StudentServiceTest {
         assertThat(actualStudent.getLastName()).isEqualTo(student3.getLastName());
         assertThat(actualStudent.getEmail()).isEqualTo(student3.getEmail());
         assertThat(actualStudent.getAge()).isEqualTo(student3.getAge());
-        Assertions.assertThat(actualStudent.getFieldOfStudy()).isEqualTo(student3.getFieldOfStudy());
         Assertions.assertThat(actualStudent.getTeachersList())
                 .extracting(
                         Teacher::getId,
@@ -267,7 +262,6 @@ class StudentServiceTest {
         assertThat(actual.getLastName()).isEqualTo(student.getLastName());
         assertThat(actual.getEmail()).isEqualTo(student.getEmail());
         assertThat(actual.getAge()).isEqualTo(student.getAge());
-        Assertions.assertThat(actual.getFieldOfStudy()).isEqualTo(student.getFieldOfStudy());
         Assertions.assertThat(actual.getTeachersList())
                 .extracting(
                         Teacher::getId,
@@ -348,8 +342,7 @@ class StudentServiceTest {
         assertThat(actualStudent1.getLastName()).isEqualTo(student2.getLastName());
         assertThat(actualStudent1.getEmail()).isEqualTo(student2.getEmail());
         assertThat(actualStudent1.getAge()).isEqualTo(student2.getAge());
-        Assertions.assertThat(actualStudent1.getFieldOfStudy()).isEqualTo(student2.getFieldOfStudy());
-        Assertions.assertThat(actualStudent1.getTeachersList())
+        assertThat(actualStudent1.getTeachersList())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -363,8 +356,7 @@ class StudentServiceTest {
         assertThat(actualStudent2.getLastName()).isEqualTo(student3.getLastName());
         assertThat(actualStudent2.getEmail()).isEqualTo(student3.getEmail());
         assertThat(actualStudent2.getAge()).isEqualTo(student3.getAge());
-        Assertions.assertThat(actualStudent2.getFieldOfStudy()).isEqualTo(student3.getFieldOfStudy());
-        Assertions.assertThat(actualStudent2.getTeachersList())
+        assertThat(actualStudent2.getTeachersList())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -397,7 +389,6 @@ class StudentServiceTest {
         assertThat(actual.getLastName()).isEqualTo(student.getLastName());
         assertThat(actual.getEmail()).isEqualTo(student.getEmail());
         assertThat(actual.getAge()).isEqualTo(student.getAge());
-        assertThat(actual.getFieldOfStudy()).isEqualTo(student.getFieldOfStudy());
         assertThat(actual.getTeachersList())
                 .extracting(
                         Teacher::getId,
@@ -443,7 +434,6 @@ class StudentServiceTest {
         assertThat(actual.getLastName()).isEqualTo(student.getLastName());
         assertThat(actual.getEmail()).isEqualTo(student.getEmail());
         assertThat(actual.getAge()).isEqualTo(student.getAge());
-        assertThat(actual.getFieldOfStudy()).isEqualTo(student.getFieldOfStudy());
         assertThat(actual.getTeachersList())
                 .extracting(
                         Teacher::getId,
