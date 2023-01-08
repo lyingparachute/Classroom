@@ -3,9 +3,7 @@ package com.example.classroom.repository.util;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
-import com.example.classroom.repository.StudentRepository;
-import com.example.classroom.repository.SubjectRepository;
-import com.example.classroom.repository.TeacherRepository;
+import com.example.classroom.repository.*;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -17,12 +15,16 @@ public class InitData {
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
     private final SubjectRepository subjectRepository;
+    private final DepartmentRepository departmentRepository;
+    private final FieldOfStudyRepository fieldOfStudyRepository;
 
 
-    public InitData(StudentRepository studentRepository, TeacherRepository teacherRepository, SubjectRepository subjectRepository) {
+    public InitData(StudentRepository studentRepository, TeacherRepository teacherRepository, SubjectRepository subjectRepository, DepartmentRepository departmentRepository, FieldOfStudyRepository fieldOfStudyRepository) {
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
         this.subjectRepository = subjectRepository;
+        this.departmentRepository = departmentRepository;
+        this.fieldOfStudyRepository = fieldOfStudyRepository;
     }
 
     @Transactional
@@ -30,6 +32,8 @@ public class InitData {
         teacherRepository.deleteAll();
         studentRepository.deleteAll();
         subjectRepository.deleteAll();
+        departmentRepository.deleteAll();
+        fieldOfStudyRepository.deleteAll();
     }
 
     @Transactional
