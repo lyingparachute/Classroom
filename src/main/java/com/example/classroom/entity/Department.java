@@ -1,7 +1,10 @@
 package com.example.classroom.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -26,24 +29,38 @@ public class Department {
     @Pattern(regexp = "(\\+48|0)[0-9]{9}")
     private int telNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "dean_id")
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "dean_id", referencedColumnName = "id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Teacher dean;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<FieldOfStudy> fieldsOfStudy = new HashSet<>();
+
+    public void addDean(Teacher dean){
+        setDean(dean);
+    }
+//    public void removeDean(Teacher dean){
+//        );
+//    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Department that = (Department) o;
-        return telNumber == that.telNumber && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(address, that.address) && Objects.equals(dean, that.dean);
+        return telNumber == that.telNumber && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address, telNumber, dean);
+        return Objects.hash(id, name, address, telNumber);
     }
 
     @Override

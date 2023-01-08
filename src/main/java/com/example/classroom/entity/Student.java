@@ -1,6 +1,5 @@
 package com.example.classroom.entity;
 
-import com.example.classroom.enums.FieldOfStudy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +44,8 @@ public class Student {
     @Email(message = "{message.valid.email}")
     private String email;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "field_id")
     private FieldOfStudy fieldOfStudy;
 
     @JsonIgnore

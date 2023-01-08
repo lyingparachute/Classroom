@@ -1,5 +1,6 @@
 package com.example.classroom.dto;
 
+import com.example.classroom.entity.Department;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import lombok.EqualsAndHashCode;
@@ -22,6 +23,7 @@ public class TeacherDto implements Serializable {
     private String lastName;
     private int age;
     private String email;
+    private Department departmentDean;
     private Set<Student> studentsList = new HashSet<>();
     private Set<Subject> subjects = new HashSet<>();
 

@@ -1,7 +1,7 @@
 package com.example.classroom.dto;
 
+import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Teacher;
-import com.example.classroom.enums.FieldOfStudy;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

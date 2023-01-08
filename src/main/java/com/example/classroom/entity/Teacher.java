@@ -12,6 +12,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -44,6 +45,10 @@ public class Teacher {
     @NotEmpty(message = "{message.empty}")
     @Email(message = "{message.valid.email}")
     private String email;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "dean")
+    private Department departmentDean;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER,
@@ -84,5 +89,18 @@ public class Teacher {
     @Override
     public String toString() {
         return firstName + " " + lastName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Teacher teacher = (Teacher) o;
+        return age == teacher.age && id.equals(teacher.id) && firstName.equals(teacher.firstName) && lastName.equals(teacher.lastName) && email.equals(teacher.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, age, email);
     }
 }

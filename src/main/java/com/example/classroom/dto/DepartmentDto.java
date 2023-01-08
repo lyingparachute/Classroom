@@ -1,5 +1,6 @@
 package com.example.classroom.dto;
 
+import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Teacher;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A DTO for the {@link com.example.classroom.entity.Department} entity
@@ -23,4 +26,5 @@ public class DepartmentDto implements Serializable {
     @Pattern(regexp = "(\\+48|0)[0-9]{9}")
     private int telNumber;
     private Teacher dean;
+    private Set<FieldOfStudy> fieldsOfStudy = new HashSet<>();
 }

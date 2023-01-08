@@ -3,6 +3,7 @@ package com.example.classroom.entity;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,17 +41,21 @@ public class FieldOfStudy {
     @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Subject> subjects = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Student> students = new HashSet<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FieldOfStudy that = (FieldOfStudy) o;
-        return id.equals(that.id) && name.equals(that.name) && levelOfEducation == that.levelOfEducation && mode == that.mode && title == that.title && Objects.equals(subjects, that.subjects);
+        return id.equals(that.id) && name.equals(that.name) && levelOfEducation == that.levelOfEducation && mode == that.mode && title == that.title;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, levelOfEducation, mode, title, subjects);
+        return Objects.hash(id, name, levelOfEducation, mode, title);
     }
 
     @Override

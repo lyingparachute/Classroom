@@ -65,3 +65,16 @@ INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (9, 3);
 INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (10, 4);
 INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (11, 5);
 INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES (12, 5);
+
+UPDATE students SET field_id = 1 WHERE id = 1;
+UPDATE students SET field_id = 2 WHERE id = 2;
+UPDATE students SET field_id = 3 WHERE id = 3;
+UPDATE students SET field_id = 4 WHERE id = 4;
+UPDATE students SET field_id = 5 WHERE id = 5;
+UPDATE students SET field_id = 6 WHERE id = 6;
+UPDATE students SET field_id = 7 WHERE id = 7;
+UPDATE students SET field_id = 8 WHERE id = 8;
+UPDATE students SET field_id = 9 WHERE id = 9;
+UPDATE students SET field_id = 10 WHERE id = 10;
+UPDATE students SET field_id = 11 WHERE id = 11;
+UPDATE students SET field_id = 12 WHERE id = 12;
