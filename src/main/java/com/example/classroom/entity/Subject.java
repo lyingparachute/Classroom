@@ -34,6 +34,7 @@ public class Subject {
     @PositiveOrZero
     private int hoursInSemester;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "field_id")
     private FieldOfStudy fieldOfStudy;

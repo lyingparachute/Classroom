@@ -121,6 +121,4 @@ public class SubjectService {
         }
         subjectRepository.deleteAll();
     }
-    
-
 }
