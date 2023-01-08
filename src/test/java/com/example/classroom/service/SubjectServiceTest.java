@@ -45,7 +45,7 @@ class SubjectServiceTest {
     }
 
     @Test
-    void create_shouldSaveStudent_givenStudentDto() {
+    void create_shouldSaveStudent_givenSubjectDto() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -76,7 +76,7 @@ class SubjectServiceTest {
     }
 
     @Test
-    void update_shouldUpdateStudent_givenStudentDto() {
+    void update_shouldUpdateSubject_givenSubjectDto() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -107,7 +107,7 @@ class SubjectServiceTest {
     }
 
     @Test
-    void update_throwsIllegalArgumentException_givenWrongStudentDto() {
+    void update_throwsIllegalArgumentException_givenWrongSubjectDto() {
         //given
         SubjectDto dto = createSubjectDto(List.of());
         dto.setId(1L);
@@ -120,7 +120,7 @@ class SubjectServiceTest {
     }
 
     @Test
-    void fetchAll_shouldReturnAllStudents() {
+    void fetchAll_shouldReturnAllSubjects() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -183,7 +183,7 @@ class SubjectServiceTest {
     }
 
     @Test
-    void fetchAllPaginated_shouldReturnAllStudentsPaginated_givenPageNo_PageSize_SortDir() {
+    void fetchAllPaginated_shouldReturnAllSubjectsPaginated_givenPageNo_PageSize_SortDir() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -219,7 +219,7 @@ class SubjectServiceTest {
     }
 
     @Test
-    void fetchById_shouldFindStudent_givenId() {
+    void fetchById_shouldFindSubject_givenId() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -260,7 +260,7 @@ class SubjectServiceTest {
     }
 
     @Test
-    void remove_shouldRemoveStudent_givenId() {
+    void remove_shouldRemoveSubject_givenId() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -290,9 +290,9 @@ class SubjectServiceTest {
     }
 
     @Test
-    void findByFirstOrLastName_returnsStudentsSearchedByFirstOrLastName_givenName() {
+    void findByFirstOrLastName_returnsSubjectsSearchedByName_givenName() {
         //given
-        String shortName = "i";
+        String name = "i";
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
         Teacher teacher3 = initData.createTeacherThree(List.of());
@@ -300,7 +300,7 @@ class SubjectServiceTest {
         Subject expected2 = initData.createSubjectArt(List.of(teacher3));
         Subject expected3 = initData.createSubjectScience(List.of(teacher1, teacher2, teacher3));
         //when
-        List<SubjectDto> actual = subjectService.findByName(shortName);
+        List<SubjectDto> actual = subjectService.findByName(name);
         //then
         assertThat(actual.size()).isEqualTo(2);
         SubjectDto actualSubject1 = actual.get(0);
@@ -341,7 +341,7 @@ class SubjectServiceTest {
     }
 
     @Test
-    void assignTeachers_shouldAssignTeachersToStudent_givenTeachersSet() {
+    void assignTeachers_shouldAssignTeachersToSubject_givenTeachersSet() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
@@ -371,7 +371,7 @@ class SubjectServiceTest {
     }
 
     @Test
-    void removeTeachers_shouldRemoveTeachersFromStudent_givenTeachersSet() {
+    void removeTeachers_shouldRemoveTeachersFromSubject_givenTeachersSet() {
         //given
         Teacher teacher1 = initData.createTeacherOne(List.of());
         Teacher teacher2 = initData.createTeacherTwo(List.of());
