@@ -13,20 +13,9 @@ public class DashboardController {
         return "dashboard/dashboard";
     }
 
-
-    @GetMapping("/fieldsOfStudy")
-    public String getFieldsOfStudy(){
-        return "dashboard/fieldsOfStudy";
-    }
-
     @GetMapping("/library")
     public String getLibrary(){
         return "dashboard/library";
-    }
-
-    @GetMapping("/facilities")
-    public String getFacilities(){
-        return "dashboard/facilities";
     }
 
     @GetMapping("/calendar")

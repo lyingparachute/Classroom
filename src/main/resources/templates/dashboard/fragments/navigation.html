@@ -40,11 +40,11 @@
                     <i class="fas fa-microscope fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item6}"></span>
                 </a>
                 <!--* Fields of Study *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('fieldsOfStudy')}" th:href="@{/dashboard/fieldsOfStudy}"
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}" th:href="@{/dashboard/fields-of-study}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
                         class="fas fa-graduation-cap fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('fieldsOfStudy')}" th:href="@{/dashboard/fieldsOfStudy}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}" th:href="@{/dashboard/fields-of-study}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-graduation-cap  fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
@@ -58,11 +58,11 @@
                         class="fas fa-book-open fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item8}"></span>
                 </a>
                 <!--* Facilities *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('facilities')}" th:href="@{/dashboard/facilities}"
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('departments')}" th:href="@{/dashboard/departments}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
                         class="fas fa-school fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item9}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('facilities')}" th:href="@{/dashboard/facilities}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('departments')}" th:href="@{/dashboard/departments}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-school fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item9}"></span>
                 </a>
