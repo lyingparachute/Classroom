@@ -216,12 +216,15 @@ public class InitData {
         fieldOfStudy.setTitle(AcademicTitle.MGR);
         if (department != null) {
             fieldOfStudy.setDepartment(department);
+            department.getFieldsOfStudy().add(fieldOfStudy);
         }
         if (subjects != null && !subjects.isEmpty()) {
             fieldOfStudy.setSubjects(new HashSet<>(subjects));
+            subjects.forEach(subject -> subject.setFieldOfStudy(fieldOfStudy));
         }
         if (students != null && !students.isEmpty()) {
             fieldOfStudy.setStudents(new HashSet<>(students));
+            students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
         }
         return fieldOfStudyRepository.save(fieldOfStudy);
     }
@@ -234,12 +237,15 @@ public class InitData {
         fieldOfStudy.setTitle(AcademicTitle.BACH);
         if (department != null) {
             fieldOfStudy.setDepartment(department);
+            department.getFieldsOfStudy().add(fieldOfStudy);
         }
         if (subjects != null && !subjects.isEmpty()) {
             fieldOfStudy.setSubjects(new HashSet<>(subjects));
+            subjects.forEach(subject -> subject.setFieldOfStudy(fieldOfStudy));
         }
         if (students != null && !students.isEmpty()) {
             fieldOfStudy.setStudents(new HashSet<>(students));
+            students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
         }
         return fieldOfStudyRepository.save(fieldOfStudy);
     }
@@ -252,12 +258,15 @@ public class InitData {
         fieldOfStudy.setTitle(AcademicTitle.DR);
         if (department != null) {
             fieldOfStudy.setDepartment(department);
+            department.getFieldsOfStudy().add(fieldOfStudy);
         }
         if (subjects != null && !subjects.isEmpty()) {
             fieldOfStudy.setSubjects(new HashSet<>(subjects));
+            subjects.forEach(subject -> subject.setFieldOfStudy(fieldOfStudy));
         }
         if (students != null && !students.isEmpty()) {
             fieldOfStudy.setStudents(new HashSet<>(students));
+            students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
         }
         return fieldOfStudyRepository.save(fieldOfStudy);
     }
@@ -281,7 +290,7 @@ public class InitData {
         Department department = new Department();
         department.setName("Wydział Chemiczny");
         department.setAddress("ul. Broniewicza 115, 00-245 Kęty");
-        department.setTelNumber(123456789);
+        department.setTelNumber(987654321);
         if (dean != null) {
             department.setDean(dean);
         }
@@ -295,7 +304,7 @@ public class InitData {
         Department department = new Department();
         department.setName("Wydział Architektury");
         department.setAddress("ul. Jabłoniowa 34, 11-112 Stalowa Wola");
-        department.setTelNumber(123456789);
+        department.setTelNumber(321321321);
         if (dean != null) {
             department.setDean(dean);
         }
