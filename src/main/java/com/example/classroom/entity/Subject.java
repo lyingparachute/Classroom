@@ -5,6 +5,7 @@ import com.example.classroom.enums.Semester;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "subjects")
 public class Subject {
 
@@ -37,6 +39,7 @@ public class Subject {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "field_id")
+    @ToString.Exclude
     private FieldOfStudy fieldOfStudy;
 
     @JsonIgnore
@@ -46,6 +49,7 @@ public class Subject {
                     CascadeType.DETACH
             },
             mappedBy = "subjects")
+    @ToString.Exclude
     private Set<Teacher> teachers = new HashSet<>();
 
 
@@ -57,14 +61,6 @@ public class Subject {
     public void addTeacher(Teacher teacher) {
         this.teachers.add(teacher);
         teacher.getSubjects().add(this);
-    }
-
-    @Override
-    public String toString() {
-        return "Subject{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 
     @Override

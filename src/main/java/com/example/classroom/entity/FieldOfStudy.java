@@ -6,6 +6,7 @@ import com.example.classroom.enums.ModeOfStudy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "fields_of_study")
 public class FieldOfStudy {
     @Id
@@ -36,22 +38,17 @@ public class FieldOfStudy {
 
     @ManyToOne
     @JoinColumn(name = "department_id")
+    @ToString.Exclude
     private Department department;
 
-    @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ToString.Exclude
     private Set<Subject> subjects = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ToString.Exclude
     private Set<Student> students = new HashSet<>();
-
-    public void addSubject(Subject subject) {
-        this.subjects.add(subject);
-    }
-
-    public void removeSubject(Subject subject) {
-        this.subjects.remove(subject);
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -64,16 +61,5 @@ public class FieldOfStudy {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, levelOfEducation, mode, title);
-    }
-
-    @Override
-    public String toString() {
-        return "FieldOfStudy{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", levelOfEducation=" + levelOfEducation +
-                ", mode=" + mode +
-                ", title=" + title +
-                '}';
     }
 }

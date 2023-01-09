@@ -3,6 +3,7 @@ package com.example.classroom.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "departments")
 public class Department {
     @Id
@@ -26,22 +28,16 @@ public class Department {
 //    @Pattern(regexp = "(\\+48|0)[0-9]{9}")
     private int telNumber;
 
-
-    @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
+    @ToString.Exclude
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dean_id", referencedColumnName = "id")
     private Teacher dean;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<FieldOfStudy> fieldsOfStudy = new HashSet<>();
-
-    public void addDean(Teacher dean){
-        setDean(dean);
-    }
-//    public void removeDean(Teacher dean){
-//        );
-//    }
 
     @Override
     public boolean equals(Object o) {
@@ -54,15 +50,5 @@ public class Department {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, address, telNumber);
-    }
-
-    @Override
-    public String toString() {
-        return "Department{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", telNumber=" + telNumber +
-                '}';
     }
 }
