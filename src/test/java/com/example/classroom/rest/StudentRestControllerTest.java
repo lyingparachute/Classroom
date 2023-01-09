@@ -60,9 +60,9 @@ class StudentRestControllerTest {
         //when
         URI url = createURL("/api/students/" + student.getId());
         ResponseEntity<StudentDto> response = restTemplate.getForEntity(url, StudentDto.class);
+        //then
         Optional<Student> byId = studentRepository.findById(student.getId());
         assertThat(byId).isPresent();
-        //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         StudentDto actual = response.getBody();
         assertThat(actual).isNotNull();
@@ -224,10 +224,9 @@ class StudentRestControllerTest {
             teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
                     "Teacher with ID = " + teacher.getId() + " should not be removed."));
         });
-        student2.getTeachers().forEach(teacher -> {
+        student2.getTeachers().forEach(teacher ->
             teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
-                    "Teacher with ID = " + teacher.getId() + " should not be removed."));
-        });
+                    "Teacher with ID = " + teacher.getId() + " should not be removed.")));
     }
 
     private StudentDto createStudentDto(List<Teacher> teachers) {

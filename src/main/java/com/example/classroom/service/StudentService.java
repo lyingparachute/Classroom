@@ -52,8 +52,8 @@ public class StudentService {
     }
 
     public List<StudentDto> fetchAll() {
-        List<Student> allStudents = studentRepository.findAll();
-        return allStudents.stream().map(student -> mapper.map(student, StudentDto.class)).collect(Collectors.toList());
+        List<Student> all = studentRepository.findAll();
+        return all.stream().map(student -> mapper.map(student, StudentDto.class)).collect(Collectors.toList());
     }
 
     public Page<StudentDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {

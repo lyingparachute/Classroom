@@ -57,8 +57,8 @@ public class FieldOfStudyService {
     }
 
     public List<FieldOfStudyDto> fetchAll() {
-        List<FieldOfStudy> fieldsOfStudy = fieldOfStudyRepository.findAll();
-        return fieldsOfStudy.stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).collect(Collectors.toList());
+        List<FieldOfStudy> all = fieldOfStudyRepository.findAll();
+        return all.stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).collect(Collectors.toList());
     }
 
     public Page<FieldOfStudyDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
