@@ -48,7 +48,10 @@ class FieldOfStudyServiceTest {
     void create_shouldSaveObject_givenObjectDto() {
         //given
         Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentOne(null, List.of());
         Subject subject1 = initData.createSubjectOne(null, List.of());
+        Subject subject2 = initData.createSubjectTwo(null, List.of());
+
         Department department = initData.createDepartmentOne(null, List.of());
         FieldOfStudyDto expected = createFieldOfStudyDto(department, List.of(subject1), List.of(student1));
         //when

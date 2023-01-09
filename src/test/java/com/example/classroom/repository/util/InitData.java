@@ -154,7 +154,7 @@ public class InitData {
     }
 
     @Transactional
-    public Subject createSubjectTwo(List<Teacher> teachers) {
+    public Subject createSubjectTwo(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setName("Art");
         subject.setDescription("Painting");
@@ -164,12 +164,15 @@ public class InitData {
             teachers.forEach(subject::addTeacher);
             subjectRepository.save(subject);
         }
+        if (fieldOfStudy != null){
+            subject.setFieldOfStudy(fieldOfStudy);
+        }
         subjectRepository.save(subject);
         return subject;
     }
 
     @Transactional
-    public Subject createSubjectThree(List<Teacher> teachers) {
+    public Subject createSubjectThree(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setName("Science");
         subject.setDescription("General Science");
@@ -179,12 +182,15 @@ public class InitData {
             teachers.forEach(subject::addTeacher);
             subjectRepository.save(subject);
         }
+        if (fieldOfStudy != null){
+            subject.setFieldOfStudy(fieldOfStudy);
+        }
         subjectRepository.save(subject);
         return subject;
     }
 
     @Transactional
-    public Subject createSubjectFour(List<Teacher> teachers) {
+    public Subject createSubjectFour(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setName("Computer Science");
         subject.setDescription("Learning Java and Spring");
@@ -193,6 +199,9 @@ public class InitData {
         if (teachers != null && !teachers.isEmpty()) {
             teachers.forEach(subject::addTeacher);
             subjectRepository.save(subject);
+        }
+        if (fieldOfStudy != null){
+            subject.setFieldOfStudy(fieldOfStudy);
         }
         subjectRepository.save(subject);
         return subject;

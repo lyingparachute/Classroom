@@ -89,8 +89,8 @@ class SubjectRestControllerTest {
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
 
-        initData.createSubjectTwo(List.of(teacher1));
-        initData.createSubjectFour(List.of(teacher2));
+        initData.createSubjectTwo(null, List.of(teacher1));
+        initData.createSubjectFour(null, List.of(teacher2));
         //when
         URI url = createURL("/api/subjects/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
@@ -180,7 +180,7 @@ class SubjectRestControllerTest {
     @Test
     void shouldDeleteSubject() throws URISyntaxException {
         //given
-        Subject subject = initData.createSubjectFour(List.of(
+        Subject subject = initData.createSubjectFour(null, List.of(
                 initData.createTeacherOne(null, List.of(), List.of()),
                 initData.createTeacherTwo(null, List.of(), List.of())));
         //when
@@ -198,7 +198,7 @@ class SubjectRestControllerTest {
     @Test
     void shouldDeleteAllSubjects() throws URISyntaxException {
         //given
-        Subject subject1 = initData.createSubjectFour(List.of(
+        Subject subject1 = initData.createSubjectFour(null, List.of(
                 initData.createTeacherOne(null, List.of(), List.of()),
                 initData.createTeacherTwo(null, List.of(), List.of())));
         Subject subject2 = initData.createSubjectOne(null, List.of(
