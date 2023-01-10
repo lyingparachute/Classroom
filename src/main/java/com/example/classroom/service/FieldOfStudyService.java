@@ -39,7 +39,7 @@ public class FieldOfStudyService {
     @Transactional
     public FieldOfStudyDto create(FieldOfStudyDto dto) {
         FieldOfStudy fieldOfStudy = mapper.map(dto, FieldOfStudy.class);
-        addDepartmentSubjectsStudents(fieldOfStudy);
+        addDepartmentSubjectsAndStudents(fieldOfStudy);
         FieldOfStudy saved = fieldOfStudyRepository.save(fieldOfStudy);
         return mapper.map(saved, FieldOfStudyDto.class);
     }
@@ -48,9 +48,9 @@ public class FieldOfStudyService {
     public FieldOfStudyDto update(FieldOfStudyDto dto) {
         FieldOfStudy fieldOfStudy = fieldOfStudyRepository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
-        removeDepartmentSubjectsStudents(fieldOfStudy);
+        removeDepartmentSubjectsAndStudents(fieldOfStudy);
         mapper.map(dto, fieldOfStudy);
-        addDepartmentSubjectsStudents(fieldOfStudy);
+        addDepartmentSubjectsAndStudents(fieldOfStudy);
         FieldOfStudy saved = fieldOfStudyRepository.save(fieldOfStudy);
         return mapper.map(saved, FieldOfStudyDto.class);
 
@@ -147,14 +147,14 @@ public class FieldOfStudyService {
         }
     }
 
-    private void addDepartmentSubjectsStudents(FieldOfStudy fieldOfStudy) {
+    private void addDepartmentSubjectsAndStudents(FieldOfStudy fieldOfStudy) {
         addDepartment(fieldOfStudy);
         addSubjects(fieldOfStudy);
         addStudents(fieldOfStudy);
         fieldOfStudyRepository.save(fieldOfStudy);
     }
 
-    private void removeDepartmentSubjectsStudents(FieldOfStudy fieldOfStudy) {
+    private void removeDepartmentSubjectsAndStudents(FieldOfStudy fieldOfStudy) {
         removeDepartment(fieldOfStudy);
         removeSubjects(fieldOfStudy);
         removeStudents(fieldOfStudy);
