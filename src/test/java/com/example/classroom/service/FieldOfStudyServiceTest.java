@@ -27,7 +27,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-@ActiveProfiles("test-it")
+@ActiveProfiles("test")
 @SpringBootTest
 @Transactional
 class FieldOfStudyServiceTest {
