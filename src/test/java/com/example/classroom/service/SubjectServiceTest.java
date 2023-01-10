@@ -3,8 +3,7 @@ package com.example.classroom.service;
 import com.example.classroom.dto.SubjectDto;
 import com.example.classroom.entity.*;
 import com.example.classroom.enums.Semester;
-import com.example.classroom.repository.SubjectRepository;
-import com.example.classroom.repository.TeacherRepository;
+import com.example.classroom.repository.*;
 import com.example.classroom.repository.util.InitData;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +39,15 @@ class SubjectServiceTest {
     @Autowired
     private TeacherRepository teacherRepository;
 
+    @Autowired
+    private FieldOfStudyRepository fieldOfStudyRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
     @BeforeEach
     public void setup() {
         initData.cleanUp();
@@ -65,19 +73,29 @@ class SubjectServiceTest {
         assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
         assertThat(actual.getSemester()).isEqualTo(expected.getSemester());
         assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
-
+        assertThat(actual.getFieldOfStudy().getSubjects())
+                .extracting(Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy,
+                        Subject::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                expected.getHoursInSemester(), fieldOfStudyRepository.findAll().get(0), expected.getTeachers()));
         assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge
+                        Teacher::getAge,
+                        Teacher::getDepartmentDean
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
+                                teacher1.getEmail(), teacher1.getAge(), department),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()));
+                                teacher2.getEmail(), teacher2.getAge(), null));
 
     }
 
