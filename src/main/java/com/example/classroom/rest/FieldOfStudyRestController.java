@@ -27,8 +27,8 @@ public class FieldOfStudyRestController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<FieldOfStudyDto> createFieldOfStudy(@RequestBody FieldOfStudyDto departmentDto) {
-        FieldOfStudyDto created = service.create(departmentDto);
+    public ResponseEntity<FieldOfStudyDto> createFieldOfStudy(@RequestBody FieldOfStudyDto fieldOfStudyDto) {
+        FieldOfStudyDto created = service.create(fieldOfStudyDto);
         return created != null ?
                 ResponseEntity.status(HttpStatus.CREATED)
                         .body(created) :
@@ -44,8 +44,8 @@ public class FieldOfStudyRestController {
     }
 
     @PutMapping
-    public ResponseEntity<FieldOfStudyDto> putFieldOfStudy(@RequestBody FieldOfStudyDto departmentDto){
-        FieldOfStudyDto updated = service.update(departmentDto);
+    public ResponseEntity<FieldOfStudyDto> putFieldOfStudy(@RequestBody FieldOfStudyDto fieldOfStudyDto){
+        FieldOfStudyDto updated = service.update(fieldOfStudyDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
                 ResponseEntity.badRequest().build();
