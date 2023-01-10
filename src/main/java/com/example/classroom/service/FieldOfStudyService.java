@@ -16,9 +16,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -120,30 +120,34 @@ public class FieldOfStudyService {
     }
 
     private void addSubjects(FieldOfStudy fieldOfStudy) {
-        Set<Subject> subjects = fieldOfStudy.getSubjects();
-        if (subjects != null && !subjects.isEmpty()) {
+        HashSet<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
+        if (!subjects.isEmpty()) {
             subjects.forEach(subject -> subject.setFieldOfStudy(fieldOfStudy));
+            fieldOfStudy.setSubjects(subjects);
         }
     }
 
     private void removeSubjects(FieldOfStudy fieldOfStudy) {
-        Set<Subject> subjects = fieldOfStudy.getSubjects();
-        if (subjects != null && !subjects.isEmpty()) {
+        HashSet<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
+        if (!subjects.isEmpty()) {
             subjects.forEach(subject -> subject.setFieldOfStudy(null));
+            fieldOfStudy.setSubjects(new HashSet<>());
         }
     }
 
     private void addStudents(FieldOfStudy fieldOfStudy) {
-        Set<Student> students = fieldOfStudy.getStudents();
-        if (students != null && !students.isEmpty()) {
+        HashSet<Student> students = new HashSet<>(fieldOfStudy.getStudents());
+        if (!students.isEmpty()) {
             students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
+            fieldOfStudy.setStudents(students);
         }
     }
 
     private void removeStudents(FieldOfStudy fieldOfStudy) {
-        Set<Student> students = fieldOfStudy.getStudents();
-        if (students != null && !students.isEmpty()) {
+        HashSet<Student> students = new HashSet<>(fieldOfStudy.getStudents());
+        if (!students.isEmpty()) {
             students.forEach(student -> student.setFieldOfStudy(null));
+            fieldOfStudy.setStudents(new HashSet<>());
         }
     }
 
@@ -151,7 +155,6 @@ public class FieldOfStudyService {
         addDepartment(fieldOfStudy);
         addSubjects(fieldOfStudy);
         addStudents(fieldOfStudy);
-        fieldOfStudyRepository.save(fieldOfStudy);
     }
 
     private void removeDepartmentSubjectsAndStudents(FieldOfStudy fieldOfStudy) {
