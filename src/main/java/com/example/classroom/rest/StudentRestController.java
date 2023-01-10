@@ -12,15 +12,15 @@ import java.util.List;
 @RequestMapping("api/students")
 public class StudentRestController {
 
-    private final StudentService studentService;
+    private final StudentService service;
 
-    public StudentRestController(StudentService studentService) {
-        this.studentService = studentService;
+    public StudentRestController(StudentService service) {
+        this.service = service;
     }
 
     @GetMapping()
     public ResponseEntity<List<StudentDto>> getStudents() {
-        List<StudentDto> students = studentService.fetchAll();
+        List<StudentDto> students = service.fetchAll();
         return students.isEmpty() ?
                 ResponseEntity.notFound().build() :
                 ResponseEntity.ok(students);
@@ -28,7 +28,7 @@ public class StudentRestController {
 
     @PostMapping("create")
     public ResponseEntity<StudentDto> createStudent(@RequestBody StudentDto studentDto) {
-        StudentDto created = studentService.create(studentDto);
+        StudentDto created = service.create(studentDto);
         return created != null ?
                 ResponseEntity.status(HttpStatus.CREATED)
                         .body(created) :
@@ -37,15 +37,15 @@ public class StudentRestController {
 
     @GetMapping("{id}")
     public ResponseEntity<StudentDto> getStudent(@PathVariable Long id) {
-        StudentDto studentDto = studentService.fetchById(id);
-        return studentDto != null ?
-                ResponseEntity.ok(studentDto) :
+        StudentDto dto = service.fetchById(id);
+        return dto != null ?
+                ResponseEntity.ok(dto) :
                 ResponseEntity.notFound().build();
     }
 
     @PutMapping
     public ResponseEntity<StudentDto> putStudent(@RequestBody StudentDto studentDto){
-        StudentDto updated = studentService.update(studentDto);
+        StudentDto updated = service.update(studentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
                 ResponseEntity.badRequest().build();
@@ -53,13 +53,13 @@ public class StudentRestController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
-        studentService.remove(id);
+        service.remove(id);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteAllStudents() {
-        studentService.removeAll();
+        service.removeAll();
         return ResponseEntity.accepted().build();
     }
 }
