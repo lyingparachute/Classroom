@@ -1,6 +1,7 @@
 package com.example.classroom.service;
 
 import com.example.classroom.dto.SubjectDto;
+import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.SubjectRepository;
@@ -16,7 +17,6 @@ import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +35,7 @@ public class SubjectService {
     @Transactional
     public SubjectDto create(SubjectDto dto) {
         Subject subject = mapper.map(dto, Subject.class);
-        addTeachers(subject, subject.getTeachers());
+        addTeachersAndFieldOfStudy(subject);
         Subject saved = subjectRepository.save(subject);
         return mapper.map(saved, SubjectDto.class);
     }
@@ -44,9 +44,9 @@ public class SubjectService {
     public SubjectDto update(SubjectDto dto) {
         Subject subject = subjectRepository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid subject '" + dto + "' with ID: " + dto.getId()));
-        removeTeachers(subject, new HashSet<>(subject.getTeachers()));
+        removeTeachersAndFieldOfStudy(subject);
         mapper.map(dto, subject);
-        addTeachers(subject, subject.getTeachers());
+        addTeachersAndFieldOfStudy(subject);
         Subject saved = subjectRepository.save(subject);
         return mapper.map(saved, SubjectDto.class);
 
@@ -77,7 +77,7 @@ public class SubjectService {
     public void remove(Long id) {
         Subject subject = subjectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid subject id: " + id));
-        removeTeachers(subject, new HashSet<>(subject.getTeachers()));
+        removeTeachersAndFieldOfStudy(subject);
         subjectRepository.delete(subject);
     }
 
@@ -97,28 +97,38 @@ public class SubjectService {
     }
 
     @Transactional
-    public void addTeachers(Subject subject, Set<Teacher> teachers) {
-        if (teachers != null && !teachers.isEmpty()) {
-            teachers.forEach(subject::addTeacher);
-            subjectRepository.save(subject);
-        }
-    }
-
-    @Transactional
-    public void removeTeachers(Subject subject, Set<Teacher> teachers) {
-        if (teachers != null && !teachers.isEmpty()) {
-            teachers.forEach(t -> t.removeSubject(subject));
-            teachers.forEach(subject::removeTeacher);
-            subjectRepository.save(subject);
-            teacherRepository.saveAll(teachers);
-        }
-    }
-
-    @Transactional
     public void removeAll() {
         for (Subject subject : subjectRepository.findAll()){
             teacherRepository.findAll().forEach(t -> t.removeSubject(subject));
         }
         subjectRepository.deleteAll();
+    }
+
+    private void addTeachersAndFieldOfStudy(Subject subject) {
+        HashSet<Teacher> teachers = new HashSet<>(subject.getTeachers());
+        FieldOfStudy fieldOfStudy = subject.getFieldOfStudy();
+        if (!teachers.isEmpty()) {
+            teachers.forEach(t -> t.getSubjects().add(subject));
+            teachers.forEach(subject::addTeacher);
+        }
+        if (fieldOfStudy != null) {
+            subject.setFieldOfStudy(fieldOfStudy);
+            fieldOfStudy.getSubjects().add(subject);
+        }
+        subjectRepository.save(subject);
+    }
+
+
+    private void removeTeachersAndFieldOfStudy(Subject subject) {
+        HashSet<Teacher> teachers = new HashSet<>(subject.getTeachers());
+        FieldOfStudy fieldOfStudy = subject.getFieldOfStudy();
+        if (!teachers.isEmpty()) {
+            teachers.forEach(t -> t.getSubjects().remove(subject));
+            teachers.forEach(subject::removeTeacher);
+        }
+        if (fieldOfStudy != null) {
+            subject.setFieldOfStudy(null);
+        }
+        subjectRepository.save(subject);
     }
 }
