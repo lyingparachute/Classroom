@@ -2,7 +2,7 @@ spring:
   datasource:
     username: root
     password: password
-    url: jdbc:h2:mem:wardrobe;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:classroom;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
