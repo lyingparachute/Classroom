@@ -70,7 +70,7 @@ class TeacherRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(teacher.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacher.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacher.getAge());
-        assertThat(actual.getStudentsList())
+        assertThat(actual.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -123,8 +123,8 @@ class TeacherRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
-        assertThat(actual.getStudentsList()).size().isEqualTo(2);
-        assertThat(actual.getStudentsList())
+        assertThat(actual.getStudents()).size().isEqualTo(2);
+        assertThat(actual.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -150,7 +150,7 @@ class TeacherRestControllerTest {
         teacherDto.setLastName("Messi");
         teacherDto.setEmail("l.messi@gmail.com");
         teacherDto.setAge(35);
-        teacherDto.setStudentsList(new HashSet<>(List.of(student1, student2)));
+        teacherDto.setStudents(new HashSet<>(List.of(student1, student2)));
 
         //when
         URI url = createURL("/api/teachers/");
@@ -169,7 +169,7 @@ class TeacherRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(teacherDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacherDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacherDto.getAge());
-        assertThat(actual.getStudentsList())
+        assertThat(actual.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -212,7 +212,7 @@ class TeacherRestControllerTest {
         HashSet<Student> students = new HashSet<>();
         students.add(studentOne);
         students.add(studentTwo);
-        teacherDto.setStudentsList(students);
+        teacherDto.setStudents(students);
         return teacherDto;
     }
 

@@ -54,17 +54,17 @@ public class Teacher {
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.MERGE,
-                    CascadeType.DETACH})
+                    CascadeType.PERSIST})
     @JoinTable(name = "teacher_subjects",
             joinColumns = { @JoinColumn(name = "teacher_id") },
             inverseJoinColumns = { @JoinColumn(name = "subject_id") })
     private Set<Subject> subjects = new HashSet<>();
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER,
+    @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.MERGE,
-                    CascadeType.DETACH})
+                    CascadeType.PERSIST})
     @JoinTable(name = "teacher_students",
             joinColumns = { @JoinColumn(name = "teacher_id") },
             inverseJoinColumns = { @JoinColumn(name = "student_id") })

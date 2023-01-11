@@ -49,11 +49,7 @@ public class Student {
     private FieldOfStudy fieldOfStudy;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = {
-                    CascadeType.MERGE,
-                    CascadeType.DETACH
-            },
+    @ManyToMany(fetch = FetchType.LAZY,
             mappedBy = "students")
     private Set<Teacher> teachers = new HashSet<>();
 

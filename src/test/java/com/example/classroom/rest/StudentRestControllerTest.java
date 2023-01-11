@@ -73,7 +73,7 @@ class StudentRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(student.getLastName());
         assertThat(actual.getEmail()).isEqualTo(student.getEmail());
         assertThat(actual.getAge()).isEqualTo(student.getAge());
-        assertThat(actual.getTeachersList())
+        assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -127,8 +127,8 @@ class StudentRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(studentDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(studentDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(studentDto.getAge());
-        Assertions.assertThat(actual.getTeachersList()).size().isEqualTo(2);
-        Assertions.assertThat(actual.getTeachersList())
+        Assertions.assertThat(actual.getTeachers()).size().isEqualTo(2);
+        Assertions.assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -154,7 +154,7 @@ class StudentRestControllerTest {
         studentDto.setLastName("Gonzales");
         studentDto.setEmail("p.gonzales@gmail.com");
         studentDto.setAge(20);
-        studentDto.setTeachersList(new HashSet<>(List.of(teacher1, teacher2)));
+        studentDto.setTeachers(new HashSet<>(List.of(teacher1, teacher2)));
 
         //when
         URI url = createURL("/api/students/");
@@ -173,7 +173,7 @@ class StudentRestControllerTest {
         assertThat(actual.getLastName()).isEqualTo(studentDto.getLastName());
         assertThat(actual.getEmail()).isEqualTo(studentDto.getEmail());
         assertThat(actual.getAge()).isEqualTo(studentDto.getAge());
-        assertThat(actual.getTeachersList())
+        assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -237,7 +237,7 @@ class StudentRestControllerTest {
         studentDto.setLastName("Romanski");
         studentDto.setEmail("w.romanski@gmail.com");
         studentDto.setAge(21);
-        studentDto.setTeachersList(new HashSet<>(teachers));
+        studentDto.setTeachers(new HashSet<>(teachers));
         return studentDto;
     }
 

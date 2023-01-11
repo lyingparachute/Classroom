@@ -69,9 +69,9 @@ class TeacherControllerTest {
                                 "&lastName=" + teacherDto.getLastName() +
                                 "&email=" + teacherDto.getEmail() +
                                 "&age=" + teacherDto.getAge() +
-                                "&studentsList=" + student1.getId() +
+                                "&students=" + student1.getId() +
                                 "&_studentsList=on" +
-                                "&studentsList=" + student2.getId() +
+                                "&students=" + student2.getId() +
                                 "&_studentsList=on" +
                                 "&add="))
                 .andDo(print())
@@ -137,9 +137,9 @@ class TeacherControllerTest {
                                 "&lastName=" + teacherDto.getLastName() +
                                 "&email=" + teacherDto.getEmail() +
                                 "&age=" + teacherDto.getAge() +
-                                "&studentsList=" + student1.getId() +
+                                "&students=" + student1.getId() +
                                 "&_studentsList=on" +
-                                "&studentsList=" + student2.getId() +
+                                "&students=" + student2.getId() +
                                 "&_studentsList=on" +
                                 "&add="))
                 .andDo(print())

@@ -58,7 +58,7 @@ class StudentServiceTest {
         expected.setLastName("Graczyk");
         expected.setEmail("f.graczyk@gmail.com");
         expected.setAge(22);
-        expected.setTeachersList(new HashSet<>(teachers));
+        expected.setTeachers(new HashSet<>(teachers));
         //when
         studentService.create(expected);
         //then
@@ -96,7 +96,7 @@ class StudentServiceTest {
         expected.setLastName("Gonzales");
         expected.setEmail("p.gonzales@gmail.com");
         expected.setAge(20);
-        expected.setTeachersList(new HashSet<>(List.of(teacher1, teacher2)));
+        expected.setTeachers(new HashSet<>(List.of(teacher1, teacher2)));
         //when
         studentService.update(expected);
         //then
@@ -161,7 +161,7 @@ class StudentServiceTest {
         assertThat(actualStudent1.getEmail()).isEqualTo(student1.getEmail());
         assertThat(actualStudent1.getAge()).isEqualTo(student1.getAge());
         Assertions.assertThat(actualStudent1.getFieldOfStudy()).isEqualTo(student1.getFieldOfStudy());
-        Assertions.assertThat(actualStudent1.getTeachersList())
+        Assertions.assertThat(actualStudent1.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -178,7 +178,7 @@ class StudentServiceTest {
         assertThat(actualStudent2.getEmail()).isEqualTo(student2.getEmail());
         assertThat(actualStudent2.getAge()).isEqualTo(student2.getAge());
         Assertions.assertThat(actualStudent2.getFieldOfStudy()).isEqualTo(student2.getFieldOfStudy());
-        Assertions.assertThat(actualStudent2.getTeachersList())
+        Assertions.assertThat(actualStudent2.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -193,7 +193,7 @@ class StudentServiceTest {
         assertThat(actualStudent3.getEmail()).isEqualTo(student3.getEmail());
         assertThat(actualStudent3.getAge()).isEqualTo(student3.getAge());
         Assertions.assertThat(actualStudent3.getFieldOfStudy()).isEqualTo(student3.getFieldOfStudy());
-        Assertions.assertThat(actualStudent3.getTeachersList())
+        Assertions.assertThat(actualStudent3.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -233,7 +233,7 @@ class StudentServiceTest {
         assertThat(actualStudent.getLastName()).isEqualTo(student3.getLastName());
         assertThat(actualStudent.getEmail()).isEqualTo(student3.getEmail());
         assertThat(actualStudent.getAge()).isEqualTo(student3.getAge());
-        Assertions.assertThat(actualStudent.getTeachersList())
+        Assertions.assertThat(actualStudent.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -264,7 +264,7 @@ class StudentServiceTest {
         assertThat(actual.getLastName()).isEqualTo(student.getLastName());
         assertThat(actual.getEmail()).isEqualTo(student.getEmail());
         assertThat(actual.getAge()).isEqualTo(student.getAge());
-        Assertions.assertThat(actual.getTeachersList())
+        Assertions.assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -344,7 +344,7 @@ class StudentServiceTest {
         assertThat(actualStudent1.getLastName()).isEqualTo(student2.getLastName());
         assertThat(actualStudent1.getEmail()).isEqualTo(student2.getEmail());
         assertThat(actualStudent1.getAge()).isEqualTo(student2.getAge());
-        assertThat(actualStudent1.getTeachersList())
+        assertThat(actualStudent1.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -358,7 +358,7 @@ class StudentServiceTest {
         assertThat(actualStudent2.getLastName()).isEqualTo(student3.getLastName());
         assertThat(actualStudent2.getEmail()).isEqualTo(student3.getEmail());
         assertThat(actualStudent2.getAge()).isEqualTo(student3.getAge());
-        assertThat(actualStudent2.getTeachersList())
+        assertThat(actualStudent2.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,

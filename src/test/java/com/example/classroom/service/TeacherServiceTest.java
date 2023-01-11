@@ -59,7 +59,7 @@ class TeacherServiceTest {
         expected.setLastName("Graczyk");
         expected.setEmail("f.graczyk@gmail.com");
         expected.setAge(55);
-        expected.setStudentsList(new HashSet<>(students));
+        expected.setStudents(new HashSet<>(students));
         //when
         teacherService.create(expected);
         //then
@@ -97,7 +97,7 @@ class TeacherServiceTest {
         dto.setLastName("Graczyk");
         dto.setEmail("f.graczyk@gmail.com");
         dto.setAge(55);
-        dto.setStudentsList(new HashSet<>(List.of(student1, student2)));
+        dto.setStudents(new HashSet<>(List.of(student1, student2)));
         //when
         teacherService.update(dto);
         //then
@@ -160,7 +160,7 @@ class TeacherServiceTest {
         assertThat(actualTeacher1.getLastName()).isEqualTo(teacher1.getLastName());
         assertThat(actualTeacher1.getEmail()).isEqualTo(teacher1.getEmail());
         assertThat(actualTeacher1.getAge()).isEqualTo(teacher1.getAge());
-        assertThat(actualTeacher1.getStudentsList())
+        assertThat(actualTeacher1.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -176,7 +176,7 @@ class TeacherServiceTest {
         assertThat(actualTeacher2.getLastName()).isEqualTo(teacher2.getLastName());
         assertThat(actualTeacher2.getEmail()).isEqualTo(teacher2.getEmail());
         assertThat(actualTeacher2.getAge()).isEqualTo(teacher2.getAge());
-        assertThat(actualTeacher2.getStudentsList())
+        assertThat(actualTeacher2.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -190,7 +190,7 @@ class TeacherServiceTest {
         assertThat(actualTeacher3.getLastName()).isEqualTo(teacher3.getLastName());
         assertThat(actualTeacher3.getEmail()).isEqualTo(teacher3.getEmail());
         assertThat(actualTeacher3.getAge()).isEqualTo(teacher3.getAge());
-        assertThat(actualTeacher3.getStudentsList())
+        assertThat(actualTeacher3.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -230,7 +230,7 @@ class TeacherServiceTest {
         assertThat(actualTeacher.getLastName()).isEqualTo(teacher3.getLastName());
         assertThat(actualTeacher.getEmail()).isEqualTo(teacher3.getEmail());
         assertThat(actualTeacher.getAge()).isEqualTo(teacher3.getAge());
-        assertThat(actualTeacher.getStudentsList())
+        assertThat(actualTeacher.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -261,7 +261,7 @@ class TeacherServiceTest {
         assertThat(actual.getLastName()).isEqualTo(teacher.getLastName());
         assertThat(actual.getEmail()).isEqualTo(teacher.getEmail());
         assertThat(actual.getAge()).isEqualTo(teacher.getAge());
-        assertThat(actual.getStudentsList())
+        assertThat(actual.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -342,7 +342,7 @@ class TeacherServiceTest {
         assertThat(actualTeacher1.getLastName()).isEqualTo(teacher1.getLastName());
         assertThat(actualTeacher1.getEmail()).isEqualTo(teacher1.getEmail());
         assertThat(actualTeacher1.getAge()).isEqualTo(teacher1.getAge());
-        assertThat(actualTeacher1.getStudentsList())
+        assertThat(actualTeacher1.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,
@@ -358,7 +358,7 @@ class TeacherServiceTest {
         assertThat(actualTeacher2.getLastName()).isEqualTo(teacher2.getLastName());
         assertThat(actualTeacher2.getEmail()).isEqualTo(teacher2.getEmail());
         assertThat(actualTeacher2.getAge()).isEqualTo(teacher2.getAge());
-        assertThat(actualTeacher2.getStudentsList())
+        assertThat(actualTeacher2.getStudents())
                 .extracting(
                         Student::getId,
                         Student::getFirstName,

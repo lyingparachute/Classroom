@@ -26,7 +26,7 @@ public class TeacherDto implements Serializable {
     private Department departmentDean;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<Student> studentsList = new HashSet<>();
+    private Set<Student> students = new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Subject> subjects = new HashSet<>();

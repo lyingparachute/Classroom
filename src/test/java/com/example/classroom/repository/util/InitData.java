@@ -51,6 +51,7 @@ public class InitData {
         if (teachers != null && !teachers.isEmpty()) {
             teachers.forEach(student::assignTeacher);
             teachers.forEach(teacher -> teacher.getStudents().add(student));
+            teacherRepository.saveAll(teachers);
         }
         if (fieldOfStudy != null) {
             student.setFieldOfStudy(fieldOfStudy);

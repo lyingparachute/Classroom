@@ -70,9 +70,9 @@ class StudentControllerTest {
                         "&lastName=" + studentDto.getLastName() +
                         "&email=" + studentDto.getEmail() +
                         "&age=" + studentDto.getAge() +
-                        "&teachersList=" + teacher1.getId() +
+                        "&teachers=" + teacher1.getId() +
                         "&_teachersList=on" +
-                        "&teachersList=" + teacher2.getId() +
+                        "&teachers=" + teacher2.getId() +
                         "&_teachersList=on" +
                         "&add="))
                 .andDo(print())
@@ -140,9 +140,9 @@ class StudentControllerTest {
                                 "&lastName=" + studentDto.getLastName() +
                                 "&email=" + studentDto.getEmail() +
                                 "&age=" + studentDto.getAge() +
-                                "&teachersList=" + teacher1.getId() +
+                                "&teachers=" + teacher1.getId() +
                                 "&_teachersList=on" +
-                                "&teachersList=" + teacher2.getId() +
+                                "&teachers=" + teacher2.getId() +
                                 "&_teachersList=on" +
                                 "&add="))
                 .andDo(print())
