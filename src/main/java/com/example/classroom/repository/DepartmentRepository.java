@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
-
-    List<Department> findAllByName(String name);
-
-    Page<Department> findAllByName(String name, Pageable pageable);
+    List<Department> findAllByNameContainingIgnoreCase(String name);
+    Page<Department> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 }

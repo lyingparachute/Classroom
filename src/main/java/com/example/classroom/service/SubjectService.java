@@ -82,7 +82,7 @@ public class SubjectService {
     }
 
     public List<SubjectDto> findByName(String searched) {
-        List<Subject> found = subjectRepository.findAllByName(searched);
+        List<Subject> found = subjectRepository.findAllByNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, SubjectDto.class)).collect(Collectors.toList());
     }
 
@@ -92,7 +92,7 @@ public class SubjectService {
                 Sort.by(sortField).descending();
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Subject> all = subjectRepository.findAllByName(searched, pageable);
+        Page<Subject> all = subjectRepository.findAllByNameContainingIgnoreCase(searched, pageable);
         return all.map(subject -> mapper.map(subject, SubjectDto.class));
     }
 

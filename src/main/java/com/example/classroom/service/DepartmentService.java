@@ -70,7 +70,7 @@ public class DepartmentService {
     }
 
     public List<DepartmentDto> findByName(String searched) {
-        List<Department> found = repository.findAllByName(searched);
+        List<Department> found = repository.findAllByNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, DepartmentDto.class)).collect(Collectors.toList());
     }
 
@@ -79,7 +79,7 @@ public class DepartmentService {
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Department> all = repository.findAllByName(searched, pageable);
+        Page<Department> all = repository.findAllByNameContainingIgnoreCase(searched, pageable);
         return all.map(department -> mapper.map(department, DepartmentDto.class));
     }
 
