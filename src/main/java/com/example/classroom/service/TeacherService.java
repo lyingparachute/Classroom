@@ -84,7 +84,7 @@ public class TeacherService {
     }
 
     public List<TeacherDto> findByFirstOrLastName(String searched) {
-        List<Teacher> found = teacherRepository.findAllByFirstNameOrLastName(searched);
+        List<Teacher> found = teacherRepository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, TeacherDto.class)).collect(Collectors.toList());
     }
 
@@ -94,7 +94,7 @@ public class TeacherService {
                 Sort.by(sortField).descending();
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Teacher> all = teacherRepository.findAllByFirstNameOrLastName(searched, pageable);
+        Page<Teacher> all = teacherRepository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
         return all.map(student -> mapper.map(student, TeacherDto.class));
     }
 
