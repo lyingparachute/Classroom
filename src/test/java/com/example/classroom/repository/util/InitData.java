@@ -48,15 +48,7 @@ public class InitData {
         student.setLastName("Komaranczuk");
         student.setEmail("m.komaranczuk@gmail.com");
         student.setAge(25);
-        student.setFieldOfStudy(fieldOfStudy);
-        if (teachers != null && !teachers.isEmpty()) {
-            teachers.forEach(student::assignTeacher);
-            teachers.forEach(teacher -> teacher.getStudents().add(student));
-        }
-        if (fieldOfStudy != null) {
-            student.setFieldOfStudy(fieldOfStudy);
-            fieldOfStudy.getStudents().add(student);
-        }
+        setFieldOfStudyAndTeachers(fieldOfStudy, teachers, student);
         studentRepository.save(student);
         teacherRepository.saveAll(Objects.requireNonNull(teachers));
         return student;
@@ -69,15 +61,7 @@ public class InitData {
         student.setLastName("Romanski");
         student.setEmail("w.romanski@gmail.com");
         student.setAge(21);
-        student.setFieldOfStudy(fieldOfStudy);
-        if (teachers != null && !teachers.isEmpty()) {
-            teachers.forEach(student::assignTeacher);
-            teachers.forEach(teacher -> teacher.getStudents().add(student));
-        }
-        if (fieldOfStudy != null) {
-            student.setFieldOfStudy(fieldOfStudy);
-            fieldOfStudy.getStudents().add(student);
-        }
+        setFieldOfStudyAndTeachers(fieldOfStudy, teachers, student);
         studentRepository.save(student);
         teacherRepository.saveAll(Objects.requireNonNull(teachers));
         return student;
@@ -90,7 +74,13 @@ public class InitData {
         student.setLastName("Sernatowicz");
         student.setEmail("a.sernatowicz@gmail.com");
         student.setAge(18);
-        student.setFieldOfStudy(fieldOfStudy);
+        setFieldOfStudyAndTeachers(fieldOfStudy, teachers, student);
+        studentRepository.save(student);
+        teacherRepository.saveAll(Objects.requireNonNull(teachers));
+        return student;
+    }
+
+    private void setFieldOfStudyAndTeachers(FieldOfStudy fieldOfStudy, List<Teacher> teachers, Student student) {
         if (teachers != null && !teachers.isEmpty()) {
             teachers.forEach(student::assignTeacher);
             teachers.forEach(teacher -> teacher.getStudents().add(student));
@@ -99,9 +89,6 @@ public class InitData {
             student.setFieldOfStudy(fieldOfStudy);
             fieldOfStudy.getStudents().add(student);
         }
-        studentRepository.save(student);
-        teacherRepository.saveAll(Objects.requireNonNull(teachers));
-        return student;
     }
 
     // *** Create Teachers *** //
@@ -112,19 +99,7 @@ public class InitData {
         teacher.setLastName("Adamczuk");
         teacher.setEmail("j.adamczuk@gmail.com");
         teacher.setAge(45);
-        teacher.setDepartmentDean(department);
-        if (department != null) {
-            teacher.setDepartmentDean(department);
-            department.setDean(teacher);
-        }
-        if (subjects != null && !subjects.isEmpty()) {
-            subjects.forEach(teacher::addSubject);
-            subjects.forEach(subject -> subject.getTeachers().add(teacher));
-        }
-        if (students != null && !students.isEmpty()) {
-            students.forEach(teacher::addStudent);
-            students.forEach(student -> student.getTeachers().add(teacher));
-        }
+        setDepartmentSubjectsAndStudents(department, subjects, students, teacher);
         return teacherRepository.save(teacher);
     }
 
@@ -135,7 +110,11 @@ public class InitData {
         teacher.setLastName("Kowalska");
         teacher.setEmail("j.kowalska@gmail.com");
         teacher.setAge(33);
-        teacher.setDepartmentDean(department);
+        setDepartmentSubjectsAndStudents(department, subjects, students, teacher);
+        return teacherRepository.save(teacher);
+    }
+
+    private void setDepartmentSubjectsAndStudents(Department department, List<Subject> subjects, List<Student> students, Teacher teacher) {
         if (department != null) {
             teacher.setDepartmentDean(department);
             department.setDean(teacher);
@@ -148,7 +127,6 @@ public class InitData {
             students.forEach(teacher::addStudent);
             students.forEach(student -> student.getTeachers().add(teacher));
         }
-        return teacherRepository.save(teacher);
     }
 
     @Transactional
@@ -158,19 +136,7 @@ public class InitData {
         teacher.setLastName("Bartosiewicz");
         teacher.setEmail("g.bartosiewicz@gmail.com");
         teacher.setAge(51);
-        teacher.setDepartmentDean(department);
-        if (department != null) {
-            teacher.setDepartmentDean(department);
-            department.setDean(teacher);
-        }
-        if (subjects != null && !subjects.isEmpty()) {
-            subjects.forEach(teacher::addSubject);
-            subjects.forEach(subject -> subject.getTeachers().add(teacher));
-        }
-        if (students != null && !students.isEmpty()) {
-            students.forEach(teacher::addStudent);
-            students.forEach(student -> student.getTeachers().add(teacher));
-        }
+        setDepartmentSubjectsAndStudents(department, subjects, students, teacher);
         return teacherRepository.save(teacher);
     }
 
@@ -182,14 +148,7 @@ public class InitData {
         subject.setDescription("Calculating integrals");
         subject.setSemester(Semester.FIFTH);
         subject.setHoursInSemester(100);
-        if (teachers != null && !teachers.isEmpty()) {
-            teachers.forEach(subject::addTeacher);
-            teachers.forEach(teacher -> teacher.getSubjects().add(subject));
-        }
-        if (fieldOfStudy != null){
-            subject.setFieldOfStudy(fieldOfStudy);
-            fieldOfStudy.getSubjects().add(subject);
-        }
+        setFieldOfStudyAndTeachers(fieldOfStudy, teachers, subject);
         subjectRepository.save(subject);
         return subject;
     }
@@ -201,14 +160,7 @@ public class InitData {
         subject.setDescription("Painting");
         subject.setSemester(Semester.SECOND);
         subject.setHoursInSemester(120);
-        if (teachers != null && !teachers.isEmpty()) {
-            teachers.forEach(subject::addTeacher);
-            teachers.forEach(teacher -> teacher.getSubjects().add(subject));
-        }
-        if (fieldOfStudy != null){
-            subject.setFieldOfStudy(fieldOfStudy);
-            fieldOfStudy.getSubjects().add(subject);
-        }
+        setFieldOfStudyAndTeachers(fieldOfStudy, teachers, subject);
         subjectRepository.save(subject);
         return subject;
     }
@@ -220,14 +172,7 @@ public class InitData {
         subject.setDescription("General Science");
         subject.setSemester(Semester.FIRST);
         subject.setHoursInSemester(150);
-        if (teachers != null && !teachers.isEmpty()) {
-            teachers.forEach(subject::addTeacher);
-            teachers.forEach(teacher -> teacher.getSubjects().add(subject));
-        }
-        if (fieldOfStudy != null){
-            subject.setFieldOfStudy(fieldOfStudy);
-            fieldOfStudy.getSubjects().add(subject);
-        }
+        setFieldOfStudyAndTeachers(fieldOfStudy, teachers, subject);
         subjectRepository.save(subject);
         return subject;
     }
@@ -239,6 +184,12 @@ public class InitData {
         subject.setDescription("Learning Java and Spring");
         subject.setSemester(Semester.SIXTH);
         subject.setHoursInSemester(360);
+        setFieldOfStudyAndTeachers(fieldOfStudy, teachers, subject);
+        subjectRepository.save(subject);
+        return subject;
+    }
+
+    private static void setFieldOfStudyAndTeachers(FieldOfStudy fieldOfStudy, List<Teacher> teachers, Subject subject) {
         if (teachers != null && !teachers.isEmpty()) {
             teachers.forEach(subject::addTeacher);
             teachers.forEach(teacher -> teacher.getSubjects().add(subject));
@@ -247,8 +198,6 @@ public class InitData {
             subject.setFieldOfStudy(fieldOfStudy);
             fieldOfStudy.getSubjects().add(subject);
         }
-        subjectRepository.save(subject);
-        return subject;
     }
 
     // *** Create Fields Of Study *** //
@@ -258,18 +207,7 @@ public class InitData {
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.SECOND);
         fieldOfStudy.setMode(ModeOfStudy.FT);
         fieldOfStudy.setTitle(AcademicTitle.MGR);
-        if (department != null) {
-            fieldOfStudy.setDepartment(department);
-            department.getFieldsOfStudy().add(fieldOfStudy);
-        }
-        if (subjects != null && !subjects.isEmpty()) {
-            fieldOfStudy.setSubjects(new HashSet<>(subjects));
-            subjects.forEach(subject -> subject.setFieldOfStudy(fieldOfStudy));
-        }
-        if (students != null && !students.isEmpty()) {
-            fieldOfStudy.setStudents(new HashSet<>(students));
-            students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
-        }
+        setDepartmentSubjectsAndStudents(department, subjects, students, fieldOfStudy);
         return fieldOfStudyRepository.save(fieldOfStudy);
     }
 
@@ -279,18 +217,7 @@ public class InitData {
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
         fieldOfStudy.setMode(ModeOfStudy.PT);
         fieldOfStudy.setTitle(AcademicTitle.BACH);
-        if (department != null) {
-            fieldOfStudy.setDepartment(department);
-            department.getFieldsOfStudy().add(fieldOfStudy);
-        }
-        if (subjects != null && !subjects.isEmpty()) {
-            fieldOfStudy.setSubjects(new HashSet<>(subjects));
-            subjects.forEach(subject -> subject.setFieldOfStudy(fieldOfStudy));
-        }
-        if (students != null && !students.isEmpty()) {
-            fieldOfStudy.setStudents(new HashSet<>(students));
-            students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
-        }
+        setDepartmentSubjectsAndStudents(department, subjects, students, fieldOfStudy);
         return fieldOfStudyRepository.save(fieldOfStudy);
     }
 
@@ -300,6 +227,11 @@ public class InitData {
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
         fieldOfStudy.setMode(ModeOfStudy.FT);
         fieldOfStudy.setTitle(AcademicTitle.DR);
+        setDepartmentSubjectsAndStudents(department, subjects, students, fieldOfStudy);
+        return fieldOfStudyRepository.save(fieldOfStudy);
+    }
+
+    private void setDepartmentSubjectsAndStudents(Department department, List<Subject> subjects, List<Student> students, FieldOfStudy fieldOfStudy) {
         if (department != null) {
             fieldOfStudy.setDepartment(department);
             department.getFieldsOfStudy().add(fieldOfStudy);
@@ -312,7 +244,6 @@ public class InitData {
             fieldOfStudy.setStudents(new HashSet<>(students));
             students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
         }
-        return fieldOfStudyRepository.save(fieldOfStudy);
     }
 
     // *** Create Departments *** //
@@ -321,7 +252,7 @@ public class InitData {
         department.setName("Wydział Elektroniki, Telekomunikacji i Informatyki");
         department.setAddress("ul. Gabriela Narutowicza 11/12 80-233 Gdańsk");
         department.setTelNumber(123456789);
-        setFieldsToDepartment(dean, fieldsOfStudy, department);
+        setTeacherAndFieldsOfStudy(dean, fieldsOfStudy, department);
         return departmentRepository.save(department);
     }
 
@@ -330,7 +261,7 @@ public class InitData {
         department.setName("Wydział Chemiczny");
         department.setAddress("ul. Broniewicza 115, 00-245 Kęty");
         department.setTelNumber(987654321);
-        setFieldsToDepartment(dean, fieldsOfStudy, department);
+        setTeacherAndFieldsOfStudy(dean, fieldsOfStudy, department);
         return departmentRepository.save(department);
     }
 
@@ -339,11 +270,11 @@ public class InitData {
         department.setName("Wydział Architektury");
         department.setAddress("ul. Jabłoniowa 34, 11-112 Stalowa Wola");
         department.setTelNumber(321321321);
-        setFieldsToDepartment(dean, fieldsOfStudy, department);
+        setTeacherAndFieldsOfStudy(dean, fieldsOfStudy, department);
         return departmentRepository.save(department);
     }
 
-    private static void setFieldsToDepartment(Teacher dean, List<FieldOfStudy> fieldsOfStudy, Department department) {
+    private void setTeacherAndFieldsOfStudy(Teacher dean, List<FieldOfStudy> fieldsOfStudy, Department department) {
         if (dean != null) {
             department.setDean(dean);
             dean.setDepartmentDean(department);
