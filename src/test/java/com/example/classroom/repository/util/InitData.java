@@ -9,7 +9,6 @@ import com.example.classroom.repository.*;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -82,12 +81,10 @@ public class InitData {
 
     private void setFieldOfStudyAndTeachers(FieldOfStudy fieldOfStudy, List<Teacher> teachers, Student student) {
         if (teachers != null && !teachers.isEmpty()) {
-            teachers.forEach(student::assignTeacher);
-            teachers.forEach(teacher -> teacher.getStudents().add(student));
+            teachers.forEach(student::addTeacher);
         }
         if (fieldOfStudy != null) {
-            student.setFieldOfStudy(fieldOfStudy);
-            fieldOfStudy.getStudents().add(student);
+            fieldOfStudy.addStudent(student);
         }
     }
 
@@ -114,21 +111,6 @@ public class InitData {
         return teacherRepository.save(teacher);
     }
 
-    private void setDepartmentSubjectsAndStudents(Department department, List<Subject> subjects, List<Student> students, Teacher teacher) {
-        if (department != null) {
-            teacher.setDepartmentDean(department);
-            department.setDean(teacher);
-        }
-        if (subjects != null && !subjects.isEmpty()) {
-            subjects.forEach(teacher::addSubject);
-            subjects.forEach(subject -> subject.getTeachers().add(teacher));
-        }
-        if (students != null && !students.isEmpty()) {
-            students.forEach(teacher::addStudent);
-            students.forEach(student -> student.getTeachers().add(teacher));
-        }
-    }
-
     @Transactional
     public Teacher createTeacherThree(Department department,List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
@@ -138,6 +120,19 @@ public class InitData {
         teacher.setAge(51);
         setDepartmentSubjectsAndStudents(department, subjects, students, teacher);
         return teacherRepository.save(teacher);
+    }
+
+    private void setDepartmentSubjectsAndStudents(Department department, List<Subject> subjects, List<Student> students, Teacher teacher) {
+        if (department != null) {
+            teacher.setDepartmentDean(department);
+            department.setDean(teacher);
+        }
+        if (subjects != null && !subjects.isEmpty()) {
+            subjects.forEach(teacher::addSubject);
+        }
+        if (students != null && !students.isEmpty()) {
+            students.forEach(teacher::addStudent);
+        }
     }
 
     // *** Create Subjects *** //
@@ -196,15 +191,14 @@ public class InitData {
     private static void setFieldOfStudyAndTeachers(FieldOfStudy fieldOfStudy, List<Teacher> teachers, Subject subject) {
         if (teachers != null && !teachers.isEmpty()) {
             teachers.forEach(subject::addTeacher);
-            teachers.forEach(teacher -> teacher.getSubjects().add(subject));
         }
         if (fieldOfStudy != null){
-            subject.setFieldOfStudy(fieldOfStudy);
-            fieldOfStudy.getSubjects().add(subject);
+            fieldOfStudy.addSubject(subject);
         }
     }
 
     // *** Create Fields Of Study *** //
+    @Transactional
     public FieldOfStudy createFieldOfStudyOne(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Inżynieria mechaniczno-medyczna");
@@ -212,9 +206,11 @@ public class InitData {
         fieldOfStudy.setMode(ModeOfStudy.FT);
         fieldOfStudy.setTitle(AcademicTitle.MGR);
         setDepartmentSubjectsAndStudents(department, subjects, students, fieldOfStudy);
-        return fieldOfStudyRepository.save(fieldOfStudy);
+        fieldOfStudyRepository.save(fieldOfStudy);
+        return fieldOfStudy;
     }
 
+    @Transactional
     public FieldOfStudy createFieldOfStudyTwo(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Mechatronika");
@@ -222,9 +218,11 @@ public class InitData {
         fieldOfStudy.setMode(ModeOfStudy.PT);
         fieldOfStudy.setTitle(AcademicTitle.BACH);
         setDepartmentSubjectsAndStudents(department, subjects, students, fieldOfStudy);
-        return fieldOfStudyRepository.save(fieldOfStudy);
+        fieldOfStudyRepository.save(fieldOfStudy);
+        return fieldOfStudy;
     }
 
+    @Transactional
     public FieldOfStudy createFieldOfStudyThree(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Informatyka");
@@ -232,25 +230,24 @@ public class InitData {
         fieldOfStudy.setMode(ModeOfStudy.FT);
         fieldOfStudy.setTitle(AcademicTitle.DR);
         setDepartmentSubjectsAndStudents(department, subjects, students, fieldOfStudy);
-        return fieldOfStudyRepository.save(fieldOfStudy);
+        fieldOfStudyRepository.save(fieldOfStudy);
+        return fieldOfStudy;
     }
 
     private void setDepartmentSubjectsAndStudents(Department department, List<Subject> subjects, List<Student> students, FieldOfStudy fieldOfStudy) {
         if (department != null) {
-            fieldOfStudy.setDepartment(department);
-            department.getFieldsOfStudy().add(fieldOfStudy);
+            department.addFieldOfStudy(fieldOfStudy);
         }
         if (subjects != null && !subjects.isEmpty()) {
-            fieldOfStudy.setSubjects(new HashSet<>(subjects));
-            subjects.forEach(subject -> subject.setFieldOfStudy(fieldOfStudy));
+            subjects.forEach(fieldOfStudy::addSubject);
         }
         if (students != null && !students.isEmpty()) {
-            fieldOfStudy.setStudents(new HashSet<>(students));
-            students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
+            students.forEach(fieldOfStudy::addStudent);
         }
     }
 
     // *** Create Departments *** //
+    @Transactional
     public Department createDepartmentOne(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
         Department department = new Department();
         department.setName("Wydział Elektroniki, Telekomunikacji i Informatyki");
@@ -260,6 +257,7 @@ public class InitData {
         return departmentRepository.save(department);
     }
 
+    @Transactional
     public Department createDepartmentTwo(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
         Department department = new Department();
         department.setName("Wydział Chemiczny");
@@ -269,6 +267,7 @@ public class InitData {
         return departmentRepository.save(department);
     }
 
+    @Transactional
     public Department createDepartmentThree(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
         Department department = new Department();
         department.setName("Wydział Architektury");
@@ -284,8 +283,7 @@ public class InitData {
             dean.setDepartmentDean(department);
         }
         if (fieldsOfStudy != null && !fieldsOfStudy.isEmpty()) {
-            department.setFieldsOfStudy(new HashSet<>(fieldsOfStudy));
-            fieldsOfStudy.forEach(fieldOfStudy -> fieldOfStudy.setDepartment(department));
+            fieldsOfStudy.forEach(department::addFieldOfStudy);
         }
     }
 }
