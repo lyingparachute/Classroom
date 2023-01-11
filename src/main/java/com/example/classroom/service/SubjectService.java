@@ -81,6 +81,14 @@ public class SubjectService {
         subjectRepository.delete(subject);
     }
 
+    @Transactional
+    public void removeAll() {
+        for (Subject subject : subjectRepository.findAll()){
+            teacherRepository.findAll().forEach(t -> t.removeSubject(subject));
+        }
+        subjectRepository.deleteAll();
+    }
+
     public List<SubjectDto> findByName(String searched) {
         List<Subject> found = subjectRepository.findAllByNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, SubjectDto.class)).collect(Collectors.toList());
@@ -96,14 +104,6 @@ public class SubjectService {
         return all.map(subject -> mapper.map(subject, SubjectDto.class));
     }
 
-    @Transactional
-    public void removeAll() {
-        for (Subject subject : subjectRepository.findAll()){
-            teacherRepository.findAll().forEach(t -> t.removeSubject(subject));
-        }
-        subjectRepository.deleteAll();
-    }
-
     private void addTeachersAndFieldOfStudy(Subject subject) {
         HashSet<Teacher> teachers = new HashSet<>(subject.getTeachers());
         FieldOfStudy fieldOfStudy = subject.getFieldOfStudy();
@@ -115,7 +115,6 @@ public class SubjectService {
             subject.setFieldOfStudy(fieldOfStudy);
             fieldOfStudy.getSubjects().add(subject);
         }
-        subjectRepository.save(subject);
     }
 
 
@@ -128,7 +127,7 @@ public class SubjectService {
         }
         if (fieldOfStudy != null) {
             subject.setFieldOfStudy(null);
+            fieldOfStudy.getSubjects().remove(subject);
         }
-        subjectRepository.save(subject);
     }
 }
