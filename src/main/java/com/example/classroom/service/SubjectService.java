@@ -4,6 +4,7 @@ import com.example.classroom.dto.SubjectDto;
 import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
+import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.SubjectRepository;
 import com.example.classroom.repository.TeacherRepository;
 import org.modelmapper.ModelMapper;
@@ -24,11 +25,13 @@ public class SubjectService {
 
     private final SubjectRepository subjectRepository;
     private final TeacherRepository teacherRepository;
+    private final FieldOfStudyRepository fieldOfStudyRepository;
     private final ModelMapper mapper;
 
-    public SubjectService(SubjectRepository subjectRepository, TeacherRepository teacherRepository, ModelMapper mapper) {
+    public SubjectService(SubjectRepository subjectRepository, TeacherRepository teacherRepository, FieldOfStudyRepository fieldOfStudyRepository, ModelMapper mapper) {
         this.subjectRepository = subjectRepository;
         this.teacherRepository = teacherRepository;
+        this.fieldOfStudyRepository = fieldOfStudyRepository;
         this.mapper = mapper;
     }
 
@@ -103,6 +106,7 @@ public class SubjectService {
         Page<Subject> all = subjectRepository.findAllByNameContainingIgnoreCase(searched, pageable);
         return all.map(subject -> mapper.map(subject, SubjectDto.class));
     }
+
 
     private void addTeachersAndFieldOfStudy(Subject subject) {
         HashSet<Teacher> teachers = new HashSet<>(subject.getTeachers());

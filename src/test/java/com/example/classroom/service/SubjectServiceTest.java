@@ -401,7 +401,7 @@ class SubjectServiceTest {
         FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
 
         Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
-        Subject expected2 = initData.createSubjectTwo(fieldOfStudy1, List.of(teacher3));
+        Subject expected2 = initData.createSubjectTwo(fieldOfStudy2, List.of(teacher3));
         //when
         service.removeAll();
         //then
