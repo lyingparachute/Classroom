@@ -6,8 +6,6 @@ import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.repository.FieldOfStudyRepository;
-import com.example.classroom.repository.StudentRepository;
-import com.example.classroom.repository.SubjectRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,14 +23,10 @@ import java.util.stream.Collectors;
 public class FieldOfStudyService {
     
     private final FieldOfStudyRepository fieldOfStudyRepository;
-    private final SubjectRepository subjectRepository;
-    private final StudentRepository studentRepository;
     private final ModelMapper mapper;
 
-    public FieldOfStudyService(FieldOfStudyRepository fieldOfStudyRepository, SubjectRepository subjectRepository, StudentRepository studentRepository, ModelMapper mapper) {
+    public FieldOfStudyService(FieldOfStudyRepository fieldOfStudyRepository, ModelMapper mapper) {
         this.fieldOfStudyRepository = fieldOfStudyRepository;
-        this.subjectRepository = subjectRepository;
-        this.studentRepository = studentRepository;
         this.mapper = mapper;
     }
 
@@ -81,13 +75,11 @@ public class FieldOfStudyService {
     public void remove(Long id) {
         FieldOfStudy fieldOfStudy = fieldOfStudyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study ID: " + id));
-//        removeDepartmentSubjectsStudents(fieldOfStudy);
         fieldOfStudyRepository.delete(fieldOfStudy);
     }
 
     @Transactional
     public void removeAll() {
-//        fieldOfStudyRepository.findAll().forEach(this::removeDepartmentSubjectsStudents);
         fieldOfStudyRepository.deleteAll();
     }
 
@@ -103,6 +95,18 @@ public class FieldOfStudyService {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<FieldOfStudy> all = fieldOfStudyRepository.findAllByNameContainingIgnoreCase(searched, pageable);
         return all.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class));
+    }
+
+    private void addDepartmentSubjectsAndStudents(FieldOfStudy fieldOfStudy) {
+        addDepartment(fieldOfStudy);
+        addSubjects(fieldOfStudy);
+        addStudents(fieldOfStudy);
+    }
+
+    private void removeDepartmentSubjectsAndStudents(FieldOfStudy fieldOfStudy) {
+        removeDepartment(fieldOfStudy);
+        removeSubjects(fieldOfStudy);
+        removeStudents(fieldOfStudy);
     }
 
     private void addDepartment(FieldOfStudy fieldOfStudy) {
@@ -149,17 +153,5 @@ public class FieldOfStudyService {
             students.forEach(student -> student.setFieldOfStudy(null));
             fieldOfStudy.setStudents(new HashSet<>());
         }
-    }
-
-    private void addDepartmentSubjectsAndStudents(FieldOfStudy fieldOfStudy) {
-        addDepartment(fieldOfStudy);
-        addSubjects(fieldOfStudy);
-        addStudents(fieldOfStudy);
-    }
-
-    private void removeDepartmentSubjectsAndStudents(FieldOfStudy fieldOfStudy) {
-        removeDepartment(fieldOfStudy);
-        removeSubjects(fieldOfStudy);
-        removeStudents(fieldOfStudy);
     }
 }
