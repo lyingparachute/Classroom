@@ -12,6 +12,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A DTO for the {@link com.example.classroom.entity.Subject} entity
+ */
 @Data
 @NoArgsConstructor
 public class SubjectDto implements Serializable {
