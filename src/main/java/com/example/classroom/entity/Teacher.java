@@ -70,20 +70,60 @@ public class Teacher {
             inverseJoinColumns = { @JoinColumn(name = "student_id") })
     private Set<Student> students = new HashSet<>();
 
+    /**
+     * Add new Student. The method keeps relationships consistency:
+     * * this teacher is added to teachers
+     *   on the student side
+     */
     public void addStudent(Student student){
-        this.students.add(student);
+        //prevent endless loop
+        if (students.contains(student)) {
+            return;
+        }
+        students.add(student);
+        student.addTeacher(this);
     }
 
+    /**
+     * Remove Student. The method keeps relationships consistency:
+     * * this teacher is removed from teachers
+     *   on the student side
+     */
     public void removeStudent(Student student) {
-        this.students.remove(student);
+        //prevent endless loop
+        if (!students.contains(student)) {
+            return;
+        }
+        students.remove(student);
+        student.removeTeacher(this);
     }
 
+    /**
+     * Add new Subject. The method keeps relationships consistency:
+     * * this teacher is added to teachers
+     *   on the subject side
+     */
     public void addSubject(Subject subject){
-        this.subjects.add(subject);
+        //prevent endless loop
+        if (subjects.contains(subject)) {
+            return;
+        }
+        subjects.add(subject);
+        subject.addTeacher(this);
     }
 
+    /**
+     * Remove Subject. The method keeps relationships consistency:
+     * * this teacher is removed from teachers
+     *   on the subject side
+     */
     public void removeSubject(Subject subject) {
-        this.subjects.remove(subject);
+        //prevent endless loop
+        if (!subjects.contains(subject)) {
+            return;
+        }
+        subjects.remove(subject);
+        subject.removeTeacher(this);
     }
 
     @Override

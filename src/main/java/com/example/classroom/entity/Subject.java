@@ -48,15 +48,32 @@ public class Subject {
     @ToString.Exclude
     private Set<Teacher> teachers = new HashSet<>();
 
-
-    public void removeTeacher(Teacher teacher) {
-        this.teachers.remove(teacher);
-        teacher.getSubjects().remove(this);
+    /**
+     * Add new Teacher. The method keeps relationships consistency:
+     * * this subject is added to subjects
+     *   on the teacher side
+     */
+    public void addTeacher(Teacher teacher) {
+        //prevent endless loop
+        if (teachers.contains(teacher)) {
+            return;
+        }
+        teachers.add(teacher);
+        teacher.addSubject(this);
     }
 
-    public void addTeacher(Teacher teacher) {
-        this.teachers.add(teacher);
-        teacher.getSubjects().add(this);
+    /**
+     * Remove Teacher. The method keeps relationships consistency:
+     * * this subject is removed from subjects
+     *   on the teacher side
+     */
+    public void removeTeacher(Teacher teacher) {
+        //prevent endless loop
+        if (!teachers.contains(teacher)) {
+            return;
+        }
+        teachers.remove(teacher);
+        teacher.removeSubject(this);
     }
 
     @Override

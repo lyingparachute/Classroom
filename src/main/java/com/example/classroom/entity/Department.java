@@ -39,6 +39,34 @@ public class Department {
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<FieldOfStudy> fieldsOfStudy = new HashSet<>();
 
+    /**
+     * Add new Field Of Study. The method keeps relationships consistency:
+     * * this Department is added to departments
+     *   on the Field Of Study side
+     */
+    public void addFieldOfStudy(FieldOfStudy fieldOfStudy) {
+        //prevent endless loop
+        if (fieldsOfStudy.contains(fieldOfStudy)) {
+            return;
+        }
+        fieldsOfStudy.add(fieldOfStudy);
+        fieldOfStudy.setDepartment(this);
+    }
+
+    /**
+     * Remove Teacher. The method keeps relationships consistency:
+     * * this Department is removed from departments
+     *   on the Field Of Study side
+     */
+    public void removeFieldOfStudy(FieldOfStudy fieldOfStudy) {
+        //prevent endless loop
+        if (!fieldsOfStudy.contains(fieldOfStudy)) {
+            return;
+        }
+        fieldsOfStudy.remove(fieldOfStudy);
+        fieldOfStudy.setDepartment(null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

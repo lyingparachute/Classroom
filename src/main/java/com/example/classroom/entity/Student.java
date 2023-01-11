@@ -53,14 +53,32 @@ public class Student {
             mappedBy = "students")
     private Set<Teacher> teachers = new HashSet<>();
 
-    public void removeTeacher(Teacher teacher){
-        this.teachers.remove(teacher);
-        teacher.getStudents().remove(this);
+    /**
+     * Add new Teacher. The method keeps relationships consistency:
+     * * this student is added to students
+     *   on the teacher side
+     */
+    public void addTeacher(Teacher teacher){
+        //prevent endless loop
+        if (teachers.contains(teacher)){
+            return;
+        }
+        teachers.add(teacher);
+        teacher.addStudent(this);
     }
 
-    public void assignTeacher(Teacher teacher){
-        this.teachers.add(teacher);
-        teacher.getStudents().add(this);
+    /**
+     * Removes the Teacher. The method keeps relationships consistency:
+     * * this student is removed from students
+     *   on the teacher side
+     */
+    public void removeTeacher(Teacher teacher){
+        //prevent endless loop
+        if (!teachers.contains(teacher)){
+            return;
+        }
+        teachers.remove(teacher);
+        teacher.removeStudent(this);
     }
 
     @Override

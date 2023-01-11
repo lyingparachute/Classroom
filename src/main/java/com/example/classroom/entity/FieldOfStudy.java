@@ -50,6 +50,62 @@ public class FieldOfStudy {
     @ToString.Exclude
     private Set<Student> students = new HashSet<>();
 
+    /**
+     * Add new Subject. The method keeps relationships consistency:
+     * * this teacher is added to teachers
+     *   on the subject side
+     */
+    public void addSubject(Subject subject){
+        //prevent endless loop
+        if (subjects.contains(subject)) {
+            return;
+        }
+        subjects.add(subject);
+        subject.setFieldOfStudy(this);
+    }
+
+    /**
+     * Remove Subject. The method keeps relationships consistency:
+     * * this teacher is removed from teachers
+     *   on the subject side
+     */
+    public void removeSubject(Subject subject) {
+        //prevent endless loop
+        if (!subjects.contains(subject)) {
+            return;
+        }
+        subjects.remove(subject);
+        subject.setFieldOfStudy(null);
+    }
+
+    /**
+     * Add new Student. The method keeps relationships consistency:
+     * * this teacher is added to teachers
+     *   on the student side
+     */
+    public void addStudent(Student student){
+        //prevent endless loop
+        if (students.contains(student)) {
+            return;
+        }
+        students.add(student);
+        student.setFieldOfStudy(this);
+    }
+
+    /**
+     * Remove Student. The method keeps relationships consistency:
+     * * this teacher is removed from teachers
+     *   on the student side
+     */
+    public void removeStudent(Student student) {
+        //prevent endless loop
+        if (!students.contains(student)) {
+            return;
+        }
+        students.remove(student);
+        student.setFieldOfStudy(null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
