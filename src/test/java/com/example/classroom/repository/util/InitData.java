@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class InitData {
@@ -51,13 +52,13 @@ public class InitData {
         if (teachers != null && !teachers.isEmpty()) {
             teachers.forEach(student::assignTeacher);
             teachers.forEach(teacher -> teacher.getStudents().add(student));
-            teacherRepository.saveAll(teachers);
         }
         if (fieldOfStudy != null) {
             student.setFieldOfStudy(fieldOfStudy);
             fieldOfStudy.getStudents().add(student);
         }
         studentRepository.save(student);
+        teacherRepository.saveAll(Objects.requireNonNull(teachers));
         return student;
     }
 
@@ -78,6 +79,7 @@ public class InitData {
             fieldOfStudy.getStudents().add(student);
         }
         studentRepository.save(student);
+        teacherRepository.saveAll(Objects.requireNonNull(teachers));
         return student;
     }
 
@@ -98,6 +100,7 @@ public class InitData {
             fieldOfStudy.getStudents().add(student);
         }
         studentRepository.save(student);
+        teacherRepository.saveAll(Objects.requireNonNull(teachers));
         return student;
     }
 
@@ -110,7 +113,6 @@ public class InitData {
         teacher.setEmail("j.adamczuk@gmail.com");
         teacher.setAge(45);
         teacher.setDepartmentDean(department);
-        teacher.setSubjects(new HashSet<>(subjects));
         if (department != null) {
             teacher.setDepartmentDean(department);
             department.setDean(teacher);
@@ -134,7 +136,6 @@ public class InitData {
         teacher.setEmail("j.kowalska@gmail.com");
         teacher.setAge(33);
         teacher.setDepartmentDean(department);
-        teacher.setSubjects(new HashSet<>(subjects));
         if (department != null) {
             teacher.setDepartmentDean(department);
             department.setDean(teacher);
@@ -158,7 +159,6 @@ public class InitData {
         teacher.setEmail("g.bartosiewicz@gmail.com");
         teacher.setAge(51);
         teacher.setDepartmentDean(department);
-        teacher.setSubjects(new HashSet<>(subjects));
         if (department != null) {
             teacher.setDepartmentDean(department);
             department.setDean(teacher);
