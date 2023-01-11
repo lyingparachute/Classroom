@@ -12,11 +12,11 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query("""
             select s from Student s
-            where upper(s.firstName) like upper(concat('%', ?1, '%')) and upper(s.lastName) like upper(concat('%', ?1, '%'))""")
-    List<Student> findAllByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(String name);
+            where upper(s.firstName) like upper(concat('%', ?1, '%')) or upper(s.lastName) like upper(concat('%', ?1, '%'))""")
+    List<Student> findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String name);
 
     @Query("""
             select s from Student s
-            where upper(s.firstName) like upper(concat('%', ?1, '%')) and upper(s.lastName) like upper(concat('%', ?1, '%'))""")
-    Page<Student> findAllByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(String name, Pageable pageable);
+            where upper(s.firstName) like upper(concat('%', ?1, '%')) or upper(s.lastName) like upper(concat('%', ?1, '%'))""")
+    Page<Student> findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String name, Pageable pageable);
 }
