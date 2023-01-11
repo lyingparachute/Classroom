@@ -43,11 +43,7 @@ public class Subject {
     private FieldOfStudy fieldOfStudy;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = {
-                    CascadeType.MERGE,
-                    CascadeType.DETACH
-            },
+    @ManyToMany(fetch = FetchType.LAZY,
             mappedBy = "subjects")
     @ToString.Exclude
     private Set<Teacher> teachers = new HashSet<>();

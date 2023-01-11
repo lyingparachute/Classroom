@@ -51,7 +51,7 @@ public class Teacher {
     private Department departmentDean;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER,
+    @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.MERGE,
                     CascadeType.PERSIST})
