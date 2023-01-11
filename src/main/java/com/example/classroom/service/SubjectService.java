@@ -117,7 +117,6 @@ public class SubjectService {
         }
     }
 
-
     private void removeTeachersAndFieldOfStudy(Subject subject) {
         HashSet<Teacher> teachers = new HashSet<>(subject.getTeachers());
         FieldOfStudy fieldOfStudy = subject.getFieldOfStudy();

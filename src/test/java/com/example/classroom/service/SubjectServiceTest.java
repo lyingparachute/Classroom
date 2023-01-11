@@ -1,7 +1,9 @@
 package com.example.classroom.service;
 
 import com.example.classroom.dto.SubjectDto;
-import com.example.classroom.entity.*;
+import com.example.classroom.entity.FieldOfStudy;
+import com.example.classroom.entity.Subject;
+import com.example.classroom.entity.Teacher;
 import com.example.classroom.enums.Semester;
 import com.example.classroom.repository.*;
 import com.example.classroom.repository.util.InitData;
@@ -31,7 +33,7 @@ class SubjectServiceTest {
     private InitData initData;
 
     @Autowired
-    private SubjectService subjectService;
+    private SubjectService service;
 
     @Autowired
     private SubjectRepository subjectRepository;
@@ -54,17 +56,15 @@ class SubjectServiceTest {
     }
 
     @Test
-    void create_shouldSaveStudent_givenSubjectDto() {
+    void create_shouldSaveSubject_givenSubjectDto() {
         //given
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2));
-        Department department = initData.createDepartmentOne(teacher1, List.of());
-        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(department, List.of(), List.of(student));
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
 
         SubjectDto expected = createSubjectDto(fieldOfStudy, List.of(teacher1, teacher2));
         //when
-        subjectService.create(expected);
+        service.create(expected);
         //then
         Optional<Subject> byId = subjectRepository.findAll().stream().findFirst();
         assertThat(byId).isPresent();
@@ -73,16 +73,7 @@ class SubjectServiceTest {
         assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
         assertThat(actual.getSemester()).isEqualTo(expected.getSemester());
         assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
-        assertThat(actual.getFieldOfStudy().getSubjects())
-                .extracting(Subject::getName,
-                        Subject::getDescription,
-                        Subject::getSemester,
-                        Subject::getHoursInSemester,
-                        Subject::getFieldOfStudy,
-                        Subject::getTeachers
-                ).containsExactlyInAnyOrder(
-                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
-                                expected.getHoursInSemester(), fieldOfStudyRepository.findAll().get(0), expected.getTeachers()));
+        assertThat(actual.getFieldOfStudy()).isEqualTo(expected.getFieldOfStudy());
         assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
@@ -93,41 +84,111 @@ class SubjectServiceTest {
                         Teacher::getDepartmentDean
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), department),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), null));
-
-    }
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()));
+        assertThat(fieldOfStudy.getSubjects())
+                .extracting(
+                        Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy,
+                        Subject::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()));
+        assertThat(teacher1.getSubjects())
+                .extracting(
+                        Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy,
+                        Subject::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()));
+        assertThat(teacher2.getSubjects())
+                .extracting(
+                        Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy,
+                        Subject::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()));
+        }
 
     @Test
     void update_shouldUpdateSubject_givenSubjectDto() {
         //given
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+
         Subject subject = initData.createSubjectTwo(null, List.of());
-        SubjectDto expected = createSubjectDto(null, List.of(teacher1, teacher2));
+        SubjectDto expected = createSubjectDto(fieldOfStudy, List.of(teacher1, teacher2));
         expected.setId(subject.getId());
         //when
-        subjectService.update(expected);
+        service.update(expected);
         //then
         Optional<Subject> byId = subjectRepository.findById(expected.getId());
         assertThat(byId).isPresent();
         Subject actual = byId.get();
         assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
+        assertThat(actual.getSemester()).isEqualTo(expected.getSemester());
         assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
+        assertThat(actual.getFieldOfStudy()).isEqualTo(expected.getFieldOfStudy());
+        assertThat(fieldOfStudy.getSubjects())
+                .extracting(
+                        Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy,
+                        Subject::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()));
+        assertThat(teacher1.getSubjects())
+                .extracting(
+                        Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy,
+                        Subject::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()));
+        assertThat(teacher2.getSubjects())
+                .extracting(
+                        Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy,
+                        Subject::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()));
         assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge
+                        Teacher::getAge,
+                        Teacher::getDepartmentDean
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()));
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()));
     }
 
     @Test
@@ -136,7 +197,7 @@ class SubjectServiceTest {
         SubjectDto dto = createSubjectDto(null, List.of());
         dto.setId(1L);
         //when
-        Throwable thrown = catchThrowable(() -> subjectService.update(dto));
+        Throwable thrown = catchThrowable(() -> service.update(dto));
         //then
         assertThat(thrown)
                 .isExactlyInstanceOf(IllegalArgumentException.class)
@@ -149,11 +210,14 @@ class SubjectServiceTest {
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
-        Subject expected1 = initData.createSubjectFour(null, List.of(teacher1, teacher2));
-        Subject expected2 = initData.createSubjectOne(null, List.of(teacher3));
-        Subject expected3 = initData.createSubjectThree(null, List.of(teacher1, teacher2, teacher3));
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+        
+        Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
+        Subject expected2 = initData.createSubjectTwo(fieldOfStudy1, List.of(teacher3));
+        Subject expected3 = initData.createSubjectThree(fieldOfStudy2, List.of(teacher1, teacher2, teacher3));
         //when
-        List<SubjectDto> actual = subjectService.fetchAll();
+        List<SubjectDto> actual = service.fetchAll();
         //then
         assertThat(actual).size().isEqualTo(3);
         SubjectDto actual1 = actual.get(0);
@@ -162,48 +226,54 @@ class SubjectServiceTest {
         assertThat(actual1.getName()).isEqualTo(expected1.getName());
         assertThat(actual1.getDescription()).isEqualTo(expected1.getDescription());
         assertThat(actual1.getHoursInSemester()).isEqualTo(expected1.getHoursInSemester());
+        assertThat(actual1.getFieldOfStudy()).isEqualTo(expected1.getFieldOfStudy());
         assertThat(actual1.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge
+                        Teacher::getAge,
+                        Teacher::getDepartmentDean
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()));
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()));
         assertThat(actual2.getName()).isEqualTo(expected2.getName());
         assertThat(actual2.getDescription()).isEqualTo(expected2.getDescription());
         assertThat(actual2.getHoursInSemester()).isEqualTo(expected2.getHoursInSemester());
+        assertThat(actual2.getFieldOfStudy()).isEqualTo(expected2.getFieldOfStudy());
         assertThat(actual2.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge
+                        Teacher::getAge,
+                        Teacher::getDepartmentDean
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                teacher3.getEmail(), teacher3.getAge()));
+                                teacher3.getEmail(), teacher3.getAge(), teacher3.getDepartmentDean()));
         assertThat(actual3.getName()).isEqualTo(expected3.getName());
         assertThat(actual3.getDescription()).isEqualTo(expected3.getDescription());
         assertThat(actual3.getHoursInSemester()).isEqualTo(expected3.getHoursInSemester());
+        assertThat(actual3.getFieldOfStudy()).isEqualTo(expected3.getFieldOfStudy());
         assertThat(actual3.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge
+                        Teacher::getAge,
+                        Teacher::getDepartmentDean
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()),
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                teacher3.getEmail(), teacher3.getAge()));
+                                teacher3.getEmail(), teacher3.getAge(), teacher3.getDepartmentDean()));
     }
 
     @Test
@@ -212,35 +282,38 @@ class SubjectServiceTest {
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
 
-        Subject expected1 = initData.createSubjectFour(null, List.of(teacher1, teacher2));
-        Subject expected2 = initData.createSubjectOne(null, List.of(teacher3));
-        Subject expected3 = initData.createSubjectThree(null, List.of(teacher1, teacher2, teacher3));
+        Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
+        Subject expected2 = initData.createSubjectTwo(fieldOfStudy1, List.of(teacher3));
+        Subject expected3 = initData.createSubjectThree(fieldOfStudy2, List.of(teacher1, teacher2, teacher3));
+
         int pageNo = 2;
         int pageSize = 2;
         String sortField = "name";
         String sortDirection = Sort.Direction.DESC.name();
         //when
-        Page<SubjectDto> actualPage = subjectService.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
+        Page<SubjectDto> actualPage = service.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
         //then
         List<SubjectDto> actualContent = actualPage.getContent();
         assertThat(actualContent).size().isEqualTo(1);
         SubjectDto actual = actualContent.get(0);
-        assertThat(actual.getName()).isEqualTo(expected1.getName());
-        assertThat(actual.getDescription()).isEqualTo(expected1.getDescription());
-        assertThat(actual.getHoursInSemester()).isEqualTo(expected1.getHoursInSemester());
+        assertThat(actual.getName()).isEqualTo(expected2.getName());
+        assertThat(actual.getDescription()).isEqualTo(expected2.getDescription());
+        assertThat(actual.getHoursInSemester()).isEqualTo(expected2.getHoursInSemester());
+        assertThat(actual.getFieldOfStudy()).isEqualTo(expected2.getFieldOfStudy());
         assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge
+                        Teacher::getAge,
+                        Teacher::getDepartmentDean
                 ).containsExactlyInAnyOrder(
-                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
-                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()));
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                                teacher3.getEmail(), teacher3.getAge(), teacher3.getDepartmentDean()));
     }
 
     @Test
@@ -248,28 +321,29 @@ class SubjectServiceTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
-        Subject expected = initData.createSubjectTwo(null, List.of(teacher1, teacher2, teacher3));
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+
+        Subject expected = initData.createSubjectTwo(fieldOfStudy, List.of(teacher1, teacher2));
         //when
-        SubjectDto actual = subjectService.fetchById(expected.getId());
+        SubjectDto actual = service.fetchById(expected.getId());
         //then
         assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
         assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
+        assertThat(actual.getFieldOfStudy()).isEqualTo(expected.getFieldOfStudy());
         assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge
+                        Teacher::getAge,
+                        Teacher::getDepartmentDean
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()),
-                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                teacher3.getEmail(), teacher3.getAge()));
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()));
     }
 
     @Test
@@ -277,7 +351,7 @@ class SubjectServiceTest {
         //given
         Long id = 1L;
         //when
-        Throwable thrown = catchThrowable(() -> subjectService.fetchById(id));
+        Throwable thrown = catchThrowable(() -> service.fetchById(id));
         //then
         assertThat(thrown)
                 .isExactlyInstanceOf(IllegalArgumentException.class)
@@ -289,17 +363,20 @@ class SubjectServiceTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
-        Subject expected = initData.createSubjectTwo(null, List.of(teacher1, teacher2, teacher3));
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+
+        Subject expected = initData.createSubjectTwo(fieldOfStudy, List.of(teacher1, teacher2));
         //when
-        subjectService.remove(expected.getId());
+        service.remove(expected.getId());
         //then
         Optional<Subject> byId = subjectRepository.findById(expected.getId());
         assertThat(byId).isNotPresent();
-        expected.getTeachers().forEach(teacher -> {
+        fieldOfStudyRepository.findById(fieldOfStudy.getId()).orElseThrow(() -> new IllegalStateException(
+                "Field Of Study with ID = " + fieldOfStudy.getId() + " and name " + fieldOfStudy.getName() + " should not be removed."));
+        expected.getTeachers().forEach(teacher ->
             teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
-                    "Teacher with ID = " + teacher.getId() + " should not be removed."));
-        });
+                    "Teacher with ID = " + teacher.getId() + " and name "
+                            + teacher.getFirstName() + " " + teacher.getLastName() + " should not be removed.")));
     }
 
     @Test
@@ -307,7 +384,7 @@ class SubjectServiceTest {
         //given
         Long id = 1L;
         //when
-        Throwable thrown = catchThrowable(() -> subjectService.remove(id));
+        Throwable thrown = catchThrowable(() -> service.remove(id));
         //then
         assertThat(thrown)
                 .isExactlyInstanceOf(IllegalArgumentException.class)
@@ -315,17 +392,54 @@ class SubjectServiceTest {
     }
 
     @Test
-    void findByName_returnsSubjectsSearchedByName_givenName() {
+    void removeAll_shouldDeleteAllObjects() {
         //given
-        String name = "i";
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
-        Subject expected1 = initData.createSubjectFour(null, List.of(teacher1, teacher2));
-        Subject expected2 = initData.createSubjectTwo(null, List.of(teacher3));
-        Subject expected3 = initData.createSubjectThree(null, List.of(teacher1, teacher2, teacher3));
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+
+        Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
+        Subject expected2 = initData.createSubjectTwo(fieldOfStudy1, List.of(teacher3));
         //when
-        List<SubjectDto> actual = subjectService.findByName(name);
+        service.removeAll();
+        //then
+        Optional<Subject> byId1 = subjectRepository.findById(fieldOfStudy1.getId());
+        assertThat(byId1).isNotPresent();
+        fieldOfStudyRepository.findById(fieldOfStudy1.getId()).orElseThrow(() -> new IllegalStateException(
+                "Field Of Study with ID = " + fieldOfStudy1.getId() + " and name " + fieldOfStudy1.getName() + " should not be removed."));
+        expected1.getTeachers().forEach(teacher ->
+                teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
+                        "Teacher with ID = " + teacher.getId() + " and name "
+                                + teacher.getFirstName() + " " + teacher.getLastName() + " should not be removed.")));
+
+        Optional<Subject> byId2 = subjectRepository.findById(fieldOfStudy2.getId());
+        assertThat(byId2).isNotPresent();
+        fieldOfStudyRepository.findById(fieldOfStudy2.getId()).orElseThrow(() -> new IllegalStateException(
+                "Field Of Study with ID = " + fieldOfStudy2.getId() + " and name " + fieldOfStudy2.getName() + " should not be removed."));
+        expected2.getTeachers().forEach(teacher ->
+                teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
+                        "Teacher with ID = " + teacher.getId() + " and name "
+                                + teacher.getFirstName() + " " + teacher.getLastName() + " should not be removed.")));
+    }
+
+    @Test
+    void findByName_returnsSubjectsSearchedByName_givenName() {
+        //given
+        String name = "i";
+
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+
+        Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
+        Subject expected2 = initData.createSubjectTwo(fieldOfStudy1, List.of(teacher3));
+        Subject expected3 = initData.createSubjectThree(fieldOfStudy2, List.of(teacher1, teacher2, teacher3));
+        //when
+        List<SubjectDto> actual = service.findByName(name);
         //then
         assertThat(actual.size()).isEqualTo(2);
         SubjectDto actualSubject1 = actual.get(0);
@@ -340,12 +454,13 @@ class SubjectServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge
+                        Teacher::getAge,
+                        Teacher::getDepartmentDean
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()));
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()));
         assertThat(actualSubject2.getName()).isEqualTo(expected3.getName());
         assertThat(actualSubject2.getDescription()).isEqualTo(expected3.getDescription());
         assertThat(actualSubject2.getHoursInSemester()).isEqualTo(expected3.getHoursInSemester());
@@ -355,14 +470,58 @@ class SubjectServiceTest {
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge
+                        Teacher::getAge,
+                        Teacher::getDepartmentDean
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()),
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                teacher3.getEmail(), teacher3.getAge()));
+                                teacher3.getEmail(), teacher3.getAge(), teacher2.getDepartmentDean()));
+    }
+
+    @Test
+    void findByNamePaginated_returnsSubjectsSearchedByNamePaginated_givenName() {
+        //given
+        int pageNo = 1;
+        int pageSize = 1;
+        String sortField = "name";
+        String sortDirection = Sort.Direction.ASC.name();
+        String name = "i";
+
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+
+        Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
+        Subject expected2 = initData.createSubjectTwo(fieldOfStudy1, List.of(teacher3));
+        Subject expected3 = initData.createSubjectThree(fieldOfStudy2, List.of(teacher1, teacher2, teacher3));
+        //when
+        Page<SubjectDto> actual = service.findByNamePaginated(pageNo, pageSize, sortField, sortDirection, name);
+        List<SubjectDto> content = actual.getContent();
+        //then
+        assertThat(content.size()).isEqualTo(1);
+        SubjectDto actualSubject1 = content.get(0);
+
+        assertThat(actualSubject1.getName()).isEqualTo(expected1.getName());
+        assertThat(actualSubject1.getDescription()).isEqualTo(expected1.getDescription());
+        assertThat(actualSubject1.getHoursInSemester()).isEqualTo(expected1.getHoursInSemester());
+        assertThat(actualSubject1.getTeachers())
+                .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge,
+                        Teacher::getDepartmentDean
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()));
     }
 
     private SubjectDto createSubjectDto(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
