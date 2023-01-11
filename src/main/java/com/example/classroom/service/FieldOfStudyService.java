@@ -92,7 +92,7 @@ public class FieldOfStudyService {
     }
 
     public List<FieldOfStudyDto> findByName(String searched) {
-        List<FieldOfStudy> found = fieldOfStudyRepository.findAllByName(searched);
+        List<FieldOfStudy> found = fieldOfStudyRepository.findAllByNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, FieldOfStudyDto.class)).collect(Collectors.toList());
     }
 
@@ -101,7 +101,7 @@ public class FieldOfStudyService {
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<FieldOfStudy> all = fieldOfStudyRepository.findAllByName(searched, pageable);
+        Page<FieldOfStudy> all = fieldOfStudyRepository.findAllByNameContainingIgnoreCase(searched, pageable);
         return all.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class));
     }
 
