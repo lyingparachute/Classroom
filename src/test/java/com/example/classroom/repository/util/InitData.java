@@ -150,6 +150,7 @@ public class InitData {
         subject.setHoursInSemester(100);
         setFieldOfStudyAndTeachers(fieldOfStudy, teachers, subject);
         subjectRepository.save(subject);
+        teacherRepository.saveAll(teachers);
         return subject;
     }
 
@@ -162,6 +163,7 @@ public class InitData {
         subject.setHoursInSemester(120);
         setFieldOfStudyAndTeachers(fieldOfStudy, teachers, subject);
         subjectRepository.save(subject);
+        teacherRepository.saveAll(teachers);
         return subject;
     }
 
@@ -174,6 +176,7 @@ public class InitData {
         subject.setHoursInSemester(150);
         setFieldOfStudyAndTeachers(fieldOfStudy, teachers, subject);
         subjectRepository.save(subject);
+        teacherRepository.saveAll(teachers);
         return subject;
     }
 
@@ -186,6 +189,7 @@ public class InitData {
         subject.setHoursInSemester(360);
         setFieldOfStudyAndTeachers(fieldOfStudy, teachers, subject);
         subjectRepository.save(subject);
+        teacherRepository.saveAll(teachers);
         return subject;
     }
 
