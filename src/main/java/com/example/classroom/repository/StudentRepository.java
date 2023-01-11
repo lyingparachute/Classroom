@@ -10,9 +10,13 @@ import java.util.List;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-    @Query("select s from Student s where s.firstName like %?1% or s.lastName like %?1%")
-    List<Student> findAllByFirstNameOrLastName(String name);
+    @Query("""
+            select s from Student s
+            where upper(s.firstName) like upper(concat('%', ?1, '%')) and upper(s.lastName) like upper(concat('%', ?1, '%'))""")
+    List<Student> findAllByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(String name);
 
-    @Query("select s from Student s where s.firstName like %?1% or s.lastName like %?1%")
-    Page<Student> findAllByFirstNameOrLastName(String name, Pageable pageable);
+    @Query("""
+            select s from Student s
+            where upper(s.firstName) like upper(concat('%', ?1, '%')) and upper(s.lastName) like upper(concat('%', ?1, '%'))""")
+    Page<Student> findAllByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(String name, Pageable pageable);
 }
