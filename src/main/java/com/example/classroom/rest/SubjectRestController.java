@@ -26,7 +26,7 @@ public class SubjectRestController {
                 ResponseEntity.ok(subjects);
     }
 
-    @PostMapping("create")
+    @PostMapping
     public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
         SubjectDto created = subjectService.create(subjectDto);
         return created != null ?

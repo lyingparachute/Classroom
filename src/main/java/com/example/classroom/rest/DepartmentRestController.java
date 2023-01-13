@@ -25,7 +25,7 @@ public class DepartmentRestController {
                 ResponseEntity.ok(departments);
     }
 
-    @PostMapping("create")
+    @PostMapping
     public ResponseEntity<DepartmentDto> createDepartment(@RequestBody DepartmentDto departmentDto) {
         DepartmentDto created = service.create(departmentDto);
         return created != null ?

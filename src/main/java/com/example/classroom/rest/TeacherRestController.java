@@ -26,7 +26,7 @@ public class TeacherRestController {
                 ResponseEntity.ok(teacher);
     }
 
-    @PostMapping("create")
+    @PostMapping
     public ResponseEntity<TeacherDto> createTeacher(@RequestBody TeacherDto teacherDto) {
         TeacherDto created = teacherService.create(teacherDto);
         return created != null ?

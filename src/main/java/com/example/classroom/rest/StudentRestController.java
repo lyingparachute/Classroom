@@ -26,7 +26,7 @@ public class StudentRestController {
                 ResponseEntity.ok(students);
     }
 
-    @PostMapping("create")
+    @PostMapping
     public ResponseEntity<StudentDto> createStudent(@RequestBody StudentDto studentDto) {
         StudentDto created = service.create(studentDto);
         return created != null ?

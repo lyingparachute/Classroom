@@ -26,7 +26,7 @@ public class FieldOfStudyRestController {
                 ResponseEntity.ok(fieldsOfStudy);
     }
 
-    @PostMapping("create")
+    @PostMapping
     public ResponseEntity<FieldOfStudyDto> createFieldOfStudy(@RequestBody FieldOfStudyDto fieldOfStudyDto) {
         FieldOfStudyDto created = service.create(fieldOfStudyDto);
         return created != null ?
