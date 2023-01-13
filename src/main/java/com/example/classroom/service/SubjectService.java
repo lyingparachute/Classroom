@@ -112,12 +112,14 @@ public class SubjectService {
         HashSet<Teacher> teachers = new HashSet<>(subject.getTeachers());
         FieldOfStudy fieldOfStudy = subject.getFieldOfStudy();
         if (!teachers.isEmpty()) {
-            teachers.forEach(t -> t.getSubjects().add(subject));
             teachers.forEach(subject::addTeacher);
+//            teachers.forEach(t -> t.getSubjects().add(subject));
+//            teachers.forEach(subject::addTeacher);
         }
         if (fieldOfStudy != null) {
-            subject.setFieldOfStudy(fieldOfStudy);
-            fieldOfStudy.getSubjects().add(subject);
+            fieldOfStudy.addSubject(subject);
+//            subject.setFieldOfStudy(fieldOfStudy);
+//            fieldOfStudy.getSubjects().add(subject);
         }
     }
 
@@ -125,12 +127,12 @@ public class SubjectService {
         HashSet<Teacher> teachers = new HashSet<>(subject.getTeachers());
         FieldOfStudy fieldOfStudy = subject.getFieldOfStudy();
         if (!teachers.isEmpty()) {
-            teachers.forEach(t -> t.getSubjects().remove(subject));
             teachers.forEach(subject::removeTeacher);
+//            teachers.forEach(t -> t.getSubjects().remove(subject));
+//            teachers.forEach(subject::removeTeacher);
         }
         if (fieldOfStudy != null) {
-            subject.setFieldOfStudy(null);
-            fieldOfStudy.getSubjects().remove(subject);
+            fieldOfStudy.removeSubject(subject);
         }
     }
 }

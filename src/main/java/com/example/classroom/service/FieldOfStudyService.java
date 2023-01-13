@@ -17,11 +17,10 @@ import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class FieldOfStudyService {
-    
+
     private final FieldOfStudyRepository fieldOfStudyRepository;
     private final ModelMapper mapper;
 
@@ -52,7 +51,7 @@ public class FieldOfStudyService {
 
     public List<FieldOfStudyDto> fetchAll() {
         List<FieldOfStudy> all = fieldOfStudyRepository.findAll();
-        return all.stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).collect(Collectors.toList());
+        return all.stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).toList();
     }
 
     public Page<FieldOfStudyDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
@@ -85,7 +84,7 @@ public class FieldOfStudyService {
 
     public List<FieldOfStudyDto> findByName(String searched) {
         List<FieldOfStudy> found = fieldOfStudyRepository.findAllByNameContainingIgnoreCase(searched);
-        return found.stream().map(s -> mapper.map(s, FieldOfStudyDto.class)).collect(Collectors.toList());
+        return found.stream().map(s -> mapper.map(s, FieldOfStudyDto.class)).toList();
     }
 
     public Page<FieldOfStudyDto> findByNamePaginated(int pageNo, int pageSize, String sortField, String sortDirection, String searched) {
@@ -126,32 +125,35 @@ public class FieldOfStudyService {
     private void addSubjects(FieldOfStudy fieldOfStudy) {
         HashSet<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
         if (!subjects.isEmpty()) {
-            subjects.forEach(subject -> subject.setFieldOfStudy(fieldOfStudy));
-            fieldOfStudy.setSubjects(subjects);
+            subjects.forEach(fieldOfStudy::addSubject);
+//            fieldOfStudy.setSubjects(subjects);
         }
     }
 
     private void removeSubjects(FieldOfStudy fieldOfStudy) {
         HashSet<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
         if (!subjects.isEmpty()) {
-            subjects.forEach(subject -> subject.setFieldOfStudy(null));
-            fieldOfStudy.setSubjects(new HashSet<>());
+            subjects.forEach(fieldOfStudy::removeSubject);
+//            subjects.forEach(subject -> subject.setFieldOfStudy(null));
+//            fieldOfStudy.setSubjects(new HashSet<>());
         }
     }
 
     private void addStudents(FieldOfStudy fieldOfStudy) {
         HashSet<Student> students = new HashSet<>(fieldOfStudy.getStudents());
         if (!students.isEmpty()) {
-            students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
-            fieldOfStudy.setStudents(students);
+            students.forEach(fieldOfStudy::addStudent);
+//            students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
+//            fieldOfStudy.setStudents(students);
         }
     }
 
     private void removeStudents(FieldOfStudy fieldOfStudy) {
         HashSet<Student> students = new HashSet<>(fieldOfStudy.getStudents());
         if (!students.isEmpty()) {
-            students.forEach(student -> student.setFieldOfStudy(null));
-            fieldOfStudy.setStudents(new HashSet<>());
+            students.forEach(fieldOfStudy::removeStudent);
+//            students.forEach(student -> student.setFieldOfStudy(null));
+//            fieldOfStudy.setStudents(new HashSet<>());
         }
     }
 }
