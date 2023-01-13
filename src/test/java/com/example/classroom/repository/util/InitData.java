@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -24,10 +26,15 @@ public class InitData {
 
     @Transactional
     public void cleanUp() {
+        studentRepository.findAll().forEach(this::removeReferencingObjectsFromStudent);
         studentRepository.deleteAll();
+        teacherRepository.findAll().forEach(this::removeReferencingObjectsFromTeacher);
         teacherRepository.deleteAll();
+        departmentRepository.findAll().forEach(this::removeReferencingObjectsFromDepartment);
         departmentRepository.deleteAll();
+        fieldOfStudyRepository.findAll().forEach(this::removeReferencingObjectsFromFieldOfStudy);
         fieldOfStudyRepository.deleteAll();
+        subjectRepository.findAll().forEach(this::removeReferencingObjectsFromSubject);
         subjectRepository.deleteAll();
     }
 
@@ -73,6 +80,12 @@ public class InitData {
         teachers.forEach(student::addTeacher);
     }
 
+    private void removeReferencingObjectsFromStudent(Student student) {
+        student.setFieldOfStudy(null);
+        Set<Teacher> teachers = new HashSet<>(student.getTeachers());
+        teachers.forEach(student::removeTeacher);
+    }
+
     // *** Create Teachers *** //
     @Transactional
     public Teacher createTeacherOne(Department department,List<Subject> subjects, List<Student> students) {
@@ -111,6 +124,14 @@ public class InitData {
         teacher.setDepartmentDean(department);
         students.forEach(teacher::addStudent);
         subjects.forEach(teacher::addSubject);
+    }
+
+    private void removeReferencingObjectsFromTeacher(final Teacher teacher){
+        Set<Student> students = new HashSet<>(teacher.getStudents());
+        Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
+        teacher.setDepartmentDean(null);
+        students.forEach(teacher::removeStudent);
+        subjects.forEach(teacher::removeSubject);
     }
 
     // *** Create Subjects *** //
@@ -167,6 +188,12 @@ public class InitData {
         teachers.forEach(subject::addTeacher);
     }
 
+    private void removeReferencingObjectsFromSubject(Subject subject) {
+        Set<Teacher> teachers = new HashSet<>(subject.getTeachers());
+        subject.setFieldOfStudy(null);
+        teachers.forEach(subject::removeTeacher);
+    }
+
     // *** Create Fields Of Study *** //
     @Transactional
     public FieldOfStudy createFieldOfStudyOne(Department department, List<Subject> subjects, List<Student> students) {
@@ -210,6 +237,14 @@ public class InitData {
         students.forEach(fieldOfStudy::addStudent);
     }
 
+    private void removeReferencingObjectsFromFieldOfStudy(FieldOfStudy fieldOfStudy) {
+        Set<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
+        Set<Student> students = new HashSet<>(fieldOfStudy.getStudents());
+        fieldOfStudy.setDepartment(null);
+        subjects.forEach(fieldOfStudy::removeSubject);
+        students.forEach(fieldOfStudy::removeStudent);
+    }
+
     // *** Create Departments *** //
     @Transactional
     public Department createDepartmentOne(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
@@ -244,5 +279,11 @@ public class InitData {
     private void addReferencingObjectsToDepartment(Teacher dean, List<FieldOfStudy> fieldsOfStudy, Department department) {
         department.setDean(dean);
         fieldsOfStudy.forEach(department::addFieldOfStudy);
+    }
+
+    private void removeReferencingObjectsFromDepartment(Department department) {
+        Set<FieldOfStudy> fieldsOfStudy = new HashSet<>(department.getFieldsOfStudy());
+        department.setDean(null);
+        fieldsOfStudy.forEach(department::removeFieldOfStudy);
     }
 }
