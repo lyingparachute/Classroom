@@ -101,9 +101,7 @@ class StudentRestControllerTest {
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Set actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual).isNotEmpty();
-        assertThat(actual).size().isEqualTo(2);
+        assertThat(actual).isNotNull().isNotEmpty().hasSize(2);
        }
 
     @Test
@@ -113,7 +111,7 @@ class StudentRestControllerTest {
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         StudentDto studentDto = createStudentDto(List.of(teacher1, teacher2));
         //when
-        URI url = createURL("/api/students/create");
+        URI url = createURL("/api/students");
         ResponseEntity<StudentDto> response = restTemplate.postForEntity(url, studentDto, StudentDto.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);

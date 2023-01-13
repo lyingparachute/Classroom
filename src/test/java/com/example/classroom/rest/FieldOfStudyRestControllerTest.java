@@ -1,7 +1,10 @@
 package com.example.classroom.rest;
 
 import com.example.classroom.dto.FieldOfStudyDto;
-import com.example.classroom.entity.*;
+import com.example.classroom.entity.Department;
+import com.example.classroom.entity.FieldOfStudy;
+import com.example.classroom.entity.Student;
+import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
@@ -84,8 +87,7 @@ class FieldOfStudyRestControllerTest {
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Set actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual).size().isEqualTo(2);
+        assertThat(actual).isNotNull().isNotEmpty().hasSize(2);
     }
 
     @Test
@@ -100,39 +102,115 @@ class FieldOfStudyRestControllerTest {
         Department department1 = initData.createDepartmentOne(null, List.of());
         Department department2 = initData.createDepartmentTwo(null, List.of());
 
-        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
+        FieldOfStudyDto expected = createFieldOfStudyDto(department1, List.of(subject1), List.of(student1));
 
         //when
-        URI url = createURL("/api/fields-of-study/" + fieldOfStudy.getId());
-        ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
-
+        URI url = createURL("/api/fields-of-study/create");
+        ResponseEntity<FieldOfStudyDto> response = restTemplate.postForEntity(url, expected, FieldOfStudyDto.class);
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        FieldOfStudyDto actual = response.getBody();
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isNotNull();
+        fieldOfStudyRepository.findById(actual.getId()).orElseThrow(() -> new IllegalStateException(
+                "Field Of Study with ID = " + actual.getId() + " and name " + actual.getName() + " should not be missing."));
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getLevelOfEducation()).isEqualTo(expected.getLevelOfEducation());
+        assertThat(actual.getMode()).isEqualTo(expected.getMode());
+        assertThat(actual.getTitle()).isEqualTo(expected.getTitle());
+        assertThat(actual.getDepartment()).isEqualTo(expected.getDepartment());
+        assertThat(actual.getDepartment().getFieldsOfStudy())
+                .extracting(
+                        FieldOfStudy::getName,
+                        FieldOfStudy::getLevelOfEducation,
+                        FieldOfStudy::getMode,
+                        FieldOfStudy::getTitle
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(expected.getName(), expected.getLevelOfEducation(), expected.getMode(), expected.getTitle()));
+        assertThat(actual.getSubjects())
+                .extracting(
+                        Subject::getId,
+                        Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy,
+                        Subject::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(subject1.getId(), subject1.getName(), subject1.getDescription(), subject1.getSemester(),
+                                subject1.getHoursInSemester(), expected, subject1.getTeachers()),
+                        Tuple.tuple(subject2.getId(), subject2.getName(), subject2.getDescription(), subject2.getSemester(),
+                                subject2.getHoursInSemester(), expected, subject2.getTeachers()));
+        assertThat(actual.getStudents())
+                .extracting(
+                        Student::getId,
+                        Student::getFirstName,
+                        Student::getLastName,
+                        Student::getAge,
+                        Student::getEmail,
+                        Student::getFieldOfStudy,
+                        Student::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(), student1.getAge(),
+                                student1.getEmail(), expected, student1.getTeachers()),
+                        Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(), student2.getAge(),
+                                student2.getEmail(), expected, student2.getTeachers()));
     }
 
     @Test
     void shouldGetFieldOfStudy() throws URISyntaxException {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Student student1 = initData.createStudentOne(null, List.of());
+        Student student2 = initData.createStudentTwo(null, List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher2));
+        Subject subject1 = initData.createSubjectOne(null, List.of());
+        Subject subject2 = initData.createSubjectTwo(null, List.of());
+        Department department = initData.createDepartmentOne(null, List.of());
 
-        Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-        Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
-
-        Department department = initData.createDepartmentOne(teacher1, List.of());
-
-        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(department, List.of(subject1, subject2), List.of(student1, student2));
+        FieldOfStudy expected = initData.createFieldOfStudyOne(department, List.of(subject1, subject2), List.of(student1, student2));
         //when
-        URI url = createURL("/api/fields-of-study/" + fieldOfStudy.getId());
+        URI url = createURL("/api/fields-of-study/" + expected.getId());
         ResponseEntity<FieldOfStudyDto> response = restTemplate.getForEntity(url, FieldOfStudyDto.class);
-        //then
-        List<FieldOfStudy> all = fieldOfStudyRepository.findAll();
-        Optional<FieldOfStudy> byId = fieldOfStudyRepository.findById(fieldOfStudy.getId());
+        Optional<FieldOfStudy> byId = fieldOfStudyRepository.findById(expected.getId());
         assertThat(byId).isPresent();
+        //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         FieldOfStudyDto actual = response.getBody();
         assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isEqualTo(expected.getId());
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getLevelOfEducation()).isEqualTo(expected.getLevelOfEducation());
+        assertThat(actual.getMode()).isEqualTo(expected.getMode());
+        assertThat(actual.getTitle()).isEqualTo(expected.getTitle());
+        assertThat(actual.getDepartment()).isEqualTo(department);
+        assertThat(actual.getSubjects())
+                .extracting(
+                        Subject::getId,
+                        Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy,
+                        Subject::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(subject1.getId(), subject1.getName(), subject1.getDescription(), subject1.getSemester(),
+                                subject1.getHoursInSemester(), expected, subject1.getTeachers()),
+                        Tuple.tuple(subject2.getId(), subject2.getName(), subject2.getDescription(), subject2.getSemester(),
+                                subject2.getHoursInSemester(), expected, subject2.getTeachers()));
+        assertThat(actual.getStudents())
+                .extracting(
+                        Student::getId,
+                        Student::getFirstName,
+                        Student::getLastName,
+                        Student::getAge,
+                        Student::getEmail,
+                        Student::getFieldOfStudy,
+                        Student::getTeachers
+                ).containsExactlyInAnyOrder(
+                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(), student1.getAge(),
+                                student1.getEmail(), expected, student1.getTeachers()),
+                        Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(), student2.getAge(),
+                                student2.getEmail(), expected, student2.getTeachers()));
     }
 
     @Test

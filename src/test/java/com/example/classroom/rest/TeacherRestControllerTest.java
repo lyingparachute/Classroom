@@ -76,7 +76,8 @@ class TeacherRestControllerTest {
                         Student::getFirstName,
                         Student::getLastName,
                         Student::getEmail,
-                        Student::getAge
+                        Student::getAge,
+                        Student::getFieldOfStudy
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(studentOne.getId(), studentOne.getFirstName(), studentOne.getLastName(),
                                 studentOne.getEmail(), studentOne.getAge(), studentOne.getFieldOfStudy()),
@@ -96,9 +97,7 @@ class TeacherRestControllerTest {
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Set actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual).isNotEmpty();
-        assertThat(actual).size().isEqualTo(2);
+        assertThat(actual).isNotNull().isNotEmpty().hasSize(2);
     }
 
     @Test
@@ -109,7 +108,7 @@ class TeacherRestControllerTest {
 
         TeacherDto teacherDto = createTeacherDto(student1, student2);
         //when
-        URI url = createURL("/api/teachers/create");
+        URI url = createURL("/api/teachers");
         ResponseEntity<TeacherDto> response = restTemplate.postForEntity(url, teacherDto, TeacherDto.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);

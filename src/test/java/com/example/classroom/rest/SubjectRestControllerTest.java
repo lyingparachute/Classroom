@@ -112,9 +112,7 @@ class SubjectRestControllerTest {
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Set actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual).isNotEmpty();
-        assertThat(actual).size().isEqualTo(2);
+        assertThat(actual).isNotNull().isNotEmpty().hasSize(2);
        }
 
     @Test
@@ -126,7 +124,7 @@ class SubjectRestControllerTest {
 
         SubjectDto expected = createSubjectDto(fieldOfStudy, List.of(teacher1, teacher2));
         //when
-        URI url = createURL("/api/subjects/create");
+        URI url = createURL("/api/subjects");
         ResponseEntity<SubjectDto> response = restTemplate.postForEntity(url, expected, SubjectDto.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
