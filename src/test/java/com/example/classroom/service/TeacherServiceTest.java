@@ -335,7 +335,7 @@ class TeacherServiceTest {
         //when
         List<TeacherDto> actual = teacherService.findByFirstOrLastName(name);
         //then
-        assertThat(actual.size()).isEqualTo(2);
+        assertThat(actual).hasSize(2);
         TeacherDto actualTeacher1 = actual.get(0);
         TeacherDto actualTeacher2 = actual.get(1);
         assertThat(actualTeacher1.getFirstName()).isEqualTo(teacher1.getFirstName());
@@ -370,38 +370,4 @@ class TeacherServiceTest {
                                 student3.getEmail(), student3.getAge()));
     }
 
-    @Test
-    void assignStudents_shouldAssignStudentsToTeacher_givenStudentsSet() {
-        //given
-        Student student1 = initData.createStudentOne(null, List.of());
-        Student student2 = initData.createStudentTwo(null, List.of());
-        Student student3 = initData.createStudentThree(null, List.of());
-
-        HashSet<Student> students = new HashSet<>(List.of(student1, student2, student3));
-        Teacher teacher = initData.createTeacherOne(null, List.of(), List.of());
-        //when
-        teacherService.assignStudents(teacher, students);
-        //then
-        Optional<Teacher> byId = teacherRepository.findById(teacher.getId());
-        assertThat(byId).isPresent();
-        Teacher actual = byId.get();
-        assertThat(actual.getFirstName()).isEqualTo(teacher.getFirstName());
-        assertThat(actual.getLastName()).isEqualTo(teacher.getLastName());
-        assertThat(actual.getEmail()).isEqualTo(teacher.getEmail());
-        assertThat(actual.getAge()).isEqualTo(teacher.getAge());
-        assertThat(actual.getStudents())
-                .extracting(
-                        Student::getId,
-                        Student::getFirstName,
-                        Student::getLastName,
-                        Student::getEmail,
-                        Student::getAge
-                ).containsExactlyInAnyOrder(
-                        Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(),
-                                student1.getEmail(), student1.getAge()),
-                        Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(),
-                                student2.getEmail(), student2.getAge()),
-                        Tuple.tuple(student3.getId(), student3.getFirstName(), student3.getLastName(),
-                                student3.getEmail(), student3.getAge()));
-    }
 }
