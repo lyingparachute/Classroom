@@ -37,21 +37,46 @@ public class Subject {
     private int hoursInSemester;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.DETACH})
     @JoinColumn(name = "field_id")
     @ToString.Exclude
     private FieldOfStudy fieldOfStudy;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
-            mappedBy = "subjects")
+    @ManyToMany(mappedBy = "subjects")
     @ToString.Exclude
     private Set<Teacher> teachers = new HashSet<>();
 
     /**
+     * Set new Field Of Study's department. The method keeps
+     * relationships consistency:
+     * * this Field Of Study is removed from the previous Department
+     * * this Field Of Study is added to next Department
+     */
+    public void setFieldOfStudy(FieldOfStudy fieldOfStudy) {
+        if (isSameAsFormer(fieldOfStudy))
+            return;
+        FieldOfStudy oldFieldOfStudy = this.fieldOfStudy;
+        this.fieldOfStudy = fieldOfStudy;
+        if (oldFieldOfStudy != null)
+            oldFieldOfStudy.removeSubject(this);
+        if (fieldOfStudy != null) {
+            fieldOfStudy.addSubject(this);
+        }
+    }
+
+    private boolean isSameAsFormer(FieldOfStudy newFieldOfStudy) {
+        if (fieldOfStudy == null)
+            return newFieldOfStudy == null;
+        return fieldOfStudy.equals(newFieldOfStudy);
+    }
+
+    /**
      * Add new Teacher. The method keeps relationships consistency:
      * * this subject is added to subjects
-     *   on the teacher side
+     * on the teacher side
      */
     public void addTeacher(Teacher teacher) {
         //prevent endless loop
@@ -65,7 +90,7 @@ public class Subject {
     /**
      * Remove Teacher. The method keeps relationships consistency:
      * * this subject is removed from subjects
-     *   on the teacher side
+     * on the teacher side
      */
     public void removeTeacher(Teacher teacher) {
         //prevent endless loop

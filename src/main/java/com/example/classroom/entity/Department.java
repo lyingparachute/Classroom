@@ -30,14 +30,37 @@ public class Department {
 
     @JsonIgnore
     @ToString.Exclude
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dean_id", referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "dean_id")
     private Teacher dean;
 
     @JsonIgnore
     @ToString.Exclude
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "department")
     private Set<FieldOfStudy> fieldsOfStudy = new HashSet<>();
+
+    /**
+     * Set new Department's dean(Teacher). The method keeps
+     * relationships consistency:
+     * * this Department is removed from the previous dean(Teacher)
+     * * this Department is added to next dean(Teacher)
+     */
+    public void setDean(Teacher dean) {
+        if (sameAsFormer(dean))
+            return;
+        Teacher oldDean = this.dean;
+        this.dean = dean;
+        if (oldDean != null)
+            oldDean.setDepartmentDean(null);
+        if (dean != null)
+            dean.setDepartmentDean(this);
+    }
+
+    private boolean sameAsFormer(Teacher newDean) {
+        if (dean == null)
+            return newDean == null;
+        return dean.equals(newDean);
+    }
 
     /**
      * Add new Field Of Study. The method keeps relationships consistency:
@@ -46,9 +69,8 @@ public class Department {
      */
     public void addFieldOfStudy(FieldOfStudy fieldOfStudy) {
         //prevent endless loop
-        if (fieldsOfStudy.contains(fieldOfStudy)) {
+        if (fieldsOfStudy.contains(fieldOfStudy))
             return;
-        }
         fieldsOfStudy.add(fieldOfStudy);
         fieldOfStudy.setDepartment(this);
     }
@@ -60,9 +82,8 @@ public class Department {
      */
     public void removeFieldOfStudy(FieldOfStudy fieldOfStudy) {
         //prevent endless loop
-        if (!fieldsOfStudy.contains(fieldOfStudy)) {
+        if (!fieldsOfStudy.contains(fieldOfStudy))
             return;
-        }
         fieldsOfStudy.remove(fieldOfStudy);
         fieldOfStudy.setDepartment(null);
     }

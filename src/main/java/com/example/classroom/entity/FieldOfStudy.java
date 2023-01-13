@@ -36,19 +36,50 @@ public class FieldOfStudy {
     @Enumerated(EnumType.STRING)
     private AcademicTitle title;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.REFRESH,
+                    CascadeType.MERGE,
+                    CascadeType.DETACH})
     @JoinColumn(name = "department_id")
     @ToString.Exclude
     private Department department;
 
-    @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "fieldOfStudy",
+            cascade = {
+                    CascadeType.MERGE}
+    )
     @ToString.Exclude
     private Set<Subject> subjects = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "fieldOfStudy", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "fieldOfStudy")
     @ToString.Exclude
     private Set<Student> students = new HashSet<>();
+
+    /**
+     * Set new Field Of Study's department. The method keeps
+     * relationships consistency:
+     * * this Field Of Study is removed from the previous Department
+     * * this Field Of Study is added to next Department
+     */
+    public void setDepartment(Department department) {
+        if (sameAsFormer(department))
+            return;
+        Department oldDepartment = this.department;
+        this.department = department;
+        if (oldDepartment != null)
+            oldDepartment.removeFieldOfStudy(this);
+        if (department != null) {
+            department.addFieldOfStudy(this);
+        }
+    }
+
+    private boolean sameAsFormer(Department newDepartment) {
+        if (department == null)
+            return newDepartment == null;
+        return department.equals(newDepartment);
+    }
 
     /**
      * Add new Subject. The method keeps relationships consistency:

@@ -1,11 +1,11 @@
 package com.example.classroom.service;
 
 import com.example.classroom.dto.FieldOfStudyDto;
-import com.example.classroom.entity.Department;
 import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.repository.FieldOfStudyRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,40 +17,37 @@ import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class FieldOfStudyService {
 
-    private final FieldOfStudyRepository fieldOfStudyRepository;
+    private final FieldOfStudyRepository repository;
     private final ModelMapper mapper;
-
-    public FieldOfStudyService(FieldOfStudyRepository fieldOfStudyRepository, ModelMapper mapper) {
-        this.fieldOfStudyRepository = fieldOfStudyRepository;
-        this.mapper = mapper;
-    }
 
     @Transactional
     public FieldOfStudyDto create(FieldOfStudyDto dto) {
         FieldOfStudy fieldOfStudy = mapper.map(dto, FieldOfStudy.class);
-        addDepartmentSubjectsAndStudents(fieldOfStudy);
-        FieldOfStudy saved = fieldOfStudyRepository.save(fieldOfStudy);
+        addReferencingObjects(fieldOfStudy);
+        FieldOfStudy saved = repository.save(fieldOfStudy);
         return mapper.map(saved, FieldOfStudyDto.class);
     }
 
     @Transactional
     public FieldOfStudyDto update(FieldOfStudyDto dto) {
-        FieldOfStudy fieldOfStudy = fieldOfStudyRepository.findById(dto.getId())
+        FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
-        removeDepartmentSubjectsAndStudents(fieldOfStudy);
+        removeReferencingObjects(fieldOfStudy);
         mapper.map(dto, fieldOfStudy);
-        addDepartmentSubjectsAndStudents(fieldOfStudy);
-        FieldOfStudy saved = fieldOfStudyRepository.save(fieldOfStudy);
+        addReferencingObjects(fieldOfStudy);
+        FieldOfStudy saved = repository.save(fieldOfStudy);
         return mapper.map(saved, FieldOfStudyDto.class);
 
     }
 
     public List<FieldOfStudyDto> fetchAll() {
-        List<FieldOfStudy> all = fieldOfStudyRepository.findAll();
+        List<FieldOfStudy> all = repository.findAll();
         return all.stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).toList();
     }
 
@@ -59,31 +56,31 @@ public class FieldOfStudyService {
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<FieldOfStudy> all = fieldOfStudyRepository.findAll(pageable);
+        Page<FieldOfStudy> all = repository.findAll(pageable);
         return all.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class));
     }
 
 
     public FieldOfStudyDto fetchById(Long id) {
-        Optional<FieldOfStudy> byId = fieldOfStudyRepository.findById(id);
+        Optional<FieldOfStudy> byId = repository.findById(id);
         return byId.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study ID: " + id));
     }
 
     @Transactional
     public void remove(Long id) {
-        FieldOfStudy fieldOfStudy = fieldOfStudyRepository.findById(id)
+        FieldOfStudy fieldOfStudy = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study ID: " + id));
-        fieldOfStudyRepository.delete(fieldOfStudy);
+        repository.delete(fieldOfStudy);
     }
 
     @Transactional
     public void removeAll() {
-        fieldOfStudyRepository.deleteAll();
+        repository.deleteAll();
     }
 
     public List<FieldOfStudyDto> findByName(String searched) {
-        List<FieldOfStudy> found = fieldOfStudyRepository.findAllByNameContainingIgnoreCase(searched);
+        List<FieldOfStudy> found = repository.findAllByNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, FieldOfStudyDto.class)).toList();
     }
 
@@ -92,68 +89,23 @@ public class FieldOfStudyService {
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<FieldOfStudy> all = fieldOfStudyRepository.findAllByNameContainingIgnoreCase(searched, pageable);
+        Page<FieldOfStudy> all = repository.findAllByNameContainingIgnoreCase(searched, pageable);
         return all.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class));
     }
 
-    private void addDepartmentSubjectsAndStudents(FieldOfStudy fieldOfStudy) {
-        addDepartment(fieldOfStudy);
-        addSubjects(fieldOfStudy);
-        addStudents(fieldOfStudy);
+    private void addReferencingObjects(FieldOfStudy fieldOfStudy) {
+        Set<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
+        Set<Student> students = new HashSet<>(fieldOfStudy.getStudents());
+        fieldOfStudy.setDepartment(fieldOfStudy.getDepartment());
+        subjects.forEach(fieldOfStudy::addSubject);
+        students.forEach(fieldOfStudy::addStudent);
     }
 
-    private void removeDepartmentSubjectsAndStudents(FieldOfStudy fieldOfStudy) {
-        removeDepartment(fieldOfStudy);
-        removeSubjects(fieldOfStudy);
-        removeStudents(fieldOfStudy);
-    }
-
-    private void addDepartment(FieldOfStudy fieldOfStudy) {
-        Department department = fieldOfStudy.getDepartment();
-        if (department != null) {
-            department.getFieldsOfStudy().add(fieldOfStudy);
-        }
-    }
-
-    private void removeDepartment(FieldOfStudy fieldOfStudy) {
-        Department department = fieldOfStudy.getDepartment();
-        if (department != null) {
-            department.getFieldsOfStudy().remove(fieldOfStudy);
-        }
-    }
-
-    private void addSubjects(FieldOfStudy fieldOfStudy) {
-        HashSet<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
-        if (!subjects.isEmpty()) {
-            subjects.forEach(fieldOfStudy::addSubject);
-//            fieldOfStudy.setSubjects(subjects);
-        }
-    }
-
-    private void removeSubjects(FieldOfStudy fieldOfStudy) {
-        HashSet<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
-        if (!subjects.isEmpty()) {
-            subjects.forEach(fieldOfStudy::removeSubject);
-//            subjects.forEach(subject -> subject.setFieldOfStudy(null));
-//            fieldOfStudy.setSubjects(new HashSet<>());
-        }
-    }
-
-    private void addStudents(FieldOfStudy fieldOfStudy) {
-        HashSet<Student> students = new HashSet<>(fieldOfStudy.getStudents());
-        if (!students.isEmpty()) {
-            students.forEach(fieldOfStudy::addStudent);
-//            students.forEach(student -> student.setFieldOfStudy(fieldOfStudy));
-//            fieldOfStudy.setStudents(students);
-        }
-    }
-
-    private void removeStudents(FieldOfStudy fieldOfStudy) {
-        HashSet<Student> students = new HashSet<>(fieldOfStudy.getStudents());
-        if (!students.isEmpty()) {
-            students.forEach(fieldOfStudy::removeStudent);
-//            students.forEach(student -> student.setFieldOfStudy(null));
-//            fieldOfStudy.setStudents(new HashSet<>());
-        }
+    private void removeReferencingObjects(FieldOfStudy fieldOfStudy) {
+        Set<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
+        Set<Student> students = new HashSet<>(fieldOfStudy.getStudents());
+        fieldOfStudy.setDepartment(null);
+        subjects.forEach(fieldOfStudy::removeSubject);
+        students.forEach(fieldOfStudy::removeStudent);
     }
 }

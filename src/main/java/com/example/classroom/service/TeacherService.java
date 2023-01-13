@@ -5,6 +5,7 @@ import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.TeacherRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,39 +20,35 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class TeacherService {
-    private final TeacherRepository teacherRepository;
+    private final TeacherRepository repository;
     private final ModelMapper mapper;
-
-    public TeacherService(TeacherRepository teacherRepository, ModelMapper mapper) {
-        this.teacherRepository = teacherRepository;
-        this.mapper = mapper;
-    }
 
     @Transactional
     public TeacherDto create(final TeacherDto dto) {
         Teacher teacher = mapper.map(dto, Teacher.class);
         addReferencingObjects(teacher);
-        Teacher saved = teacherRepository.save(teacher);
+        Teacher saved = repository.save(teacher);
         return mapper.map(saved, TeacherDto.class);
     }
 
     @Transactional
     public TeacherDto update(final TeacherDto dto) {
-        Teacher teacher = teacherRepository.findById(dto.getId())
+        Teacher teacher = repository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Invalid teacher '" + dto.getFirstName() + " " + dto.getLastName() + "' with ID: " + dto.getId()));
         removeReferencingObjects(teacher);
         mapper.map(dto, teacher);
         addReferencingObjects(teacher);
-        Teacher saved = teacherRepository.save(teacher);
+        Teacher saved = repository.save(teacher);
         return mapper.map(saved, TeacherDto.class);
 
     }
 
     @Transactional
     public List<TeacherDto> fetchAll() {
-        List<Teacher> teachers = teacherRepository.findAll();
+        List<Teacher> teachers = repository.findAll();
         return teachers.stream().map(teacher -> mapper.map(teacher, TeacherDto.class)).toList();
     }
 
@@ -61,33 +58,33 @@ public class TeacherService {
                 Sort.by(sortField).descending();
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Teacher> all = teacherRepository.findAll(pageable);
+        Page<Teacher> all = repository.findAll(pageable);
         return all.map(teacher -> mapper.map(teacher, TeacherDto.class));
     }
 
     @Transactional
     public TeacherDto fetchById(final Long id) {
-        Optional<Teacher> byId = teacherRepository.findById(id);
+        Optional<Teacher> byId = repository.findById(id);
         return byId.map(teacher -> mapper.map(teacher, TeacherDto.class))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid teacher ID: " + id));
     }
 
     @Transactional
     public void remove(final Long id) {
-        Teacher teacher = teacherRepository.findById(id)
+        Teacher teacher = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid teacher ID: " + id));
         removeReferencingObjects(teacher);
-        teacherRepository.delete(teacher);
+        repository.delete(teacher);
     }
 
     @Transactional
     public void removeAll() {
-        teacherRepository.findAll().forEach(this::removeReferencingObjects);
-        teacherRepository.deleteAll();
+        repository.findAll().forEach(this::removeReferencingObjects);
+        repository.deleteAll();
     }
 
     public List<TeacherDto> findByFirstOrLastName(final String searched) {
-        List<Teacher> found = teacherRepository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched);
+        List<Teacher> found = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, TeacherDto.class)).toList();
     }
 
@@ -97,7 +94,7 @@ public class TeacherService {
                 Sort.by(sortField).descending();
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Teacher> all = teacherRepository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
+        Page<Teacher> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
         return all.map(student -> mapper.map(student, TeacherDto.class));
     }
 

@@ -44,14 +44,39 @@ public class Student {
     @Email(message = "{message.valid.email}")
     private String email;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.DETACH})
     @JoinColumn(name = "field_id")
     private FieldOfStudy fieldOfStudy;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
-            mappedBy = "students")
+    @ManyToMany(mappedBy = "students")
     private Set<Teacher> teachers = new HashSet<>();
+
+    /**
+     * Set new Student's fieldOfStudy. The method keeps
+     * relationships consistency:
+     * * this Student is removed from the previous FieldOfStudy
+     * * this Student is added to next FieldOfStudy
+     */
+    public void setFieldOfStudy(FieldOfStudy fieldOfStudy) {
+        if (sameAsFormer(fieldOfStudy))
+            return;
+        FieldOfStudy oldFieldOfStudy = this.fieldOfStudy;
+        this.fieldOfStudy = fieldOfStudy;
+        if (oldFieldOfStudy != null)
+            oldFieldOfStudy.removeStudent(this);
+        if (fieldOfStudy != null) {
+            fieldOfStudy.addStudent(this);
+        }
+    }
+
+    private boolean sameAsFormer(FieldOfStudy newFieldOfStudy) {
+        if (fieldOfStudy == null)
+            return newFieldOfStudy == null;
+        return fieldOfStudy.equals(newFieldOfStudy);
+    }
 
     /**
      * Add new Teacher. The method keeps relationships consistency:
