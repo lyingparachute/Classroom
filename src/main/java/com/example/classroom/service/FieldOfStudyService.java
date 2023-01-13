@@ -71,11 +71,13 @@ public class FieldOfStudyService {
     public void remove(Long id) {
         FieldOfStudy fieldOfStudy = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study ID: " + id));
+        removeReferencingObjects(fieldOfStudy);
         repository.delete(fieldOfStudy);
     }
 
     @Transactional
     public void removeAll() {
+        repository.findAll().forEach(this::removeReferencingObjects);
         repository.deleteAll();
     }
 
