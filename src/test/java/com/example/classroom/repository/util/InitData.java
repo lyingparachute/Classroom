@@ -6,6 +6,7 @@ import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
 import com.example.classroom.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
 public class InitData {
 
     private final StudentRepository studentRepository;
@@ -20,15 +22,6 @@ public class InitData {
     private final SubjectRepository subjectRepository;
     private final DepartmentRepository departmentRepository;
     private final FieldOfStudyRepository fieldOfStudyRepository;
-
-
-    public InitData(StudentRepository studentRepository, TeacherRepository teacherRepository, SubjectRepository subjectRepository, DepartmentRepository departmentRepository, FieldOfStudyRepository fieldOfStudyRepository) {
-        this.studentRepository = studentRepository;
-        this.teacherRepository = teacherRepository;
-        this.subjectRepository = subjectRepository;
-        this.departmentRepository = departmentRepository;
-        this.fieldOfStudyRepository = fieldOfStudyRepository;
-    }
 
     @Transactional
     public void cleanUp() {
