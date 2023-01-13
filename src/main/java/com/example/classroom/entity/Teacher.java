@@ -53,29 +53,45 @@ public class Teacher {
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST})
+                    CascadeType.DETACH})
     @JoinTable(name = "teacher_subjects",
-            joinColumns = { @JoinColumn(name = "teacher_id") },
-            inverseJoinColumns = { @JoinColumn(name = "subject_id") })
+            joinColumns = {@JoinColumn(name = "teacher_id")},
+            inverseJoinColumns = {@JoinColumn(name = "subject_id")})
     private Set<Subject> subjects = new HashSet<>();
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST})
+                    CascadeType.DETACH})
     @JoinTable(name = "teacher_students",
-            joinColumns = { @JoinColumn(name = "teacher_id") },
-            inverseJoinColumns = { @JoinColumn(name = "student_id") })
+            joinColumns = {@JoinColumn(name = "teacher_id")},
+            inverseJoinColumns = {@JoinColumn(name = "student_id")})
     private Set<Student> students = new HashSet<>();
+
+    public void setDepartmentDean(Department departmentDean) {
+        if (sameAsFormer(departmentDean))
+            return;
+        Department oldDepartmentDean = this.departmentDean;
+        this.departmentDean = departmentDean;
+        if (oldDepartmentDean != null)
+            oldDepartmentDean.setDean(null);
+        if (departmentDean != null) {
+            departmentDean.setDean(this);
+        }
+    }
+
+    private boolean sameAsFormer(Department newDepartmentDean) {
+        if (departmentDean == null)
+            return newDepartmentDean == null;
+        return departmentDean.equals(newDepartmentDean);
+    }
 
     /**
      * Add new Student. The method keeps relationships consistency:
      * * this teacher is added to teachers
-     *   on the student side
+     * on the student side
      */
-    public void addStudent(Student student){
+    public void addStudent(Student student) {
         //prevent endless loop
         if (students.contains(student)) {
             return;
@@ -87,7 +103,7 @@ public class Teacher {
     /**
      * Remove Student. The method keeps relationships consistency:
      * * this teacher is removed from teachers
-     *   on the student side
+     * on the student side
      */
     public void removeStudent(Student student) {
         //prevent endless loop
@@ -101,9 +117,9 @@ public class Teacher {
     /**
      * Add new Subject. The method keeps relationships consistency:
      * * this teacher is added to teachers
-     *   on the subject side
+     * on the subject side
      */
-    public void addSubject(Subject subject){
+    public void addSubject(Subject subject) {
         //prevent endless loop
         if (subjects.contains(subject)) {
             return;
@@ -115,7 +131,7 @@ public class Teacher {
     /**
      * Remove Subject. The method keeps relationships consistency:
      * * this teacher is removed from teachers
-     *   on the subject side
+     * on the subject side
      */
     public void removeSubject(Subject subject) {
         //prevent endless loop

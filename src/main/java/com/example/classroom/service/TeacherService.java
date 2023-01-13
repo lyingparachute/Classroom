@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class TeacherService {
@@ -30,24 +29,21 @@ public class TeacherService {
     }
 
     @Transactional
-    public TeacherDto create(TeacherDto dto) {
+    public TeacherDto create(final TeacherDto dto) {
         Teacher teacher = mapper.map(dto, Teacher.class);
-        assignStudents(teacher, new HashSet<>(teacher.getStudents()));
-        addSubjects(teacher, new HashSet<>(teacher.getSubjects()));
+        addReferencingObjects(teacher);
         Teacher saved = teacherRepository.save(teacher);
         return mapper.map(saved, TeacherDto.class);
     }
 
     @Transactional
-    public TeacherDto update(TeacherDto dto) {
+    public TeacherDto update(final TeacherDto dto) {
         Teacher teacher = teacherRepository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Invalid teacher '" + dto.getFirstName() + " " + dto.getLastName() + "' with ID: " + dto.getId()));
-        removeStudents(teacher, new HashSet<>(teacher.getStudents()));
-        removeSubjects(teacher, new HashSet<>(teacher.getSubjects()));
+        removeReferencingObjects(teacher);
         mapper.map(dto, teacher);
-        assignStudents(teacher, teacher.getStudents());
-        addSubjects(teacher, teacher.getSubjects());
+        addReferencingObjects(teacher);
         Teacher saved = teacherRepository.save(teacher);
         return mapper.map(saved, TeacherDto.class);
 
@@ -56,7 +52,7 @@ public class TeacherService {
     @Transactional
     public List<TeacherDto> fetchAll() {
         List<Teacher> teachers = teacherRepository.findAll();
-        return teachers.stream().map(teacher -> mapper.map(teacher, TeacherDto.class)).collect(Collectors.toList());
+        return teachers.stream().map(teacher -> mapper.map(teacher, TeacherDto.class)).toList();
     }
 
     @Transactional
@@ -70,22 +66,29 @@ public class TeacherService {
     }
 
     @Transactional
-    public TeacherDto fetchById(Long id) {
+    public TeacherDto fetchById(final Long id) {
         Optional<Teacher> byId = teacherRepository.findById(id);
         return byId.map(teacher -> mapper.map(teacher, TeacherDto.class))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid teacher ID: " + id));
     }
 
     @Transactional
-    public void remove(Long id) {
+    public void remove(final Long id) {
         Teacher teacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid teacher ID: " + id));
+        removeReferencingObjects(teacher);
         teacherRepository.delete(teacher);
     }
 
-    public List<TeacherDto> findByFirstOrLastName(String searched) {
+    @Transactional
+    public void removeAll() {
+        teacherRepository.findAll().forEach(this::removeReferencingObjects);
+        teacherRepository.deleteAll();
+    }
+
+    public List<TeacherDto> findByFirstOrLastName(final String searched) {
         List<Teacher> found = teacherRepository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched);
-        return found.stream().map(s -> mapper.map(s, TeacherDto.class)).collect(Collectors.toList());
+        return found.stream().map(s -> mapper.map(s, TeacherDto.class)).toList();
     }
 
     public Page<TeacherDto> findByFirstOrLastNamePaginated(int pageNo, int pageSize, String sortField, String sortDirection, String searched) {
@@ -98,32 +101,19 @@ public class TeacherService {
         return all.map(student -> mapper.map(student, TeacherDto.class));
     }
 
-    public void assignStudents(Teacher teacher, Set<Student> students) {
-        if (students != null && !students.isEmpty()) {
-            students.forEach(teacher::addStudent);
-        }
+    private void addReferencingObjects(final Teacher teacher){
+        Set<Student> students = new HashSet<>(teacher.getStudents());
+        Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
+        teacher.setDepartmentDean(teacher.getDepartmentDean());
+        students.forEach(teacher::addStudent);
+        subjects.forEach(teacher::addSubject);
     }
 
-    private void removeStudents(Teacher teacher, Set<Student> students) {
-        if (students != null && !students.isEmpty()) {
-            students.forEach(teacher::removeStudent);
-        }
-    }
-
-    public void addSubjects(Teacher teacher, Set<Subject> subjects) {
-        if (subjects != null && !subjects.isEmpty()) {
-            subjects.forEach(teacher::addSubject);
-        }
-    }
-
-    private void removeSubjects(Teacher teacher, Set<Subject> subjects) {
-        if (subjects != null && !subjects.isEmpty()) {
-            subjects.forEach(teacher::removeSubject);
-        }
-    }
-
-    @Transactional
-    public void removeAll() {
-        teacherRepository.deleteAll();
+    private void removeReferencingObjects(final Teacher teacher){
+        Set<Student> students = new HashSet<>(teacher.getStudents());
+        Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
+        teacher.setDepartmentDean(null);
+        students.forEach(teacher::removeStudent);
+        subjects.forEach(teacher::removeSubject);
     }
 }
