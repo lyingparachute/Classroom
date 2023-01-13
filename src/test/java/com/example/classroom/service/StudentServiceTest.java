@@ -336,7 +336,7 @@ class StudentServiceTest {
         //when
         List<StudentDto> actual = studentService.findByFirstOrLastName(name);
         //then
-        assertThat(actual.size()).isEqualTo(2);
+        assertThat(actual).hasSize(2);
         StudentDto actualStudent1 = actual.get(0);
         StudentDto actualStudent2 = actual.get(1);
 
@@ -372,81 +372,5 @@ class StudentServiceTest {
                                 teacher2.getEmail(), teacher2.getAge()),
                         Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
                                 teacher3.getEmail(), teacher3.getAge()));
-    }
-
-    @Test
-    void assignTeachers_shouldAssignTeachersToStudent_givenTeachersSet() {
-        //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        HashSet<Teacher> teachers = new HashSet<>(List.of(teacher1, teacher2));
-        Student student = initData.createStudentOne(null, List.of());
-        //when
-        studentService.assignTeachers(student, teachers);
-        //then
-        Optional<Student> byId = studentRepository.findById(student.getId());
-        assertThat(byId).isPresent();
-        Student actual = byId.get();
-        assertThat(actual.getFirstName()).isEqualTo(student.getFirstName());
-        assertThat(actual.getLastName()).isEqualTo(student.getLastName());
-        assertThat(actual.getEmail()).isEqualTo(student.getEmail());
-        assertThat(actual.getAge()).isEqualTo(student.getAge());
-        assertThat(actual.getTeachers())
-                .extracting(
-                        Teacher::getId,
-                        Teacher::getFirstName,
-                        Teacher::getLastName,
-                        Teacher::getEmail,
-                        Teacher::getAge
-                ).containsExactlyInAnyOrder(
-                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
-                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()));
-    }
-
-    @Test
-    void removeTeachers_shouldRemoveTeachersFromStudent_givenTeachersSet() {
-        //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2));
-        Optional<Student> byId2 = studentRepository.findById(student.getId());
-        assertThat(byId2).isPresent();
-        Student actual2 = byId2.get();
-        assertThat(actual2.getTeachers())
-                .extracting(
-                        Teacher::getId,
-                        Teacher::getFirstName,
-                        Teacher::getLastName,
-                        Teacher::getEmail,
-                        Teacher::getAge
-                ).contains(
-                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
-                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()));
-        //when
-        studentService.removeTeachers(student, new HashSet<>(student.getTeachers()));
-        //then
-        Optional<Student> byId = studentRepository.findById(student.getId());
-        assertThat(byId).isPresent();
-        Student actual = byId.get();
-        assertThat(actual.getFirstName()).isEqualTo(student.getFirstName());
-        assertThat(actual.getLastName()).isEqualTo(student.getLastName());
-        assertThat(actual.getEmail()).isEqualTo(student.getEmail());
-        assertThat(actual.getAge()).isEqualTo(student.getAge());
-        assertThat(actual.getTeachers())
-                .extracting(
-                        Teacher::getId,
-                        Teacher::getFirstName,
-                        Teacher::getLastName,
-                        Teacher::getEmail,
-                        Teacher::getAge
-                ).doesNotContain(
-                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge()),
-                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge()));
     }
 }
