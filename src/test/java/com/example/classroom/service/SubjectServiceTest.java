@@ -441,7 +441,7 @@ class SubjectServiceTest {
         //when
         List<SubjectDto> actual = service.findByName(name);
         //then
-        assertThat(actual.size()).isEqualTo(2);
+        assertThat(actual).hasSize(2);
         SubjectDto actualSubject1 = actual.get(0);
         SubjectDto actualSubject2 = actual.get(1);
 
@@ -503,7 +503,7 @@ class SubjectServiceTest {
         Page<SubjectDto> actual = service.findByNamePaginated(pageNo, pageSize, sortField, sortDirection, name);
         List<SubjectDto> content = actual.getContent();
         //then
-        assertThat(content.size()).isEqualTo(1);
+        assertThat(content).hasSize(1);
         SubjectDto actualSubject1 = content.get(0);
 
         assertThat(actualSubject1.getName()).isEqualTo(expected1.getName());
