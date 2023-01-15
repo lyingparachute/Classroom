@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -69,58 +70,68 @@ class SubjectServiceTest {
         Optional<Subject> byId = subjectRepository.findAll().stream().findFirst();
         assertThat(byId).isPresent();
         Subject actual = byId.get();
-        assertThat(actual.getName()).isEqualTo(expected.getName());
-        assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
-        assertThat(actual.getSemester()).isEqualTo(expected.getSemester());
-        assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
-        assertThat(actual.getFieldOfStudy()).isEqualTo(expected.getFieldOfStudy());
-        assertThat(actual.getTeachers())
-                .extracting(
-                        Teacher::getId,
-                        Teacher::getFirstName,
-                        Teacher::getLastName,
-                        Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getDepartmentDean
-                ).containsExactlyInAnyOrder(
-                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
-                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()));
-        assertThat(fieldOfStudy.getSubjects())
-                .extracting(
-                        Subject::getName,
-                        Subject::getDescription,
-                        Subject::getSemester,
-                        Subject::getHoursInSemester,
-                        Subject::getFieldOfStudy,
-                        Subject::getTeachers
-                ).containsExactlyInAnyOrder(
-                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
-                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()));
-        assertThat(teacher1.getSubjects())
-                .extracting(
-                        Subject::getName,
-                        Subject::getDescription,
-                        Subject::getSemester,
-                        Subject::getHoursInSemester,
-                        Subject::getFieldOfStudy,
-                        Subject::getTeachers
-                ).containsExactlyInAnyOrder(
-                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
-                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()));
-        assertThat(teacher2.getSubjects())
-                .extracting(
-                        Subject::getName,
-                        Subject::getDescription,
-                        Subject::getSemester,
-                        Subject::getHoursInSemester,
-                        Subject::getFieldOfStudy,
-                        Subject::getTeachers
-                ).containsExactlyInAnyOrder(
-                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
-                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()));
-        }
+        assertAll("Properties Test",
+                () -> assertAll("Subject properties",
+                        () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+                        () -> assertThat(actual.getDescription()).isEqualTo(expected.getDescription()),
+                        () -> assertThat(actual.getSemester()).isEqualTo(expected.getSemester()),
+                        () -> assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester()),
+                        () -> assertThat(actual.getFieldOfStudy()).isEqualTo(expected.getFieldOfStudy()),
+                        () -> assertThat(actual.getTeachers())
+                                .extracting(
+                                        Teacher::getId,
+                                        Teacher::getFirstName,
+                                        Teacher::getLastName,
+                                        Teacher::getEmail,
+                                        Teacher::getAge,
+                                        Teacher::getDepartmentDean
+                                ).containsExactlyInAnyOrder(
+                                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
+                                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()))
+                ),
+                () -> assertAll("Field Of Study's Subjects properties",
+                        () -> assertThat(fieldOfStudy.getSubjects())
+                                .extracting(
+                                        Subject::getName,
+                                        Subject::getDescription,
+                                        Subject::getSemester,
+                                        Subject::getHoursInSemester,
+                                        Subject::getFieldOfStudy,
+                                        Subject::getTeachers
+                                ).containsExactlyInAnyOrder(
+                                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()))
+                ),
+                () -> assertAll("Teacher1's Subjects properties",
+                        () -> assertThat(teacher1.getSubjects())
+                                .extracting(
+                                        Subject::getName,
+                                        Subject::getDescription,
+                                        Subject::getSemester,
+                                        Subject::getHoursInSemester,
+                                        Subject::getFieldOfStudy,
+                                        Subject::getTeachers
+                                ).containsExactlyInAnyOrder(
+                                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()))
+                ),
+                () -> assertAll("Teacher2's Subjects properties",
+                        () -> assertThat(teacher2.getSubjects())
+                                .extracting(
+                                        Subject::getName,
+                                        Subject::getDescription,
+                                        Subject::getSemester,
+                                        Subject::getHoursInSemester,
+                                        Subject::getFieldOfStudy,
+                                        Subject::getTeachers
+                                ).containsExactlyInAnyOrder(
+                                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                                expected.getHoursInSemester(), expected.getFieldOfStudy(), expected.getTeachers()))
+                )
+        );
+    }
 
     @Test
     void update_shouldUpdateSubject_givenSubjectDto() {
@@ -212,7 +223,7 @@ class SubjectServiceTest {
         Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
-        
+
         Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
         Subject expected2 = initData.createSubjectTwo(fieldOfStudy1, List.of(teacher3));
         Subject expected3 = initData.createSubjectThree(fieldOfStudy2, List.of(teacher1, teacher2, teacher3));
@@ -374,9 +385,9 @@ class SubjectServiceTest {
         fieldOfStudyRepository.findById(fieldOfStudy.getId()).orElseThrow(() -> new IllegalStateException(
                 "Field Of Study with ID = " + fieldOfStudy.getId() + " and name " + fieldOfStudy.getName() + " should not be removed."));
         expected.getTeachers().forEach(teacher ->
-            teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
-                    "Teacher with ID = " + teacher.getId() + " and name "
-                            + teacher.getFirstName() + " " + teacher.getLastName() + " should not be removed.")));
+                teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
+                        "Teacher with ID = " + teacher.getId() + " and name "
+                                + teacher.getFirstName() + " " + teacher.getLastName() + " should not be removed.")));
     }
 
     @Test
