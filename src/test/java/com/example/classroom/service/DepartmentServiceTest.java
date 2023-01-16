@@ -252,16 +252,8 @@ class DepartmentServiceTest {
                         .as("Check %s %s", "department1", "Address").isEqualTo(department1.getAddress()),
                 () -> assertThat(actualItem1.getTelNumber())
                         .as("Check %s %s", "department1", "Telephone Number").isEqualTo(department1.getTelNumber()),
-                () -> assertThat(actualItem1.getDean().getId())
-                        .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean1.getId()),
-                () -> assertThat(actualItem1.getDean().getFirstName())
-                        .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean1.getFirstName()),
-                () -> assertThat(actualItem1.getDean().getLastName())
-                        .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean1.getLastName()),
-                () -> assertThat(actualItem1.getDean().getAge())
-                        .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean1.getAge()),
-                () -> assertThat(actualItem1.getDean().getEmail())
-                        .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean1.getEmail()),
+                () -> assertThat(actualItem1.getDean())
+                        .as("Check %s's %s", "Department", "Dean").isEqualTo(dean1),
                 () -> assertThat(actualItem1.getFieldsOfStudy())
                         .as("Check if %s contains %s", "department1", "fieldOfStudy1").contains(fieldOfStudy1),
                 () -> assertThat(actualItem1.getFieldsOfStudy())
@@ -276,16 +268,8 @@ class DepartmentServiceTest {
                         .as("Check %s %s", "department2", "Address").isEqualTo(department2.getAddress()),
                 () -> assertThat(actualItem2.getTelNumber())
                         .as("Check %s %s", "department2", "Telephone Number").isEqualTo(department2.getTelNumber()),
-                () -> assertThat(actualItem2.getDean().getId())
-                        .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean2.getId()),
-                () -> assertThat(actualItem2.getDean().getFirstName())
-                        .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean2.getFirstName()),
-                () -> assertThat(actualItem2.getDean().getLastName())
-                        .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean2.getLastName()),
-                () -> assertThat(actualItem2.getDean().getAge())
-                        .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean2.getAge()),
-                () -> assertThat(actualItem2.getDean().getEmail())
-                        .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean2.getEmail()),
+                () -> assertThat(actualItem2.getDean())
+                        .as("Check %s's %s", "Department", "Dean").isEqualTo(dean2),
                 () -> assertThat(actualItem2.getFieldsOfStudy())
                         .as("Check if %s contains %s", "department2", "fieldOfStudy1").contains(fieldOfStudy2),
                 () -> assertThat(actualItem2.getFieldsOfStudy())
@@ -329,16 +313,8 @@ class DepartmentServiceTest {
                         .as("Check %s %s", "department3", "Address").isEqualTo(department3.getAddress()),
                 () -> assertThat(actualItem.getTelNumber())
                         .as("Check %s %s", "department3", "Telephone Number").isEqualTo(department3.getTelNumber()),
-                () -> assertThat(actualItem.getDean().getId())
-                        .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean3.getId()),
-                () -> assertThat(actualItem.getDean().getFirstName())
-                        .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean3.getFirstName()),
-                () -> assertThat(actualItem.getDean().getLastName())
-                        .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean3.getLastName()),
-                () -> assertThat(actualItem.getDean().getAge())
-                        .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean3.getAge()),
-                () -> assertThat(actualItem.getDean().getEmail())
-                        .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean3.getEmail()),
+                () -> assertThat(actualItem.getDean())
+                        .as("Check %s's %s", "Department", "Dean").isEqualTo(dean3),
                 () -> assertThat(actualItem.getFieldsOfStudy())
                         .as("Check if %s contains %s", "department3", "fieldOfStudy1")
                         .contains(fieldOfStudy3).doesNotContain(fieldOfStudy1, fieldOfStudy2)
