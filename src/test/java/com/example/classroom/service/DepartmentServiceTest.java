@@ -12,6 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +49,7 @@ class DepartmentServiceTest {
     private ArgumentCaptor<Department> departmentArgumentCaptor;
 
     @Test
-    void create_shouldSaveDepartment_givenDto() {
+    void create_savesDepartment_givenDepartmentDto() {
         //given
         Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
@@ -120,7 +124,7 @@ class DepartmentServiceTest {
     @Nested
     class updateDepartmentTest {
         @Test
-        void update_shouldUpdateDepartment_givenDto() {
+        void update_updatesDepartment_givenDepartmentDto() {
             //given
             Teacher dean1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher dean = initData.createTeacherThree(null, List.of(), List.of());
@@ -206,7 +210,7 @@ class DepartmentServiceTest {
         }
 
         @Test
-        void update_throwsIllegalArgumentException_givenWrongDto() {
+        void update_throwsIllegalArgumentException_givenWrongDepartmentDto() {
             //given
             Department department = initData.createDepartmentOne(null, List.of());
             DepartmentDto dto = mapper.map(department, DepartmentDto.class);
@@ -221,11 +225,124 @@ class DepartmentServiceTest {
     }
 
     @Test
-    void fetchAll() {
+    void fetchAll_returnsAllDepartments() {
+        //given
+        Teacher dean1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher dean2 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+
+        Department department1 = initData.createDepartmentOne(dean1, List.of(fieldOfStudy1));
+        Department department2 = initData.createDepartmentTwo(dean2, List.of(fieldOfStudy2));
+        List<Department> departments = List.of(department1, department2);
+        //when
+        when(repository.findAll()).thenReturn(departments);
+        List<DepartmentDto> actual = service.fetchAll();
+        //then
+        verify(repository).findAll();
+        assertThat(actual).isNotNull().isNotEmpty().hasSize(2);
+        DepartmentDto actualItem1 = actual.get(0);
+        DepartmentDto actualItem2 = actual.get(1);
+        assertAll("department1 properties",
+                () -> assertThat(actualItem1.getId())
+                        .as("Check %s %s", "department1", "ID").isEqualTo(department1.getId()),
+                () -> assertThat(actualItem1.getName())
+                        .as("Check %s %s", "department1", "Name").isEqualTo(department1.getName()),
+                () -> assertThat(actualItem1.getAddress())
+                        .as("Check %s %s", "department1", "Address").isEqualTo(department1.getAddress()),
+                () -> assertThat(actualItem1.getTelNumber())
+                        .as("Check %s %s", "department1", "Telephone Number").isEqualTo(department1.getTelNumber()),
+                () -> assertThat(actualItem1.getDean().getId())
+                        .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean1.getId()),
+                () -> assertThat(actualItem1.getDean().getFirstName())
+                        .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean1.getFirstName()),
+                () -> assertThat(actualItem1.getDean().getLastName())
+                        .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean1.getLastName()),
+                () -> assertThat(actualItem1.getDean().getAge())
+                        .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean1.getAge()),
+                () -> assertThat(actualItem1.getDean().getEmail())
+                        .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean1.getEmail()),
+                () -> assertThat(actualItem1.getFieldsOfStudy())
+                        .as("Check if %s contains %s", "department1", "fieldOfStudy1").contains(fieldOfStudy1),
+                () -> assertThat(actualItem1.getFieldsOfStudy())
+                        .as("Check if %s does not contain %s", "department1", "fieldOfStudy2").doesNotContain(fieldOfStudy2)
+        );
+        assertAll("department2 properties",
+                () -> assertThat(actualItem2.getId())
+                        .as("Check %s %s", "department2", "ID").isEqualTo(department2.getId()),
+                () -> assertThat(actualItem2.getName())
+                        .as("Check %s %s", "department2", "Name").isEqualTo(department2.getName()),
+                () -> assertThat(actualItem2.getAddress())
+                        .as("Check %s %s", "department2", "Address").isEqualTo(department2.getAddress()),
+                () -> assertThat(actualItem2.getTelNumber())
+                        .as("Check %s %s", "department2", "Telephone Number").isEqualTo(department2.getTelNumber()),
+                () -> assertThat(actualItem2.getDean().getId())
+                        .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean2.getId()),
+                () -> assertThat(actualItem2.getDean().getFirstName())
+                        .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean2.getFirstName()),
+                () -> assertThat(actualItem2.getDean().getLastName())
+                        .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean2.getLastName()),
+                () -> assertThat(actualItem2.getDean().getAge())
+                        .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean2.getAge()),
+                () -> assertThat(actualItem2.getDean().getEmail())
+                        .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean2.getEmail()),
+                () -> assertThat(actualItem2.getFieldsOfStudy())
+                        .as("Check if %s contains %s", "department2", "fieldOfStudy1").contains(fieldOfStudy2),
+                () -> assertThat(actualItem2.getFieldsOfStudy())
+                        .as("Check if %s does not contain %s", "department2", "fieldOfStudy2").doesNotContain(fieldOfStudy1)
+        );
     }
 
     @Test
     void fetchAllPaginated() {
+        //given
+        int pageNo = 2;
+        int pageSize = 2;
+        String sortField = "name";
+        String sortDirection = Sort.Direction.DESC.name();
+
+        Teacher dean1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher dean2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher dean3 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(null, List.of(), List.of());
+
+        Department department1 = initData.createDepartmentOne(dean1, List.of(fieldOfStudy1));
+        Department department2 = initData.createDepartmentTwo(dean2, List.of(fieldOfStudy2));
+        Department department3 = initData.createDepartmentThree(dean3, List.of(fieldOfStudy3));
+        Page<Department> departments = new PageImpl<>(List.of(department3));
+        //when
+        when(repository.findAll(any(PageRequest.class))).thenReturn(departments);
+        Page<DepartmentDto> actualPage = service.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
+        //then
+        verify(repository).findAll(any(PageRequest.class));
+        List<DepartmentDto> actualContent = actualPage.getContent();
+        assertThat(actualContent).size().isEqualTo(1);
+        DepartmentDto actualItem = actualContent.get(0);
+        assertAll("Resulting department properties",
+                () -> assertThat(actualItem.getId())
+                        .as("Check %s %s", "department3", "ID").isEqualTo(department3.getId()),
+                () -> assertThat(actualItem.getName())
+                        .as("Check %s %s", "department3", "Name").isEqualTo(department3.getName()),
+                () -> assertThat(actualItem.getAddress())
+                        .as("Check %s %s", "department3", "Address").isEqualTo(department3.getAddress()),
+                () -> assertThat(actualItem.getTelNumber())
+                        .as("Check %s %s", "department3", "Telephone Number").isEqualTo(department3.getTelNumber()),
+                () -> assertThat(actualItem.getDean().getId())
+                        .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean3.getId()),
+                () -> assertThat(actualItem.getDean().getFirstName())
+                        .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean3.getFirstName()),
+                () -> assertThat(actualItem.getDean().getLastName())
+                        .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean3.getLastName()),
+                () -> assertThat(actualItem.getDean().getAge())
+                        .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean3.getAge()),
+                () -> assertThat(actualItem.getDean().getEmail())
+                        .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean3.getEmail()),
+                () -> assertThat(actualItem.getFieldsOfStudy())
+                        .as("Check if %s contains %s", "department3", "fieldOfStudy1")
+                        .contains(fieldOfStudy3).doesNotContain(fieldOfStudy1, fieldOfStudy2)
+        );
     }
 
     @Nested
@@ -235,12 +352,19 @@ class DepartmentServiceTest {
         }
 
         @Test
-        void fetchById_shouldThrowIllegalStateException_givenIncorrectId() {
+        void fetchById_throwsIllegalArgumentException_givenWrongId() {
         }
     }
 
-    @Test
-    void remove() {
+    @Nested
+    class removeDepartmentByIdTest {
+        @Test
+        void remove_deletesDepartment_givenId() {
+        }
+
+        @Test
+        void remove_throwsIllegalArgumentException_givenWrongId() {
+        }
     }
 
     @Test
