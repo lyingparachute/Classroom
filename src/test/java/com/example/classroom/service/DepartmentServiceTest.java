@@ -4,12 +4,8 @@ import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.entity.Department;
 import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Teacher;
-import com.example.classroom.enums.AcademicTitle;
-import com.example.classroom.enums.LevelOfEducation;
-import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.repository.DepartmentRepository;
 import com.example.classroom.repository.util.UnitTestsInitData;
-import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,10 +13,10 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,38 +46,66 @@ class DepartmentServiceTest {
         FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
 
-        Department department = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
-        DepartmentDto dto = mapper.map(department, DepartmentDto.class);
+        Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+        DepartmentDto dto = mapper.map(expected, DepartmentDto.class);
         //when
-        when(departmentRepository.save(department)).thenReturn(department);
-        DepartmentDto created = departmentService.create(dto);
+        when(departmentRepository.save(expected)).thenReturn(expected);
+        departmentService.create(dto);
         //then
-        verify(departmentRepository).save(department);
         ArgumentCaptor<Department> departmentArgumentCaptor = ArgumentCaptor.forClass(Department.class);
         verify(departmentRepository).save(departmentArgumentCaptor.capture());
         Department actual = departmentArgumentCaptor.getValue();
-        assertAll("Department Properties Test",
-                () -> assertThat(actual).isNotNull(),
-                () -> assertThat(actual.getId()).isEqualTo(dto.getId()),
-                () -> assertThat(actual.getName()).isEqualTo(dto.getName()),
-                () -> assertThat(actual.getAddress()).isEqualTo(dto.getAddress()),
-                () -> assertThat(actual.getTelNumber()).isEqualTo(dto.getTelNumber()),
-                () -> assertThat(actual.getDean()).isEqualTo(dean),
-                () -> assertThat(actual.getDean().getDepartmentDean()).isEqualTo(department),
-                () -> assertThat(actual.getFieldsOfStudy())
-                        .extracting(
-                                FieldOfStudy::getId,
-                                FieldOfStudy::getName,
-                                FieldOfStudy::getMode,
-                                FieldOfStudy::getTitle,
-                                FieldOfStudy::getLevelOfEducation,
-                                FieldOfStudy::getDepartment
-                        ).containsExactlyInAnyOrder(
-                                Tuple.tuple(fieldOfStudy1.getId(), fieldOfStudy1.getName(), fieldOfStudy1.getMode(),
-                                        fieldOfStudy1.getTitle(), fieldOfStudy1.getLevelOfEducation(), department),
-                                Tuple.tuple(fieldOfStudy2.getId(), fieldOfStudy2.getName(), fieldOfStudy2.getMode(),
-                                        fieldOfStudy2.getTitle(), fieldOfStudy2.getLevelOfEducation(), department))
+        assertThat(actual).as("Check if %s is not null", "Department").isNotNull();
+        assertAll("Department's properties",
+                () -> assertThat(actual.getId())
+                        .as("Check %s's %s", "Department", "ID").isEqualTo(expected.getId()),
+                () -> assertThat(actual.getName())
+                        .as("Check %s's %s", "Department", "Name").isEqualTo(dto.getName()),
+                () -> assertThat(actual.getAddress())
+                        .as("Check %s's %s", "Department", "Address").isEqualTo(dto.getAddress()),
+                () -> assertThat(actual.getTelNumber())
+                        .as("Check %s's %s", "Department", "Telephone Number").isEqualTo(dto.getTelNumber())
         );
+        assertAll("Department's Dean properties",
+                () -> assertThat(actual.getDean().getId())
+                        .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean.getId()),
+                () -> assertThat(actual.getDean().getFirstName())
+                        .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean.getFirstName()),
+                () -> assertThat(actual.getDean().getLastName())
+                        .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean.getLastName()),
+                () -> assertThat(actual.getDean().getAge())
+                        .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean.getAge()),
+                () -> assertThat(actual.getDean().getEmail())
+                        .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean.getEmail())
+        );
+        assertAll("Dean's Department properties",
+                () -> assertThat(dean.getDepartmentDean().getId())
+                        .as("Check %s's %s %s", "Dean", "Department", "Id").isEqualTo(expected.getId()),
+                () -> assertThat(dean.getDepartmentDean().getName())
+                        .as("Check %s's %s %s", "Dean", "Department", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(dean.getDepartmentDean().getAddress())
+                        .as("Check %s's %s %s", "Dean", "Department", "Address").isEqualTo(expected.getAddress()),
+                () -> assertThat(dean.getDepartmentDean().getTelNumber())
+                        .as("Check %s's %s %s", "Dean", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
+        );
+        assertThat(actual.getFieldsOfStudy()).as("Check %s's %s properties", "Department", "Fields Of Study")
+                .extracting(
+                        FieldOfStudy::getId,
+                        FieldOfStudy::getName,
+                        FieldOfStudy::getMode,
+                        FieldOfStudy::getTitle,
+                        FieldOfStudy::getLevelOfEducation,
+                        fieldOfStudy -> fieldOfStudy.getDepartment().getId(),
+                        fieldOfStudy -> fieldOfStudy.getDepartment().getName(),
+                        fieldOfStudy -> fieldOfStudy.getDepartment().getAddress(),
+                        fieldOfStudy -> fieldOfStudy.getDepartment().getTelNumber()
+                ).containsExactlyInAnyOrder(
+                        tuple(fieldOfStudy1.getId(), fieldOfStudy1.getName(), fieldOfStudy1.getMode(),
+                                fieldOfStudy1.getTitle(), fieldOfStudy1.getLevelOfEducation(),
+                                expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()),
+                        tuple(fieldOfStudy2.getId(), fieldOfStudy2.getName(), fieldOfStudy2.getMode(),
+                                fieldOfStudy2.getTitle(), fieldOfStudy2.getLevelOfEducation(),
+                                expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()));
     }
 
     @Test
@@ -121,53 +145,5 @@ class DepartmentServiceTest {
 
     @Test
     void removeAll() {
-    }
-
-    private DepartmentDto createDepartmentDto() {
-        DepartmentDto dto = new DepartmentDto();
-        dto.setId(1L);
-        dto.setName("Really nice department");
-        dto.setAddress("Holy street 89");
-        dto.setTelNumber(123456789);
-        dto.setDean(createDean());
-        dto.setFieldsOfStudy(new HashSet<>());
-        return dto;
-    }
-
-    private Department createDepartment(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
-        Department department = new Department();
-        department.setName("Wydział Architektury");
-        department.setAddress("ul. Jabłoniowa 34, 11-112 Stalowa Wola");
-        department.setTelNumber(321321321);
-        department.setDean(dean);
-        fieldsOfStudy.forEach(department::addFieldOfStudy);
-        return department;
-    }
-
-
-    private Teacher createDean() {
-        Teacher teacher = new Teacher();
-        teacher.setId(1L);
-        teacher.setFirstName("Fabian");
-        teacher.setLastName("Graczyk");
-        teacher.setEmail("f.graczyk@gmail.com");
-        teacher.setAge(55);
-        return teacher;
-    }
-
-    private List<FieldOfStudy> createFieldsOfStudy() {
-        FieldOfStudy fieldOfStudy1 = new FieldOfStudy();
-        fieldOfStudy1.setName("Inżynieria mechaniczno-medyczna");
-        fieldOfStudy1.setLevelOfEducation(LevelOfEducation.SECOND);
-        fieldOfStudy1.setMode(ModeOfStudy.FT);
-        fieldOfStudy1.setTitle(AcademicTitle.MGR);
-
-        FieldOfStudy fieldOfStudy2 = new FieldOfStudy();
-        fieldOfStudy2.setName("Mechatronika");
-        fieldOfStudy2.setLevelOfEducation(LevelOfEducation.FIRST);
-        fieldOfStudy2.setMode(ModeOfStudy.PT);
-        fieldOfStudy2.setTitle(AcademicTitle.BACH);
-
-        return List.of(fieldOfStudy1, fieldOfStudy2);
     }
 }
