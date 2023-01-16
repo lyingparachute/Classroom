@@ -376,11 +376,7 @@ class DepartmentServiceTest {
         @Test
         void remove_deletesDepartment_givenId() {
             //given
-            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
-            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
-            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
-
-            Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+            Department expected = initData.createDepartmentOne(null, List.of());
             //when
             when(repository.findById(anyLong())).thenReturn(Optional.of(expected));
             service.remove(expected.getId());
@@ -403,16 +399,26 @@ class DepartmentServiceTest {
     }
 
     @Test
+    void removeAll_deletesAllDepartments() {
+        //given
+        Department department1 = initData.createDepartmentOne(null, List.of());
+        Department department2 = initData.createDepartmentTwo(null, List.of());
+        Department department3 = initData.createDepartmentThree(null, List.of());
+        List<Department> departments = List.of(department1, department2, department3);
+        //when
+        when(repository.findAll()).thenReturn(departments);
+        service.removeAll();
+        //then
+        verify(repository).findAll();
+        verify(repository).deleteAll();
+    }
+
+    @Test
     void findByName() {
+
     }
 
     @Test
     void findByNamePaginated() {
     }
-
-    @Test
-    void removeAll() {
-    }
-
-
 }
