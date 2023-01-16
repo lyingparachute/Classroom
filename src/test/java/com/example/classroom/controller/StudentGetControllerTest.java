@@ -2,7 +2,7 @@ package com.example.classroom.controller;
 
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Teacher;
-import com.example.classroom.repository.util.InitData;
+import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,19 +31,19 @@ class StudentGetControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @Autowired
-    private InitData initData;
+    private IntegrationTestsInitData integrationTestsInitData;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     public void setup() {
-        initData.cleanUp();
+        integrationTestsInitData.cleanUp();
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
     @Test
     void shouldGetStudentView() throws Exception {
-        Student student = initData.createStudentOne(null, List.of());
+        Student student = integrationTestsInitData.createStudentOne(null, List.of());
 
         this.mockMvc.perform(get("/dashboard/students/" + student.getId()))
                 .andDo(print())
@@ -55,9 +55,9 @@ class StudentGetControllerTest {
     @Test
     void shouldGetParticularStudent() throws Exception {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2));
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
+        Student student = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
 
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students/" + student.getId()))
@@ -99,11 +99,11 @@ class StudentGetControllerTest {
     @Test
     void shouldGetStudentsAndContainParticularStudents() throws Exception {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher1));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher1));
 
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students"))
@@ -130,12 +130,12 @@ class StudentGetControllerTest {
     @Test
     void shouldGetStudentsSecondPageSortedByFirstName() throws Exception {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher1));
-        Student student3 = initData.createStudentThree(null, List.of(teacher1, teacher2));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher1));
+        Student student3 = integrationTestsInitData.createStudentThree(null, List.of(teacher1, teacher2));
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students?page=2&size=2&sortField=firstName&sortDir=asc"))
                 .andDo(print())
@@ -178,12 +178,12 @@ class StudentGetControllerTest {
     @Test
     void shouldGetResultOfSearchStudentsByFirstOrLastName() throws Exception {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher1));
-        Student student3 = initData.createStudentThree(null, List.of(teacher1, teacher2));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher1));
+        Student student3 = integrationTestsInitData.createStudentThree(null, List.of(teacher1, teacher2));
         //when
         // Searching for letter 'w' in first name or last name
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students?name=w"))

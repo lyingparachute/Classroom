@@ -5,7 +5,7 @@ import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
-import com.example.classroom.repository.util.InitData;
+import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 class StudentServiceTest {
 
     @Autowired
-    private InitData initData;
+    private IntegrationTestsInitData integrationTestsInitData;
 
     @Autowired
     private StudentService studentService;
@@ -44,14 +44,14 @@ class StudentServiceTest {
 
     @BeforeEach
     public void setup() {
-        initData.cleanUp();
+        integrationTestsInitData.cleanUp();
     }
 
     @Test
     void create_shouldSaveStudent_givenStudentDto() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
         ArrayList<Teacher> teachers = new ArrayList<>(List.of(teacher1, teacher2));
         StudentDto expected = new StudentDto();
         expected.setFirstName("Fabian");
@@ -87,9 +87,9 @@ class StudentServiceTest {
     @Test
     void update_shouldUpdateStudent_givenStudentDto() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Student student = initData.createStudentOne(null, List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
+        Student student = integrationTestsInitData.createStudentOne(null, List.of());
         StudentDto expected = new StudentDto();
         expected.setId(student.getId());
         expected.setFirstName("Pamela");
@@ -142,12 +142,12 @@ class StudentServiceTest {
     @Test
     void fetchAll_shouldReturnAllStudents() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
-        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher3));
-        Student student3 = initData.createStudentThree(null, List.of(teacher1, teacher2, teacher3));
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of());
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher3));
+        Student student3 = integrationTestsInitData.createStudentThree(null, List.of(teacher1, teacher2, teacher3));
         //when
         List<StudentDto> actual = studentService.fetchAll();
         //then
@@ -212,13 +212,13 @@ class StudentServiceTest {
     @Test
     void fetchAllPaginated_shouldReturnAllStudentsPaginated_givenPageNo_PageSize_SortDir() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher3));
-        Student student3 = initData.createStudentThree(null, List.of(teacher1, teacher2, teacher3));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher3));
+        Student student3 = integrationTestsInitData.createStudentThree(null, List.of(teacher1, teacher2, teacher3));
         int pageNo = 2;
         int pageSize = 2;
         String sortField = "firstName";
@@ -252,11 +252,11 @@ class StudentServiceTest {
     @Test
     void fetchById_shouldFindStudent_givenId() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of());
 
-        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2, teacher3));
+        Student student = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2, teacher3));
         //when
         StudentDto actual = studentService.fetchById(student.getId());
         //then
@@ -295,11 +295,11 @@ class StudentServiceTest {
     @Test
     void remove_shouldRemoveStudent_givenId() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of());
 
-        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2, teacher3));
+        Student student = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2, teacher3));
         //when
         studentService.remove(student.getId());
         //then
@@ -326,13 +326,13 @@ class StudentServiceTest {
     void findByFirstOrLastName_returnsStudentsSearchedByFirstOrLastName_givenName() {
         //given
         String name = "w";
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1, teacher2));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher3));
-        Student student3 = initData.createStudentThree(null, List.of(teacher1, teacher2, teacher3));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher3));
+        Student student3 = integrationTestsInitData.createStudentThree(null, List.of(teacher1, teacher2, teacher3));
         //when
         List<StudentDto> actual = studentService.findByFirstOrLastName(name);
         //then

@@ -38,17 +38,14 @@ public class FieldOfStudy {
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {
-                    CascadeType.REFRESH,
                     CascadeType.MERGE,
                     CascadeType.DETACH})
     @JoinColumn(name = "department_id")
     @ToString.Exclude
     private Department department;
 
-    @OneToMany(mappedBy = "fieldOfStudy",
-            cascade = {
-                    CascadeType.MERGE}
-    )
+    @JsonIgnore
+    @OneToMany(mappedBy = "fieldOfStudy")
     @ToString.Exclude
     private Set<Subject> subjects = new HashSet<>();
 

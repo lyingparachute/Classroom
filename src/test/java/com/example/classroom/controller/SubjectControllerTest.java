@@ -2,7 +2,7 @@ package com.example.classroom.controller;
 
 import com.example.classroom.repository.SubjectRepository;
 import com.example.classroom.repository.TeacherRepository;
-import com.example.classroom.repository.util.InitData;
+import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,13 +25,13 @@ class SubjectControllerTest {
     private TeacherRepository teacherRepository;
 
     @Autowired
-    private InitData initData;
+    private IntegrationTestsInitData integrationTestsInitData;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     public void setup() {
-        initData.cleanUp();
+        integrationTestsInitData.cleanUp();
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 

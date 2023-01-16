@@ -3,7 +3,7 @@ package com.example.classroom.controller;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.repository.SubjectRepository;
 import com.example.classroom.repository.TeacherRepository;
-import com.example.classroom.repository.util.InitData;
+import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,19 +34,19 @@ class SubjectGetControllerTest {
     private TeacherRepository teacherRepository;
 
     @Autowired
-    private InitData initData;
+    private IntegrationTestsInitData integrationTestsInitData;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     public void setup() {
-        initData.cleanUp();
+        integrationTestsInitData.cleanUp();
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
     @Test
     void shouldGetSubjectView() throws Exception {
-        Subject subject = initData.createSubjectFour(null, List.of());
+        Subject subject = integrationTestsInitData.createSubjectFour(null, List.of());
         this.mockMvc.perform(get("/dashboard/subjects/" + subject.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -30,7 +30,7 @@ public class Department {
 
     @JsonIgnore
     @ToString.Exclude
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dean_id")
     private Teacher dean;
 

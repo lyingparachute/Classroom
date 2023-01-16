@@ -16,7 +16,7 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class InitData {
+public class IntegrationTestsInitData {
 
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;

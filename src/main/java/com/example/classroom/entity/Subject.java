@@ -37,15 +37,14 @@ public class Subject {
     private int hoursInSemester;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.DETACH})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "field_id")
     @ToString.Exclude
     private FieldOfStudy fieldOfStudy;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "subjects")
+    @ManyToMany(fetch = FetchType.LAZY,
+            mappedBy = "subjects")
     @ToString.Exclude
     private Set<Teacher> teachers = new HashSet<>();
 

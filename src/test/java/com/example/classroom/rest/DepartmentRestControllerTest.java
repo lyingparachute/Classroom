@@ -2,7 +2,7 @@ package com.example.classroom.rest;
 
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.DepartmentRepository;
-import com.example.classroom.repository.util.InitData;
+import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class DepartmentRestControllerTest {
     @Autowired
-    private InitData initData;
+    private IntegrationTestsInitData integrationTestsInitData;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -37,14 +37,14 @@ class DepartmentRestControllerTest {
 
     @BeforeEach
     public void setup() {
-        initData.cleanUp();
+        integrationTestsInitData.cleanUp();
     }
 
     @Test
     void shouldGetAllDepartments() throws URISyntaxException {
         //given
-        Teacher teacher = initData.createTeacherTwo(null, List.of(), List.of());
-        initData.createDepartmentOne(teacher, List.of());
+        Teacher teacher = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
+        integrationTestsInitData.createDepartmentOne(teacher, List.of());
         //when
         URI url = createURL("/api/subjects/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);

@@ -9,7 +9,7 @@ import com.example.classroom.repository.DepartmentRepository;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.SubjectRepository;
-import com.example.classroom.repository.util.InitData;
+import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 class FieldOfStudyServiceTest {
 
     @Autowired
-    private InitData initData;
+    private IntegrationTestsInitData integrationTestsInitData;
 
     @Autowired
     private FieldOfStudyService service;
@@ -52,19 +52,19 @@ class FieldOfStudyServiceTest {
 
     @BeforeEach
     public void setup() {
-        initData.cleanUp();
+        integrationTestsInitData.cleanUp();
     }
 
     @Test
     void create_shouldSaveObject_givenObjectDto() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Student student1 = initData.createStudentOne(null, List.of(teacher1));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher2));
-        Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-        Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
-        Department department = initData.createDepartmentOne(teacher1, List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher2));
+        Subject subject1 = integrationTestsInitData.createSubjectOne(null, List.of(teacher1));
+        Subject subject2 = integrationTestsInitData.createSubjectTwo(null, List.of(teacher2));
+        Department department = integrationTestsInitData.createDepartmentOne(teacher1, List.of());
 
         FieldOfStudyDto expected = createFieldOfStudyDto(department, List.of(subject1, subject2), List.of(student1, student2));
         //when
@@ -119,15 +119,15 @@ class FieldOfStudyServiceTest {
     @Test
     void update_shouldUpdateObject_givenObjectDto() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Student student1 = initData.createStudentOne(null, List.of(teacher1));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher2));
-        Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-        Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
-        Department department = initData.createDepartmentOne(teacher1, List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher2));
+        Subject subject1 = integrationTestsInitData.createSubjectOne(null, List.of(teacher1));
+        Subject subject2 = integrationTestsInitData.createSubjectTwo(null, List.of(teacher2));
+        Department department = integrationTestsInitData.createDepartmentOne(teacher1, List.of());
 
-        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy = integrationTestsInitData.createFieldOfStudyOne(null, List.of(), List.of());
         FieldOfStudyDto expected = createFieldOfStudyDto(department, List.of(subject1, subject2), List.of(student1, student2));
         expected.setId(fieldOfStudy.getId());
         //when
@@ -197,20 +197,20 @@ class FieldOfStudyServiceTest {
     @Test
     void fetchAll_shouldReturnAllObjects() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher2));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher2));
 
-        Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-        Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
+        Subject subject1 = integrationTestsInitData.createSubjectOne(null, List.of(teacher1));
+        Subject subject2 = integrationTestsInitData.createSubjectTwo(null, List.of(teacher2));
 
-        Department department1 = initData.createDepartmentOne(teacher1, List.of());
-        Department department2 = initData.createDepartmentTwo(teacher2, List.of());
+        Department department1 = integrationTestsInitData.createDepartmentOne(teacher1, List.of());
+        Department department2 = integrationTestsInitData.createDepartmentTwo(teacher2, List.of());
 
-        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
-        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(department2, List.of(subject2), List.of(student2));
+        FieldOfStudy fieldOfStudy1 = integrationTestsInitData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
+        FieldOfStudy fieldOfStudy2 = integrationTestsInitData.createFieldOfStudyTwo(department2, List.of(subject2), List.of(student2));
         //when
         List<FieldOfStudyDto> actual = service.fetchAll();
         assertThat(actual).size().isEqualTo(2);
@@ -306,20 +306,20 @@ class FieldOfStudyServiceTest {
         String sortField = "name";
         String sortDirection = Sort.Direction.DESC.name();
 
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher2));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher2));
 
-        Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-        Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
+        Subject subject1 = integrationTestsInitData.createSubjectOne(null, List.of(teacher1));
+        Subject subject2 = integrationTestsInitData.createSubjectTwo(null, List.of(teacher2));
 
-        Department department1 = initData.createDepartmentOne(teacher1, List.of());
-        Department department2 = initData.createDepartmentTwo(teacher2, List.of());
+        Department department1 = integrationTestsInitData.createDepartmentOne(teacher1, List.of());
+        Department department2 = integrationTestsInitData.createDepartmentTwo(teacher2, List.of());
 
-        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
-        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(department2, List.of(subject2), List.of(student2));
+        FieldOfStudy fieldOfStudy1 = integrationTestsInitData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
+        FieldOfStudy fieldOfStudy2 = integrationTestsInitData.createFieldOfStudyTwo(department2, List.of(subject2), List.of(student2));
         //when
         Page<FieldOfStudyDto> actual = service.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
         //then
@@ -370,18 +370,18 @@ class FieldOfStudyServiceTest {
     @Test
     void fetchById_shouldFindObject_givenId() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher2));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher2));
 
-        Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-        Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
+        Subject subject1 = integrationTestsInitData.createSubjectOne(null, List.of(teacher1));
+        Subject subject2 = integrationTestsInitData.createSubjectTwo(null, List.of(teacher2));
 
-        Department department = initData.createDepartmentOne(teacher1, List.of());
+        Department department = integrationTestsInitData.createDepartmentOne(teacher1, List.of());
 
-        FieldOfStudy expected = initData.createFieldOfStudyOne(department, List.of(subject1, subject2), List.of(student1, student2));
+        FieldOfStudy expected = integrationTestsInitData.createFieldOfStudyOne(department, List.of(subject1, subject2), List.of(student1, student2));
         //when
         FieldOfStudyDto actual = service.fetchById(expected.getId());
         //then
@@ -445,18 +445,18 @@ class FieldOfStudyServiceTest {
     @Test
     void remove_shouldDeleteObject_givenId() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher2));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher2));
 
-        Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-        Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
+        Subject subject1 = integrationTestsInitData.createSubjectOne(null, List.of(teacher1));
+        Subject subject2 = integrationTestsInitData.createSubjectTwo(null, List.of(teacher2));
 
-        Department department = initData.createDepartmentOne(null, List.of());
+        Department department = integrationTestsInitData.createDepartmentOne(null, List.of());
 
-        FieldOfStudy expected = initData.createFieldOfStudyOne(department, List.of(subject1, subject2), List.of(student1, student2));
+        FieldOfStudy expected = integrationTestsInitData.createFieldOfStudyOne(department, List.of(subject1, subject2), List.of(student1, student2));
         //when
         service.remove(expected.getId());
         //then
@@ -487,20 +487,20 @@ class FieldOfStudyServiceTest {
     @Test
     void removeAll_shouldDeleteAllObjects() {
         //given
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher2));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher2));
 
-        Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-        Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
+        Subject subject1 = integrationTestsInitData.createSubjectOne(null, List.of(teacher1));
+        Subject subject2 = integrationTestsInitData.createSubjectTwo(null, List.of(teacher2));
 
-        Department department1 = initData.createDepartmentOne(null, List.of());
-        Department department2 = initData.createDepartmentThree(null, List.of());
+        Department department1 = integrationTestsInitData.createDepartmentOne(null, List.of());
+        Department department2 = integrationTestsInitData.createDepartmentThree(null, List.of());
 
-        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
-        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyOne(department2, List.of(subject2), List.of(student2));
+        FieldOfStudy fieldOfStudy1 = integrationTestsInitData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
+        FieldOfStudy fieldOfStudy2 = integrationTestsInitData.createFieldOfStudyOne(department2, List.of(subject2), List.of(student2));
         //when
         service.removeAll();
         //then
@@ -532,20 +532,20 @@ class FieldOfStudyServiceTest {
     void findByName_returnsObjectsSearchedByName_givenName() {
         //given
         String name = "in";
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher2));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher2));
 
-        Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-        Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
+        Subject subject1 = integrationTestsInitData.createSubjectOne(null, List.of(teacher1));
+        Subject subject2 = integrationTestsInitData.createSubjectTwo(null, List.of(teacher2));
 
-        Department department1 = initData.createDepartmentOne(teacher1, List.of());
-        Department department2 = initData.createDepartmentTwo(teacher2, List.of());
+        Department department1 = integrationTestsInitData.createDepartmentOne(teacher1, List.of());
+        Department department2 = integrationTestsInitData.createDepartmentTwo(teacher2, List.of());
 
-        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
-        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(department2, List.of(subject2), List.of(student2));
+        FieldOfStudy fieldOfStudy1 = integrationTestsInitData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
+        FieldOfStudy fieldOfStudy2 = integrationTestsInitData.createFieldOfStudyTwo(department2, List.of(subject2), List.of(student2));
         //when
         List<FieldOfStudyDto> actual = service.findByName(name);
         assertThat(actual).size().isEqualTo(1);
@@ -600,21 +600,21 @@ class FieldOfStudyServiceTest {
         String sortField = "name";
         String sortDirection = Sort.Direction.ASC.name();
         String name = "in";
-        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
-        Student student1 = initData.createStudentOne(null, List.of(teacher1));
-        Student student2 = initData.createStudentTwo(null, List.of(teacher2));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1));
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher2));
 
-        Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-        Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
+        Subject subject1 = integrationTestsInitData.createSubjectOne(null, List.of(teacher1));
+        Subject subject2 = integrationTestsInitData.createSubjectTwo(null, List.of(teacher2));
 
-        Department department1 = initData.createDepartmentOne(teacher1, List.of());
-        Department department2 = initData.createDepartmentTwo(teacher2, List.of());
+        Department department1 = integrationTestsInitData.createDepartmentOne(teacher1, List.of());
+        Department department2 = integrationTestsInitData.createDepartmentTwo(teacher2, List.of());
 
-        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
-        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(department2, List.of(), List.of());
-        FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(department2, List.of(subject2), List.of(student2));
+        FieldOfStudy fieldOfStudy1 = integrationTestsInitData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
+        FieldOfStudy fieldOfStudy2 = integrationTestsInitData.createFieldOfStudyTwo(department2, List.of(), List.of());
+        FieldOfStudy fieldOfStudy3 = integrationTestsInitData.createFieldOfStudyThree(department2, List.of(subject2), List.of(student2));
         //when
         Page<FieldOfStudyDto> actual = service.findByNamePaginated(pageNo, pageSize, sortField, sortDirection, name);
         List<FieldOfStudyDto> actualContent = actual.getContent();

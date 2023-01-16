@@ -5,7 +5,7 @@ import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
-import com.example.classroom.repository.util.InitData;
+import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,21 +42,21 @@ class TeacherControllerTest {
     private TeacherRepository teacherRepository;
 
     @Autowired
-    private InitData initData;
+    private IntegrationTestsInitData integrationTestsInitData;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     public void setup() {
-        initData.cleanUp();
+        integrationTestsInitData.cleanUp();
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
     @Test
     void shouldCreateTeacher() throws Exception {
         //given
-        Student student1 = initData.createStudentOne(null, List.of());
-        Student student2 = initData.createStudentTwo(null, List.of());
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of());
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of());
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setFirstName("Marek");
         teacherDto.setLastName("Mostowiak");
@@ -101,9 +101,9 @@ class TeacherControllerTest {
     @Test
     void shouldDeleteStudent() throws Exception {
         //given
-        Student student1 = initData.createStudentOne(null, List.of());
-        Student student2 = initData.createStudentTwo(null, List.of());
-        Teacher teacher = initData.createTeacherTwo(null, List.of(), List.of(student1, student2));
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of());
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of());
+        Teacher teacher = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of(student1, student2));
         //when
         this.mockMvc.perform(get("/dashboard/teachers/delete/" + teacher.getId()))
                 .andDo(print())
@@ -120,9 +120,9 @@ class TeacherControllerTest {
     @Test
     void shouldEditTeacher() throws Exception {
         //given
-        Student student1 = initData.createStudentOne(null, List.of());
-        Student student2 = initData.createStudentTwo(null, List.of());
-        Teacher teacherEntity = initData.createTeacherTwo(null, List.of(), List.of());
+        Student student1 = integrationTestsInitData.createStudentOne(null, List.of());
+        Student student2 = integrationTestsInitData.createStudentTwo(null, List.of());
+        Teacher teacherEntity = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setId(teacherEntity.getId());
         teacherDto.setFirstName("Marek");
