@@ -42,9 +42,6 @@ class DepartmentServiceTest {
     UnitTestsInitData initData;
 
     @Captor
-    private ArgumentCaptor<List<Department>> departmentListArgumentCaptor;
-
-    @Captor
     private ArgumentCaptor<Department> departmentArgumentCaptor;
 
     @Test
