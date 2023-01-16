@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -22,8 +22,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -297,10 +296,10 @@ class DepartmentServiceTest {
         Department department3 = initData.createDepartmentThree(dean3, List.of(fieldOfStudy3));
         Page<Department> departments = new PageImpl<>(List.of(department3));
         //when
-        when(repository.findAll(any(PageRequest.class))).thenReturn(departments);
+        when(repository.findAll(any(Pageable.class))).thenReturn(departments);
         Page<DepartmentDto> actualPage = service.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
         //then
-        verify(repository).findAll(any(PageRequest.class));
+        verify(repository).findAll(any(Pageable.class));
         List<DepartmentDto> actualContent = actualPage.getContent();
         assertThat(actualContent).size().isEqualTo(1);
         DepartmentDto actualItem = actualContent.get(0);
@@ -414,26 +413,121 @@ class DepartmentServiceTest {
     }
 
     @Test
-    void removeAll_deletesAllDepartments() {
+    void findByName_returnsDepartmentsSearcherByName_givenName() {
         //given
-        Department department1 = initData.createDepartmentOne(null, List.of());
-        Department department2 = initData.createDepartmentTwo(null, List.of());
-        Department department3 = initData.createDepartmentThree(null, List.of());
-        List<Department> departments = List.of(department1, department2, department3);
+        String name = "ch";
+
+        Teacher dean1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher dean2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher dean3 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(null, List.of(), List.of());
+
+        Department department1 = initData.createDepartmentOne(dean1, List.of(fieldOfStudy1));
+        Department department2 = initData.createDepartmentTwo(dean2, List.of(fieldOfStudy2));
+        Department department3 = initData.createDepartmentThree(dean3, List.of(fieldOfStudy3));
+        List<Department> departments = List.of(department2, department3);
         //when
-        when(repository.findAll()).thenReturn(departments);
-        service.removeAll();
+        when(repository.findAllByNameContainingIgnoreCase(anyString())).thenReturn(departments);
+        List<DepartmentDto> actualContent = service.findByName(name);
         //then
-        verify(repository).findAll();
-        verify(repository).deleteAll();
+        verify(repository).findAllByNameContainingIgnoreCase(anyString());
+        assertThat(actualContent).size().isEqualTo(2);
+        DepartmentDto actualItem1 = actualContent.get(0);
+        DepartmentDto actualItem2 = actualContent.get(1);
+
+        assertAll("department1 properties",
+                () -> assertThat(actualItem1.getId())
+                        .as("Check %s %s", "department1", "ID").isEqualTo(department2.getId()),
+                () -> assertThat(actualItem1.getName())
+                        .as("Check %s %s", "department1", "Name").isEqualTo(department2.getName()),
+                () -> assertThat(actualItem1.getAddress())
+                        .as("Check %s %s", "department1", "Address").isEqualTo(department2.getAddress()),
+                () -> assertThat(actualItem1.getTelNumber())
+                        .as("Check %s %s", "department1", "Telephone Number").isEqualTo(department2.getTelNumber()),
+                () -> assertThat(actualItem1.getDean())
+                        .as("Check %s's %s", "Department", "Dean").isEqualTo(dean2),
+                () -> assertThat(actualItem1.getFieldsOfStudy())
+                        .as("Check if %s contains %s", "department1", "fieldOfStudy1")
+                        .contains(fieldOfStudy2).doesNotContain(fieldOfStudy1, fieldOfStudy3)
+        );
+        assertAll("department2 properties",
+                () -> assertThat(actualItem2.getId())
+                        .as("Check %s %s", "department2", "ID").isEqualTo(department3.getId()),
+                () -> assertThat(actualItem2.getName())
+                        .as("Check %s %s", "department2", "Name").isEqualTo(department3.getName()),
+                () -> assertThat(actualItem2.getAddress())
+                        .as("Check %s %s", "department2", "Address").isEqualTo(department3.getAddress()),
+                () -> assertThat(actualItem2.getTelNumber())
+                        .as("Check %s %s", "department2", "Telephone Number").isEqualTo(department3.getTelNumber()),
+                () -> assertThat(actualItem2.getDean())
+                        .as("Check %s's %s", "Department", "Dean").isEqualTo(dean3),
+                () -> assertThat(actualItem2.getFieldsOfStudy())
+                        .as("Check if %s contains %s", "department2", "fieldOfStudy1")
+                        .contains(fieldOfStudy3).doesNotContain(fieldOfStudy1, fieldOfStudy2)
+        );
     }
 
     @Test
-    void findByName() {
+    void findByNamePaginated_returnsDepartmentsSearcherByNamePaginated_givenName() {
+        //given
+        int pageNo = 2;
+        int pageSize = 2;
+        String sortField = "name";
+        String sortDirection = Sort.Direction.DESC.name();
+        String name = "ch";
 
-    }
+        Teacher dean1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher dean2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher dean3 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(null, List.of(), List.of());
 
-    @Test
-    void findByNamePaginated() {
+        Department department1 = initData.createDepartmentOne(dean1, List.of(fieldOfStudy1));
+        Department department2 = initData.createDepartmentTwo(dean2, List.of(fieldOfStudy2));
+        Department department3 = initData.createDepartmentThree(dean3, List.of(fieldOfStudy3));
+        Page<Department> departments = new PageImpl<>(List.of(department2, department3));
+        //when
+        when(repository.findAllByNameContainingIgnoreCase(anyString(), any(Pageable.class))).thenReturn(departments);
+        Page<DepartmentDto> actualPage = service.findByNamePaginated(pageNo, pageSize, sortField, sortDirection, name);
+        //then
+        verify(repository).findAllByNameContainingIgnoreCase(anyString(), any(Pageable.class));
+        List<DepartmentDto> actualContent = actualPage.getContent();
+        assertThat(actualContent).size().isEqualTo(2);
+        DepartmentDto actualItem1 = actualContent.get(0);
+        DepartmentDto actualItem2 = actualContent.get(1);
+
+        assertAll("department1 properties",
+                () -> assertThat(actualItem1.getId())
+                        .as("Check %s %s", "department1", "ID").isEqualTo(department2.getId()),
+                () -> assertThat(actualItem1.getName())
+                        .as("Check %s %s", "department1", "Name").isEqualTo(department2.getName()),
+                () -> assertThat(actualItem1.getAddress())
+                        .as("Check %s %s", "department1", "Address").isEqualTo(department2.getAddress()),
+                () -> assertThat(actualItem1.getTelNumber())
+                        .as("Check %s %s", "department1", "Telephone Number").isEqualTo(department2.getTelNumber()),
+                () -> assertThat(actualItem1.getDean())
+                        .as("Check %s's %s", "Department", "Dean").isEqualTo(dean2),
+                () -> assertThat(actualItem1.getFieldsOfStudy())
+                        .as("Check if %s contains %s", "department1", "fieldOfStudy1")
+                        .contains(fieldOfStudy2).doesNotContain(fieldOfStudy1, fieldOfStudy3)
+        );
+        assertAll("department2 properties",
+                () -> assertThat(actualItem2.getId())
+                        .as("Check %s %s", "department2", "ID").isEqualTo(department3.getId()),
+                () -> assertThat(actualItem2.getName())
+                        .as("Check %s %s", "department2", "Name").isEqualTo(department3.getName()),
+                () -> assertThat(actualItem2.getAddress())
+                        .as("Check %s %s", "department2", "Address").isEqualTo(department3.getAddress()),
+                () -> assertThat(actualItem2.getTelNumber())
+                        .as("Check %s %s", "department2", "Telephone Number").isEqualTo(department3.getTelNumber()),
+                () -> assertThat(actualItem2.getDean())
+                        .as("Check %s's %s", "Department", "Dean").isEqualTo(dean3),
+                () -> assertThat(actualItem2.getFieldsOfStudy())
+                        .as("Check if %s contains %s", "department2", "fieldOfStudy1")
+                        .contains(fieldOfStudy3).doesNotContain(fieldOfStudy1, fieldOfStudy2)
+        );
     }
 }
