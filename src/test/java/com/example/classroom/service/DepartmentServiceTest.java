@@ -8,6 +8,8 @@ import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.repository.DepartmentRepository;
+import com.example.classroom.repository.util.UnitTestsInitData;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,12 +21,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class DepartmentServiceTest {
-    //TODO - tests for DepartmentService
 
     @Mock
     DepartmentRepository departmentRepository;
@@ -35,29 +37,51 @@ class DepartmentServiceTest {
     @Spy
     ModelMapper mapper;
 
+    @Spy
+    UnitTestsInitData initData;
+
     @Captor
     private ArgumentCaptor<List<Department>> argCaptor;
 
     @Test
     void create_shouldSaveDepartment_givenDto() {
         //given
-        DepartmentDto dto = createDepartmentDto();
-        Department entity = mapper.map(dto, Department.class);
-//        entity.setDean(createDean());
+        Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+
+        Department department = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+        DepartmentDto dto = mapper.map(department, DepartmentDto.class);
         //when
-        when(departmentRepository.save(entity)).thenReturn(entity);
+        when(departmentRepository.save(department)).thenReturn(department);
         DepartmentDto created = departmentService.create(dto);
         //then
-        verify(departmentRepository).save(entity);
+        verify(departmentRepository).save(department);
         ArgumentCaptor<Department> departmentArgumentCaptor = ArgumentCaptor.forClass(Department.class);
         verify(departmentRepository).save(departmentArgumentCaptor.capture());
-        Department captured = departmentArgumentCaptor.getValue();
-        assertThat(captured).isNotNull();
-        assertThat(captured.getId()).isEqualTo(dto.getId());
-        assertThat(captured.getName()).isEqualTo(dto.getName());
-        assertThat(captured.getAddress()).isEqualTo(dto.getAddress());
-        assertThat(captured.getTelNumber()).isEqualTo(dto.getTelNumber());
-        assertThat(captured.getDean()).isEqualTo(createDean());
+        Department actual = departmentArgumentCaptor.getValue();
+        assertAll("Department Properties Test",
+                () -> assertThat(actual).isNotNull(),
+                () -> assertThat(actual.getId()).isEqualTo(dto.getId()),
+                () -> assertThat(actual.getName()).isEqualTo(dto.getName()),
+                () -> assertThat(actual.getAddress()).isEqualTo(dto.getAddress()),
+                () -> assertThat(actual.getTelNumber()).isEqualTo(dto.getTelNumber()),
+                () -> assertThat(actual.getDean()).isEqualTo(dean),
+                () -> assertThat(actual.getDean().getDepartmentDean()).isEqualTo(department),
+                () -> assertThat(actual.getFieldsOfStudy())
+                        .extracting(
+                                FieldOfStudy::getId,
+                                FieldOfStudy::getName,
+                                FieldOfStudy::getMode,
+                                FieldOfStudy::getTitle,
+                                FieldOfStudy::getLevelOfEducation,
+                                FieldOfStudy::getDepartment
+                        ).containsExactlyInAnyOrder(
+                                Tuple.tuple(fieldOfStudy1.getId(), fieldOfStudy1.getName(), fieldOfStudy1.getMode(),
+                                        fieldOfStudy1.getTitle(), fieldOfStudy1.getLevelOfEducation(), department),
+                                Tuple.tuple(fieldOfStudy2.getId(), fieldOfStudy2.getName(), fieldOfStudy2.getMode(),
+                                        fieldOfStudy2.getTitle(), fieldOfStudy2.getLevelOfEducation(), department))
+        );
     }
 
     @Test
@@ -82,6 +106,7 @@ class DepartmentServiceTest {
         void fetchById_shouldThrowIllegalStateException_givenIncorrectId() {
         }
     }
+
     @Test
     void remove() {
     }
@@ -98,7 +123,7 @@ class DepartmentServiceTest {
     void removeAll() {
     }
 
-    private DepartmentDto createDepartmentDto(){
+    private DepartmentDto createDepartmentDto() {
         DepartmentDto dto = new DepartmentDto();
         dto.setId(1L);
         dto.setName("Really nice department");
@@ -109,7 +134,7 @@ class DepartmentServiceTest {
         return dto;
     }
 
-    private Department createDepartment(Teacher dean, List<FieldOfStudy> fieldsOfStudy){
+    private Department createDepartment(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
         Department department = new Department();
         department.setName("Wydział Architektury");
         department.setAddress("ul. Jabłoniowa 34, 11-112 Stalowa Wola");
@@ -120,7 +145,7 @@ class DepartmentServiceTest {
     }
 
 
-    private Teacher createDean(){
+    private Teacher createDean() {
         Teacher teacher = new Teacher();
         teacher.setId(1L);
         teacher.setFirstName("Fabian");
