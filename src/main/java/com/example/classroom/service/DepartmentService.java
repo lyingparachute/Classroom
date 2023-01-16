@@ -55,14 +55,11 @@ public class DepartmentService {
                                                  int pageSize,
                                                  String sortField,
                                                  String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-                Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
+        Sort sort = getSortOrder(sortField, sortDirection);
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Department> all = repository.findAll(pageable);
         return all.map(department -> mapper.map(department, DepartmentDto.class));
     }
-
 
     public DepartmentDto fetchById(Long id) {
         Optional<Department> byId = repository.findById(id);
@@ -96,9 +93,7 @@ public class DepartmentService {
                                                    String sortField,
                                                    String sortDirection,
                                                    String searched) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-                Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
+        Sort sort = getSortOrder(sortField, sortDirection);
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Department> all = repository.findAllByNameContainingIgnoreCase(searched, pageable);
         return all.map(department -> mapper.map(department, DepartmentDto.class));
@@ -114,5 +109,11 @@ public class DepartmentService {
         Set<FieldOfStudy> fieldsOfStudy = new HashSet<>(department.getFieldsOfStudy());
         department.setDean(null);
         fieldsOfStudy.forEach(department::removeFieldOfStudy);
+    }
+
+    private Sort getSortOrder(String sortField, String sortDirection) {
+        return sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
     }
 }
