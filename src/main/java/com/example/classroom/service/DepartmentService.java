@@ -47,10 +47,14 @@ public class DepartmentService {
 
     public List<DepartmentDto> fetchAll() {
         List<Department> departments = repository.findAll();
-        return departments.stream().map(department -> mapper.map(department, DepartmentDto.class)).toList();
+        return departments.stream().map(
+                department -> mapper.map(department, DepartmentDto.class)).toList();
     }
 
-    public Page<DepartmentDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+    public Page<DepartmentDto> fetchAllPaginated(int pageNo,
+                                                 int pageSize,
+                                                 String sortField,
+                                                 String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
