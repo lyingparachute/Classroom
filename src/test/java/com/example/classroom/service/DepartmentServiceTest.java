@@ -375,11 +375,30 @@ class DepartmentServiceTest {
     class removeDepartmentByIdTest {
         @Test
         void remove_deletesDepartment_givenId() {
+            //given
+            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
 
+            Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(expected));
+            service.remove(expected.getId());
+            //then
+            verify(repository).findById(anyLong());
+            verify(repository).delete(any(Department.class));
         }
 
         @Test
         void remove_throwsIllegalArgumentException_givenWrongId() {
+            //given
+            Long id = 10L;
+            //when
+            Throwable thrown = catchThrowable(() -> service.remove(id));
+            //then
+            assertThat(thrown)
+                    .isExactlyInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("Invalid Department id: " + id);
         }
     }
 
