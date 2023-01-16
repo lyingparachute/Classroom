@@ -372,7 +372,7 @@ class DepartmentServiceTest {
     }
 
     @Nested
-    class removeDepartmentByIdTest {
+    class removeDepartmentTest {
         @Test
         void remove_deletesDepartment_givenId() {
             //given
@@ -395,6 +395,21 @@ class DepartmentServiceTest {
             assertThat(thrown)
                     .isExactlyInstanceOf(IllegalArgumentException.class)
                     .hasMessage("Invalid Department id: " + id);
+        }
+
+        @Test
+        void removeAll_deletesAllDepartments() {
+            //given
+            Department department1 = initData.createDepartmentOne(null, List.of());
+            Department department2 = initData.createDepartmentTwo(null, List.of());
+            Department department3 = initData.createDepartmentThree(null, List.of());
+            List<Department> departments = List.of(department1, department2, department3);
+            //when
+            when(repository.findAll()).thenReturn(departments);
+            service.removeAll();
+            //then
+            verify(repository).findAll();
+            verify(repository).deleteAll();
         }
     }
 
