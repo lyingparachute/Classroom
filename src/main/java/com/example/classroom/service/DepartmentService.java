@@ -35,7 +35,8 @@ public class DepartmentService {
     @Transactional
     public DepartmentDto update(DepartmentDto dto) {
         Department department = repository.findById(dto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Department '" + dto.getName() + "' with ID: " + dto.getId()));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Invalid Department '" + dto.getName() + "' with ID: " + dto.getId()));
         removeReferencingObjects(department);
         mapper.map(dto, department);
         addReferencingObjects(department);
@@ -62,13 +63,15 @@ public class DepartmentService {
     public DepartmentDto fetchById(Long id) {
         Optional<Department> byId = repository.findById(id);
         return byId.map(department -> mapper.map(department, DepartmentDto.class))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Department id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Invalid Department id: " + id));
     }
 
     @Transactional
     public void remove(Long id) {
         Department department = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Department id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Invalid Department id: " + id));
         removeReferencingObjects(department);
         repository.delete(department);
     }
@@ -84,7 +87,11 @@ public class DepartmentService {
         return found.stream().map(s -> mapper.map(s, DepartmentDto.class)).toList();
     }
 
-    public Page<DepartmentDto> findByNamePaginated(int pageNo, int pageSize, String sortField, String sortDirection, String searched) {
+    public Page<DepartmentDto> findByNamePaginated(int pageNo,
+                                                   int pageSize,
+                                                   String sortField,
+                                                   String sortDirection,
+                                                   String searched) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
