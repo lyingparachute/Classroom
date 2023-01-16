@@ -324,11 +324,50 @@ class DepartmentServiceTest {
     @Nested
     class FindDepartmentByIdTest {
         @Test
-        void fetchById_shouldReturnDepartment_givenCorrectId() {
+        void fetchById_shouldReturnDepartment_givenId() {
+            //given
+            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+
+            Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(expected));
+            DepartmentDto actual = service.fetchById(expected.getId());
+            //then
+            ArgumentCaptor<Long> idArgCaptor = ArgumentCaptor.forClass(Long.class);
+            verify(repository).findById(idArgCaptor.capture());
+            Long actualId = idArgCaptor.getValue();
+
+            assertThat(actual).as("Check if %s is not null", "Department").isNotNull();
+
+            assertAll("Resulting department properties",
+                    () -> assertThat(actualId)
+                            .as("Check %s %s", "department3", "ID").isEqualTo(expected.getId()),
+                    () -> assertThat(actual.getName())
+                            .as("Check %s %s", "department3", "Name").isEqualTo(expected.getName()),
+                    () -> assertThat(actual.getAddress())
+                            .as("Check %s %s", "department3", "Address").isEqualTo(expected.getAddress()),
+                    () -> assertThat(actual.getTelNumber())
+                            .as("Check %s %s", "department3", "Telephone Number").isEqualTo(expected.getTelNumber()),
+                    () -> assertThat(actual.getDean())
+                            .as("Check %s's %s", "Department", "Dean").isEqualTo(dean),
+                    () -> assertThat(actual.getFieldsOfStudy())
+                            .as("Check if %s contains %s", "department3", "fieldOfStudy1")
+                            .contains(fieldOfStudy1, fieldOfStudy2)
+            );
         }
 
         @Test
         void fetchById_throwsIllegalArgumentException_givenWrongId() {
+            //given
+            Long id = 10L;
+            //when
+            Throwable thrown = catchThrowable(() -> service.fetchById(id));
+            //then
+            assertThat(thrown)
+                    .isExactlyInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("Invalid Department id: " + id);
         }
     }
 
@@ -336,6 +375,7 @@ class DepartmentServiceTest {
     class removeDepartmentByIdTest {
         @Test
         void remove_deletesDepartment_givenId() {
+
         }
 
         @Test
