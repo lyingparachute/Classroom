@@ -2,7 +2,6 @@ package com.example.classroom.service;
 
 import com.example.classroom.dto.SubjectDto;
 import com.example.classroom.entity.Subject;
-import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -13,10 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -91,15 +88,13 @@ public class SubjectService {
     }
 
     private void addReferencingObjects(Subject subject) {
-        Set<Teacher> teachers = new HashSet<>(subject.getTeachers());
         subject.setFieldOfStudy(subject.getFieldOfStudy());
-        teachers.forEach(subject::addTeacher);
+        subject.getTeachers().forEach(subject::addTeacher);
     }
 
     private void removeReferencingObjects(Subject subject) {
-        Set<Teacher> teachers = new HashSet<>(subject.getTeachers());
         subject.setFieldOfStudy(null);
-        teachers.forEach(subject::removeTeacher);
+        subject.getTeachers().forEach(subject::removeTeacher);
     }
 
     private static Sort getSortOrder(String sortField, String sortDirection) {
