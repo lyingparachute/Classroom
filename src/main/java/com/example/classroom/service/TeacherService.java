@@ -52,13 +52,6 @@ public class TeacherService {
         return teachers.stream().map(teacher -> mapper.map(teacher, TeacherDto.class)).toList();
     }
 
-    private static Sort getSortOrder(String sortField, String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-                Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
-        return sort;
-    }
-
     @Transactional
     public TeacherDto fetchById(final Long id) {
         Optional<Teacher> byId = repository.findById(id);
@@ -123,5 +116,11 @@ public class TeacherService {
         teacher.setDepartmentDean(null);
         students.forEach(teacher::removeStudent);
         subjects.forEach(teacher::removeSubject);
+    }
+
+    private static Sort getSortOrder(String sortField, String sortDirection) {
+        return sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
     }
 }
