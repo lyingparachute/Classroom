@@ -43,19 +43,6 @@ public class StudentService {
         return all.stream().map(student -> mapper.map(student, StudentDto.class)).toList();
     }
 
-    @Transactional
-    public StudentDto update(StudentDto dto) {
-        Student student = repository.findById(dto.getId())
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Invalid Student '" + dto.getFirstName() + " " + dto.getLastName() + "' with ID: " + dto.getId()));
-        removeReferencingObjects(student);
-        mapper.map(dto, student);
-        addReferencingObjects(student);
-        Student saved = repository.save(student);
-        return mapper.map(saved, StudentDto.class);
-
-    }
-
     public Page<StudentDto> fetchAllPaginated(int pageNo,
                                               int pageSize,
                                               String sortField,
@@ -73,6 +60,18 @@ public class StudentService {
     }
 
     @Transactional
+    public StudentDto update(StudentDto dto) {
+        Student student = repository.findById(dto.getId())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Invalid Student '" + dto.getFirstName() + " " + dto.getLastName() + "' with ID: " + dto.getId()));
+        removeReferencingObjects(student);
+        mapper.map(dto, student);
+        addReferencingObjects(student);
+        Student saved = repository.save(student);
+        return mapper.map(saved, StudentDto.class);
+    }
+
+    @Transactional
     public void removeAll() {
         repository.findAll().forEach(this::removeReferencingObjects);
         repository.deleteAll();
@@ -81,6 +80,17 @@ public class StudentService {
     public List<StudentDto> findByFirstOrLastName(String searched) {
         List<Student> found = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).toList();
+    }
+
+    public Page<StudentDto> findByFirstOrLastNamePaginated(int pageNo,
+                                                           int pageSize,
+                                                           String sortField,
+                                                           String sortDirection,
+                                                           String searched) {
+        Sort sort = getSortOrder(sortField, sortDirection);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Student> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
+        return all.map(student -> mapper.map(student, StudentDto.class));
     }
 
     @Transactional
@@ -101,16 +111,5 @@ public class StudentService {
         student.setFieldOfStudy(null);
         Set<Teacher> teachers = new HashSet<>(student.getTeachers());
         teachers.forEach(student::removeTeacher);
-    }
-
-    public Page<StudentDto> findByFirstOrLastNamePaginated(int pageNo,
-                                                           int pageSize,
-                                                           String sortField,
-                                                           String sortDirection,
-                                                           String searched) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Student> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
-        return all.map(student -> mapper.map(student, StudentDto.class));
     }
 }
