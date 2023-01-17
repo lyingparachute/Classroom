@@ -12,6 +12,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -102,13 +103,26 @@ public class Student {
      * * this student is removed from students
      *   on the teacher side
      */
-    public void removeTeacher(Teacher teacher){
+    public void removeTeacher(Teacher teacher) {
         //prevent endless loop
-        if (!teachers.contains(teacher)){
+        if (!teachers.contains(teacher)) {
             return;
         }
         teachers.remove(teacher);
         teacher.removeStudent(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return age == student.age && id.equals(student.id) && Objects.equals(firstName, student.firstName) && Objects.equals(lastName, student.lastName) && Objects.equals(email, student.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, age, email);
     }
 
     @Override
