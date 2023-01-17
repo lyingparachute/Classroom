@@ -22,7 +22,6 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class FieldOfStudyService {
-
     private final FieldOfStudyRepository repository;
     private final ModelMapper mapper;
 
@@ -57,7 +56,6 @@ public class FieldOfStudyService {
                 Sort.by(sortField).descending();
     }
 
-
     public FieldOfStudyDto fetchById(Long id) {
         Optional<FieldOfStudy> byId = repository.findById(id);
         return byId.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
@@ -81,6 +79,17 @@ public class FieldOfStudyService {
     public List<FieldOfStudyDto> findByName(String searched) {
         List<FieldOfStudy> found = repository.findAllByNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, FieldOfStudyDto.class)).toList();
+    }
+
+    public Page<FieldOfStudyDto> findByNamePaginated(int pageNo,
+                                                     int pageSize,
+                                                     String sortField,
+                                                     String sortDirection,
+                                                     String searched) {
+        Sort sort = getSortOrder(sortField, sortDirection);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<FieldOfStudy> all = repository.findAllByNameContainingIgnoreCase(searched, pageable);
+        return all.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class));
     }
 
     public Page<FieldOfStudyDto> fetchAllPaginated(int pageNo,
@@ -107,16 +116,5 @@ public class FieldOfStudyService {
         fieldOfStudy.setDepartment(null);
         subjects.forEach(fieldOfStudy::removeSubject);
         students.forEach(fieldOfStudy::removeStudent);
-    }
-
-    public Page<FieldOfStudyDto> findByNamePaginated(int pageNo,
-                                                     int pageSize,
-                                                     String sortField,
-                                                     String sortDirection,
-                                                     String searched) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<FieldOfStudy> all = repository.findAllByNameContainingIgnoreCase(searched, pageable);
-        return all.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class));
     }
 }

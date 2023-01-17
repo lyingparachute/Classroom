@@ -93,14 +93,6 @@ public class StudentService {
         return all.map(student -> mapper.map(student, StudentDto.class));
     }
 
-    @Transactional
-    public void remove(Long id) {
-        Student student = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
-        removeReferencingObjects(student);
-        repository.delete(student);
-    }
-
     private void addReferencingObjects(Student student) {
         student.setFieldOfStudy(student.getFieldOfStudy());
         Set<Teacher> teachers = new HashSet<>(student.getTeachers());
@@ -111,5 +103,13 @@ public class StudentService {
         student.setFieldOfStudy(null);
         Set<Teacher> teachers = new HashSet<>(student.getTeachers());
         teachers.forEach(student::removeTeacher);
+    }
+
+    @Transactional
+    public void remove(Long id) {
+        Student student = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
+        removeReferencingObjects(student);
+        repository.delete(student);
     }
 }

@@ -53,6 +53,18 @@ public class TeacherService {
     }
 
     @Transactional
+    public Page<TeacherDto> fetchAllPaginated(int pageNo,
+                                              int pageSize,
+                                              String sortField,
+                                              String sortDirection) {
+        Sort sort = getSortOrder(sortField, sortDirection);
+
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Teacher> all = repository.findAll(pageable);
+        return all.map(teacher -> mapper.map(teacher, TeacherDto.class));
+    }
+
+    @Transactional
     public TeacherDto fetchById(final Long id) {
         Optional<Teacher> byId = repository.findById(id);
         return byId.map(teacher -> mapper.map(teacher, TeacherDto.class))
@@ -78,25 +90,12 @@ public class TeacherService {
         return found.stream().map(s -> mapper.map(s, TeacherDto.class)).toList();
     }
 
-    @Transactional
-    public Page<TeacherDto> fetchAllPaginated(int pageNo,
-                                              int pageSize,
-                                              String sortField,
-                                              String sortDirection) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Teacher> all = repository.findAll(pageable);
-        return all.map(teacher -> mapper.map(teacher, TeacherDto.class));
-    }
-
     public Page<TeacherDto> findByFirstOrLastNamePaginated(int pageNo,
                                                            int pageSize,
                                                            String sortField,
                                                            String sortDirection,
                                                            String searched) {
         Sort sort = getSortOrder(sortField, sortDirection);
-
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Teacher> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
         return all.map(student -> mapper.map(student, TeacherDto.class));
