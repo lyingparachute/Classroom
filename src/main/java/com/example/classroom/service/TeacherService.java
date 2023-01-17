@@ -52,14 +52,11 @@ public class TeacherService {
         return teachers.stream().map(teacher -> mapper.map(teacher, TeacherDto.class)).toList();
     }
 
-    @Transactional
-    public Page<TeacherDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+    private static Sort getSortOrder(String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
-
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Teacher> all = repository.findAll(pageable);
-        return all.map(teacher -> mapper.map(teacher, TeacherDto.class));
+        return sort;
     }
 
     @Transactional
@@ -88,17 +85,31 @@ public class TeacherService {
         return found.stream().map(s -> mapper.map(s, TeacherDto.class)).toList();
     }
 
-    public Page<TeacherDto> findByFirstOrLastNamePaginated(int pageNo, int pageSize, String sortField, String sortDirection, String searched) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-                Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
+    @Transactional
+    public Page<TeacherDto> fetchAllPaginated(int pageNo,
+                                              int pageSize,
+                                              String sortField,
+                                              String sortDirection) {
+        Sort sort = getSortOrder(sortField, sortDirection);
+
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Teacher> all = repository.findAll(pageable);
+        return all.map(teacher -> mapper.map(teacher, TeacherDto.class));
+    }
+
+    public Page<TeacherDto> findByFirstOrLastNamePaginated(int pageNo,
+                                                           int pageSize,
+                                                           String sortField,
+                                                           String sortDirection,
+                                                           String searched) {
+        Sort sort = getSortOrder(sortField, sortDirection);
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Teacher> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
         return all.map(student -> mapper.map(student, TeacherDto.class));
     }
 
-    private void addReferencingObjects(final Teacher teacher){
+    private void addReferencingObjects(final Teacher teacher) {
         Set<Student> students = new HashSet<>(teacher.getStudents());
         Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
         teacher.setDepartmentDean(teacher.getDepartmentDean());
@@ -106,7 +117,7 @@ public class TeacherService {
         subjects.forEach(teacher::addSubject);
     }
 
-    private void removeReferencingObjects(final Teacher teacher){
+    private void removeReferencingObjects(final Teacher teacher) {
         Set<Student> students = new HashSet<>(teacher.getStudents());
         Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
         teacher.setDepartmentDean(null);

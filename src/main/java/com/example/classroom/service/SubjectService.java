@@ -47,7 +47,10 @@ public class SubjectService {
         return subjects.stream().map(subject -> mapper.map(subject, SubjectDto.class)).toList();
     }
 
-    public Page<SubjectDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+    public Page<SubjectDto> fetchAllPaginated(int pageNo,
+                                              int pageSize,
+                                              String sortField,
+                                              String sortDirection) {
         Sort sort = getSortOrder(sortField, sortDirection);
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Subject> all = repository.findAll(pageable);
@@ -79,7 +82,11 @@ public class SubjectService {
         return found.stream().map(s -> mapper.map(s, SubjectDto.class)).toList();
     }
 
-    public Page<SubjectDto> findByNamePaginated(int pageNo, int pageSize, String sortField, String sortDirection, String searched) {
+    public Page<SubjectDto> findByNamePaginated(int pageNo,
+                                                int pageSize,
+                                                String sortField,
+                                                String sortDirection,
+                                                String searched) {
         Sort sort = getSortOrder(sortField, sortDirection);
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
