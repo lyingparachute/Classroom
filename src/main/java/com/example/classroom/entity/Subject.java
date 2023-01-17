@@ -48,6 +48,11 @@ public class Subject {
     @ToString.Exclude
     private Set<Teacher> teachers = new HashSet<>();
 
+    public Set<Teacher> getTeachers() {
+        //defensive copy, nobody will be able to change Set from the outside
+        return new HashSet<>(teachers);
+    }
+
     /**
      * Set new Field Of Study's department. The method keeps
      * relationships consistency:
@@ -105,11 +110,11 @@ public class Subject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subject subject = (Subject) o;
-        return id.equals(subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && Objects.equals(teachers, subject.teachers);
+        return hoursInSemester == subject.hoursInSemester && id.equals(subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && semester == subject.semester;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, teachers);
+        return Objects.hash(id, name, description, semester, hoursInSemester);
     }
 }

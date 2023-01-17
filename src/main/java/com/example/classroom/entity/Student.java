@@ -54,6 +54,11 @@ public class Student {
     @ManyToMany(mappedBy = "students")
     private Set<Teacher> teachers = new HashSet<>();
 
+    public Set<Teacher> getTeachers() {
+        //defensive copy, nobody will be able to change Set from the outside
+        return new HashSet<>(teachers);
+    }
+
     /**
      * Set new Student's fieldOfStudy. The method keeps
      * relationships consistency:

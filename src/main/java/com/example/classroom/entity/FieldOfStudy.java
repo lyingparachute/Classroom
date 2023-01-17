@@ -54,6 +54,16 @@ public class FieldOfStudy {
     @ToString.Exclude
     private Set<Student> students = new HashSet<>();
 
+    public Set<Subject> getSubjects() {
+        //defensive copy, nobody will be able to change Set from the outside
+        return new HashSet<>(subjects);
+    }
+
+    public Set<Student> getStudents() {
+        //defensive copy, nobody will be able to change Set from the outside
+        return new HashSet<>(students);
+    }
+
     /**
      * Set new Field Of Study's department. The method keeps
      * relationships consistency:
@@ -139,7 +149,7 @@ public class FieldOfStudy {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FieldOfStudy that = (FieldOfStudy) o;
-        return id.equals(that.id) && name.equals(that.name) && levelOfEducation == that.levelOfEducation && mode == that.mode && title == that.title;
+        return id.equals(that.id) && Objects.equals(name, that.name) && levelOfEducation == that.levelOfEducation && mode == that.mode && title == that.title;
     }
 
     @Override

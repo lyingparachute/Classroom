@@ -39,6 +39,11 @@ public class Department {
     @OneToMany(mappedBy = "department")
     private Set<FieldOfStudy> fieldsOfStudy = new HashSet<>();
 
+    public Set<FieldOfStudy> getFieldsOfStudy() {
+        //defensive copy, nobody will be able to change Set from the outside
+        return new HashSet<>(fieldsOfStudy);
+    }
+
     /**
      * Set new Department's dean(Teacher). The method keeps
      * relationships consistency:

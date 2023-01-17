@@ -68,6 +68,16 @@ public class Teacher {
             inverseJoinColumns = {@JoinColumn(name = "student_id")})
     private Set<Student> students = new HashSet<>();
 
+    public Set<Subject> getSubjects() {
+        //defensive copy, nobody will be able to change Set from the outside
+        return new HashSet<>(subjects);
+    }
+
+    public Set<Student> getStudents() {
+        //defensive copy, nobody will be able to change Set from the outside
+        return new HashSet<>(students);
+    }
+
     public void setDepartmentDean(Department departmentDean) {
         if (sameAsFormer(departmentDean))
             return;
