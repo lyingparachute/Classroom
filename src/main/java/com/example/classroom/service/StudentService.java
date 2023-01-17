@@ -32,10 +32,22 @@ public class StudentService {
         return mapper.map(saved, StudentDto.class);
     }
 
+    private static Sort getSortOrder(String sortField, String sortDirection) {
+        return sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+    }
+
+    public List<StudentDto> fetchAll() {
+        List<Student> all = repository.findAll();
+        return all.stream().map(student -> mapper.map(student, StudentDto.class)).toList();
+    }
+
     @Transactional
     public StudentDto update(StudentDto dto) {
         Student student = repository.findById(dto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid student '" + dto + "' with ID: " + dto.getId()));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Invalid Student '" + dto.getFirstName() + " " + dto.getLastName() + "' with ID: " + dto.getId()));
         removeReferencingObjects(student);
         mapper.map(dto, student);
         addReferencingObjects(student);
@@ -44,34 +56,20 @@ public class StudentService {
 
     }
 
-    public List<StudentDto> fetchAll() {
-        List<Student> all = repository.findAll();
-        return all.stream().map(student -> mapper.map(student, StudentDto.class)).toList();
-    }
-
-    public Page<StudentDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-                Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
-
+    public Page<StudentDto> fetchAllPaginated(int pageNo,
+                                              int pageSize,
+                                              String sortField,
+                                              String sortDirection) {
+        Sort sort = getSortOrder(sortField, sortDirection);
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Student> all = repository.findAll(pageable);
         return all.map(student -> mapper.map(student, StudentDto.class));
     }
 
-
     public StudentDto fetchById(Long id) {
         Optional<Student> byId = repository.findById(id);
         return byId.map(student -> mapper.map(student, StudentDto.class))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid student id: " + id));
-    }
-
-    @Transactional
-    public void remove(Long id) {
-        Student student = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid student id: " + id));
-        removeReferencingObjects(student);
-        repository.delete(student);
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
     }
 
     @Transactional
@@ -85,14 +83,12 @@ public class StudentService {
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).toList();
     }
 
-    public Page<StudentDto> findByFirstOrLastNamePaginated(int pageNo, int pageSize, String sortField, String sortDirection, String searched) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-                Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
-
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Student> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
-        return all.map(student -> mapper.map(student, StudentDto.class));
+    @Transactional
+    public void remove(Long id) {
+        Student student = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
+        removeReferencingObjects(student);
+        repository.delete(student);
     }
 
     private void addReferencingObjects(Student student) {
@@ -105,5 +101,16 @@ public class StudentService {
         student.setFieldOfStudy(null);
         Set<Teacher> teachers = new HashSet<>(student.getTeachers());
         teachers.forEach(student::removeTeacher);
+    }
+
+    public Page<StudentDto> findByFirstOrLastNamePaginated(int pageNo,
+                                                           int pageSize,
+                                                           String sortField,
+                                                           String sortDirection,
+                                                           String searched) {
+        Sort sort = getSortOrder(sortField, sortDirection);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Student> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
+        return all.map(student -> mapper.map(student, StudentDto.class));
     }
 }
