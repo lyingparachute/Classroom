@@ -51,14 +51,11 @@ public class SubjectService {
     }
 
     public Page<SubjectDto> fetchAllPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-                Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
+        Sort sort = getSortOrder(sortField, sortDirection);
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Subject> all = repository.findAll(pageable);
         return all.map(subject -> mapper.map(subject, SubjectDto.class));
     }
-
 
     public SubjectDto fetchById(Long id) {
         Optional<Subject> byId = repository.findById(id);
@@ -86,9 +83,7 @@ public class SubjectService {
     }
 
     public Page<SubjectDto> findByNamePaginated(int pageNo, int pageSize, String sortField, String sortDirection, String searched) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-                Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
+        Sort sort = getSortOrder(sortField, sortDirection);
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Subject> all = repository.findAllByNameContainingIgnoreCase(searched, pageable);
@@ -105,5 +100,11 @@ public class SubjectService {
         Set<Teacher> teachers = new HashSet<>(subject.getTeachers());
         subject.setFieldOfStudy(null);
         teachers.forEach(subject::removeTeacher);
+    }
+
+    private static Sort getSortOrder(String sortField, String sortDirection) {
+        return sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
     }
 }
