@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,11 +16,11 @@ import java.util.Set;
  */
 @Data
 @NoArgsConstructor
-public class DepartmentDto implements Serializable {
+public class DepartmentDto {
     private Long id;
     private String name;
     private String address;
-    @Pattern(regexp = "(\\+48|0)[0-9]{9}")
+    @Pattern(regexp = "(\\+48|0)\\d{9}")
     private int telNumber;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

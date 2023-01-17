@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +19,7 @@ import java.util.Set;
  */
 @Data
 @NoArgsConstructor
-public class FieldOfStudyDto implements Serializable {
+public class FieldOfStudyDto {
     private Long id;
     private String name;
     private LevelOfEducation levelOfEducation;
