@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class DepartmentRestControllerTest {
     @Autowired
-    private IntegrationTestsInitData integrationTestsInitData;
+    private IntegrationTestsInitData initData;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -37,14 +37,14 @@ class DepartmentRestControllerTest {
 
     @BeforeEach
     public void setup() {
-        integrationTestsInitData.cleanUp();
+        initData.cleanUp();
     }
 
     @Test
     void shouldGetAllDepartments() throws URISyntaxException {
         //given
-        Teacher teacher = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
-        integrationTestsInitData.createDepartmentOne(teacher, List.of());
+        Teacher teacher = initData.createTeacherTwo(null, List.of(), List.of());
+        initData.createDepartmentOne(teacher, List.of());
         //when
         URI url = createURL("/api/subjects/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);

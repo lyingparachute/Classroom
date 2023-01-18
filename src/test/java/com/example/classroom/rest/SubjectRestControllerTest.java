@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SubjectRestControllerTest {
 
     @Autowired
-    private IntegrationTestsInitData integrationTestsInitData;
+    private IntegrationTestsInitData initData;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -55,17 +55,17 @@ class SubjectRestControllerTest {
 
     @BeforeEach
     public void setup() {
-        integrationTestsInitData.cleanUp();
+        initData.cleanUp();
     }
 
     @Test
     void shouldGetSubject() throws URISyntaxException {
         //given
-        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
-        FieldOfStudy fieldOfStudy = integrationTestsInitData.createFieldOfStudyOne(null, List.of(), List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
 
-        Subject expected = integrationTestsInitData.createSubjectTwo(fieldOfStudy, List.of(teacher1, teacher2));
+        Subject expected = initData.createSubjectTwo(fieldOfStudy, List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/subjects/" + expected.getId());
         ResponseEntity<SubjectDto> response = restTemplate.getForEntity(url, SubjectDto.class);
@@ -98,14 +98,14 @@ class SubjectRestControllerTest {
     @Test
     void shouldGetAllSubjects() throws URISyntaxException {
         //given
-        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
-        Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of());
-        FieldOfStudy fieldOfStudy1 = integrationTestsInitData.createFieldOfStudyOne(null, List.of(), List.of());
-        FieldOfStudy fieldOfStudy2 = integrationTestsInitData.createFieldOfStudyTwo(null, List.of(), List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
 
-        Subject expected1 = integrationTestsInitData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
-        Subject expected2 = integrationTestsInitData.createSubjectTwo(fieldOfStudy2, List.of(teacher3));
+        Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
+        Subject expected2 = initData.createSubjectTwo(fieldOfStudy2, List.of(teacher3));
         //when
         URI url = createURL("/api/subjects/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
@@ -113,14 +113,14 @@ class SubjectRestControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Set actual = response.getBody();
         assertThat(actual).isNotNull().isNotEmpty().hasSize(2);
-       }
+    }
 
     @Test
     void shouldCreateSubject() throws URISyntaxException {
         //given
-        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
-        FieldOfStudy fieldOfStudy = integrationTestsInitData.createFieldOfStudyOne(null, List.of(), List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
 
         SubjectDto expected = createSubjectDto(fieldOfStudy, List.of(teacher1, teacher2));
         //when
@@ -157,11 +157,11 @@ class SubjectRestControllerTest {
     @Test
     void shouldUpdateSubject() throws URISyntaxException {
         //given
-        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
-        FieldOfStudy fieldOfStudy = integrationTestsInitData.createFieldOfStudyOne(null, List.of(), List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
 
-        Subject subjectEntity = integrationTestsInitData.createSubjectOne(null, List.of());
+        Subject subjectEntity = initData.createSubjectOne(null, List.of());
         SubjectDto subjectDto = createSubjectDto(fieldOfStudy, List.of(teacher1, teacher2));
         subjectDto.setId(subjectEntity.getId());
 
@@ -200,11 +200,11 @@ class SubjectRestControllerTest {
     @Test
     void shouldDeleteSubject() throws URISyntaxException {
         //given
-        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
-        FieldOfStudy fieldOfStudy = integrationTestsInitData.createFieldOfStudyOne(null, List.of(), List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
 
-        Subject expected = integrationTestsInitData.createSubjectTwo(fieldOfStudy, List.of(teacher1, teacher2));
+        Subject expected = initData.createSubjectTwo(fieldOfStudy, List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/subjects/" + expected.getId());
         restTemplate.delete(url);
@@ -222,14 +222,14 @@ class SubjectRestControllerTest {
     @Test
     void shouldDeleteAllSubjects() throws URISyntaxException {
         //given
-        Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
-        Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
-        Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of());
-        FieldOfStudy fieldOfStudy1 = integrationTestsInitData.createFieldOfStudyOne(null, List.of(), List.of());
-        FieldOfStudy fieldOfStudy2 = integrationTestsInitData.createFieldOfStudyTwo(null, List.of(), List.of());
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
 
-        Subject expected1 = integrationTestsInitData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
-        Subject expected2 = integrationTestsInitData.createSubjectTwo(fieldOfStudy2, List.of(teacher3));
+        Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
+        Subject expected2 = initData.createSubjectTwo(fieldOfStudy2, List.of(teacher3));
 
         //when
         URI url = createURL("/api/subjects");
