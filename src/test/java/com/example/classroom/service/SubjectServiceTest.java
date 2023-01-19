@@ -393,7 +393,7 @@ class SubjectServiceTest {
             ArgumentCaptor<Long> idArgCaptor = ArgumentCaptor.forClass(Long.class);
             verify(repository).findById(idArgCaptor.capture());
             Long actualId = idArgCaptor.getValue();
-
+            assertThat(actual).as("Check if %s is not null", "Subject").isNotNull();
             assertAll("Subject's properties",
                     () -> assertThat(actualId)
                             .as("Check %s's %s", "Subject", "ID").isEqualTo(expected.getId()),
