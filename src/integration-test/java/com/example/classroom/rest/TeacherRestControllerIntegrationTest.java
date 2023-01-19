@@ -37,20 +37,28 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TeacherRestControllerIntegrationTest {
+
     @LocalServerPort
     int randomServerPort;
+
     @Autowired
     TeacherRepository teacherRepository;
+
     @Autowired
     StudentRepository studentRepository;
+
     @Autowired
     SubjectRepository subjectRepository;
+
     @Autowired
     DepartmentRepository departmentRepository;
+
     @Autowired
     ModelMapper mapper;
+
     @Autowired
     private IntegrationTestsInitData initData;
+
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -227,7 +235,6 @@ class TeacherRestControllerIntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         TeacherDto actual = response.getBody();
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isNotNull();
         teacherRepository.findById(actual.getId()).orElseThrow(
                 () -> new IllegalStateException(
                         "Teacher with ID= " + actual.getId() + " should not be missing."));
@@ -314,7 +321,8 @@ class TeacherRestControllerIntegrationTest {
         Optional<Teacher> byId = teacherRepository.findById(expected.getId());
         assertThat(byId).isNotPresent();
         departmentRepository.findById(department.getId()).orElseThrow(() -> new IllegalStateException(
-                "Department with ID = " + department.getId() + " and name " + department.getName() + " should not be removed."));
+                "Department with ID = " + department.getId() + " and name " +
+                        department.getName() + " should not be removed."));
         expected.getStudents().forEach(student ->
                 studentRepository.findById(student.getId()).orElseThrow(() -> new IllegalStateException(
                         "Student with ID= " + student.getId() + " and name " +
@@ -344,7 +352,8 @@ class TeacherRestControllerIntegrationTest {
         Optional<Teacher> byId1 = teacherRepository.findById(expected1.getId());
         assertThat(byId1).isNotPresent();
         departmentRepository.findById(department1.getId()).orElseThrow(() -> new IllegalStateException(
-                "Department with ID = " + department1.getId() + " and name " + department1.getName() + " should not be removed."));
+                "Department with ID = " + department1.getId() + " and name " +
+                        department1.getName() + " should not be removed."));
         expected1.getStudents().forEach(student ->
                 studentRepository.findById(student.getId()).orElseThrow(() -> new IllegalStateException(
                         "Student with ID= " + student.getId() + " and name " +
@@ -357,7 +366,8 @@ class TeacherRestControllerIntegrationTest {
         Optional<Teacher> byId2 = teacherRepository.findById(expected1.getId());
         assertThat(byId2).isNotPresent();
         departmentRepository.findById(department2.getId()).orElseThrow(() -> new IllegalStateException(
-                "Department with ID = " + department2.getId() + " and name " + department2.getName() + " should not be removed."));
+                "Department with ID = " + department2.getId() + " and name " +
+                        department2.getName() + " should not be removed."));
         expected2.getStudents().forEach(student ->
                 studentRepository.findById(student.getId()).orElseThrow(() -> new IllegalStateException(
                         "Student with ID= " + student.getId() + " and name " +
