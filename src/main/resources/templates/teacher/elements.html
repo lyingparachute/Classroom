@@ -74,7 +74,7 @@
       <th:block th:each="fieldOpt : ${students}">
         <div>
           <input class="form-check-input m-2" type="checkbox" value="" id="students_list"
-                 th:field="*{studentsList}"
+                 th:field="*{students}"
                  th:value="${fieldOpt.id}" th:text="${fieldOpt}">
         </div>
       </th:block>
@@ -98,7 +98,7 @@
       <span th:text="#{teacher.studentList}"></span>
       <ul class="list-group">
         <a class="list-group-item"
-           th:each="fieldOpt : ${teacher.studentsList}"
+           th:each="fieldOpt : ${teacher.students}"
            th:href="@{/dashboard/students/{id}(id=${fieldOpt.id})}"
            th:value="${fieldOpt.id}"
            th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">

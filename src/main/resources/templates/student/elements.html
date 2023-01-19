@@ -68,8 +68,12 @@
     </label>
     <div class="col-sm">
       <select class="form-select" id="field_of_study" th:field="*{fieldOfStudy}">
-        <option th:each="fieldOpt : ${T(systems.ultimate.classroom.enums.FieldOfStudy).values()}"
-                th:value="${fieldOpt}" th:text="${fieldOpt.desc}">
+        <option th:each="fieldOpt : ${fieldsOfStudy}"
+                th:text="${fieldOpt.name}
+                + ', Study mode: ' + ${fieldOpt.mode.value}
+                + ', Level of education: ' + ${fieldOpt.levelOfEducation.value}
+                + ', Obtained title: ' + ${fieldOpt.title.fullTitle}"
+                th:value="${fieldOpt.id}">
         </option>
       </select>
     </div>
@@ -83,7 +87,7 @@
       <th:block th:each="fieldOpt : ${teachers}">
         <div>
           <input class="form-check-input m-2" type="checkbox" value="" id="teachers_list"
-                 th:field="*{teachersList}"
+                 th:field="*{teachers}"
                  th:value="${fieldOpt.id}" th:text="${fieldOpt}">
         </div>
       </th:block>
@@ -101,11 +105,15 @@
     <li class="list-group-item" th:text="#{student.lastName} + ': ' + ${student.lastName}"></li>
     <li class="list-group-item" th:text="#{student.email} + ': ' + ${student.email}"></li>
     <li class="list-group-item" th:text="#{student.age} + ': ' + ${student.age}"></li>
-    <li class="list-group-item" th:text="#{student.fieldOfStudy} + ': ' + ${student.fieldOfStudy}"></li>
-    <li class="list-group-item"> <span th:text="#{student.teachersList}"></span>
+    <li class="list-group-item">
+      <span th:text="#{student.fieldOfStudy} + ': ' "></span>
+      <a th:href="@{/dashboard/fields-of-study/{id}(id=${student.fieldOfStudy.id})}"
+         th:text="${student.fieldOfStudy.name}"></a>
+    </li>
+    <li class="list-group-item"><span th:text="#{student.teachersList}"></span>
       <ul class="list-group">
         <a class="list-group-item"
-           th:each="fieldOpt : ${student.teachersList}"
+           th:each="fieldOpt : ${student.teachers}"
            th:href="@{/dashboard/teachers/{id}(id=${fieldOpt.id})}"
            th:value="${fieldOpt.id}"
            th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
