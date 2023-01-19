@@ -24,7 +24,7 @@ public class TeacherDto {
     private String email;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Department departmentDean;
+    private Department department;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Student> students = new HashSet<>();
