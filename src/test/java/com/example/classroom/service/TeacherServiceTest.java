@@ -424,7 +424,7 @@ class TeacherServiceTest {
                     () -> assertThat(actual.getAge())
                             .as("Check %s's %s", "Teacher", "Age").isEqualTo(expected.getAge()),
                     () -> assertThat(actual.getDepartmentDean())
-                            .as("Check %s's %s", "Teacher", "Age").isEqualTo(department),
+                            .as("Check %s's %s", "Teacher", "Department").isEqualTo(department),
                     () -> assertThat(actual.getSubjects())
                             .as("Check if %s contains %s", "actualTeacher", "subjects")
                             .contains(subject1, subject2),
