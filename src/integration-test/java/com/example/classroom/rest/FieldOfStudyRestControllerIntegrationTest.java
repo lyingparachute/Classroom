@@ -38,8 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
-class FieldOfStudyRestControllerTest {
+class FieldOfStudyRestControllerIntegrationTest {
 
     @Autowired
     private IntegrationTestsInitData initData;
@@ -91,6 +90,7 @@ class FieldOfStudyRestControllerTest {
     }
 
     @Test
+    @Transactional
     void shouldCreateFieldOfStudy() throws URISyntaxException {
         //given
         Student student1 = initData.createStudentOne(null, List.of());
@@ -105,7 +105,7 @@ class FieldOfStudyRestControllerTest {
         FieldOfStudyDto expected = createFieldOfStudyDto(department1, List.of(subject1), List.of(student1));
 
         //when
-        URI url = createURL("/api/fields-of-study/create");
+        URI url = createURL("/api/fields-of-study");
         ResponseEntity<FieldOfStudyDto> response = restTemplate.postForEntity(url, expected, FieldOfStudyDto.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);

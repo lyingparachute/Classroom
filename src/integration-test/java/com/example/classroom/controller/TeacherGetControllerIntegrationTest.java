@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-class TeacherGetControllerTest {
+class TeacherGetControllerIntegrationTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;

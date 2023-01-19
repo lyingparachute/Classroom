@@ -13,7 +13,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @ActiveProfiles("test")
 @SpringBootTest
-class SubjectControllerTest {
+class SubjectControllerIntegrationTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;

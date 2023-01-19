@@ -14,17 +14,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
-class DepartmentRepositoryTest {
+class DepartmentRepositoryIntegrationTest {
 
     @Autowired
     DepartmentRepository underTest;
 
     @Autowired
-    IntegrationTestsInitData integrationTestsInitData;
+    IntegrationTestsInitData initData;
 
     @BeforeEach
     void setup() {
-        integrationTestsInitData.cleanUp();
+        initData.cleanUp();
     }
 
     @Test

@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ActiveProfiles("test")
 @SpringBootTest
-class DashboardControllerTest {
+class DashboardControllerIntegrationTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 

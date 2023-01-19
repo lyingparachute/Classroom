@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-class StudentControllerTest {
+class StudentControllerIntegrationTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;

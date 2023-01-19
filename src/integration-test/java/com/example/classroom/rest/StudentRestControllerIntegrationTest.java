@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class StudentRestControllerTest {
+class StudentRestControllerIntegrationTest {
 
     @Autowired
     private IntegrationTestsInitData initData;
@@ -58,21 +58,21 @@ class StudentRestControllerTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Student student = initData.createStudentOne(null, List.of(teacher1, teacher2));
+        Student expected = initData.createStudentOne(null, List.of(teacher1, teacher2));
         //when
-        URI url = createURL("/api/students/" + student.getId());
+        URI url = createURL("/api/students/" + expected.getId());
         ResponseEntity<StudentDto> response = restTemplate.getForEntity(url, StudentDto.class);
         //then
-        Optional<Student> byId = studentRepository.findById(student.getId());
+        Optional<Student> byId = studentRepository.findById(expected.getId());
         assertThat(byId).isPresent();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         StudentDto actual = response.getBody();
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(student.getId());
-        assertThat(actual.getFirstName()).isEqualTo(student.getFirstName());
-        assertThat(actual.getLastName()).isEqualTo(student.getLastName());
-        assertThat(actual.getEmail()).isEqualTo(student.getEmail());
-        assertThat(actual.getAge()).isEqualTo(student.getAge());
+        assertThat(actual.getId()).isEqualTo(expected.getId());
+        assertThat(actual.getFirstName()).isEqualTo(expected.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(expected.getLastName());
+        assertThat(actual.getEmail()).isEqualTo(expected.getEmail());
+        assertThat(actual.getAge()).isEqualTo(expected.getAge());
         assertThat(actual.getTeachers())
                 .extracting(
                         Teacher::getId,

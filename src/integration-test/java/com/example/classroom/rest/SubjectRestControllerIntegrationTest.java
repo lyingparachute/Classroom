@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SubjectRestControllerTest {
+class SubjectRestControllerIntegrationTest {
 
     @Autowired
     private IntegrationTestsInitData initData;
@@ -64,13 +64,10 @@ class SubjectRestControllerTest {
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
-
         Subject expected = initData.createSubjectTwo(fieldOfStudy, List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/subjects/" + expected.getId());
         ResponseEntity<SubjectDto> response = restTemplate.getForEntity(url, SubjectDto.class);
-        Optional<Subject> byId = subjectRepository.findById(expected.getId());
-        assertThat(byId).isPresent();
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         SubjectDto actual = response.getBody();
@@ -87,12 +84,12 @@ class SubjectRestControllerTest {
                         Teacher::getLastName,
                         Teacher::getEmail,
                         Teacher::getAge,
-                        Teacher::getDepartmentDean
+                        Teacher::getDepartment
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartment()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()));
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartment()));
     }
 
     @Test
@@ -146,12 +143,12 @@ class SubjectRestControllerTest {
                         Teacher::getLastName,
                         Teacher::getEmail,
                         Teacher::getAge,
-                        Teacher::getDepartmentDean
+                        Teacher::getDepartment
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartment()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()));
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartment()));
     }
 
     @Test
@@ -189,12 +186,12 @@ class SubjectRestControllerTest {
                         Teacher::getLastName,
                         Teacher::getEmail,
                         Teacher::getAge,
-                        Teacher::getDepartmentDean
+                        Teacher::getDepartment
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartmentDean()),
+                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartment()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartmentDean()));
+                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartment()));
     }
 
     @Test

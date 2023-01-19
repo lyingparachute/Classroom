@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class DepartmentRestControllerTest {
+class DepartmentRestControllerIntegrationTest {
     @Autowired
     private IntegrationTestsInitData initData;
 
@@ -46,14 +46,12 @@ class DepartmentRestControllerTest {
         Teacher teacher = initData.createTeacherTwo(null, List.of(), List.of());
         initData.createDepartmentOne(teacher, List.of());
         //when
-        URI url = createURL("/api/subjects/");
+        URI url = createURL("/api/departments");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Set actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual).isNotEmpty();
-        assertThat(actual).size().isEqualTo(8);
+        assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
     }
 
     @Test
