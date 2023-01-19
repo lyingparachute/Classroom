@@ -12,6 +12,7 @@ import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -30,6 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -53,6 +55,9 @@ class SubjectRestControllerIntegrationTest {
     @Autowired
     FieldOfStudyRepository fieldOfStudyRepository;
 
+    @Autowired
+    ModelMapper mapper;
+
     @BeforeEach
     public void setup() {
         initData.cleanUp();
@@ -64,6 +69,7 @@ class SubjectRestControllerIntegrationTest {
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+
         Subject expected = initData.createSubjectTwo(fieldOfStudy, List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/subjects/" + expected.getId());
@@ -71,25 +77,33 @@ class SubjectRestControllerIntegrationTest {
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         SubjectDto actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(expected.getId());
-        assertThat(actual.getName()).isEqualTo(expected.getName());
-        assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
-        assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
-        assertThat(actual.getFieldOfStudy()).isEqualTo(expected.getFieldOfStudy());
-        assertThat(actual.getTeachers())
-                .extracting(
-                        Teacher::getId,
-                        Teacher::getFirstName,
-                        Teacher::getLastName,
-                        Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getDepartment
-                ).containsExactlyInAnyOrder(
-                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartment()),
-                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartment()));
+        assertThat(actual).as("Check if %s is not null", "Subject").isNotNull();
+        assertAll("Subject's properties",
+                () -> assertThat(actual.getId())
+                        .as("Check %s's %s", "Subject", "ID").isEqualTo(expected.getId()),
+                () -> assertThat(actual.getName())
+                        .as("Check %s's %s", "Subject", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(actual.getDescription())
+                        .as("Check %s's %s", "Subject", "Description").isEqualTo(expected.getDescription()),
+                () -> assertThat(actual.getSemester())
+                        .as("Check %s's %s", "Subject", "Semester").isEqualTo(expected.getSemester()),
+                () -> assertThat(actual.getHoursInSemester())
+                        .as("Check %s's %s", "Subject", "Hours in semester").isEqualTo(expected.getHoursInSemester()),
+                () -> assertThat(actual.getFieldOfStudy())
+                        .as("Check %s's %s", "Subject", "fieldOfStudy").isEqualTo(fieldOfStudy),
+                () -> assertThat(actual.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
+                        .extracting(
+                                Teacher::getId,
+                                Teacher::getFirstName,
+                                Teacher::getLastName,
+                                Teacher::getEmail,
+                                Teacher::getAge
+                        ).containsExactlyInAnyOrder(
+                                Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                                        teacher1.getEmail(), teacher1.getAge()),
+                                Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                                        teacher2.getEmail(), teacher2.getAge()))
+        );
     }
 
     @Test
@@ -101,15 +115,16 @@ class SubjectRestControllerIntegrationTest {
         FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
 
-        Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
-        Subject expected2 = initData.createSubjectTwo(fieldOfStudy2, List.of(teacher3));
+        Subject expectedSubject1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
+        Subject expectedSubject2 = initData.createSubjectTwo(fieldOfStudy1, List.of(teacher3));
+        Subject expectedSubject3 = initData.createSubjectThree(fieldOfStudy2, List.of(teacher1, teacher2, teacher3));
         //when
         URI url = createURL("/api/subjects/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Set actual = response.getBody();
-        assertThat(actual).isNotNull().isNotEmpty().hasSize(2);
+        Set<SubjectDto> actual = response.getBody();
+        assertThat(actual).isNotNull().isNotEmpty().hasSize(3);
     }
 
     @Test
@@ -120,35 +135,67 @@ class SubjectRestControllerIntegrationTest {
         FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
 
         SubjectDto expected = createSubjectDto(fieldOfStudy, List.of(teacher1, teacher2));
+        Subject expectedEntity = mapper.map(expected, Subject.class);
         //when
         URI url = createURL("/api/subjects");
         ResponseEntity<SubjectDto> response = restTemplate.postForEntity(url, expected, SubjectDto.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         SubjectDto actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isNotNull();
+        assertThat(actual).as("Check if %s is not null", "Subject").isNotNull();
+        assertThat(actual.getId()).as("Check %s's %s", "Subject", "ID").isNotNull();
         subjectRepository.findById(actual.getId()).orElseThrow(
                 () -> new IllegalStateException(
                         "Subject with ID= " + actual.getId() + " should not be missing"));
-        assertThat(actual.getName()).isEqualTo(expected.getName());
-        assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
-        assertThat(actual.getSemester()).isEqualTo(expected.getSemester());
-        assertThat(actual.getHoursInSemester()).isEqualTo(expected.getHoursInSemester());
-        assertThat(actual.getFieldOfStudy()).isEqualTo(fieldOfStudy);
-        assertThat(actual.getTeachers())
+        assertAll("Subject's properties",
+                () -> assertThat(actual.getName())
+                        .as("Check %s's %s", "Subject", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(actual.getDescription())
+                        .as("Check %s's %s", "Subject", "Description").isEqualTo(expected.getDescription()),
+                () -> assertThat(actual.getSemester())
+                        .as("Check %s's %s", "Subject", "Semester").isEqualTo(expected.getSemester()),
+                () -> assertThat(actual.getHoursInSemester())
+                        .as("Check %s's %s", "Subject", "Hours in semester").isEqualTo(expected.getHoursInSemester())
+        );
+        assertAll("Subject's fieldOfStudy properties",
+                () -> assertThat(actual.getFieldOfStudy().getId())
+                        .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Id").isEqualTo(fieldOfStudy.getId()),
+                () -> assertThat(actual.getFieldOfStudy().getName())
+                        .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Name").isEqualTo(fieldOfStudy.getName()),
+                () -> assertThat(actual.getFieldOfStudy().getLevelOfEducation())
+                        .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Level of education").isEqualTo(fieldOfStudy.getLevelOfEducation()),
+                () -> assertThat(actual.getFieldOfStudy().getMode())
+                        .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Study mode").isEqualTo(fieldOfStudy.getMode()),
+                () -> assertThat(actual.getFieldOfStudy().getTitle())
+                        .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Obtained title").isEqualTo(fieldOfStudy.getTitle()),
+                () -> assertThat(actual.getFieldOfStudy().getSubjects())
+                        .as("Check %s's %s properties", "fieldOfStudy", "subjects")
+                        .extracting(
+                                Subject::getName,
+                                Subject::getDescription,
+                                Subject::getSemester,
+                                Subject::getHoursInSemester,
+                                Subject::getFieldOfStudy
+                        ).containsExactlyInAnyOrder(
+                                Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                        expected.getHoursInSemester(), fieldOfStudy))
+        );
+        assertThat(actual.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getDepartment
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartment()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartment()));
+                                teacher2.getEmail(), teacher2.getAge()));
+        assertThat(teacher1.getSubjects()).as("Check if %s' %s list contains subject", "teacher1", "subjects")
+                .isNotNull().isNotEmpty().hasSize(1).contains(expectedEntity);
+        assertThat(teacher2.getSubjects()).as("Check if %s' %s list contains subject", "teacher2", "subjects")
+                .isNotNull().isNotEmpty().hasSize(1).contains(expectedEntity);
     }
 
     @Test
@@ -159,39 +206,68 @@ class SubjectRestControllerIntegrationTest {
         FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
 
         Subject subjectEntity = initData.createSubjectOne(null, List.of());
-        SubjectDto subjectDto = createSubjectDto(fieldOfStudy, List.of(teacher1, teacher2));
-        subjectDto.setId(subjectEntity.getId());
-
+        SubjectDto expected = createSubjectDto(fieldOfStudy, List.of(teacher1, teacher2));
+        expected.setId(subjectEntity.getId());
+        Subject expectedEntity = mapper.map(expected, Subject.class);
         //when
         URI url = createURL("/api/subjects/");
-        final HttpEntity<SubjectDto> request = new HttpEntity<>(subjectDto);
+        final HttpEntity<SubjectDto> request = new HttpEntity<>(expected);
         ResponseEntity<SubjectDto> response = restTemplate.exchange(url, HttpMethod.PUT, request, SubjectDto.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         SubjectDto actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isNotNull();
-        subjectRepository.findById(actual.getId()).orElseThrow(
-                () -> new IllegalStateException(
-                        "Subject with ID= " + actual.getId() + " should not be missing"));
-        assertThat(actual.getId()).isEqualTo(subjectDto.getId());
-        assertThat(actual.getName()).isEqualTo(subjectDto.getName());
-        assertThat(actual.getDescription()).isEqualTo(subjectDto.getDescription());
-        assertThat(actual.getHoursInSemester()).isEqualTo(subjectDto.getHoursInSemester());
-        assertThat(actual.getTeachers()).size().isEqualTo(2);
-        assertThat(actual.getTeachers())
+        assertThat(actual).as("Check if %s is not null", "Subject").isNotNull();
+        assertAll("Subject's properties",
+                () -> assertThat(actual.getId())
+                        .as("Check %s's %s", "Subject", "ID").isEqualTo(expected.getId()),
+                () -> assertThat(actual.getName())
+                        .as("Check %s's %s", "Subject", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(actual.getDescription())
+                        .as("Check %s's %s", "Subject", "Description").isEqualTo(expected.getDescription()),
+                () -> assertThat(actual.getSemester())
+                        .as("Check %s's %s", "Subject", "Semester").isEqualTo(expected.getSemester()),
+                () -> assertThat(actual.getHoursInSemester())
+                        .as("Check %s's %s", "Subject", "Hours in semester").isEqualTo(expected.getHoursInSemester())
+        );
+        assertAll("Subject's fieldOfStudy properties",
+                () -> assertThat(actual.getFieldOfStudy().getId())
+                        .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Id").isEqualTo(fieldOfStudy.getId()),
+                () -> assertThat(actual.getFieldOfStudy().getName())
+                        .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Name").isEqualTo(fieldOfStudy.getName()),
+                () -> assertThat(actual.getFieldOfStudy().getLevelOfEducation())
+                        .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Level of education").isEqualTo(fieldOfStudy.getLevelOfEducation()),
+                () -> assertThat(actual.getFieldOfStudy().getMode())
+                        .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Study mode").isEqualTo(fieldOfStudy.getMode()),
+                () -> assertThat(actual.getFieldOfStudy().getTitle())
+                        .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Obtained title").isEqualTo(fieldOfStudy.getTitle()),
+                () -> assertThat(actual.getFieldOfStudy().getSubjects())
+                        .as("Check %s's %s properties", "fieldOfStudy", "subjects")
+                        .extracting(
+                                Subject::getName,
+                                Subject::getDescription,
+                                Subject::getSemester,
+                                Subject::getHoursInSemester,
+                                Subject::getFieldOfStudy
+                        ).containsExactlyInAnyOrder(
+                                Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                                        expected.getHoursInSemester(), fieldOfStudy))
+        );
+        assertThat(actual.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
                         Teacher::getLastName,
                         Teacher::getEmail,
-                        Teacher::getAge,
-                        Teacher::getDepartment
+                        Teacher::getAge
                 ).containsExactlyInAnyOrder(
                         Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                teacher1.getEmail(), teacher1.getAge(), teacher1.getDepartment()),
+                                teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                teacher2.getEmail(), teacher2.getAge(), teacher2.getDepartment()));
+                                teacher2.getEmail(), teacher2.getAge()));
+        assertThat(teacher1.getSubjects()).as("Check if %s' %s list contains subject", "teacher1", "subjects")
+                .isNotNull().isNotEmpty().hasSize(1).contains(expectedEntity);
+        assertThat(teacher2.getSubjects()).as("Check if %s' %s list contains subject", "teacher2", "subjects")
+                .isNotNull().isNotEmpty().hasSize(1).contains(expectedEntity);
     }
 
     @Test
@@ -209,7 +285,8 @@ class SubjectRestControllerIntegrationTest {
         Optional<Subject> byId = subjectRepository.findById(expected.getId());
         assertThat(byId).isNotPresent();
         fieldOfStudyRepository.findById(fieldOfStudy.getId()).orElseThrow(() -> new IllegalStateException(
-                "Field Of Study with ID = " + fieldOfStudy.getId() + " and name " + fieldOfStudy.getName() + " should not be removed."));
+                "Field Of Study with ID = " + fieldOfStudy.getId() + " and name " +
+                        fieldOfStudy.getName() + " should not be removed."));
         expected.getTeachers().forEach(teacher ->
                 teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
                         "Teacher with ID = " + teacher.getId() + " and name "
@@ -227,7 +304,6 @@ class SubjectRestControllerIntegrationTest {
 
         Subject expected1 = initData.createSubjectOne(fieldOfStudy1, List.of(teacher1, teacher2));
         Subject expected2 = initData.createSubjectTwo(fieldOfStudy2, List.of(teacher3));
-
         //when
         URI url = createURL("/api/subjects");
         restTemplate.delete(url);
@@ -235,7 +311,8 @@ class SubjectRestControllerIntegrationTest {
         Optional<Subject> byId1 = subjectRepository.findById(fieldOfStudy1.getId());
         assertThat(byId1).isNotPresent();
         fieldOfStudyRepository.findById(fieldOfStudy1.getId()).orElseThrow(() -> new IllegalStateException(
-                "Field Of Study with ID = " + fieldOfStudy1.getId() + " and name " + fieldOfStudy1.getName() + " should not be removed."));
+                "Field Of Study with ID = " + fieldOfStudy1.getId() + " and name " +
+                        fieldOfStudy1.getName() + " should not be removed."));
         expected1.getTeachers().forEach(teacher ->
                 teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
                         "Teacher with ID = " + teacher.getId() + " and name "
@@ -244,7 +321,8 @@ class SubjectRestControllerIntegrationTest {
         Optional<Subject> byId2 = subjectRepository.findById(fieldOfStudy2.getId());
         assertThat(byId2).isNotPresent();
         fieldOfStudyRepository.findById(fieldOfStudy2.getId()).orElseThrow(() -> new IllegalStateException(
-                "Field Of Study with ID = " + fieldOfStudy2.getId() + " and name " + fieldOfStudy2.getName() + " should not be removed."));
+                "Field Of Study with ID = " + fieldOfStudy2.getId() + " and name " +
+                        fieldOfStudy2.getName() + " should not be removed."));
         expected2.getTeachers().forEach(teacher ->
                 teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
                         "Teacher with ID = " + teacher.getId() + " and name "

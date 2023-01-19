@@ -1,15 +1,17 @@
 package com.example.classroom.rest;
 
 import com.example.classroom.dto.StudentDto;
+import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Teacher;
+import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -28,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -48,6 +51,12 @@ class StudentRestControllerIntegrationTest {
     @Autowired
     TeacherRepository teacherRepository;
 
+    @Autowired
+    FieldOfStudyRepository fieldOfStudyRepository;
+
+    @Autowired
+    ModelMapper mapper;
+
     @BeforeEach
     public void setup() {
         initData.cleanUp();
@@ -58,7 +67,9 @@ class StudentRestControllerIntegrationTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Student expected = initData.createStudentOne(null, List.of(teacher1, teacher2));
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+
+        Student expected = initData.createStudentOne(fieldOfStudy, List.of(teacher1, teacher2));
         //when
         URI url = createURL("/api/students/" + expected.getId());
         ResponseEntity<StudentDto> response = restTemplate.getForEntity(url, StudentDto.class);
@@ -92,9 +103,12 @@ class StudentRestControllerIntegrationTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
 
-        initData.createStudentOne(null, List.of(teacher1));
-        initData.createStudentTwo(null, List.of(teacher2));
+        Student expectedStudent1 = initData.createStudentOne(fieldOfStudy1, List.of(teacher1, teacher2));
+        Student expectedStudent2 = initData.createStudentTwo(fieldOfStudy2, List.of(teacher2, teacher3));
         //when
         URI url = createURL("/api/students/");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
@@ -109,24 +123,57 @@ class StudentRestControllerIntegrationTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        StudentDto studentDto = createStudentDto(List.of(teacher1, teacher2));
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+
+        StudentDto expected = createStudentDto(fieldOfStudy, List.of(teacher1, teacher2));
+        Student expectedEntity = mapper.map(expected, Student.class);
         //when
         URI url = createURL("/api/students");
-        ResponseEntity<StudentDto> response = restTemplate.postForEntity(url, studentDto, StudentDto.class);
+        ResponseEntity<StudentDto> response = restTemplate.postForEntity(url, expected, StudentDto.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         StudentDto actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isNotNull();
+        assertThat(actual).as("Check if %s is not null", "Student").isNotNull();
+        assertThat(actual.getId()).as("Check %s's %s", "Student", "ID").isNotNull();
         studentRepository.findById(actual.getId()).orElseThrow(
                 () -> new IllegalStateException(
                         "Student with ID= " + actual.getId() + " should not be missing"));
-        assertThat(actual.getFirstName()).isEqualTo(studentDto.getFirstName());
-        assertThat(actual.getLastName()).isEqualTo(studentDto.getLastName());
-        assertThat(actual.getEmail()).isEqualTo(studentDto.getEmail());
-        assertThat(actual.getAge()).isEqualTo(studentDto.getAge());
-        Assertions.assertThat(actual.getTeachers()).size().isEqualTo(2);
-        Assertions.assertThat(actual.getTeachers())
+        assertAll("Student's properties",
+                () -> assertThat(actual.getFirstName())
+                        .as("Check %s's %s", "Student", "First Name").isEqualTo(expected.getFirstName()),
+                () -> assertThat(actual.getLastName())
+                        .as("Check %s's %s", "Student", "Last Name").isEqualTo(expected.getLastName()),
+                () -> assertThat(actual.getEmail())
+                        .as("Check %s's %s", "Student", "Email").isEqualTo(expected.getEmail()),
+                () -> assertThat(actual.getAge())
+                        .as("Check %s's %s", "Student", "Age").isEqualTo(expected.getAge())
+        );
+        assertThat(actual.getFieldOfStudy()).as("Check if %s is not null", "Student's fieldOfStudy").isNotNull();
+        assertAll("Student's fieldOfStudy properties",
+                () -> assertThat(actual.getFieldOfStudy().getId())
+                        .as("Check %s's %s %s", "Student", "fieldOfStudy", "Id").isEqualTo(fieldOfStudy.getId()),
+                () -> assertThat(actual.getFieldOfStudy().getName())
+                        .as("Check %s's %s %s", "Student", "fieldOfStudy", "Name").isEqualTo(fieldOfStudy.getName()),
+                () -> assertThat(actual.getFieldOfStudy().getLevelOfEducation())
+                        .as("Check %s's %s %s", "Student", "fieldOfStudy", "Level of education").isEqualTo(fieldOfStudy.getLevelOfEducation()),
+                () -> assertThat(actual.getFieldOfStudy().getMode())
+                        .as("Check %s's %s %s", "Student", "fieldOfStudy", "Study mode").isEqualTo(fieldOfStudy.getMode()),
+                () -> assertThat(actual.getFieldOfStudy().getTitle())
+                        .as("Check %s's %s %s", "Student", "fieldOfStudy", "Obtained title").isEqualTo(fieldOfStudy.getTitle()),
+                () -> assertThat(actual.getFieldOfStudy().getStudents())
+                        .as("Check %s's %s properties", "fieldOfStudy", "students")
+                        .extracting(
+                                Student::getId,
+                                Student::getFirstName,
+                                Student::getLastName,
+                                Student::getEmail,
+                                Student::getAge,
+                                Student::getFieldOfStudy
+                        ).containsExactlyInAnyOrder(
+                                Tuple.tuple(expected.getId(), expected.getFirstName(), expected.getLastName(),
+                                        expected.getEmail(), expected.getAge(), fieldOfStudy))
+        );
+        assertThat(actual.getTeachers()).as("Check %s's %s properties", "Student", "teachers")
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -138,6 +185,10 @@ class StudentRestControllerIntegrationTest {
                                 teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
                                 teacher2.getEmail(), teacher2.getAge()));
+        assertThat(teacher1.getStudents()).as("Check if %s' %s list has exact size and contains student", "teacher1", "students")
+                .isNotNull().isNotEmpty().hasSize(1).contains(expectedEntity);
+        assertThat(teacher2.getStudents()).as("Check if %s' %s list has exact size and contains student", "teacher2", "students")
+                .isNotNull().isNotEmpty().hasSize(1).contains(expectedEntity);
     }
 
     @Test
@@ -145,33 +196,60 @@ class StudentRestControllerIntegrationTest {
         //given
         Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-        Student studentEntity = initData.createStudentOne(null, List.of());
-        StudentDto studentDto = new StudentDto();
-        studentDto.setId(studentEntity.getId());
-        studentDto.setFirstName("Pamela");
-        studentDto.setLastName("Gonzales");
-        studentDto.setEmail("p.gonzales@gmail.com");
-        studentDto.setAge(20);
-        studentDto.setTeachers(new HashSet<>(List.of(teacher1, teacher2)));
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
 
+        Student entity = initData.createStudentOne(null, List.of());
+        StudentDto expected = createStudentDto(fieldOfStudy, List.of(teacher1, teacher2));
+        expected.setId(entity.getId());
+        Student expectedEntity = mapper.map(expected, Student.class);
         //when
         URI url = createURL("/api/students/");
-        final HttpEntity<StudentDto> request = new HttpEntity<>(studentDto);
+        final HttpEntity<StudentDto> request = new HttpEntity<>(expected);
         ResponseEntity<StudentDto> response = restTemplate.exchange(url, HttpMethod.PUT, request, StudentDto.class);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         StudentDto actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isNotNull();
+        assertThat(actual).as("Check if %s is not null", "Student").isNotNull();
+        assertThat(actual.getId()).as("Check %s's %s", "Student", "ID").isNotNull();
         studentRepository.findById(actual.getId()).orElseThrow(
                 () -> new IllegalStateException(
                         "Student with ID= " + actual.getId() + " should not be missing"));
-        assertThat(actual.getId()).isEqualTo(studentDto.getId());
-        assertThat(actual.getFirstName()).isEqualTo(studentDto.getFirstName());
-        assertThat(actual.getLastName()).isEqualTo(studentDto.getLastName());
-        assertThat(actual.getEmail()).isEqualTo(studentDto.getEmail());
-        assertThat(actual.getAge()).isEqualTo(studentDto.getAge());
-        assertThat(actual.getTeachers())
+        assertAll("Student's properties",
+                () -> assertThat(actual.getFirstName())
+                        .as("Check %s's %s", "Student", "First Name").isEqualTo(expected.getFirstName()),
+                () -> assertThat(actual.getLastName())
+                        .as("Check %s's %s", "Student", "Last Name").isEqualTo(expected.getLastName()),
+                () -> assertThat(actual.getEmail())
+                        .as("Check %s's %s", "Student", "Email").isEqualTo(expected.getEmail()),
+                () -> assertThat(actual.getAge())
+                        .as("Check %s's %s", "Student", "Age").isEqualTo(expected.getAge())
+        );
+        assertThat(actual.getFieldOfStudy()).as("Check if %s is not null", "Student's fieldOfStudy").isNotNull();
+        assertAll("Student's fieldOfStudy properties",
+                () -> assertThat(actual.getFieldOfStudy().getId())
+                        .as("Check %s's %s %s", "Student", "fieldOfStudy", "Id").isEqualTo(fieldOfStudy.getId()),
+                () -> assertThat(actual.getFieldOfStudy().getName())
+                        .as("Check %s's %s %s", "Student", "fieldOfStudy", "Name").isEqualTo(fieldOfStudy.getName()),
+                () -> assertThat(actual.getFieldOfStudy().getLevelOfEducation())
+                        .as("Check %s's %s %s", "Student", "fieldOfStudy", "Level of education").isEqualTo(fieldOfStudy.getLevelOfEducation()),
+                () -> assertThat(actual.getFieldOfStudy().getMode())
+                        .as("Check %s's %s %s", "Student", "fieldOfStudy", "Study mode").isEqualTo(fieldOfStudy.getMode()),
+                () -> assertThat(actual.getFieldOfStudy().getTitle())
+                        .as("Check %s's %s %s", "Student", "fieldOfStudy", "Obtained title").isEqualTo(fieldOfStudy.getTitle()),
+                () -> assertThat(actual.getFieldOfStudy().getStudents())
+                        .as("Check %s's %s properties", "fieldOfStudy", "students")
+                        .extracting(
+                                Student::getId,
+                                Student::getFirstName,
+                                Student::getLastName,
+                                Student::getEmail,
+                                Student::getAge,
+                                Student::getFieldOfStudy
+                        ).containsExactlyInAnyOrder(
+                                Tuple.tuple(expected.getId(), expected.getFirstName(), expected.getLastName(),
+                                        expected.getEmail(), expected.getAge(), fieldOfStudy))
+        );
+        assertThat(actual.getTeachers()).as("Check %s's %s properties", "Student", "teachers")
                 .extracting(
                         Teacher::getId,
                         Teacher::getFirstName,
@@ -183,21 +261,30 @@ class StudentRestControllerIntegrationTest {
                                 teacher1.getEmail(), teacher1.getAge()),
                         Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
                                 teacher2.getEmail(), teacher2.getAge()));
+        assertThat(teacher1.getStudents()).as("Check if %s' %s list has exact size and contains student", "teacher1", "students")
+                .isNotNull().isNotEmpty().hasSize(1).contains(expectedEntity);
+        assertThat(teacher2.getStudents()).as("Check if %s' %s list has exact size and contains student", "teacher2", "students")
+                .isNotNull().isNotEmpty().hasSize(1).contains(expectedEntity);
     }
 
     @Test
     void shouldDeleteStudent() throws URISyntaxException {
         //given
-        Student student = initData.createStudentOne(null, List.of(
-                initData.createTeacherOne(null, List.of(), List.of()),
-                initData.createTeacherTwo(null, List.of(), List.of())));
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+
+        Student expected = initData.createStudentOne(fieldOfStudy, List.of(teacher1, teacher2));
         //when
-        URI url = createURL("/api/students/" + student.getId());
+        URI url = createURL("/api/students/" + expected.getId());
         restTemplate.delete(url);
         //then
-        Optional<Student> byId = studentRepository.findById(student.getId());
+        Optional<Student> byId = studentRepository.findById(expected.getId());
         assertThat(byId).isNotPresent();
-        student.getTeachers().forEach(teacher -> {
+        fieldOfStudyRepository.findById(fieldOfStudy.getId()).orElseThrow(() -> new IllegalStateException(
+                "Field Of Study with ID = " + fieldOfStudy.getId() + " and name " +
+                        fieldOfStudy.getName() + " should not be removed."));
+        expected.getTeachers().forEach(teacher -> {
             teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
                     "Teacher with ID = " + teacher.getId() + " should not be removed."));
         });
@@ -206,37 +293,48 @@ class StudentRestControllerIntegrationTest {
     @Test
     void shouldDeleteAllStudents() throws URISyntaxException {
         //given
-        Student student1 = initData.createStudentOne(null, List.of(
-                initData.createTeacherOne(null, List.of(), List.of()),
-                initData.createTeacherTwo(null, List.of(), List.of())));
-        Student student2 = initData.createStudentOne(null, List.of(
-                initData.createTeacherOne(null, List.of(), List.of()),
-                initData.createTeacherTwo(null, List.of(), List.of())));
+        Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+        Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+        Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+        FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(null, List.of(), List.of());
+
+        Student expected1 = initData.createStudentOne(fieldOfStudy1, List.of(teacher1, teacher2));
+        Student expected2 = initData.createStudentTwo(fieldOfStudy2, List.of(teacher1, teacher3));
+
         //when
         URI url = createURL("/api/students");
         restTemplate.delete(url);
         //then
-        Optional<Student> byId1 = studentRepository.findById(student1.getId());
-        Optional<Student> byId2 = studentRepository.findById(student1.getId());
+        Optional<Student> byId1 = studentRepository.findById(expected1.getId());
         assertThat(byId1).isNotPresent();
-        assertThat(byId2).isNotPresent();
-        student1.getTeachers().forEach(teacher -> {
+        fieldOfStudyRepository.findById(fieldOfStudy1.getId()).orElseThrow(() -> new IllegalStateException(
+                "Field Of Study with ID = " + fieldOfStudy1.getId() + " and name " +
+                        fieldOfStudy1.getName() + " should not be removed."));
+        expected1.getTeachers().forEach(teacher -> {
             teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
                     "Teacher with ID = " + teacher.getId() + " should not be removed."));
         });
-        student2.getTeachers().forEach(teacher ->
-            teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
-                    "Teacher with ID = " + teacher.getId() + " should not be removed.")));
+        Optional<Student> byId2 = studentRepository.findById(expected1.getId());
+        assertThat(byId2).isNotPresent();
+        fieldOfStudyRepository.findById(fieldOfStudy2.getId()).orElseThrow(() -> new IllegalStateException(
+                "Field Of Study with ID = " + fieldOfStudy2.getId() + " and name " +
+                        fieldOfStudy2.getName() + " should not be removed."));
+        expected2.getTeachers().forEach(teacher ->
+                teacherRepository.findById(teacher.getId()).orElseThrow(() -> new IllegalStateException(
+                        "Teacher with ID = " + teacher.getId() + " should not be removed.")));
     }
 
-    private StudentDto createStudentDto(List<Teacher> teachers) {
-        StudentDto studentDto = new StudentDto();
-        studentDto.setFirstName("Weronika");
-        studentDto.setLastName("Romanski");
-        studentDto.setEmail("w.romanski@gmail.com");
-        studentDto.setAge(21);
-        studentDto.setTeachers(new HashSet<>(teachers));
-        return studentDto;
+    private StudentDto createStudentDto(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
+        StudentDto dto = new StudentDto();
+        dto.setFirstName("Pamela");
+        dto.setLastName("Gonzales");
+        dto.setEmail("p.gonzales@gmail.com");
+        dto.setAge(20);
+        dto.setFieldOfStudy(fieldOfStudy);
+        dto.setTeachers(new HashSet<>(teachers));
+        return dto;
     }
 
     private URI createURL(String path) throws URISyntaxException {
