@@ -2,6 +2,7 @@ package com.example.classroom.rest;
 
 import com.example.classroom.dto.StudentDto;
 import com.example.classroom.service.StudentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +11,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/students")
+@RequiredArgsConstructor
 public class StudentRestController {
 
     private final StudentService service;
 
-    public StudentRestController(StudentService service) {
-        this.service = service;
+    @GetMapping("{id}")
+    public ResponseEntity<StudentDto> getStudent(@PathVariable Long id) {
+        StudentDto dto = service.fetchById(id);
+        return dto != null ?
+                ResponseEntity.ok(dto) :
+                ResponseEntity.notFound().build();
     }
 
     @GetMapping()
@@ -33,14 +39,6 @@ public class StudentRestController {
                 ResponseEntity.status(HttpStatus.CREATED)
                         .body(created) :
                 ResponseEntity.badRequest().build();
-    }
-
-    @GetMapping("{id}")
-    public ResponseEntity<StudentDto> getStudent(@PathVariable Long id) {
-        StudentDto dto = service.fetchById(id);
-        return dto != null ?
-                ResponseEntity.ok(dto) :
-                ResponseEntity.notFound().build();
     }
 
     @PutMapping

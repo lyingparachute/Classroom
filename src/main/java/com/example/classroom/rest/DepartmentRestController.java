@@ -2,6 +2,7 @@ package com.example.classroom.rest;
 
 import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.service.DepartmentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +11,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/departments")
+@RequiredArgsConstructor
 public class DepartmentRestController {
+
     private final DepartmentService service;
 
-    public DepartmentRestController(DepartmentService service) {
-        this.service = service;
+    @GetMapping("{id}")
+    public ResponseEntity<DepartmentDto> getDepartment(@PathVariable Long id) {
+        DepartmentDto dto = service.fetchById(id);
+        return dto != null ?
+                ResponseEntity.ok(dto) :
+                ResponseEntity.notFound().build();
     }
-    
+
     @GetMapping()
     public ResponseEntity<List<DepartmentDto>> getDepartments() {
         List<DepartmentDto> departments = service.fetchAll();
@@ -32,14 +39,6 @@ public class DepartmentRestController {
                 ResponseEntity.status(HttpStatus.CREATED)
                         .body(created) :
                 ResponseEntity.badRequest().build();
-    }
-
-    @GetMapping("{id}")
-    public ResponseEntity<DepartmentDto> getDepartment(@PathVariable Long id) {
-        DepartmentDto dto = service.fetchById(id);
-        return dto != null ?
-                ResponseEntity.ok(dto) :
-                ResponseEntity.notFound().build();
     }
 
     @PutMapping

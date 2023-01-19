@@ -2,6 +2,7 @@ package com.example.classroom.rest;
 
 import com.example.classroom.dto.TeacherDto;
 import com.example.classroom.service.TeacherService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,20 +11,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/teachers")
+@RequiredArgsConstructor
 public class TeacherRestController {
-    
+
     private final TeacherService teacherService;
 
-    public TeacherRestController(TeacherService teacherService) {
-        this.teacherService = teacherService;
+    @GetMapping("{id}")
+    public ResponseEntity<TeacherDto> getTeacher(@PathVariable Long id) {
+        TeacherDto dto = teacherService.fetchById(id);
+        return dto != null ?
+                ResponseEntity.ok(dto) :
+                ResponseEntity.notFound().build();
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<TeacherDto>> getTeachers() {
-        List<TeacherDto> teacher = teacherService.fetchAll();
-        return teacher.isEmpty() ?
+        List<TeacherDto> teachers = teacherService.fetchAll();
+        return teachers.isEmpty() ?
                 ResponseEntity.notFound().build() :
-                ResponseEntity.ok(teacher);
+                ResponseEntity.ok(teachers);
     }
 
     @PostMapping
@@ -35,16 +41,8 @@ public class TeacherRestController {
                 ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<TeacherDto> getTeacher(@PathVariable Long id) {
-        TeacherDto teacherDto = teacherService.fetchById(id);
-        return teacherDto != null ?
-                ResponseEntity.ok(teacherDto) :
-                ResponseEntity.notFound().build();
-    }
-
     @PutMapping
-    public ResponseEntity<TeacherDto> putTeacher(@RequestBody TeacherDto teacherDto){
+    public ResponseEntity<TeacherDto> putTeacher(@RequestBody TeacherDto teacherDto) {
         TeacherDto updated = teacherService.update(teacherDto);
         return updated != null ?
                 ResponseEntity.status(HttpStatus.OK)

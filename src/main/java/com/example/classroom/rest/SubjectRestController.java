@@ -2,6 +2,7 @@ package com.example.classroom.rest;
 
 import com.example.classroom.dto.SubjectDto;
 import com.example.classroom.service.SubjectService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,16 +11,21 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/subjects")
+@RequiredArgsConstructor
 public class SubjectRestController {
 
     private final SubjectService subjectService;
 
-    public SubjectRestController(SubjectService subjectService) {
-        this.subjectService = subjectService;
+    @GetMapping("{id}")
+    public ResponseEntity<SubjectDto> getSubject(@PathVariable Long id) {
+        SubjectDto dto = subjectService.fetchById(id);
+        return dto != null ?
+                ResponseEntity.ok(dto) :
+                ResponseEntity.notFound().build();
     }
 
-    @GetMapping()
-    public ResponseEntity<List<SubjectDto>> getSubjects() {
+    @GetMapping
+    public ResponseEntity<List<SubjectDto>> getAllSubjects() {
         List<SubjectDto> subjects = subjectService.fetchAll();
         return subjects.isEmpty() ?
                 ResponseEntity.notFound().build() :
@@ -35,16 +41,8 @@ public class SubjectRestController {
                 ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<SubjectDto> getSubject(@PathVariable Long id) {
-        SubjectDto studentDto = subjectService.fetchById(id);
-        return studentDto != null ?
-                ResponseEntity.ok(studentDto) :
-                ResponseEntity.notFound().build();
-    }
-
     @PutMapping
-    public ResponseEntity<SubjectDto> putSubject(@RequestBody SubjectDto studentDto){
+    public ResponseEntity<SubjectDto> putSubject(@RequestBody SubjectDto studentDto) {
         SubjectDto updated = subjectService.update(studentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
