@@ -78,15 +78,15 @@ public class Teacher {
         return new HashSet<>(students);
     }
 
-    public void setDepartment(Department departmentDean) {
-        if (sameAsFormer(departmentDean))
+    public void setDepartment(Department department) {
+        if (sameAsFormer(department))
             return;
         Department oldDepartmentDean = this.department;
-        this.department = departmentDean;
+        this.department = department;
         if (oldDepartmentDean != null)
             oldDepartmentDean.setDean(null);
-        if (departmentDean != null) {
-            departmentDean.setDean(this);
+        if (department != null) {
+            department.setDean(this);
         }
     }
 
