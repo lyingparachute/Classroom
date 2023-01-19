@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{subject.edit.header}"></strong>
+                    </h3>
+                </div>
+                <div class="card-body mx-4">
+                    <form class="form-group needs-validation"
+                          th:object="${subject}"
+                          th:action="@{/dashboard/subjects/update}"
+                          th:method="post">
+                        <div th:replace="subject/elements :: subject-form"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+</body>
+</html>

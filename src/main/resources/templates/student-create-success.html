@@ -18,21 +18,10 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    <ul class="list-group">
-                        <li class="list-group-item" th:text="#{student.id} + ': ' + ${student.id}"></li>
-                        <li class="list-group-item" th:text="#{student.firstName} + ': ' + ${student.firstName}"></li>
-                        <li class="list-group-item" th:text="#{student.lastName} + ': ' + ${student.lastName}"></li>
-                        <li class="list-group-item" th:text="#{student.email} + ': ' + ${student.email}"></li>
-                        <li class="list-group-item" th:text="#{student.age} + ': ' + ${student.age}"></li>
-                        <li class="list-group-item"
-                            th:text="#{student.fieldOfStudy} + ': '  + ${student.fieldOfStudy.desc}"></li>
-                        <li class="list-group-item"
-                            th:text="#{student.no.of.teachers} + ': '  + ${student.teachersList.size()}"></li>
-                    </ul>
-
+                    <!-- ======= Student Details ======= -->
+                    <div th:replace="student/elements :: view-student"></div>
                     <!-- ======= Buttons ======= -->
                     <div th:replace="fragments/buttons :: #studentGoBackBtn"></div>
-
                 </div>
             </div>
         </section>

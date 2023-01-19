@@ -18,28 +18,10 @@
                     </h3>
                 </div>
                 <div class="card-body mx-4">
-                    <ul class="list-group list-group-root well">
-                        <li class="list-group-item" th:text="#{student.id} + ': ' + ${student.id}"></li>
-                        <li class="list-group-item" th:text="#{student.firstName} + ': ' + ${student.firstName}"></li>
-                        <li class="list-group-item" th:text="#{student.lastName} + ': ' + ${student.lastName}"></li>
-                        <li class="list-group-item" th:text="#{student.email} + ': ' + ${student.email}"></li>
-                        <li class="list-group-item" th:text="#{student.age} + ': ' + ${student.age}"></li>
-                        <li class="list-group-item"
-                            th:text="#{student.fieldOfStudy} + ': '  + ${student.fieldOfStudy.desc}"></li>
-                        <li class="list-group-item">List of assigned teachers:
-                            <ul class="list-group">
-                                <a class="list-group-item"
-                                   th:href="@{/teachers/{id}(id=${fieldOpt.id})}"
-                                   th:each="fieldOpt : ${student.teachersList}"
-                                   th:value="${fieldOpt.id}"
-                                   th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
-                                </a>
-                            </ul>
-                        </li>
-                    </ul>
+                    <!-- ======= Student Details ======= -->
+                    <div th:replace="student/elements :: view-student"></div>
                     <!-- ======= Buttons ======= -->
                     <div th:replace="fragments/buttons :: #studentEditDeleteBtn"></div>
-
                 </div>
             </div>
         </section>

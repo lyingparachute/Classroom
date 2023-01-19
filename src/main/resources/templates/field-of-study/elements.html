@@ -1,0 +1,84 @@
+<!-- ======= Form for Subject ======= -->
+<div th:fragment="item-form">
+    <input hidden type="text" id="id_input_id" th:field="*{id}">
+    <div class="row mb-4">
+        <label class="col-form-label col-sm-4"
+               for="first_name">
+            <span th:text="#{subject.name}"></span>
+        </label>
+        <div class="col-sm">
+            <input class="form-control"
+                   type="text"
+                   id="first_name"
+                   th:field="*{name}"/>
+        </div>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('name')}"
+             th:errors="*{name}"></div>
+    </div>
+    <div class="row mb-4">
+        <label class="col-form-label col-sm-4"
+               for="last_name">
+            <span th:text="#{subject.description}"></span>
+        </label>
+        <div class="col-sm">
+            <input class="form-control"
+                   type="text"
+                   id="last_name"
+                   th:field="*{description}"/>
+        </div>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('description')}"
+             th:errors="*{description}"></div>
+    </div>
+    <div class="row mb-4">
+        <label class="col-sm-4 col-form-label"
+               for="age">
+            <span th:text="#{subject.hoursInSemester}"></span>
+        </label>
+        <div class="col-sm">
+            <input class="form-control"
+                   type="number" id="age"
+                   th:field="*{hoursInSemester}"/>
+        </div>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('hoursInSemester')}"
+             th:errors="*{hoursInSemester}">
+        </div>
+    </div>
+    <div class="row mb-4">
+        <label class="col-form-label col-sm-4"
+               for="teachers_list">
+            <span th:text="#{subject.teachers.list}"></span>
+        </label>
+        <div class="col-sm text-left">
+            <th:block th:each="fieldOpt : ${teachers}">
+                <div>
+                    <input class="form-check-input m-2" type="checkbox" value="" id="teachers_list"
+                           th:field="*{teachers}"
+                           th:value="${fieldOpt.id}" th:text="${fieldOpt}">
+                </div>
+            </th:block>
+        </div>
+    </div>
+    <!-- ======= Buttons ======= -->
+    <div th:replace="field-of-study/buttons :: cancelSubmitBtn"></div>
+</div>
+
+<!-- ======= View Subject card body ======= -->
+<div th:fragment="view-item">
+  <ul class="list-group list-group-root well">
+    <li class="list-group-item" th:text="#{table.id} + ': ' + ${subject.id}"></li>
+    <li class="list-group-item" th:text="#{subject.name} + ': ' + ${subject.name}"></li>
+    <li class="list-group-item" th:text="#{subject.description} + ': ' + ${subject.description}"></li>
+    <li class="list-group-item" th:text="#{subject.hoursInSemester} + ': ' + ${subject.hoursInSemester}"></li>
+    <li class="list-group-item"> <span th:text="#{subject.teachers.list}"></span>
+      <ul class="list-group">
+        <a class="list-group-item"
+           th:each="fieldOpt : ${subject.teachers}"
+           th:href="@{/dashboard/teachers/{id}(id=${fieldOpt.id})}"
+           th:value="${fieldOpt.id}"
+           th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
+        </a>
+      </ul>
+    </li>
+  </ul>
+
+</div>

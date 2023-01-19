@@ -17,20 +17,10 @@
                     </h3>
                 </div>
                 <div class="card-body mx-4">
-                    <ul class="list-group">
-                        <li class="list-group-item" th:text="#{teacher.id} + ': ' + ${teacher.id}"></li>
-                        <li class="list-group-item" th:text="#{teacher.firstName} + ': ' + ${teacher.firstName}"></li>
-                        <li class="list-group-item" th:text="#{teacher.lastName} + ': ' + ${teacher.lastName}"></li>
-                        <li class="list-group-item" th:text="#{teacher.email} + ': ' + ${teacher.email}"></li>
-                        <li class="list-group-item" th:text="#{teacher.age} + ': ' + ${teacher.age}"></li>
-                        <li class="list-group-item" th:text="#{teacher.subject} + ': '  + ${teacher.subject.desc}"></li>
-                        <li class="list-group-item"
-                            th:text="#{teacher.no.of.students} + ': '  + ${teacher.studentsList.size()}"></li>
-                    </ul>
-
+                    <!-- ======= Teacher Details ======= -->
+                    <div th:replace="teacher/elements :: view-teacher"></div>
                     <!-- ======= Buttons ======= -->
                     <div th:replace="fragments/buttons :: #teacherGoBackBtn"></div>
-
                 </div>
             </div>
         </section>
