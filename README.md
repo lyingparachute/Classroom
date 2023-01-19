@@ -30,9 +30,9 @@ docker run -p 3307:3306 --name mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DA
 ### 3. Start application
 
 * `mvn spring-boot:run`
-* go to endpoints and test app: 
-  * `http://localhost:8080/teachers`
-  * `http://localhost:8080/students`
-  
+* go to endpoints and test app:
+  * `http://localhost:8080/`
+  * `http://localhost:8080/dashboard`
+
 * Press CTRL+C to finish running app
 
