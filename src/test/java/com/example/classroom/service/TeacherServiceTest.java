@@ -279,8 +279,8 @@ class TeacherServiceTest {
                             .as("Check %s's %s", "Teacher1", "Email").isEqualTo(expectedTeacher1.getEmail()),
                     () -> assertThat(actualTeacher1.getAge())
                             .as("Check %s's %s", "Teacher1", "Age").isEqualTo(expectedTeacher1.getAge()),
-                    () -> assertThat(actualTeacher1.getDepartmentDean())
-                            .as("Check %s's %s", "Teacher1", "Age").isEqualTo(department1),
+                    () -> assertThat(actualTeacher1.getDepartment())
+                            .as("Check %s's %s", "Teacher1", "Department").isEqualTo(department1),
                     () -> assertThat(actualTeacher1.getSubjects())
                             .as("Check if %s contains %s", "actualTeacher1", "subjects")
                             .contains(subject1, subject2)
@@ -301,8 +301,8 @@ class TeacherServiceTest {
                             .as("Check %s's %s", "Teacher2", "Email").isEqualTo(expectedTeacher2.getEmail()),
                     () -> assertThat(actualTeacher2.getAge())
                             .as("Check %s's %s", "Teacher2", "Age").isEqualTo(expectedTeacher2.getAge()),
-                    () -> assertThat(actualTeacher2.getDepartmentDean())
-                            .as("Check %s's %s", "Teacher2", "Age").isEqualTo(department2),
+                    () -> assertThat(actualTeacher2.getDepartment())
+                            .as("Check %s's %s", "Teacher2", "Department").isEqualTo(department2),
                     () -> assertThat(actualTeacher2.getSubjects())
                             .as("Check if %s contains %s", "actualTeacher2", "subjects")
                             .contains(subject2)
@@ -323,8 +323,8 @@ class TeacherServiceTest {
                             .as("Check %s's %s", "Teacher3", "Email").isEqualTo(expectedTeacher3.getEmail()),
                     () -> assertThat(actualTeacher3.getAge())
                             .as("Check %s's %s", "Teacher3", "Age").isEqualTo(expectedTeacher3.getAge()),
-                    () -> assertThat(actualTeacher3.getDepartmentDean())
-                            .as("Check %s's %s", "Teacher3", "Age").isEqualTo(department3),
+                    () -> assertThat(actualTeacher3.getDepartment())
+                            .as("Check %s's %s", "Teacher3", "Department").isEqualTo(department3),
                     () -> assertThat(actualTeacher3.getSubjects())
                             .as("Check if %s contains %s", "actualTeacher3", "subjects")
                             .contains(subject3)
@@ -377,8 +377,8 @@ class TeacherServiceTest {
                             .as("Check %s's %s", "Teacher3", "Email").isEqualTo(expectedTeacher3.getEmail()),
                     () -> assertThat(actualTeacher.getAge())
                             .as("Check %s's %s", "Teacher3", "Age").isEqualTo(expectedTeacher3.getAge()),
-                    () -> assertThat(actualTeacher.getDepartmentDean())
-                            .as("Check %s's %s", "Teacher3", "Age").isEqualTo(department3),
+                    () -> assertThat(actualTeacher.getDepartment())
+                            .as("Check %s's %s", "Teacher3", "Department").isEqualTo(department3),
                     () -> assertThat(actualTeacher.getSubjects())
                             .as("Check if %s contains %s", "actualTeacher", "subjects")
                             .contains(subject3)
@@ -423,7 +423,7 @@ class TeacherServiceTest {
                             .as("Check %s's %s", "Teacher", "Email").isEqualTo(expected.getEmail()),
                     () -> assertThat(actual.getAge())
                             .as("Check %s's %s", "Teacher", "Age").isEqualTo(expected.getAge()),
-                    () -> assertThat(actual.getDepartmentDean())
+                    () -> assertThat(actual.getDepartment())
                             .as("Check %s's %s", "Teacher", "Department").isEqualTo(department),
                     () -> assertThat(actual.getSubjects())
                             .as("Check if %s contains %s", "actualTeacher", "subjects")
@@ -527,8 +527,8 @@ class TeacherServiceTest {
                             .as("Check %s's %s", "Teacher2", "Email").isEqualTo(expectedTeacher2.getEmail()),
                     () -> assertThat(actualTeacher1.getAge())
                             .as("Check %s's %s", "Teacher2", "Age").isEqualTo(expectedTeacher2.getAge()),
-                    () -> assertThat(actualTeacher1.getDepartmentDean())
-                            .as("Check %s's %s", "Teacher2", "Age").isEqualTo(department2),
+                    () -> assertThat(actualTeacher1.getDepartment())
+                            .as("Check %s's %s", "Teacher2", "Department").isEqualTo(department2),
                     () -> assertThat(actualTeacher1.getSubjects())
                             .as("Check if %s contains %s", "actualTeacher1", "subjects")
                             .contains(subject2)
@@ -549,8 +549,8 @@ class TeacherServiceTest {
                             .as("Check %s's %s", "Teacher3", "Email").isEqualTo(expectedTeacher3.getEmail()),
                     () -> assertThat(actualTeacher2.getAge())
                             .as("Check %s's %s", "Teacher3", "Age").isEqualTo(expectedTeacher3.getAge()),
-                    () -> assertThat(actualTeacher2.getDepartmentDean())
-                            .as("Check %s's %s", "Teacher3", "Age").isEqualTo(department3),
+                    () -> assertThat(actualTeacher2.getDepartment())
+                            .as("Check %s's %s", "Teacher3", "Department").isEqualTo(department3),
                     () -> assertThat(actualTeacher2.getSubjects())
                             .as("Check if %s contains %s", "actualTeacher2", "subjects")
                             .contains(subject3)
@@ -605,8 +605,8 @@ class TeacherServiceTest {
                             .as("Check %s's %s", "Teacher3", "Email").isEqualTo(expectedTeacher3.getEmail()),
                     () -> assertThat(actualTeacher.getAge())
                             .as("Check %s's %s", "Teacher3", "Age").isEqualTo(expectedTeacher3.getAge()),
-                    () -> assertThat(actualTeacher.getDepartmentDean())
-                            .as("Check %s's %s", "Teacher3", "Age").isEqualTo(department3),
+                    () -> assertThat(actualTeacher.getDepartment())
+                            .as("Check %s's %s", "Teacher3", "Department").isEqualTo(department3),
                     () -> assertThat(actualTeacher.getSubjects())
                             .as("Check if %s contains %s", "actualTeacher", "subjects")
                             .contains(subject3)
