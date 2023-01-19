@@ -104,7 +104,7 @@ public class TeacherService {
     private void addReferencingObjects(final Teacher teacher) {
         Set<Student> students = new HashSet<>(teacher.getStudents());
         Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
-        teacher.setDepartmentDean(teacher.getDepartmentDean());
+        teacher.setDepartment(teacher.getDepartment());
         students.forEach(teacher::addStudent);
         subjects.forEach(teacher::addSubject);
     }
@@ -112,7 +112,7 @@ public class TeacherService {
     private void removeReferencingObjects(final Teacher teacher) {
         Set<Student> students = new HashSet<>(teacher.getStudents());
         Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
-        teacher.setDepartmentDean(null);
+        teacher.setDepartment(null);
         students.forEach(teacher::removeStudent);
         subjects.forEach(teacher::removeSubject);
     }

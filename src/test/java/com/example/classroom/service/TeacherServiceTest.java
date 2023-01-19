@@ -79,17 +79,17 @@ class TeacherServiceTest {
                     () -> assertThat(actual.getAge())
                             .as("Check %s's %s", "Teacher", "Age").isEqualTo(expected.getAge())
             );
-            assertThat(actual.getDepartmentDean()).as("Check if %s is not null", "Teacher's department").isNotNull();
+            assertThat(actual.getDepartment()).as("Check if %s is not null", "Teacher's department").isNotNull();
             assertAll("Teacher's fieldOfStudy properties",
-                    () -> assertThat(actual.getDepartmentDean().getId())
+                    () -> assertThat(actual.getDepartment().getId())
                             .as("Check %s's %s %s", "Teacher", "department", "Id").isEqualTo(department.getId()),
-                    () -> assertThat(actual.getDepartmentDean().getName())
+                    () -> assertThat(actual.getDepartment().getName())
                             .as("Check %s's %s %s", "Teacher", "department", "Name").isEqualTo(department.getName()),
-                    () -> assertThat(actual.getDepartmentDean().getAddress())
+                    () -> assertThat(actual.getDepartment().getAddress())
                             .as("Check %s's %s %s", "Teacher", "department", "Address").isEqualTo(department.getAddress()),
-                    () -> assertThat(actual.getDepartmentDean().getTelNumber())
+                    () -> assertThat(actual.getDepartment().getTelNumber())
                             .as("Check %s's %s %s", "Teacher", "department", "Telephone Number").isEqualTo(department.getTelNumber()),
-                    () -> assertThat(actual.getDepartmentDean().getDean())
+                    () -> assertThat(actual.getDepartment().getDean())
                             .as("Check %s's %s", "Department", "dean")
                             .isNotNull().isEqualTo(expected)
             );
@@ -146,7 +146,7 @@ class TeacherServiceTest {
             expected.setLastName("Graczyk");
             expected.setEmail("f.graczyk@gmail.com");
             expected.setAge(55);
-            expected.setDepartmentDean(department);
+            expected.setDepartment(department);
             expected.addSubject(subject1);
             expected.addSubject(subject2);
             expected.addStudent(student1);
@@ -174,17 +174,17 @@ class TeacherServiceTest {
                     () -> assertThat(actual.getAge())
                             .as("Check %s's %s", "Teacher", "Age").isEqualTo(expected.getAge())
             );
-            assertThat(actual.getDepartmentDean()).as("Check if %s is not null", "Teacher's department").isNotNull();
+            assertThat(actual.getDepartment()).as("Check if %s is not null", "Teacher's department").isNotNull();
             assertAll("Teacher's fieldOfStudy properties",
-                    () -> assertThat(actual.getDepartmentDean().getId())
+                    () -> assertThat(actual.getDepartment().getId())
                             .as("Check %s's %s %s", "Teacher", "department", "Id").isEqualTo(department.getId()),
-                    () -> assertThat(actual.getDepartmentDean().getName())
+                    () -> assertThat(actual.getDepartment().getName())
                             .as("Check %s's %s %s", "Teacher", "department", "Name").isEqualTo(department.getName()),
-                    () -> assertThat(actual.getDepartmentDean().getAddress())
+                    () -> assertThat(actual.getDepartment().getAddress())
                             .as("Check %s's %s %s", "Teacher", "department", "Address").isEqualTo(department.getAddress()),
-                    () -> assertThat(actual.getDepartmentDean().getTelNumber())
+                    () -> assertThat(actual.getDepartment().getTelNumber())
                             .as("Check %s's %s %s", "Teacher", "department", "Telephone Number").isEqualTo(department.getTelNumber()),
-                    () -> assertThat(actual.getDepartmentDean().getDean())
+                    () -> assertThat(actual.getDepartment().getDean())
                             .as("Check %s's %s", "Department", "dean")
                             .isNotNull().isEqualTo(expected)
             );

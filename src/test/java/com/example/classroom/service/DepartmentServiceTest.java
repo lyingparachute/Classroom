@@ -86,15 +86,15 @@ class DepartmentServiceTest {
                     () -> assertThat(actual.getDean().getEmail())
                             .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean.getEmail())
             );
-            assertThat(dean.getDepartmentDean()).as("Check if %s is not null", "Dean's Department").isNotNull();
+            assertThat(dean.getDepartment()).as("Check if %s is not null", "Dean's Department").isNotNull();
             assertAll("Dean's Department properties",
-                    () -> assertThat(dean.getDepartmentDean().getId())
+                    () -> assertThat(dean.getDepartment().getId())
                             .as("Check %s's %s %s", "Dean", "Department", "Id").isEqualTo(expected.getId()),
-                    () -> assertThat(dean.getDepartmentDean().getName())
+                    () -> assertThat(dean.getDepartment().getName())
                             .as("Check %s's %s %s", "Dean", "Department", "Name").isEqualTo(expected.getName()),
-                    () -> assertThat(dean.getDepartmentDean().getAddress())
+                    () -> assertThat(dean.getDepartment().getAddress())
                             .as("Check %s's %s %s", "Dean", "Department", "Address").isEqualTo(expected.getAddress()),
-                    () -> assertThat(dean.getDepartmentDean().getTelNumber())
+                    () -> assertThat(dean.getDepartment().getTelNumber())
                             .as("Check %s's %s %s", "Dean", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
             );
             assertThat(actual.getFieldsOfStudy()).isNotNull().isNotEmpty().hasSize(2);
@@ -175,15 +175,15 @@ class DepartmentServiceTest {
                     () -> assertThat(actual.getDean().getEmail())
                             .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean.getEmail())
             );
-            assertThat(dean.getDepartmentDean()).as("Check if %s is not null", "Dean's Department").isNotNull();
+            assertThat(dean.getDepartment()).as("Check if %s is not null", "Dean's Department").isNotNull();
             assertAll("Dean's Department properties",
-                    () -> assertThat(dean.getDepartmentDean().getId())
+                    () -> assertThat(dean.getDepartment().getId())
                             .as("Check %s's %s %s", "Dean", "Department", "Id").isEqualTo(expected.getId()),
-                    () -> assertThat(dean.getDepartmentDean().getName())
+                    () -> assertThat(dean.getDepartment().getName())
                             .as("Check %s's %s %s", "Dean", "Department", "Name").isEqualTo(expected.getName()),
-                    () -> assertThat(dean.getDepartmentDean().getAddress())
+                    () -> assertThat(dean.getDepartment().getAddress())
                             .as("Check %s's %s %s", "Dean", "Department", "Address").isEqualTo(expected.getAddress()),
-                    () -> assertThat(dean.getDepartmentDean().getTelNumber())
+                    () -> assertThat(dean.getDepartment().getTelNumber())
                             .as("Check %s's %s %s", "Dean", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
             );
             assertThat(actual.getFieldsOfStudy()).isNotNull().isNotEmpty().hasSize(2);

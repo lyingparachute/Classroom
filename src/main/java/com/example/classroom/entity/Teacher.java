@@ -48,7 +48,7 @@ public class Teacher {
 
     @JsonIgnore
     @OneToOne(mappedBy = "dean")
-    private Department departmentDean;
+    private Department department;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
@@ -78,11 +78,11 @@ public class Teacher {
         return new HashSet<>(students);
     }
 
-    public void setDepartmentDean(Department departmentDean) {
+    public void setDepartment(Department departmentDean) {
         if (sameAsFormer(departmentDean))
             return;
-        Department oldDepartmentDean = this.departmentDean;
-        this.departmentDean = departmentDean;
+        Department oldDepartmentDean = this.department;
+        this.department = departmentDean;
         if (oldDepartmentDean != null)
             oldDepartmentDean.setDean(null);
         if (departmentDean != null) {
@@ -91,9 +91,9 @@ public class Teacher {
     }
 
     private boolean sameAsFormer(Department newDepartmentDean) {
-        if (departmentDean == null)
+        if (department == null)
             return newDepartmentDean == null;
-        return departmentDean.equals(newDepartmentDean);
+        return department.equals(newDepartmentDean);
     }
 
     /**

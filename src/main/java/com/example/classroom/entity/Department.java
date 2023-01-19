@@ -56,9 +56,9 @@ public class Department {
         Teacher oldDean = this.dean;
         this.dean = dean;
         if (oldDean != null)
-            oldDean.setDepartmentDean(null);
+            oldDean.setDepartment(null);
         if (dean != null)
-            dean.setDepartmentDean(this);
+            dean.setDepartment(this);
     }
 
     private boolean sameAsFormer(Teacher newDean) {

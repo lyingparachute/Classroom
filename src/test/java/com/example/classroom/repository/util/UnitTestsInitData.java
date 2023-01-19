@@ -96,7 +96,7 @@ public class UnitTestsInitData {
     }
 
     private void addReferencingObjectsToTeacher(Department department, List<Subject> subjects, List<Student> students, Teacher teacher) {
-        teacher.setDepartmentDean(department);
+        teacher.setDepartment(department);
         students.forEach(teacher::addStudent);
         subjects.forEach(teacher::addSubject);
     }
@@ -104,7 +104,7 @@ public class UnitTestsInitData {
     private void removeReferencingObjectsFromTeacher(final Teacher teacher) {
         Set<Student> students = new HashSet<>(teacher.getStudents());
         Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
-        teacher.setDepartmentDean(null);
+        teacher.setDepartment(null);
         students.forEach(teacher::removeStudent);
         subjects.forEach(teacher::removeSubject);
     }
