@@ -61,6 +61,7 @@
                             </div>
                         </div>
                     </form>
+
                     <div id="subjectsTable" class="table-responsive">
                         <table class="table table-hover" th:if="${totalItems != 0}">
                             <thead>
@@ -171,10 +172,136 @@
                         <div th:unless="${totalItems != 0}">
                             <div id="signTableEmpty" class="h4" th:text="#{subjects.empty.table}"></div>
                         </div>
-
                     </div>
                 </div>
             </div>
+
+        </section>
+        <section class="mb-4">
+            <div class="row mb-4">
+                <div class="col-4">
+                    <div class="card" id="energ-card">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img class="img-fluid" th:src="@{/img/fields-of-study/energetyka.jpg}"/>
+                            <a href="#!">
+                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Energetyka</h5>
+                            <p class="card-text">
+                                Some quick example text to build on the card title and make up the bulk of the
+                                card's content.
+                            </p>
+
+                            <button class="btn btn-primary" type="button">Button</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card" id="elektro-card">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img class="img-fluid" th:src="@{/img/fields-of-study/elektrotechnika.jpg}"/>
+                            <a href="#!">
+                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Elektrotechnika</h5>
+                            <p class="card-text">
+                                Some quick example text to build on the card title and make up the bulk of the
+                                card's content.
+                            </p>
+
+                            <button class="btn btn-primary" type="button">Button</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card" id="arss-card">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img class="img-fluid" th:src="@{/img/fields-of-study/arss.jpg}"/>
+                            <a href="#!">
+                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Automatyka Robotyka i Systemy Sterowania</h5>
+                            <p class="card-text">
+                                Some quick example text to build on the card title and make up the bulk of the
+                                card's content.
+                            </p>
+
+                            <button class="btn btn-primary" type="button">Button</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="card" id="tech-wodorowe-card">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img class="img-fluid"
+                                 th:src="@{/img/fields-of-study/technologie_wodorowe_elektromobilność.png}"/>
+                            <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
+                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Technologie Wodorowe i Elektromobilność</h5>
+                            <p class="card-text">
+                                Some quick example text to build on the card title and make up the bulk of the
+                                card's content.
+                            </p>
+
+                            <button class="btn btn-primary" type="button">Button</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="card" id="inżynieria-materiałowa-card">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img class="img-fluid" th:src="@{/img/fields-of-study/inżynieria-materiałowa.jpg}"/>
+                            <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
+                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Inżynieria materiałowa</h5>
+                            <p class="card-text">
+                                Some quick example text to build on the card title and make up the bulk of the
+                                card's content.
+                            </p>
+
+                            <button class="btn btn-primary" type="button">Button</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="card" id="inżynieria-mechaniczno-medyczna-card">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img class="img-fluid"
+                                 th:src="@{/img/fields-of-study/inżynieria-mechaniczno-medyczna.jpg}"/>
+                            <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
+                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Inżynieria mechaniczno-medyczna</h5>
+                            <p class="card-text">
+                                Some quick example text to build on the card title and make up the bulk of the
+                                card's content.
+                            </p>
+                            <button class="btn btn-primary" type="button">Button</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </section>
     </div>
 </main>

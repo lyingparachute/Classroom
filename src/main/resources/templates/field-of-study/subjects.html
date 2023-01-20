@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <link rel="stylesheet" th:href="@{/css/modals.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css"/>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+
+            <div class="card" id="itemCard">
+                <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
+                    <h3 class="mb-0 text-center">
+                        <strong th:text="#{fieldOfStudy.subjects.card.header}"></strong>
+                    </h3>
+                </div>
+                <div class="card-body mx-4">
+                    <h4 class="card-title mb-4">
+                    <span class="h4 fw-bold"
+                          th:text="${fieldOfStudy.name} + ', '"></span>
+                        <span class="h5"
+                              th:text="${fieldOfStudy.levelOfEducation.value.toLowerCase()} + ' - '"></span>
+                        <span class="h5"
+                              th:text="${fieldOfStudy.title.fullTitle.toLowerCase()} + ', '"></span>
+                        <span class="h5"
+                              th:text="${fieldOfStudy.mode.value.toLowerCase()}"></span>
+                    </h4>
+                    <th:block th:each="semOpt, iterStat : ${T(com.example.classroom.enums.Semester).values()}">
+                        <div class="card my-3" th:id="'sem' + ${iterStat} +  '-card'">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold" th:text="${semOpt.description}"></h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover border-primary">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}"></th>
+                                            <th scope="col"
+                                                th:text="#{fieldOfStudy.subjects.table.thead.description}"></th>
+                                            <th scope="col"
+                                                th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="subject: ${semestersMap.get(semOpt)}">
+                                            <th scope="row" th:text="${subject.name}"></th>
+                                            <td th:text="${subject.description}"></td>
+                                            <td th:text="${subject.hoursInSemester}"></td>
+                                        </tr>
+                                        </tbody>
+                                        <caption class="fst-italic">
+                                            <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>
+                                            <span class="fw-bold"
+                                                  th:text="#{fieldOfStudy.subjects.table.caption1.val}"></span>
+                                            &nbsp;&nbsp;
+                                            <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>
+                                            <span class="fw-bold"
+                                                  th:text="#{fieldOfStudy.subjects.table.caption2.val}"></span>
+                                        </caption>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <!--                    <div id="sem1-card" class="card my-3">-->
+                    <!--                        <div class="card-body">-->
+                    <!--                            <h5 class="card-title fw-bold" th:text="${T(com.example.classroom.enums.Semester).FIRST.description}"></h5>-->
+                    <!--                            <div class="table-responsive">-->
+                    <!--                                <table class="table table-hover border-primary">-->
+                    <!--                                    <thead>-->
+                    <!--                                    <tr>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}">#</th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.description}">-->
+                    <!--                                            Lorem-->
+                    <!--                                        </th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}">-->
+                    <!--                                            Ipsum-->
+                    <!--                                        </th>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </thead>-->
+                    <!--                                    <tbody>-->
+                    <!--                                    <tr th:each="subject: ${subjectsSem1}">-->
+                    <!--                                        <th scope="row" th:text="${subject.name}"></th>-->
+                    <!--                                        <td th:text="${subject.description}"></td>-->
+                    <!--                                        <td th:text="${subject.hoursInSemester}"></td>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </tbody>-->
+                    <!--                                    <caption class="fst-italic">-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption1.val}"></span>-->
+                    <!--                                        &nbsp;&nbsp;-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption2.val}"></span>-->
+                    <!--                                    </caption>-->
+                    <!--                                </table>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+
+                    <!--                    <div id="sem2-card" class="card my-3">-->
+                    <!--                        <div class="card-body">-->
+                    <!--                            <h5 class="card-title fw-bold" th:text="${T(com.example.classroom.enums.Semester).SECOND.description}"></h5>-->
+                    <!--                            <div class="table-responsive">-->
+                    <!--                                <table class="table table-hover border-primary">-->
+                    <!--                                    <thead>-->
+                    <!--                                    <tr>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}">#</th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.description}">-->
+                    <!--                                            Lorem-->
+                    <!--                                        </th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}">-->
+                    <!--                                            Ipsum-->
+                    <!--                                        </th>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </thead>-->
+                    <!--                                    <tbody>-->
+                    <!--                                    <tr th:each="subject: ${subjectsSem2}">-->
+                    <!--                                        <th scope="row" th:text="${subject.name}"></th>-->
+                    <!--                                        <td th:text="${subject.description}"></td>-->
+                    <!--                                        <td th:text="${subject.hoursInSemester}"></td>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </tbody>-->
+                    <!--                                    <caption class="fst-italic">-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption1.val}"></span>-->
+                    <!--                                        &nbsp;&nbsp;-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption2.val}"></span>-->
+                    <!--                                    </caption>-->
+                    <!--                                </table>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                    <!--                    <div id="sem3-card" class="card my-3">-->
+                    <!--                        <div class="card-body">-->
+                    <!--                            <h5 class="card-title fw-bold" th:text="${T(com.example.classroom.enums.Semester).THIRD.description}"></h5>-->
+                    <!--                            <div class="table-responsive">-->
+                    <!--                                <table class="table table-hover border-primary">-->
+                    <!--                                    <thead>-->
+                    <!--                                    <tr>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}">#</th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.description}">-->
+                    <!--                                            Lorem-->
+                    <!--                                        </th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}">-->
+                    <!--                                            Ipsum-->
+                    <!--                                        </th>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </thead>-->
+                    <!--                                    <tbody>-->
+                    <!--                                    <tr th:each="subject: ${subjectsSem3}">-->
+                    <!--                                        <th scope="row" th:text="${subject.name}"></th>-->
+                    <!--                                        <td th:text="${subject.description}"></td>-->
+                    <!--                                        <td th:text="${subject.hoursInSemester}"></td>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </tbody>-->
+                    <!--                                    <caption class="fst-italic">-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption1.val}"></span>-->
+                    <!--                                        &nbsp;&nbsp;-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption2.val}"></span>-->
+                    <!--                                    </caption>-->
+                    <!--                                </table>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                    <!--                    <div id="sem4-card" class="card my-3">-->
+                    <!--                        <div class="card-body">-->
+                    <!--                            <h5 class="card-title fw-bold" th:text="${T(com.example.classroom.enums.Semester).FOURTH.description}"></h5>-->
+                    <!--                            <div class="table-responsive">-->
+                    <!--                                <table class="table table-hover border-primary">-->
+                    <!--                                    <thead>-->
+                    <!--                                    <tr>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}">#</th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.description}">-->
+                    <!--                                            Lorem-->
+                    <!--                                        </th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}">-->
+                    <!--                                            Ipsum-->
+                    <!--                                        </th>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </thead>-->
+                    <!--                                    <tbody>-->
+                    <!--                                    <tr th:each="subject: ${subjectsSem4}">-->
+                    <!--                                        <th scope="row" th:text="${subject.name}"></th>-->
+                    <!--                                        <td th:text="${subject.description}"></td>-->
+                    <!--                                        <td th:text="${subject.hoursInSemester}"></td>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </tbody>-->
+                    <!--                                    <caption class="fst-italic">-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption1.val}"></span>-->
+                    <!--                                        &nbsp;&nbsp;-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption2.val}"></span>-->
+                    <!--                                    </caption>-->
+                    <!--                                </table>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                    <!--                    <div id="sem5-card" class="card my-3">-->
+                    <!--                        <div class="card-body">-->
+                    <!--                            <h5 class="card-title fw-bold" th:text="${T(com.example.classroom.enums.Semester).FIFTH.description}"></h5>-->
+                    <!--                            <div class="table-responsive">-->
+                    <!--                                <table class="table table-hover border-primary">-->
+                    <!--                                    <thead>-->
+                    <!--                                    <tr>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}">#</th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.description}">-->
+                    <!--                                            Lorem-->
+                    <!--                                        </th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}">-->
+                    <!--                                            Ipsum-->
+                    <!--                                        </th>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </thead>-->
+                    <!--                                    <tbody>-->
+                    <!--                                    <tr th:each="subject: ${subjectsSem5}">-->
+                    <!--                                        <th scope="row" th:text="${subject.name}"></th>-->
+                    <!--                                        <td th:text="${subject.description}"></td>-->
+                    <!--                                        <td th:text="${subject.hoursInSemester}"></td>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </tbody>-->
+                    <!--                                    <caption class="fst-italic">-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption1.val}"></span>-->
+                    <!--                                        &nbsp;&nbsp;-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption2.val}"></span>-->
+                    <!--                                    </caption>-->
+                    <!--                                </table>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                    <!--                    <div id="sem6-card" class="card my-3">-->
+                    <!--                        <div class="card-body">-->
+                    <!--                            <h5 class="card-title fw-bold" th:text="${T(com.example.classroom.enums.Semester).SIXTH.description}"></h5>-->
+                    <!--                            <div class="table-responsive">-->
+                    <!--                                <table class="table table-hover border-primary">-->
+                    <!--                                    <thead>-->
+                    <!--                                    <tr>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}">#</th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.description}">-->
+                    <!--                                            Lorem-->
+                    <!--                                        </th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}">-->
+                    <!--                                            Ipsum-->
+                    <!--                                        </th>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </thead>-->
+                    <!--                                    <tbody>-->
+                    <!--                                    <tr th:each="subject: ${subjectsSem6}">-->
+                    <!--                                        <th scope="row" th:text="${subject.name}"></th>-->
+                    <!--                                        <td th:text="${subject.description}"></td>-->
+                    <!--                                        <td th:text="${subject.hoursInSemester}"></td>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </tbody>-->
+                    <!--                                    <caption class="fst-italic">-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption1.val}"></span>-->
+                    <!--                                        &nbsp;&nbsp;-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption2.val}"></span>-->
+                    <!--                                    </caption>-->
+                    <!--                                </table>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                    <!--                    <div id="sem7-card" class="card my-3">-->
+                    <!--                        <div class="card-body">-->
+                    <!--                            <h5 class="card-title fw-bold" th:text="${T(com.example.classroom.enums.Semester).SEVENTH.description}"></h5>-->
+                    <!--                            <div class="table-responsive">-->
+                    <!--                                <table class="table table-hover border-primary">-->
+                    <!--                                    <thead>-->
+                    <!--                                    <tr>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}">#</th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.description}">-->
+                    <!--                                            Lorem-->
+                    <!--                                        </th>-->
+                    <!--                                        <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}">-->
+                    <!--                                            Ipsum-->
+                    <!--                                        </th>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </thead>-->
+                    <!--                                    <tbody>-->
+                    <!--                                    <tr th:each="subject: ${subjectsSem7}">-->
+                    <!--                                        <th scope="row" th:text="${subject.name}"></th>-->
+                    <!--                                        <td th:text="${subject.description}"></td>-->
+                    <!--                                        <td th:text="${subject.hoursInSemester}"></td>-->
+                    <!--                                    </tr>-->
+                    <!--                                    </tbody>-->
+                    <!--                                    <caption class="fst-italic">-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption1.val}"></span>-->
+                    <!--                                        &nbsp;&nbsp;-->
+                    <!--                                        <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>-->
+                    <!--                                        <span class="fw-bold"-->
+                    <!--                                              th:text="#{fieldOfStudy.subjects.table.caption2.val}"></span>-->
+                    <!--                                    </caption>-->
+                    <!--                                </table>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                </div>
+            </div>
+
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+</body>
+</html>
