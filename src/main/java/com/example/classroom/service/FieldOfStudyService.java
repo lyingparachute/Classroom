@@ -4,7 +4,9 @@ import com.example.classroom.dto.FieldOfStudyDto;
 import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
+import com.example.classroom.enums.Semester;
 import com.example.classroom.repository.FieldOfStudyRepository;
+import com.example.classroom.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -14,15 +16,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.Map.entry;
 
 @Service
 @RequiredArgsConstructor
 public class FieldOfStudyService {
     private final FieldOfStudyRepository repository;
+    private final SubjectRepository subjectRepository;
     private final ModelMapper mapper;
 
     @Transactional
@@ -100,6 +102,18 @@ public class FieldOfStudyService {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<FieldOfStudy> all = repository.findAll(pageable);
         return all.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class));
+    }
+
+    public Map<Semester, List<Subject>> getAllSubjectsForFieldOfStudy(Long fieldOfStudyId) {
+        return Map.ofEntries(
+                entry(Semester.FIRST, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.FIRST)),
+                entry(Semester.SECOND, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.SECOND)),
+                entry(Semester.THIRD, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.THIRD)),
+                entry(Semester.FOURTH, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.FOURTH)),
+                entry(Semester.FIFTH, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.FIFTH)),
+                entry(Semester.SIXTH, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.SIXTH)),
+                entry(Semester.SEVENTH, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.SEVENTH))
+        );
     }
 
     private void addReferencingObjects(FieldOfStudy fieldOfStudy) {
