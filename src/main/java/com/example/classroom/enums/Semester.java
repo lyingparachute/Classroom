@@ -1,19 +1,19 @@
 package com.example.classroom.enums;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
 public enum Semester {
-    FIRST("I"),
-    SECOND("II"),
-    THIRD("III"),
-    FOURTH("IV"),
-    FIFTH("V"),
-    SIXTH("VI"),
-    SEVENTH("VII");
+    FIRST("I", "Semester: I"),
+    SECOND("II", "Semester: II"),
+    THIRD("III", "Semester: III"),
+    FOURTH("IV", "Semester: IV"),
+    FIFTH("V", "Semester: V"),
+    SIXTH("VI", "Semester: VI"),
+    SEVENTH("VII", "Semester: VIII");
 
     private final String value;
-    Semester(String value) {
-        this.value = value;
-    }
-    public String getValue() {
-        return value;
-    }
+    private final String description;
 }
