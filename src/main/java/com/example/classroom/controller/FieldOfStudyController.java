@@ -39,7 +39,7 @@ public class FieldOfStudyController {
     public String getFieldOfStudySubjects(@PathVariable Long id, Model model) {
         FieldOfStudyDto dto = service.fetchById(id);
         List<Subject> subjects = new ArrayList<>(dto.getSubjects());
-        Map<Semester, List<Subject>> semestersMap = service.getAllSubjectsForFieldOfStudy(id);
+        Map<Semester, List<Subject>> semestersMap = service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id);
 
         model.addAttribute("semestersMap", semestersMap);
         model.addAttribute("fieldOfStudy", dto);

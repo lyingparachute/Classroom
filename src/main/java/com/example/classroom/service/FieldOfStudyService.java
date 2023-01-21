@@ -6,7 +6,6 @@ import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.Semester;
 import com.example.classroom.repository.FieldOfStudyRepository;
-import com.example.classroom.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,6 @@ import static java.util.Map.entry;
 @RequiredArgsConstructor
 public class FieldOfStudyService {
     private final FieldOfStudyRepository repository;
-    private final SubjectRepository subjectRepository;
     private final ModelMapper mapper;
 
     @Transactional
@@ -104,16 +102,21 @@ public class FieldOfStudyService {
         return all.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class));
     }
 
-    public Map<Semester, List<Subject>> getAllSubjectsForFieldOfStudy(Long fieldOfStudyId) {
+    public Map<Semester, List<Subject>> fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(Long fieldOfStudyId) {
+        Set<Subject> subjects = fetchById(fieldOfStudyId).getSubjects();
         return Map.ofEntries(
-                entry(Semester.FIRST, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.FIRST)),
-                entry(Semester.SECOND, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.SECOND)),
-                entry(Semester.THIRD, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.THIRD)),
-                entry(Semester.FOURTH, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.FOURTH)),
-                entry(Semester.FIFTH, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.FIFTH)),
-                entry(Semester.SIXTH, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.SIXTH)),
-                entry(Semester.SEVENTH, subjectRepository.findAllByFieldOfStudy(fieldOfStudyId, Semester.SEVENTH))
+                entry(Semester.FIRST, filterSubjectsBySemester(subjects, Semester.FIRST)),
+                entry(Semester.SECOND, filterSubjectsBySemester(subjects, Semester.SECOND)),
+                entry(Semester.THIRD, filterSubjectsBySemester(subjects, Semester.THIRD)),
+                entry(Semester.FOURTH, filterSubjectsBySemester(subjects, Semester.FOURTH)),
+                entry(Semester.FIFTH, filterSubjectsBySemester(subjects, Semester.FIFTH)),
+                entry(Semester.SIXTH, filterSubjectsBySemester(subjects, Semester.SIXTH)),
+                entry(Semester.SEVENTH, filterSubjectsBySemester(subjects, Semester.SEVENTH))
         );
+    }
+
+    private List<Subject> filterSubjectsBySemester(Set<Subject> subjects, Semester semester) {
+        return subjects.stream().filter(s -> s.getSemester().equals(semester)).toList();
     }
 
     private void addReferencingObjects(FieldOfStudy fieldOfStudy) {
