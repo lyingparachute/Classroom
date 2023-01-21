@@ -103,7 +103,7 @@ public class FieldOfStudyService {
     }
 
     public Map<Semester, List<Subject>> fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(Long fieldOfStudyId) {
-        Set<Subject> subjects = fetchById(fieldOfStudyId).getSubjects();
+        List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
         return Map.ofEntries(
                 entry(Semester.FIRST, filterSubjectsBySemester(subjects, Semester.FIRST)),
                 entry(Semester.SECOND, filterSubjectsBySemester(subjects, Semester.SECOND)),
@@ -115,7 +115,7 @@ public class FieldOfStudyService {
         );
     }
 
-    private List<Subject> filterSubjectsBySemester(Set<Subject> subjects, Semester semester) {
+    private List<Subject> filterSubjectsBySemester(List<Subject> subjects, Semester semester) {
         return subjects.stream().filter(s -> s.getSemester().equals(semester)).toList();
     }
 
