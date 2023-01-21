@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.util.Map.entry;
 
@@ -105,18 +106,38 @@ public class FieldOfStudyService {
     public Map<Semester, List<Subject>> fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(Long fieldOfStudyId) {
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
         return Map.ofEntries(
-                entry(Semester.FIRST, filterSubjectsBySemester(subjects, Semester.FIRST)),
-                entry(Semester.SECOND, filterSubjectsBySemester(subjects, Semester.SECOND)),
-                entry(Semester.THIRD, filterSubjectsBySemester(subjects, Semester.THIRD)),
-                entry(Semester.FOURTH, filterSubjectsBySemester(subjects, Semester.FOURTH)),
-                entry(Semester.FIFTH, filterSubjectsBySemester(subjects, Semester.FIFTH)),
-                entry(Semester.SIXTH, filterSubjectsBySemester(subjects, Semester.SIXTH)),
-                entry(Semester.SEVENTH, filterSubjectsBySemester(subjects, Semester.SEVENTH))
+                entry(Semester.FIRST, filterSubjectsBySemester(subjects, Semester.FIRST).toList()),
+                entry(Semester.SECOND, filterSubjectsBySemester(subjects, Semester.SECOND).toList()),
+                entry(Semester.THIRD, filterSubjectsBySemester(subjects, Semester.THIRD).toList()),
+                entry(Semester.FOURTH, filterSubjectsBySemester(subjects, Semester.FOURTH).toList()),
+                entry(Semester.FIFTH, filterSubjectsBySemester(subjects, Semester.FIFTH).toList()),
+                entry(Semester.SIXTH, filterSubjectsBySemester(subjects, Semester.SIXTH).toList()),
+                entry(Semester.SEVENTH, filterSubjectsBySemester(subjects, Semester.SEVENTH).toList())
         );
     }
 
-    private List<Subject> filterSubjectsBySemester(List<Subject> subjects, Semester semester) {
-        return subjects.stream().filter(s -> s.getSemester().equals(semester)).toList();
+    private Stream<Subject> filterSubjectsBySemester(List<Subject> subjects, Semester semester) {
+        return subjects.stream().filter(s -> s.getSemester().equals(semester));
+    }
+
+    public Map<Semester, Integer> calculateHoursInEachSemesterFromFieldOfStudy(Long fieldOfStudyId) {
+        List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
+        return Map.ofEntries(
+                entry(Semester.FIRST, filterSubjectsBySemester(subjects, Semester.FIRST)
+                        .mapToInt(Subject::getHoursInSemester).sum()),
+                entry(Semester.SECOND, filterSubjectsBySemester(subjects, Semester.SECOND)
+                        .mapToInt(Subject::getHoursInSemester).sum()),
+                entry(Semester.THIRD, filterSubjectsBySemester(subjects, Semester.THIRD)
+                        .mapToInt(Subject::getHoursInSemester).sum()),
+                entry(Semester.FOURTH, filterSubjectsBySemester(subjects, Semester.FOURTH)
+                        .mapToInt(Subject::getHoursInSemester).sum()),
+                entry(Semester.FIFTH, filterSubjectsBySemester(subjects, Semester.FIFTH)
+                        .mapToInt(Subject::getHoursInSemester).sum()),
+                entry(Semester.SIXTH, filterSubjectsBySemester(subjects, Semester.SIXTH)
+                        .mapToInt(Subject::getHoursInSemester).sum()),
+                entry(Semester.SEVENTH, filterSubjectsBySemester(subjects, Semester.SEVENTH)
+                        .mapToInt(Subject::getHoursInSemester).sum())
+        );
     }
 
     private void addReferencingObjects(FieldOfStudy fieldOfStudy) {

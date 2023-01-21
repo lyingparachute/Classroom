@@ -42,6 +42,7 @@ public class FieldOfStudyController {
         Map<Semester, List<Subject>> semestersMap = service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id);
 
         model.addAttribute("semestersMap", semestersMap);
+        model.addAttribute("hoursInSemester", service.calculateHoursInEachSemesterFromFieldOfStudy(id));
         model.addAttribute("fieldOfStudy", dto);
         model.addAttribute("subjects", subjects);
         return "field-of-study/subjects";
