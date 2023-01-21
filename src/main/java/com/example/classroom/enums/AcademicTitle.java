@@ -1,5 +1,10 @@
 package com.example.classroom.enums;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
 public enum AcademicTitle {
     BACH("", "Bachelor"),
     ENG("eng.", "Engineer"),
@@ -14,17 +19,4 @@ public enum AcademicTitle {
 
     private final String prefix;
     private final String fullTitle;
-
-    AcademicTitle(String value, String fullTitle) {
-        this.prefix = value;
-        this.fullTitle = fullTitle;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public String getFullTitle() {
-        return fullTitle;
-    }
 }
