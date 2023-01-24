@@ -4,6 +4,7 @@ package com.example.classroom.controller;
 import com.example.classroom.dto.FieldOfStudyDto;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.Semester;
+import com.example.classroom.service.DepartmentService;
 import com.example.classroom.service.FieldOfStudyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class FieldOfStudyController {
 
     private final FieldOfStudyService service;
+    private final DepartmentService departmentService;
 
     @GetMapping
     public String getAllFieldsOfStudy(Model model) {
@@ -29,12 +31,18 @@ public class FieldOfStudyController {
         return "field-of-study/all-items";
     }
 
+    private static void addAttributeSemesters(Model model) {
+        model.addAttribute("numberOfSemesters", 7);
+    }
+
+    private static void addAttributeECTS(Model model) {
+        model.addAttribute("ectsPoints", 30);
+    }
+
     @GetMapping("{id}")
     public String getFieldOfStudy(@PathVariable Long id, Model model) {
-        model.addAttribute("fieldOfStudy", service.fetchById(id));
-        model.addAttribute("descriptionList", service.getDescriptionSeparated(id));
-        model.addAttribute("ectsPoints", 30);
-        model.addAttribute("numberOfSemesters", 7);
+        addAttributeFieldOfStudy(id, model);
+        addAttributes(id, model);
         return "field-of-study/item-view";
     }
 
@@ -44,16 +52,17 @@ public class FieldOfStudyController {
         List<Subject> subjects = new ArrayList<>(dto.getSubjects());
         Map<Semester, List<Subject>> semestersMap = service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id);
 
+        addAttributeFieldOfStudy(id, model);
         model.addAttribute("semestersMap", semestersMap);
         model.addAttribute("hoursInSemester", service.calculateHoursInEachSemesterFromFieldOfStudy(id));
-        model.addAttribute("fieldOfStudy", dto);
         model.addAttribute("subjects", subjects);
         return "field-of-study/subjects";
     }
 
     @GetMapping("new")
     public String getCreateFieldOfStudyForm(Model model) {
-        model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
+        addAttributeFieldOfStudyDto(model);
+        addAttributeDepartments(model);
         return "field-of-study/item-form";
     }
 
@@ -64,13 +73,21 @@ public class FieldOfStudyController {
         if (result.hasErrors())
             return "field-of-study/item-form";
         service.create(fieldOfStudy);
-        model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
+        addAttributeFieldOfStudyDto(model);
         return "field-of-study/item-create-success";
+    }
+
+    @GetMapping("delete/{id}")
+    public String deleteFieldOfStudy(@PathVariable Long id, Model model) {
+        service.remove(id);
+        return "redirect:/dashboard/fields-of-study";
     }
 
     @GetMapping("edit/{id}")
     public String getEditFieldOfStudyForm(@PathVariable Long id, Model model) {
-        model.addAttribute("fieldOfStudy", service.fetchById(id));
+        addAttributeFieldOfStudy(id, model);
+        addAttributes(id, model);
+        addAttributeDepartments(model);
         return "field-of-study/item-edit-form";
     }
 
@@ -81,15 +98,30 @@ public class FieldOfStudyController {
         if (result.hasErrors())
             return "field-of-study/item-form";
         service.update(fieldOfStudy);
-        model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
+        addAttributeFieldOfStudy(fieldOfStudy.getId(), model);
+        addAttributes(fieldOfStudy.getId(), model);
         return "field-of-study/item-edit-success";
     }
 
-    @GetMapping("delete/{id}")
-    public String deleteFieldOfStudy(@PathVariable Long id, Model model) {
-        model.addAttribute("fieldOfStudy", service.fetchById(id));
-        service.remove(id);
-        return "redirect:/dashboard/fields-of-study";
+    private void addAttributes(Long id, Model model) {
+        addAttributeDescription(id, model);
+        addAttributeECTS(model);
+        addAttributeSemesters(model);
     }
 
+    private void addAttributeDescription(Long id, Model model) {
+        model.addAttribute("descriptionList", service.getDescriptionSeparated(id));
+    }
+
+    private void addAttributeDepartments(Model model) {
+        model.addAttribute("departments", departmentService.fetchAll());
+    }
+
+    private void addAttributeFieldOfStudy(Long id, Model model) {
+        model.addAttribute("fieldOfStudy", service.fetchById(id));
+    }
+
+    private void addAttributeFieldOfStudyDto(Model model) {
+        model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
+    }
 }
