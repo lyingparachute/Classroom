@@ -79,7 +79,7 @@ public class FieldOfStudyController {
                                    Model model) {
         if (result.hasErrors())
             return "field-of-study/item-form";
-        service.create(fieldOfStudy);
+        service.update(fieldOfStudy);
         model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
         return "field-of-study/item-edit-success";
     }
@@ -87,6 +87,7 @@ public class FieldOfStudyController {
     @GetMapping("delete/{id}")
     public String deleteFieldOfStudy(@PathVariable Long id, Model model) {
         model.addAttribute("fieldOfStudy", service.fetchById(id));
+        service.remove(id);
         return "redirect:/dashboard/fields-of-study";
     }
 
