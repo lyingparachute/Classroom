@@ -32,6 +32,8 @@ public class FieldOfStudyController {
     @GetMapping("{id}")
     public String getFieldOfStudy(@PathVariable Long id, Model model) {
         model.addAttribute("fieldOfStudy", service.fetchById(id));
+        model.addAttribute("ectsPoints", 30);
+        model.addAttribute("numberOfSemesters", 7);
         return "field-of-study/item-view";
     }
 
