@@ -19,9 +19,16 @@
                 </div>
                 <div class="card-body">
                     <!-- ======= Subject Details ======= -->
-                    <div th:replace="field-of-study/elements :: view-subject"></div>
+                    <div th:replace="field-of-study/item-view :: fieldOfStudy-details"></div>
+
                     <!-- ======= Buttons ======= -->
-                    <div th:replace="field-of-study/buttons :: subjectGoBackBtn"></div>
+                    <div class="row my-2 justify-content-center">
+                        <div class="col-auto">
+                            <a class="btn btn-primary" th:href="@{/dashboard/fields-of-study}">
+                                <i class="fas fa-home mr-2"></i><span th:text="#{button.go.back}"></span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
