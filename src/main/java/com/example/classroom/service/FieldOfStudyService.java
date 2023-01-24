@@ -4,6 +4,7 @@ import com.example.classroom.dto.FieldOfStudyDto;
 import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
+import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.Semester;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import lombok.RequiredArgsConstructor;
@@ -140,7 +141,7 @@ public class FieldOfStudyService {
         );
     }
 
-    public List<String> getDescriptionSeparated(Long id) {
+    public List<String> splitDescription(Long id) {
         FieldOfStudyDto dto = fetchById(id);
         String description = dto.getDescription();
         if (description != null) {
@@ -149,6 +150,13 @@ public class FieldOfStudyService {
                     .toList();
         }
         return List.of();
+    }
+
+    public int getNumberOfSemesters(Long id) {
+        LevelOfEducation levelOfEducation = fetchById(id).getLevelOfEducation();
+        if (levelOfEducation.equals(LevelOfEducation.FIRST))
+            return 7;
+        return 3;
     }
 
     private void addReferencingObjects(FieldOfStudy fieldOfStudy) {
