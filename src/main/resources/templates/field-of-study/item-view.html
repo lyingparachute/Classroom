@@ -18,59 +18,61 @@
                     </h3>
                 </div>
                 <div class="card-body mx-4">
-                    <div class="mb-4">
-                        <h4 th:text="#{fieldOfStudy.item.card.body.fieldOfStudy}"></h4>
-                        <span th:text="${fieldOfStudy.name}"></span>
-                    </div>
-                    <hr>
-                    <div class="mb-4">
-                        <h4 th:text="#{fieldOfStudy.item.card.body.levelOfEducation}"></h4>
-                        <span th:text="${fieldOfStudy.levelOfEducation.value}"></span>
-                    </div>
-                    <hr>
-                    <div class="mb-4">
-                        <h4 th:text="#{fieldOfStudy.item.card.body.mode}"></h4>
-                        <span th:text="${fieldOfStudy.mode.value}"></span>
-                    </div>
-                    <hr>
-                    <div class="mb-4">
-                        <h4 th:text="#{fieldOfStudy.item.card.body.department}"></h4>
-                        <a class="text-body" th:href="@{/dashboard/departments/{id}(id=${fieldOfStudy.department.id})}">
-                            <span th:text="${fieldOfStudy.department.name}"></span>
-                            <i class="fas fa-regular fa-up-right-from-square"></i>
-                        </a>
-                    </div>
-                    <hr>
-                    <div class="mb-4">
-                        <h4 th:text="#{fieldOfStudy.item.card.body.titleGained}"></h4>
-                        <span th:text="${fieldOfStudy.title.fullTitle} + ' (' + ${fieldOfStudy.title.prefix} + ')'"></span>
-                    </div>
-                    <hr>
-                    <div class="mb-4">
-                        <h4 th:text="#{fieldOfStudy.item.card.body.noOfSemesters}"></h4>
-                        <div th:text="${numberOfSemesters}"></div>
-                    </div>
-                    <hr>
-                    <div class="mb-4">
-                        <h4 th:text="#{fieldOfStudy.item.card.body.ectsPoints}"></h4>
-                        <span th:text="${ectsPoints}"></span>
-                    </div>
-                    <hr>
-                    <div class="mb-4">
-                        <h4 th:text="#{fieldOfStudy.item.card.body.description}"></h4>
-                        <div class="mb-2">
-                            <span th:text="#{fieldOfStudy.item.card.body.description.text} + ${fieldOfStudy.title.fullTitle.toLowerCase()} + ':'"></span>
+
+                    <div th:fragment="fieldOfStudy-details">
+                        <div class="mb-4">
+                            <h4 th:text="#{fieldOfStudy.item.card.body.fieldOfStudy}"></h4>
+                            <span th:text="${fieldOfStudy.name}"></span>
                         </div>
-
-                        <span th:text="${fieldOfStudy.description}"></span>
-
-                        <th:block th:each="descriptionItem : ${descriptionList}">
+                        <hr>
+                        <div class="mb-4">
+                            <h4 th:text="#{fieldOfStudy.item.card.body.levelOfEducation}"></h4>
+                            <span th:text="${fieldOfStudy.levelOfEducation.value}"></span>
+                        </div>
+                        <hr>
+                        <div class="mb-4">
+                            <h4 th:text="#{fieldOfStudy.item.card.body.mode}"></h4>
+                            <span th:text="${fieldOfStudy.mode.value}"></span>
+                        </div>
+                        <hr>
+                        <div class="mb-4">
+                            <h4 th:text="#{fieldOfStudy.item.card.body.department}"></h4>
+                            <a class="text-body"
+                               th:href="@{/dashboard/departments/{id}(id=${fieldOfStudy.department.id})}">
+                                <span th:text="${fieldOfStudy.department.name}"></span>
+                                <i class="fas fa-regular fa-up-right-from-square"></i>
+                            </a>
+                        </div>
+                        <hr>
+                        <div class="mb-4">
+                            <h4 th:text="#{fieldOfStudy.item.card.body.titleGained}"></h4>
+                            <span th:text="${fieldOfStudy.title.fullTitle} + ' (' + ${fieldOfStudy.title.prefix} + ')'"></span>
+                        </div>
+                        <hr>
+                        <div class="mb-4">
+                            <h4 th:text="#{fieldOfStudy.item.card.body.noOfSemesters}"></h4>
+                            <div th:text="${numberOfSemesters}"></div>
+                        </div>
+                        <hr>
+                        <div class="mb-4">
+                            <h4 th:text="#{fieldOfStudy.item.card.body.ectsPoints}"></h4>
+                            <span th:text="${ectsPoints}"></span>
+                        </div>
+                        <hr>
+                        <div class="mb-4">
+                            <h4 th:text="#{fieldOfStudy.item.card.body.description}"></h4>
                             <div class="mb-2">
-                                <i class="fas fa-regular fa-check"></i>
-                                <span th:text="${descriptionItem}"></span>
+                                <span th:text="#{fieldOfStudy.item.card.body.description.text} + ${fieldOfStudy.title.fullTitle.toLowerCase()} + ':'"></span>
                             </div>
-                        </th:block>
+                            <th:block th:each="descriptionItem : ${descriptionList}">
+                                <div class="mb-2">
+                                    <i class="fas fa-regular fa-check"></i>
+                                    <span th:text="${descriptionItem}"></span>
+                                </div>
+                            </th:block>
+                        </div>
                     </div>
+
 
                     <div class="row my-2 justify-content-end">
                         <div class="col-auto">
