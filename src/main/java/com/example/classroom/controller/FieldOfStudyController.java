@@ -31,14 +31,6 @@ public class FieldOfStudyController {
         return "field-of-study/all-items";
     }
 
-    private static void addAttributeSemesters(Model model) {
-        model.addAttribute("numberOfSemesters", 7);
-    }
-
-    private static void addAttributeECTS(Model model) {
-        model.addAttribute("ectsPoints", 30);
-    }
-
     @GetMapping("{id}")
     public String getFieldOfStudy(@PathVariable Long id, Model model) {
         addAttributeFieldOfStudy(id, model);
@@ -53,6 +45,7 @@ public class FieldOfStudyController {
         Map<Semester, List<Subject>> semestersMap = service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id);
 
         addAttributeFieldOfStudy(id, model);
+        addAttributeSemesters(id, model);
         model.addAttribute("semestersMap", semestersMap);
         model.addAttribute("hoursInSemester", service.calculateHoursInEachSemesterFromFieldOfStudy(id));
         model.addAttribute("subjects", subjects);
@@ -105,12 +98,20 @@ public class FieldOfStudyController {
 
     private void addAttributes(Long id, Model model) {
         addAttributeDescription(id, model);
-        addAttributeECTS(model);
-        addAttributeSemesters(model);
+        addAttributeECTS(id, model);
+        addAttributeSemesters(id, model);
+    }
+
+    private void addAttributeSemesters(Long id, Model model) {
+        model.addAttribute("numberOfSemesters", service.getNumberOfSemesters(id));
+    }
+
+    private void addAttributeECTS(Long id, Model model) {
+        model.addAttribute("ectsPoints", 30);
     }
 
     private void addAttributeDescription(Long id, Model model) {
-        model.addAttribute("descriptionList", service.getDescriptionSeparated(id));
+        model.addAttribute("descriptionList", service.splitDescription(id));
     }
 
     private void addAttributeDepartments(Model model) {
