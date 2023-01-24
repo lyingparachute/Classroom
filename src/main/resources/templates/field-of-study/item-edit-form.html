@@ -25,11 +25,13 @@
                         <div th:fragment="fieldOfStudy-edit-form">
                             <div class="mb-4">
                                 <h4 th:text="#{fieldOfStudy.edit.card.body.name}"></h4>
-                                <input class="form-control"
-                                       id="name"
-                                       th:field="*{name}"
-                                       type="text"
-                                />
+                                <div class="form-outline">
+                                    <input class="form-control"
+                                           id="name"
+                                           th:field="*{name}"
+                                           type="text"/>
+                                    <label class="form-label" for="name" th:text="#{fieldOfStudy.name}"></label>
+                                </div>
                                 <div class="alert alert-danger" th:errors="*{name}"
                                      th:if="${#fields.hasErrors('name')}"></div>
                             </div>
@@ -76,13 +78,19 @@
                                 </select>
                             </div>
                             <hr>
+
                             <div class="mb-4">
                                 <h4 th:text="#{fieldOfStudy.item.card.body.description}"></h4>
-                                <input class="form-control"
-                                       id="description"
-                                       th:field="*{description}"
-                                       type="text"
-                                />
+                                <div class="form-outline">
+                                    <textarea class="form-control"
+                                              id="description"
+                                              rows="5"
+                                              th:field="*{description}"></textarea>
+                                    <label class="form-label" for="description"
+                                           th:text="#{fieldOfStudy.description}"></label>
+                                    <div class="form-helper" th:text="#{fieldOfStudy.description.helper}"></div>
+                                </div>
+
                                 <div class="alert alert-danger" th:errors="*{description}"
                                      th:if="${#fields.hasErrors('description')}"></div>
                             </div>
