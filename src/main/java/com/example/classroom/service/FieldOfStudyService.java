@@ -140,6 +140,17 @@ public class FieldOfStudyService {
         );
     }
 
+    public List<String> getDescriptionSeparated(Long id) {
+        FieldOfStudyDto dto = fetchById(id);
+        String description = dto.getDescription();
+        if (description != null) {
+            return Stream.of(description.split(";"))
+                    .map(String::strip)
+                    .toList();
+        }
+        return List.of();
+    }
+
     private void addReferencingObjects(FieldOfStudy fieldOfStudy) {
         Set<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
         Set<Student> students = new HashSet<>(fieldOfStudy.getStudents());
