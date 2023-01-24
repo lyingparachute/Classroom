@@ -25,6 +25,8 @@ public class FieldOfStudy {
 
     private String name;
 
+    private String description;
+
     @Enumerated(EnumType.STRING)
     private LevelOfEducation levelOfEducation;
 

@@ -22,6 +22,7 @@ import java.util.Set;
 public class FieldOfStudyDto {
     private Long id;
     private String name;
+    private String description;
     private LevelOfEducation levelOfEducation;
     private ModeOfStudy mode;
     private AcademicTitle title;
