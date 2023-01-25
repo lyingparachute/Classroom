@@ -117,10 +117,6 @@ public class FieldOfStudyService {
         );
     }
 
-    private Stream<Subject> filterSubjectsBySemester(List<Subject> subjects, Semester semester) {
-        return subjects.stream().filter(s -> s.getSemester().equals(semester));
-    }
-
     public Map<Semester, Integer> calculateHoursInEachSemesterFromFieldOfStudy(Long fieldOfStudyId) {
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
         return Map.ofEntries(
@@ -141,9 +137,12 @@ public class FieldOfStudyService {
         );
     }
 
+    private Stream<Subject> filterSubjectsBySemester(List<Subject> subjects, Semester semester) {
+        return subjects.stream().filter(s -> s.getSemester().equals(semester));
+    }
+
     public List<String> splitDescription(Long id) {
-        FieldOfStudyDto dto = fetchById(id);
-        String description = dto.getDescription();
+        String description = fetchById(id).getDescription();
         if (description != null) {
             return Stream.of(description.split(";"))
                     .map(String::strip)
@@ -158,6 +157,32 @@ public class FieldOfStudyService {
             return 7;
         return 3;
     }
+
+    public Map<Semester, Integer> calculateEctsPointsForEachSemester(Long id) {
+        List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(id);
+        return Map.ofEntries(
+                entry(Semester.FIRST, getSumOfEctsPointsForSemester(subjects, Semester.FIRST)),
+                entry(Semester.SECOND, getSumOfEctsPointsForSemester(subjects, Semester.SECOND)),
+                entry(Semester.THIRD, getSumOfEctsPointsForSemester(subjects, Semester.THIRD)),
+                entry(Semester.FOURTH, getSumOfEctsPointsForSemester(subjects, Semester.FOURTH)),
+                entry(Semester.FIFTH, getSumOfEctsPointsForSemester(subjects, Semester.FIFTH)),
+                entry(Semester.SIXTH, getSumOfEctsPointsForSemester(subjects, Semester.SIXTH)),
+                entry(Semester.SEVENTH, getSumOfEctsPointsForSemester(subjects, Semester.SEVENTH))
+        );
+    }
+
+    private Integer getSumOfEctsPointsForSemester(List<Subject> subjects, Semester semester) {
+        return subjects.stream().filter(subject -> subject.getSemester().equals(semester))
+                .mapToInt(Subject::getEctsPoints)
+                .sum();
+    }
+
+    public Integer getSumOfEctsPointsFromAllSemesters(Long id) {
+        return calculateEctsPointsForEachSemester(id).values()
+                .stream().mapToInt(Integer::intValue)
+                .sum();
+    }
+
 
     private void addReferencingObjects(FieldOfStudy fieldOfStudy) {
         Set<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
@@ -174,4 +199,6 @@ public class FieldOfStudyService {
         subjects.forEach(fieldOfStudy::removeSubject);
         students.forEach(fieldOfStudy::removeStudent);
     }
+
+
 }
