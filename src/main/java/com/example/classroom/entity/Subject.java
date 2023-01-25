@@ -9,6 +9,8 @@ import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.HashSet;
 import java.util.Objects;
@@ -35,6 +37,11 @@ public class Subject {
 
     @PositiveOrZero
     private int hoursInSemester;
+
+    @Max(30)
+    @Min(0)
+    @Column(name = "ects")
+    private int ectsPoints;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
