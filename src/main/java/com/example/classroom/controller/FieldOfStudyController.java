@@ -73,26 +73,25 @@ public class FieldOfStudyController {
     @GetMapping("edit/{id}")
     public String getEditFieldOfStudyForm(@PathVariable Long id, Model model) {
         addAttributeFieldOfStudy(id, model);
-        addAttributes(id, model);
         addAttributeDepartments(model);
         return "field-of-study/item-edit-form";
     }
 
     @PostMapping("update")
-    public String editFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto fieldOfStudy,
+    public String editFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
                                    BindingResult result,
                                    Model model) {
         if (result.hasErrors())
-            return "field-of-study/item-form";
-        service.update(fieldOfStudy);
-        addAttributeFieldOfStudy(fieldOfStudy.getId(), model);
-        addAttributes(fieldOfStudy.getId(), model);
+            return "field-of-study/item-edit-form";
+        service.update(dto);
+        addAttributeFieldOfStudy(dto.getId(), model);
+        addAttributes(dto.getId(), model);
         return "field-of-study/item-edit-success";
     }
 
     private void addAttributes(Long id, Model model) {
         addAttributeDescription(id, model);
-        addAttributeEcts(id, model);
+        addAttributeTotalEctsPoints(id, model);
         addAttributeSemesters(id, model);
     }
 
@@ -100,7 +99,7 @@ public class FieldOfStudyController {
         model.addAttribute("numberOfSemesters", service.getNumberOfSemesters(id));
     }
 
-    private void addAttributeEcts(Long id, Model model) {
+    private void addAttributeTotalEctsPoints(Long id, Model model) {
         model.addAttribute("ects", service.getSumOfEctsPointsFromAllSemesters(id));
     }
 
