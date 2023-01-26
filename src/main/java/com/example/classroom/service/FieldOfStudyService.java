@@ -4,7 +4,7 @@ import com.example.classroom.dto.FieldOfStudyDto;
 import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
-import com.example.classroom.enums.LevelOfEducation;
+import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.Semester;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import lombok.RequiredArgsConstructor;
@@ -151,11 +151,15 @@ public class FieldOfStudyService {
         return List.of();
     }
 
-    public int getNumberOfSemesters(Long id) {
-        LevelOfEducation levelOfEducation = fetchById(id).getLevelOfEducation();
-        if (levelOfEducation.equals(LevelOfEducation.FIRST))
-            return 7;
-        return 3;
+    @Transactional
+    public FieldOfStudyDto update(FieldOfStudyDto dto) {
+        FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
+        removeDepartment(fieldOfStudy);
+        mapper.map(dto, fieldOfStudy);
+        addReferencingObjects(fieldOfStudy);
+        FieldOfStudy saved = repository.save(fieldOfStudy);
+        return mapper.map(saved, FieldOfStudyDto.class);
     }
 
     public Map<Semester, Integer> calculateEctsPointsForEachSemester(Long id) {
