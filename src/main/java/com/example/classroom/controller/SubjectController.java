@@ -71,22 +71,23 @@ public class SubjectController {
 
     @GetMapping("{id}")
     public String getSubject(@PathVariable Long id, Model model) {
-        SubjectDto subjectDto = subjectService.fetchById(id);
-        model.addAttribute("subject", subjectDto);
+        addAttributeSubjectFetchById(id, model);
         return "subject/subject";
     }
 
     @GetMapping("new")
     public String getNewSubjectForm(Model model) {
         model.addAttribute("subject", new SubjectDto());
-        model.addAttribute("teachers", teacherService.fetchAll());
+        addAttributeTeachers(model);
+        addAttributeFieldsOfStudy(model);
         return "subject/subject-form";
     }
 
     @PostMapping(value = "new")
     public String createSubject(@Valid @ModelAttribute("subject") Subject subject, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("teachers", teacherService.fetchAll());
+            addAttributeTeachers(model);
+            addAttributeFieldsOfStudy(model);
             return "subject/subject-form";
         }
         subjectService.create(mapper.map(subject, SubjectDto.class));
@@ -101,17 +102,16 @@ public class SubjectController {
 
     @GetMapping("edit/{id}")
     public String editSubjectForm(@PathVariable Long id, Model model) {
-        SubjectDto dto = subjectService.fetchById(id);
-        model.addAttribute("subject", dto);
-        model.addAttribute("teachers", teacherService.fetchAll());
-        model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAll());
+        addAttributeSubjectFetchById(id, model);
+        addAttributeTeachers(model);
+        addAttributeFieldsOfStudy(model);
         return "subject/subject-edit-form";
     }
 
     @PostMapping(value = "update")
     public String editSubject(@Valid @ModelAttribute("subject") Subject subject, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("teachers", teacherService.fetchAll());
+            addAttributeTeachers(model);
             return "subject/subject-edit-form";
         }
 
@@ -122,5 +122,17 @@ public class SubjectController {
         model.addAttribute("subject", updated);
 
         return "subject/subject-edit-success";
+    }
+
+    private void addAttributeSubjectFetchById(Long id, Model model) {
+        model.addAttribute("subject", subjectService.fetchById(id));
+    }
+
+    private void addAttributeTeachers(Model model) {
+        model.addAttribute("teachers", teacherService.fetchAll());
+    }
+
+    private void addAttributeFieldsOfStudy(Model model) {
+        model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAll());
     }
 }
