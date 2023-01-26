@@ -91,6 +91,7 @@ public class SubjectController {
             return "subject/subject-form";
         }
         subjectService.create(mapper.map(subject, SubjectDto.class));
+        addAttributeSubjectFetchById(subject.getId(), model);
         return "subject/subject-create-success";
     }
 
