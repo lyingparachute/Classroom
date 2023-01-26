@@ -20,16 +20,25 @@
                     </h3>
                 </div>
                 <div class="card-body mx-4">
-                    <h4 class="card-title mb-4">
+
+                    <div class="row">
+                        <div class="col">
+                            <h4 class="card-title mb-4">
                     <span class="h4 fw-bold"
                           th:text="${fieldOfStudy.name} + ', '"></span>
-                        <span class="h5"
-                              th:text="${fieldOfStudy.levelOfEducation.value.toLowerCase()} + ' - '"></span>
-                        <span class="h5"
-                              th:text="${fieldOfStudy.title.fullTitle.toLowerCase()} + ', '"></span>
-                        <span class="h5"
-                              th:text="${fieldOfStudy.mode.value.toLowerCase()}"></span>
-                    </h4>
+                                <span class="h5"
+                                      th:text="${fieldOfStudy.levelOfEducation.value.toLowerCase()} + ' - '"></span>
+                                <span class="h5"
+                                      th:text="${fieldOfStudy.title.fullTitle.toLowerCase()} + ', '"></span>
+                                <span class="h5"
+                                      th:text="${fieldOfStudy.mode.value.toLowerCase()}"></span>
+                            </h4>
+                        </div>
+                        <div class="col">
+                            <div th:replace="field-of-study/buttons :: editSubjectsButton"></div>
+                        </div>
+                    </div>
+
                     <th:block th:each="semOpt, iterStat : ${T(com.example.classroom.enums.Semester).values()}">
                         <div class="card my-3" th:id="'sem' + ${iterStat} +  '-card'">
                             <div class="card-body">
