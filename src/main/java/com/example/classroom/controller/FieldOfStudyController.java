@@ -28,7 +28,7 @@ public class FieldOfStudyController {
 
     @GetMapping("{id}")
     public String getFieldOfStudy(@PathVariable Long id, Model model) {
-        addAttributeFieldOfStudy(id, model);
+        addAttributeFieldOfStudyFetchById(id, model);
         addAttributes(id, model);
         return "field-of-study/fieldOfStudy-view";
     }
@@ -36,8 +36,7 @@ public class FieldOfStudyController {
     @GetMapping("{id}/subjects")
     public String getFieldOfStudySubjects(@PathVariable Long id, Model model) {
         FieldOfStudyDto dto = service.fetchById(id);
-
-        addAttributeFieldOfStudy(id, model);
+        addAttributeFieldOfStudyFetchById(id, model);
         addAttributeSemesters(id, model);
         addAttributeEctsMap(id, model);
         model.addAttribute("semestersMap", service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id));
@@ -57,10 +56,12 @@ public class FieldOfStudyController {
     public String createFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto fieldOfStudy,
                                      BindingResult result,
                                      Model model) {
-        if (result.hasErrors())
+        if (result.hasErrors()) {
+            addAttributeDepartments(model);
             return "fieldOfStudy-form";
-        service.create(fieldOfStudy);
-        addAttributeFieldOfStudyDto(model);
+        }
+        FieldOfStudyDto created = service.create(fieldOfStudy);
+        addAttributes(created.getId(), model);
         return "field-of-study/fieldOfStudy-create-success";
     }
 
@@ -72,7 +73,7 @@ public class FieldOfStudyController {
 
     @GetMapping("edit/{id}")
     public String getEditFieldOfStudyForm(@PathVariable Long id, Model model) {
-        addAttributeFieldOfStudy(id, model);
+        addAttributeFieldOfStudyFetchById(id, model);
         addAttributeDepartments(model);
         return "field-of-study/fieldOfStudy-edit-form";
     }
@@ -84,7 +85,7 @@ public class FieldOfStudyController {
         if (result.hasErrors())
             return "field-of-study/item-edit-form";
         service.update(dto);
-        addAttributeFieldOfStudy(dto.getId(), model);
+        addAttributeFieldOfStudyFetchById(dto.getId(), model);
         addAttributes(dto.getId(), model);
         return "field-of-study/fieldOfStudy-edit-success";
     }
@@ -115,7 +116,7 @@ public class FieldOfStudyController {
         model.addAttribute("departments", departmentService.fetchAll());
     }
 
-    private void addAttributeFieldOfStudy(Long id, Model model) {
+    private void addAttributeFieldOfStudyFetchById(Long id, Model model) {
         model.addAttribute("fieldOfStudy", service.fetchById(id));
     }
 
