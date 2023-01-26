@@ -3,8 +3,10 @@ package com.example.classroom.controller;
 
 import com.example.classroom.dto.SubjectDto;
 import com.example.classroom.entity.Subject;
+import com.example.classroom.service.FieldOfStudyService;
 import com.example.classroom.service.SubjectService;
 import com.example.classroom.service.TeacherService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -17,17 +19,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("dashboard/subjects")
+@RequiredArgsConstructor
 public class SubjectController {
 
     private final SubjectService subjectService;
     private final TeacherService teacherService;
+    private final FieldOfStudyService fieldOfStudyService;
     private final ModelMapper mapper;
-
-    public SubjectController(SubjectService subjectService, TeacherService teacherService, ModelMapper mapper) {
-        this.subjectService = subjectService;
-        this.teacherService = teacherService;
-        this.mapper = mapper;
-    }
 
     @GetMapping
     public String getSubjects(@RequestParam(required = false) String name,
@@ -106,6 +104,7 @@ public class SubjectController {
         SubjectDto dto = subjectService.fetchById(id);
         model.addAttribute("subject", dto);
         model.addAttribute("teachers", teacherService.fetchAll());
+        model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAll());
         return "subject/subject-edit-form";
     }
 

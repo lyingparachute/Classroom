@@ -100,11 +100,6 @@
 <!-- ======= View Student card body ======= -->
 <div th:fragment="view-student">
     <div class="mb-4">
-        <h4 th:text="#{student.id}"></h4>
-        <span th:text="${student.id}"></span>
-    </div>
-    <hr>
-    <div class="mb-4">
         <h4 th:text="#{student.firstName}"></h4>
         <span th:text="${student.firstName}"></span>
     </div>
@@ -135,9 +130,9 @@
     <hr>
     <div class="mb-4">
         <h4 th:text="#{student.teachersList}"></h4>
-        <th:block th:each="fieldOpt : ${student.teachers}">
+        <th:block th:each="fieldOpt, count : ${student.teachers}">
             <div class="mb-2">
-                <i class="fas fa-light fa-minus"></i>
+                <span th:text="${count.index + 1} + '. '"></span>
                 <a class="text-body"
                    th:href="@{/dashboard/teachers/{id}(id=${fieldOpt.id})}">
                 <span th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}"

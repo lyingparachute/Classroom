@@ -22,10 +22,6 @@
                           th:object="${fieldOfStudy}"
                           th:method="post">
                         <input hidden id="id_input_id" th:field="*{id}" type="text">
-                        <input hidden id="subjects" th:field="*{subjects}" th:value="${fieldOfStudy.subjects}"
-                               type="hidden">
-                        <input hidden id="students" th:field="*{students}" th:value="${fieldOfStudy.students}"
-                               type="hidden">
                         <div th:fragment="fieldOfStudy-edit-form">
                             <div class="mb-4">
                                 <h4 th:text="#{fieldOfStudy.edit.card.body.name}"></h4>
