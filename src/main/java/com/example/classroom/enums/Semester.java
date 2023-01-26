@@ -6,14 +6,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum Semester {
-    FIRST("I", "Semester: I"),
-    SECOND("II", "Semester: II"),
-    THIRD("III", "Semester: III"),
-    FOURTH("IV", "Semester: IV"),
-    FIFTH("V", "Semester: V"),
-    SIXTH("VI", "Semester: VI"),
-    SEVENTH("VII", "Semester: VIII");
+    FIRST("I", "I (first)", "Semester: I"),
+    SECOND("II", "II (second)", "Semester: II"),
+    THIRD("III", "III (third)", "Semester: III"),
+    FOURTH("IV", "IV (fourth)", "Semester: IV"),
+    FIFTH("V", "V (fifth)", "Semester: V"),
+    SIXTH("VI", "VI (sixth)", "Semester: VI"),
+    SEVENTH("VII", "VII (seventh)", "Semester: VIII");
 
     private final String value;
+    private final String fullName;
     private final String description;
 }
