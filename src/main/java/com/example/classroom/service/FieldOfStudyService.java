@@ -35,18 +35,6 @@ public class FieldOfStudyService {
         return mapper.map(saved, FieldOfStudyDto.class);
     }
 
-    @Transactional
-    public FieldOfStudyDto update(FieldOfStudyDto dto) {
-        FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
-        removeReferencingObjects(fieldOfStudy);
-        mapper.map(dto, fieldOfStudy);
-        addReferencingObjects(fieldOfStudy);
-        FieldOfStudy saved = repository.save(fieldOfStudy);
-        return mapper.map(saved, FieldOfStudyDto.class);
-
-    }
-
     public List<FieldOfStudyDto> fetchAll() {
         List<FieldOfStudy> all = repository.findAll();
         return all.stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).toList();
@@ -162,6 +150,17 @@ public class FieldOfStudyService {
         return mapper.map(saved, FieldOfStudyDto.class);
     }
 
+    @Transactional
+    public FieldOfStudyDto updateSubjects(FieldOfStudyDto dto) {
+        FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
+        removeSubjects(fieldOfStudy);
+        mapper.map(dto, fieldOfStudy);
+        addReferencingObjects(fieldOfStudy);
+        FieldOfStudy saved = repository.save(fieldOfStudy);
+        return mapper.map(saved, FieldOfStudyDto.class);
+    }
+
     public Map<Semester, Integer> calculateEctsPointsForEachSemester(Long id) {
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(id);
         return Map.ofEntries(
@@ -196,13 +195,38 @@ public class FieldOfStudyService {
         students.forEach(fieldOfStudy::addStudent);
     }
 
-    private void removeReferencingObjects(FieldOfStudy fieldOfStudy) {
-        Set<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
-        Set<Student> students = new HashSet<>(fieldOfStudy.getStudents());
-        fieldOfStudy.setDepartment(null);
-        subjects.forEach(fieldOfStudy::removeSubject);
-        students.forEach(fieldOfStudy::removeStudent);
+    public int getNumberOfSemesters(Long id) {
+        AcademicTitle title = fetchById(id).getTitle();
+        switch (title) {
+            case BACH -> {
+                return 6;
+            }
+            case ENG -> {
+                return 7;
+            }
+            default -> {
+                return 3;
+            }
+        }
     }
 
+    private void removeReferencingObjects(FieldOfStudy fieldOfStudy) {
+        removeDepartment(fieldOfStudy);
+        removeSubjects(fieldOfStudy);
+        removeStudents(fieldOfStudy);
+    }
 
+    private void removeDepartment(FieldOfStudy fieldOfStudy) {
+        fieldOfStudy.setDepartment(null);
+    }
+
+    private void removeSubjects(FieldOfStudy fieldOfStudy) {
+        Set<Subject> subjects = fieldOfStudy.getSubjects();
+        subjects.forEach(fieldOfStudy::removeSubject);
+    }
+
+    private void removeStudents(FieldOfStudy fieldOfStudy) {
+        Set<Student> students = fieldOfStudy.getStudents();
+        students.forEach(fieldOfStudy::removeStudent);
+    }
 }

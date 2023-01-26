@@ -4,6 +4,7 @@ package com.example.classroom.controller;
 import com.example.classroom.dto.FieldOfStudyDto;
 import com.example.classroom.service.DepartmentService;
 import com.example.classroom.service.FieldOfStudyService;
+import com.example.classroom.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ public class FieldOfStudyController {
 
     private final FieldOfStudyService service;
     private final DepartmentService departmentService;
+    private final SubjectService subjectService;
 
     @GetMapping
     public String getAllFieldsOfStudy(Model model) {
@@ -83,11 +85,30 @@ public class FieldOfStudyController {
                                    BindingResult result,
                                    Model model) {
         if (result.hasErrors())
-            return "field-of-study/item-edit-form";
+            return "field-of-study/fieldOfStudy-edit-form";
         service.update(dto);
         addAttributeFieldOfStudyFetchById(dto.getId(), model);
         addAttributes(dto.getId(), model);
         return "field-of-study/fieldOfStudy-edit-success";
+    }
+
+    @GetMapping("edit/{id}/subjects")
+    public String getEditFieldOfStudySubjectsForm(@PathVariable Long id, Model model) {
+        addAttributeFieldOfStudyFetchById(id, model);
+        addAttributeSubjects(model);
+        return "field-of-study/fieldOfStudy-subjects-edit-form";
+    }
+
+    @PostMapping("subjects/update")
+    public String editFieldOfStudySubjects(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
+                                           BindingResult result,
+                                           Model model) {
+        if (result.hasErrors())
+            return "field-of-study/fieldOfStudy-edit-form";
+        service.update(dto);
+        addAttributeFieldOfStudyFetchById(dto.getId(), model);
+        addAttributes(dto.getId(), model);
+        return "field-of-study/fieldOfStudy-subjects-edit-success";
     }
 
     private void addAttributes(Long id, Model model) {
@@ -122,5 +143,9 @@ public class FieldOfStudyController {
 
     private void addAttributeFieldOfStudyDto(Model model) {
         model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
+    }
+
+    private void addAttributeSubjects(Model model) {
+        model.addAttribute("subjects", subjectService.fetchAll());
     }
 }
