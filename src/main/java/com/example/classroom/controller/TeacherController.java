@@ -65,30 +65,30 @@ public class TeacherController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
         model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
-        return "teachers";
+        return "teacher/teachers";
     }
 
     @GetMapping("{id}")
     public String getTeacher(@PathVariable Long id, Model model) {
         addAttributeTeacherById(id, model);
-        return "teacher";
+        return "teacher/teacher";
     }
 
     @GetMapping("new")
     public String getNewTeacherForm(Model model) {
-        model.addAttribute("teacher", new TeacherDto());
-        addAttributesSubjectsStudents(model);
+        model.addAttribute("teacher/teacher", new TeacherDto());
+        addAttributesSubjectsAndStudents(model);
         return "teacher-form";
     }
 
     @PostMapping(value = "new")
     public String createTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            addAttributesSubjectsStudents(model);
-            return "teacher-form";
+            addAttributesSubjectsAndStudents(model);
+            return "teacher/teacher-form";
         }
         teacherService.create(mapper.map(teacher, TeacherDto.class));
-        return "teacher-create-success";
+        return "teacher/teacher-create-success";
     }
 
     @GetMapping("delete/{id}")
@@ -100,25 +100,25 @@ public class TeacherController {
     @GetMapping("edit/{id}")
     public String editTeacher(@PathVariable Long id, Model model) {
         addAttributeTeacherById(id, model);
-        addAttributesSubjectsStudents(model);
-        return "teacher-edit-form";
+        addAttributesSubjectsAndStudents(model);
+        return "teacher/teacher-edit-form";
     }
 
     @PostMapping(value = "update")
     public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            addAttributesSubjectsStudents(model);
-            return "teacher-edit-form";
+            addAttributesSubjectsAndStudents(model);
+            return "teacher/teacher-edit-form";
         }
         TeacherDto updated = teacherService.update(mapper.map(teacher, TeacherDto.class));
         if (updated == null) {
             return "error/404";
         }
         model.addAttribute("teacher", updated);
-        return "teacher-edit-success";
+        return "teacher/teacher-edit-success";
     }
 
-    private void addAttributesSubjectsStudents(Model model) {
+    private void addAttributesSubjectsAndStudents(Model model) {
         model.addAttribute("subjects", subjectService.fetchAll());
         model.addAttribute("students", studentService.fetchAll());
     }
