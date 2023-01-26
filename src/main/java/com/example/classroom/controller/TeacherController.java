@@ -3,7 +3,9 @@ package com.example.classroom.controller;
 import com.example.classroom.dto.TeacherDto;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.service.StudentService;
+import com.example.classroom.service.SubjectService;
 import com.example.classroom.service.TeacherService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -16,17 +18,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("dashboard/teachers")
+@RequiredArgsConstructor
 public class TeacherController {
 
     private final TeacherService teacherService;
     private final StudentService studentService;
+    private final SubjectService subjectService;
     private final ModelMapper mapper;
-
-    public TeacherController(TeacherService teacherService, StudentService studentService, ModelMapper mapper) {
-        this.teacherService = teacherService;
-        this.studentService = studentService;
-        this.mapper = mapper;
-    }
 
     @GetMapping
     public String getPaginatedTeachers(@RequestParam(required = false) String name,
@@ -72,22 +70,21 @@ public class TeacherController {
 
     @GetMapping("{id}")
     public String getTeacher(@PathVariable Long id, Model model) {
-        TeacherDto studentDto = teacherService.fetchById(id);
-        model.addAttribute("teacher", studentDto);
+        addAttributeTeacherById(id, model);
         return "teacher";
     }
 
     @GetMapping("new")
     public String getNewTeacherForm(Model model) {
         model.addAttribute("teacher", new TeacherDto());
-        model.addAttribute("students", studentService.fetchAll());
+        addAttributesSubjectsStudents(model);
         return "teacher-form";
     }
 
     @PostMapping(value = "new")
     public String createTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, BindingResult result, Model model) {
-        if (result.hasErrors()){
-            model.addAttribute("students", studentService.fetchAll());
+        if (result.hasErrors()) {
+            addAttributesSubjectsStudents(model);
             return "teacher-form";
         }
         teacherService.create(mapper.map(teacher, TeacherDto.class));
@@ -102,16 +99,15 @@ public class TeacherController {
 
     @GetMapping("edit/{id}")
     public String editTeacher(@PathVariable Long id, Model model) {
-        TeacherDto dto = teacherService.fetchById(id);
-        model.addAttribute("teacher", dto);
-        model.addAttribute("students", studentService.fetchAll());
+        addAttributeTeacherById(id, model);
+        addAttributesSubjectsStudents(model);
         return "teacher-edit-form";
     }
 
     @PostMapping(value = "update")
     public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, BindingResult result, Model model) {
-        if (result.hasErrors()){
-            model.addAttribute("students", studentService.fetchAll());
+        if (result.hasErrors()) {
+            addAttributesSubjectsStudents(model);
             return "teacher-edit-form";
         }
         TeacherDto updated = teacherService.update(mapper.map(teacher, TeacherDto.class));
@@ -120,5 +116,14 @@ public class TeacherController {
         }
         model.addAttribute("teacher", updated);
         return "teacher-edit-success";
+    }
+
+    private void addAttributesSubjectsStudents(Model model) {
+        model.addAttribute("subjects", subjectService.fetchAll());
+        model.addAttribute("students", studentService.fetchAll());
+    }
+
+    private void addAttributeTeacherById(Long id, Model model) {
+        model.addAttribute("teacher", teacherService.fetchById(id));
     }
 }

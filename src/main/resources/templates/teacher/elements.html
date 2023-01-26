@@ -64,6 +64,24 @@
         </div>
     </div>
 
+    <div class="row mb-4">
+        <label class="col-form-label col-sm-4"
+               for="students_list">
+            <span th:text="#{teacher.subject}"></span>
+        </label>
+        <div class="col-sm text-left">
+            <th:block th:each="fieldOpt : ${subjects}">
+                <div>
+                    <input class="form-check-input m-2" id="subjects_list" th:field="*{subjects}"
+                           th:text="${fieldOpt.name}  + ', Field of study: ' + ${fieldOpt.fieldOfStudy.name}
+                           + ', ' + ${fieldOpt.semester.description}"
+                           th:value="${fieldOpt.id}"
+                           type="checkbox" value="">
+                </div>
+            </th:block>
+        </div>
+    </div>
+
 
     <div class="row mb-4">
         <label class="col-form-label col-sm-4"
@@ -108,7 +126,7 @@
         <span th:text="${teacher.age}"></span>
     </div>
     <hr>
-    <div class="mb-4">
+    <div class="mb-4" th:if="${teacher.department != null}">
         <h4 th:text="#{teacher.department}"></h4>
         <a class="text-body"
            th:href="@{/dashboard/departments/{id}(id=${teacher.department.id})}">
