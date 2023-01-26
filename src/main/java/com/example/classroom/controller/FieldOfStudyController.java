@@ -23,14 +23,14 @@ public class FieldOfStudyController {
     @GetMapping
     public String getAllFieldsOfStudy(Model model) {
         model.addAttribute("fieldsOfStudy", service.fetchAll());
-        return "field-of-study/all-items";
+        return "field-of-study/all-fieldsOfStudy";
     }
 
     @GetMapping("{id}")
     public String getFieldOfStudy(@PathVariable Long id, Model model) {
         addAttributeFieldOfStudy(id, model);
         addAttributes(id, model);
-        return "field-of-study/item-view";
+        return "field-of-study/fieldOfStudy-view";
     }
 
     @GetMapping("{id}/subjects")
@@ -43,14 +43,14 @@ public class FieldOfStudyController {
         model.addAttribute("semestersMap", service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id));
         model.addAttribute("hoursInSemester", service.calculateHoursInEachSemesterFromFieldOfStudy(id));
         model.addAttribute("subjects", dto.getSubjects());
-        return "field-of-study/subjects";
+        return "field-of-study/fieldOfStudy-subjects";
     }
 
     @GetMapping("new")
     public String getCreateFieldOfStudyForm(Model model) {
         addAttributeFieldOfStudyDto(model);
         addAttributeDepartments(model);
-        return "field-of-study/item-form";
+        return "field-of-study/fieldOfStudy-create-form";
     }
 
     @PostMapping("new")
@@ -58,10 +58,10 @@ public class FieldOfStudyController {
                                      BindingResult result,
                                      Model model) {
         if (result.hasErrors())
-            return "field-of-study/item-form";
+            return "fieldOfStudy-form";
         service.create(fieldOfStudy);
         addAttributeFieldOfStudyDto(model);
-        return "field-of-study/item-create-success";
+        return "field-of-study/fieldOfStudy-create-success";
     }
 
     @GetMapping("delete/{id}")
@@ -74,7 +74,7 @@ public class FieldOfStudyController {
     public String getEditFieldOfStudyForm(@PathVariable Long id, Model model) {
         addAttributeFieldOfStudy(id, model);
         addAttributeDepartments(model);
-        return "field-of-study/item-edit-form";
+        return "field-of-study/fieldOfStudy-edit-form";
     }
 
     @PostMapping("update")
@@ -86,7 +86,7 @@ public class FieldOfStudyController {
         service.update(dto);
         addAttributeFieldOfStudy(dto.getId(), model);
         addAttributes(dto.getId(), model);
-        return "field-of-study/item-edit-success";
+        return "field-of-study/fieldOfStudy-edit-success";
     }
 
     private void addAttributes(Long id, Model model) {
