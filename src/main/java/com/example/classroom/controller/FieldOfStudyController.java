@@ -2,22 +2,27 @@ package com.example.classroom.controller;
 
 
 import com.example.classroom.dto.FieldOfStudyDto;
+import com.example.classroom.fileupload.FileUploadUtil;
 import com.example.classroom.service.DepartmentService;
 import com.example.classroom.service.FieldOfStudyService;
 import com.example.classroom.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("dashboard/fields-of-study")
 @RequiredArgsConstructor
 public class FieldOfStudyController {
 
+    public static final String UPLOAD_DIR = "fields-of-study/";
     private final FieldOfStudyService service;
     private final DepartmentService departmentService;
     private final SubjectService subjectService;
@@ -25,6 +30,7 @@ public class FieldOfStudyController {
     @GetMapping
     public String getAllFieldsOfStudy(Model model) {
         model.addAttribute("fieldsOfStudy", service.fetchAll());
+        model.addAttribute("imagesPath", FileUploadUtil.getImagesPath(UPLOAD_DIR));
         return "field-of-study/all-fieldsOfStudy";
     }
 
@@ -54,14 +60,18 @@ public class FieldOfStudyController {
     }
 
     @PostMapping("new")
-    public String createFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto fieldOfStudy,
+    public String createFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
+                                     @RequestParam(value = "imageUpload") MultipartFile multipartFile,
                                      BindingResult result,
-                                     Model model) {
+                                     Model model) throws IOException {
         if (result.hasErrors()) {
             addAttributeDepartments(model);
             return "fieldOfStudy-form";
         }
-        FieldOfStudyDto created = service.create(fieldOfStudy);
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        dto.setImage(fileName);
+        FieldOfStudyDto created = service.create(dto);
+        FileUploadUtil.saveFile(UPLOAD_DIR + created.getId(), fileName, multipartFile);
         addAttributes(created.getId(), model);
         return "field-of-study/fieldOfStudy-create-success";
     }
@@ -81,11 +91,17 @@ public class FieldOfStudyController {
 
     @PostMapping("update")
     public String editFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
+                                   @RequestParam(value = "imageUpload") MultipartFile multipartFile,
                                    BindingResult result,
-                                   Model model) {
+                                   Model model) throws IOException {
         if (result.hasErrors())
             return "field-of-study/fieldOfStudy-edit-form";
-        service.update(dto);
+
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        dto.setImage(fileName);
+        FieldOfStudyDto updated = service.update(dto);
+        FileUploadUtil.saveFile(UPLOAD_DIR + updated.getId(), fileName, multipartFile);
+
         addAttributeFieldOfStudyFetchById(dto.getId(), model);
         addAttributes(dto.getId(), model);
         return "field-of-study/fieldOfStudy-edit-success";
@@ -109,6 +125,11 @@ public class FieldOfStudyController {
         addAttributeDescriptionList(id, model);
         addAttributeTotalEctsPoints(id, model);
         addAttributeNumberOfSemesters(id, model);
+        addAttributeImagePath(id, model);
+    }
+
+    private void addAttributeImagePath(Long id, Model model) {
+        model.addAttribute("imagePath", service.getImagePath(id));
     }
 
     private void addAttributeNumberOfSemesters(Long id, Model model) {
