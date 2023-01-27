@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -208,6 +209,14 @@ public class FieldOfStudyService {
                 return 3;
             }
         }
+    }
+
+    public String getImagePath(Long id) {
+        String imageName = fetchById(id).getImage();
+        Path imagePath = Path.of("/img").resolve("fields-of-study");
+        if (imageName != null)
+            return imagePath.resolve(id.toString()).resolve(imageName).toString();
+        return imagePath.resolve("default.jpg").toString();
     }
 
     private void removeReferencingObjects(FieldOfStudy fieldOfStudy) {
