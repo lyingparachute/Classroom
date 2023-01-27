@@ -1,4 +1,4 @@
-<!-- ======= Form for Subject ======= -->
+<!-- ======= Form for FieldOfStudy ======= -->
 <div th:fragment="item-form">
     <div class="mb-4">
         <h4 th:text="#{fieldOfStudy.edit.card.body.name}"></h4>
@@ -64,9 +64,14 @@
                    th:text="#{fieldOfStudy.description}"></label>
             <div class="form-helper" th:text="#{fieldOfStudy.description.helper}"></div>
         </div>
-
         <div class="alert alert-danger" th:errors="*{description}"
              th:if="${#fields.hasErrors('description')}"></div>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{fieldOfStudy.item.card.body.image}"></h4>
+        <label class="form-label" for="customFile" th:text="#{fieldOfStudy.item.card.body.image.desc}"></label>
+        <input class="form-control" id="customFile" type="file"/>
     </div>
 </div>
 
