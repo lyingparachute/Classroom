@@ -20,6 +20,7 @@
                     <form class="form-group needs-validation"
                           th:action="@{/dashboard/fields-of-study/new}"
                           th:object="${fieldOfStudy}"
+                          enctype="multipart/form-data"
                           th:method="post">
                         <!-- ======= FieldOfStudy Form ======= -->
                         <div th:replace="field-of-study/elements :: item-form"></div>

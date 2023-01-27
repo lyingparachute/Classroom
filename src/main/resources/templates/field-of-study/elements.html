@@ -71,7 +71,9 @@
     <div class="mb-4">
         <h4 th:text="#{fieldOfStudy.item.card.body.image}"></h4>
         <label class="form-label" for="customFile" th:text="#{fieldOfStudy.item.card.body.image.desc}"></label>
-        <input class="form-control" id="customFile" type="file"/>
+        <input accept="image/png, image/jpeg" class="form-control" id="customFile"
+               name="imageUpload"
+               type="file"/>
     </div>
 </div>
 
@@ -129,8 +131,13 @@
             </div>
         </th:block>
     </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{fieldOfStudy.item.card.body.image}"></h4>
+        <img class="img-fluid"
+             th:src="@{${imagePath}}"/>
+    </div>
 </div>
-
 
 <!-- ======= View FieldOfStudy Subjects ======= -->
 <div th:fragment="subjects-view">
@@ -207,7 +214,8 @@
                                 data-field="state"
                                 rowspan="2" style="text-align: center; vertical-align: middle; width: 36px;">
                                 <div class="form-check">
-                                    <input aria-label="select all items" class="form-check-input th-inner" id="flexCheckDefault"
+                                    <input aria-label="select all items" class="form-check-input th-inner"
+                                           id="flexCheckDefault"
                                            name="btSelectAll"
                                            type="checkbox"/>
                                 </div>
