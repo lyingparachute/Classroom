@@ -38,9 +38,9 @@ public class FieldOfStudyController {
     @GetMapping("{id}/subjects")
     public String getFieldOfStudySubjects(@PathVariable Long id, Model model) {
         addAttributeFieldOfStudyFetchById(id, model);
-        addAttributeSemesters(id, model);
-        addAttributeEctsMap(id, model);
-        addAttributeSemestersMap(id, model);
+        addAttributeNumberOfSemesters(id, model);
+        addAttributeEctsPointsForEachSemester(id, model);
+        addAttributeSubjectsMapGroupedBySemesters(id, model);
         model.addAttribute("hoursInSemester", service.calculateHoursInEachSemesterFromFieldOfStudy(id));
         model.addAttribute("subjects", service.fetchById(id).getSubjects());
         return "field-of-study/fieldOfStudy-subjects";
@@ -92,33 +92,26 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("edit/{id}/subjects")
-    public String getEditFieldOfStudySubjectsForm(@PathVariable Long id, Model model) {
+    public String getSubjectsForm(@PathVariable Long id, Model model) {
         addAttributeFieldOfStudyFetchById(id, model);
-        addAttributeSemesters(id, model);
-        addAttributeEctsMap(id, model);
-        addAttributeSemestersMap(id, model);
-        model.addAttribute("hoursInSemester", service.calculateHoursInEachSemesterFromFieldOfStudy(id));
-        model.addAttribute("subjects", service.fetchById(id).getSubjects());
+        addAttributeAllSubjectsMapGroupedBySemesters(model);
+        addAttributeNumberOfSemesters(id, model);
         return "field-of-study/fieldOfStudy-subjects-edit-form";
     }
 
     @PostMapping("subjects/update")
-    public String editFieldOfStudySubjects(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
-                                           BindingResult result,
-                                           Model model) {
-        if (result.hasErrors())
-            return "field-of-study/fieldOfStudy-edit-form";
+    public String editSubjects(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto) {
         service.updateSubjects(dto);
         return "redirect:/dashboard/fields-of-study/" + dto.getId() + "/subjects";
     }
 
     private void addAttributes(Long id, Model model) {
-        addAttributeDescription(id, model);
+        addAttributeDescriptionList(id, model);
         addAttributeTotalEctsPoints(id, model);
-        addAttributeSemesters(id, model);
+        addAttributeNumberOfSemesters(id, model);
     }
 
-    private void addAttributeSemesters(Long id, Model model) {
+    private void addAttributeNumberOfSemesters(Long id, Model model) {
         model.addAttribute("numberOfSemesters", service.getNumberOfSemesters(id));
     }
 
@@ -126,11 +119,11 @@ public class FieldOfStudyController {
         model.addAttribute("ects", service.getSumOfEctsPointsFromAllSemesters(id));
     }
 
-    private void addAttributeEctsMap(Long id, Model model) {
+    private void addAttributeEctsPointsForEachSemester(Long id, Model model) {
         model.addAttribute("ectsMap", service.calculateEctsPointsForEachSemester(id));
     }
 
-    private void addAttributeDescription(Long id, Model model) {
+    private void addAttributeDescriptionList(Long id, Model model) {
         model.addAttribute("descriptionList", service.splitDescription(id));
     }
 
@@ -146,11 +139,11 @@ public class FieldOfStudyController {
         model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
     }
 
-    private void addAttributeAllSubjects(Model model) {
-        model.addAttribute("subjects", subjectService.fetchAll());
+    private void addAttributeAllSubjectsMapGroupedBySemesters(Model model) {
+        model.addAttribute("subjectsMap", subjectService.fetchAllGroupedBySemesters());
     }
 
-    private void addAttributeSemestersMap(Long id, Model model) {
+    private void addAttributeSubjectsMapGroupedBySemesters(Long id, Model model) {
         model.addAttribute("semestersMap", service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id));
     }
 }

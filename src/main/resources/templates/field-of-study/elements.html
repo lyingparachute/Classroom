@@ -189,37 +189,52 @@
         <span class="h5"
               th:text="${fieldOfStudy.mode.value.toLowerCase()}"></span>
     </h4>
-    <th:block th:each="semOpt, iterStat : ${T(com.example.classroom.enums.Semester).values()}">
+
+    <th:block th:each="semester, iterStat : ${T(com.example.classroom.enums.Semester).values()}">
         <div class="card my-3">
             <div class="card-body">
-                <h5 class="card-title fw-bold" th:text="${semOpt.description}"></h5>
+                <h5 class="card-title fw-bold" th:text="${semester.description}"></h5>
                 <div class="table-responsive">
                     <table class="table table-hover border-primary">
                         <thead>
                         <tr>
+                            <th class="bs-checkbox"
+                                data-field="state"
+                                rowspan="2" style="text-align: center; vertical-align: middle; width: 36px;">
+                                <div class="form-check">
+                                    <input aria-label="select all items" class="form-check-input th-inner" id="flexCheckDefault"
+                                           name="btSelectAll"
+                                           type="checkbox"/>
+                                </div>
+                            </th>
                             <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}"></th>
                             <th scope="col"
                                 th:text="#{fieldOfStudy.subjects.table.thead.description}"></th>
                             <th scope="col"
                                 th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}"></th>
+                            <th scope="col"
+                                th:text="#{fieldOfStudy.subjects.table.thead.ects}"></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="subject: ${semestersMap.get(semOpt)}">
+                        <tr th:each="subject : ${subjectsMap.get(semester)}">
+                            <td class="bs-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           name="btSelectItem"
+                                           th:aria-label="${subject.name}"
+                                           th:data-index="${subject}"
+                                           th:field="*{subjects}"
+                                           th:value="${subject.id}"
+                                           type="checkbox"/>
+                                </div>
+                            </td>
                             <th scope="row" th:text="${subject.name}"></th>
                             <td th:text="${subject.description}"></td>
                             <td th:text="${subject.hoursInSemester}"></td>
+                            <td th:text="${subject.ectsPoints}"></td>
                         </tr>
                         </tbody>
-                        <caption class="fst-italic">
-                            <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>
-                            <span class="fw-bold"
-                                  th:text="${hoursInSemester.get(semOpt)}"></span>
-                            &nbsp;&nbsp;
-                            <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>
-                            <span class="fw-bold"
-                                  th:text="${hoursInSemester.get(semOpt)}"></span>
-                        </caption>
                     </table>
                 </div>
             </div>

@@ -54,3 +54,13 @@
         </a>
     </div>
 </div>
+
+<!-- ======= Edit subjects Button ======= -->
+<div class="row my-2 justify-content-end" th:fragment="editSubjectsButton">
+    <div class="col-auto">
+        <a class="btn btn-outline-primary"
+           th:href="@{/dashboard/fields-of-study/edit/{id}/subjects(id=${fieldOfStudy.id})}">
+            <i class="fas fa-pen mr-2"></i><span th:text="#{button.edit}"></span>
+        </a>
+    </div>
+</div>
