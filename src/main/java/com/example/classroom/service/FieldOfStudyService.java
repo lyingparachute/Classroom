@@ -214,9 +214,7 @@ public class FieldOfStudyService {
     public String getImagePath(Long id) {
         String imageName = fetchById(id).getImage();
         Path imagePath = Path.of("/img").resolve("fields-of-study");
-        if (imageName != null)
-            return imagePath.resolve(id.toString()).resolve(imageName).toString();
-        return imagePath.resolve("default.jpg").toString();
+        return imagePath.resolve(Objects.requireNonNullElse(imageName, "default.jpg")).toString();
     }
 
     private void removeReferencingObjects(FieldOfStudy fieldOfStudy) {
