@@ -39,6 +39,9 @@ public class FieldOfStudy {
     @Enumerated(EnumType.STRING)
     private AcademicTitle title;
 
+    @Column(length = 64)
+    private String image;
+
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.MERGE,

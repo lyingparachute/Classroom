@@ -26,6 +26,7 @@ public class FieldOfStudyDto {
     private LevelOfEducation levelOfEducation;
     private ModeOfStudy mode;
     private AcademicTitle title;
+    private String image;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Department department;
