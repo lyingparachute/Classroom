@@ -20,65 +20,78 @@
                 </div>
                 <div class="card-body">
 
-                                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="row mb-4 ">
+                        <div class="col-auto">
+                            <a class="btn btn-secondary"
+                               th:href="@{/dashboard/fields-of-study/first}">
+                                <span th:text="#{fieldsOfStudy.button.first.level}"></span>
+                                <i class="fas fa-regular fa-up-right-from-square"></i>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <a class="btn btn-secondary"
+                               th:href="@{/dashboard/fields-of-study/second}">
+                                <span th:text="#{fieldsOfStudy.button.second.level}"></span>
+                                <i class="fas fa-regular fa-up-right-from-square"></i>
+                            </a>
+                        </div>
+                    </div>
 
-                                    <th:block th:each="fieldMapOpt, iterStat : ${fieldsOfStudyMap}">
-                                        <div class="col">
-                                            <div class="card h-100">
-                                                <div class="bg-image hover-overlay ripple"
-                                                     data-mdb-ripple-color="light">
-                                                    <img class="img-fluid"
-                                                         th:alt="${fieldMapOpt.value.get(0).name}"
-                                                         th:if="${fieldMapOpt.value.get(0).image} != null"
-                                                         th:src="@{${imagesPath} + '/' + ${fieldMapOpt.value.get(0).image}}"/>
-                                                    <img alt="Default image"
-                                                         class="img-fluid"
-                                                         th:src="@{${imagesPath} + '/' + 'default.jpg'}"
-                                                         th:unless="${fieldMapOpt.value.get(0).image} != null"/>
-                                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldMapOpt.value.get(0).id})}">
-                                                        <div class="mask"
-                                                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                                                    </a>
-                                                </div>
-                                                <div class="card-body">
-                                                    <h5 class="card-title"
-                                                        th:text="${fieldMapOpt.value.get(0).name}"></h5>
-                                                    <p class="card-text"
-                                                       th:text="${fieldMapOpt.value.get(0).description}"></p>
-                                                </div>
-                                                <div class="card-footer text-center">
-                                                    <div class="dropdown">
-                                                        <button aria-expanded="false"
-                                                                class="btn btn-primary dropdown-toggle"
-                                                                data-mdb-toggle="dropdown"
-                                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                                type="button">
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <th:block
-                                                                    th:each="fieldOpt, iterStat2 : ${fieldMapOpt.value}">
-                                                                <li>
-                                                                    <a class="dropdown-item"
-                                                                       th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+                        <th:block th:each="fieldMapOpt, iterStat : ${fieldsOfStudyMap}">
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="bg-image hover-overlay ripple"
+                                         data-mdb-ripple-color="light">
+                                        <img class="img-fluid"
+                                             th:alt="${fieldMapOpt.value.get(0).name}"
+                                             th:if="${fieldMapOpt.value.get(0).image} != null"
+                                             th:src="@{${imagesPath} + '/' + ${fieldMapOpt.value.get(0).image}}"/>
+                                        <img alt="Default image"
+                                             class="img-fluid"
+                                             th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                                             th:unless="${fieldMapOpt.value.get(0).image} != null"/>
+                                        <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldMapOpt.value.get(0).id})}">
+                                            <div class="mask"
+                                                 style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title"
+                                            th:text="${fieldMapOpt.value.get(0).name}"></h5>
+                                        <p class="card-text"
+                                           th:text="${fieldMapOpt.value.get(0).description}"></p>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <div class="dropdown">
+                                            <button aria-expanded="false"
+                                                    class="btn btn-primary dropdown-toggle"
+                                                    data-mdb-toggle="dropdown"
+                                                    th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
+                                                    type="button">
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <th:block
+                                                        th:each="fieldOpt, iterStat2 : ${fieldMapOpt.value}">
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                           th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
                                                                     <span th:text="${fieldOpt.levelOfEducation.value}
                                                                     + ', ' + ${fieldOpt.mode.value.toLowerCase()}"></span>
-                                                                        <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                                    </a>
-                                                                </li>
-                                                            </th:block>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                            <i class="fas fa-regular fa-up-right-from-square"></i>
+                                                        </a>
+                                                    </li>
+                                                </th:block>
+                                            </ul>
                                         </div>
-
-                                    </th:block>
-
+                                    </div>
                                 </div>
+                            </div>
+                        </th:block>
+                    </div>
                 </div>
             </div>
-
-
         </section>
     </div>
 </main>
