@@ -2,6 +2,7 @@ package com.example.classroom.repository;
 
 import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Subject;
+import com.example.classroom.enums.LevelOfEducation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,6 @@ public interface FieldOfStudyRepository extends JpaRepository<FieldOfStudy, Long
 
     @Query("select f.subjects as subjects from FieldOfStudy f where f.id = ?1")
     List<Subject> findAllSubjectsFromFieldOfStudy(Long id);
+
+    List<FieldOfStudy> findAllByLevelOfEducation(LevelOfEducation levelOfEducation);
 }
