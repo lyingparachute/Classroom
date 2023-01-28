@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum LevelOfEducation {
-    FIRST("First Degree Studies"),
-    SECOND("Second Degree Studies");
+    FIRST("First degree studies"),
+    SECOND("Second degree studies");
 
     private final String value;
 }
