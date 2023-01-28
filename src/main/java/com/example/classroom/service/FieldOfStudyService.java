@@ -218,18 +218,24 @@ public class FieldOfStudyService {
         return imagePath.resolve(Objects.requireNonNullElse(imageName, "default.jpg")).toString();
     }
 
-    public Map<LevelOfEducation, List<FieldOfStudy>> fetchAllGroupedByLevelOfEducation() {
+    public Map<LevelOfEducation, List<FieldOfStudyDto>> fetchAllGroupedByLevelOfEducation() {
         return Map.ofEntries(
-                entry(LevelOfEducation.FIRST, repository.findAllByLevelOfEducation(LevelOfEducation.FIRST)),
-                entry(LevelOfEducation.SECOND, repository.findAllByLevelOfEducation(LevelOfEducation.SECOND))
+                entry(LevelOfEducation.FIRST, fetchAllByLevelOfEducation(LevelOfEducation.FIRST)),
+                entry(LevelOfEducation.SECOND, fetchAllByLevelOfEducation(LevelOfEducation.SECOND))
         );
     }
 
-    public Map<String, List<FieldOfStudy>> fetchAllGroupedByName() {
-        List<String> uniqueNames = repository.findAll().stream().map(FieldOfStudy::getName).distinct().toList();
-        Map<String, List<FieldOfStudy>> map = new HashMap<>();
+    public List<FieldOfStudyDto> fetchAllByLevelOfEducation(LevelOfEducation levelOfEducation) {
+        return repository.findAllByLevelOfEducation(levelOfEducation)
+                .stream().map(f -> mapper.map(f, FieldOfStudyDto.class)).toList();
+    }
+
+    public Map<String, List<FieldOfStudyDto>> fetchAllGroupedAndSortedByName() {
+        List<String> uniqueNames = repository.findAll().stream().map(FieldOfStudy::getName).distinct().sorted().toList();
+        Map<String, List<FieldOfStudyDto>> map = new TreeMap<>();
         for (String name : uniqueNames) {
-            map.put(name, repository.findAllByNameContainingIgnoreCase(name));
+            map.put(name, repository.findAllByNameContainingIgnoreCase(name)
+                    .stream().map(f -> mapper.map(f, FieldOfStudyDto.class)).toList());
         }
         return map;
     }

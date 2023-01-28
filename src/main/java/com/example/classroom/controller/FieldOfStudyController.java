@@ -2,6 +2,7 @@ package com.example.classroom.controller;
 
 
 import com.example.classroom.dto.FieldOfStudyDto;
+import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.fileupload.FileUploadUtil;
 import com.example.classroom.service.DepartmentService;
 import com.example.classroom.service.FieldOfStudyService;
@@ -29,12 +30,22 @@ public class FieldOfStudyController {
     private final DepartmentService departmentService;
     private final SubjectService subjectService;
 
-    @GetMapping
-    public String getAllFieldsOfStudy(Model model) {
-        model.addAttribute("fieldsOfStudy", service.fetchAll());
-        model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedByLevelOfEducation());
+    private static void addAttributeImagesFolderPath(Model model) {
         model.addAttribute("imagesPath", Path.of("/img").resolve(UPLOAD_DIR));
+    }
+
+    @GetMapping()
+    public String getAllFieldsOfStudy(Model model) {
+        model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedAndSortedByName());
+        addAttributeImagesFolderPath(model);
         return "field-of-study/all-fieldsOfStudy";
+    }
+
+    @GetMapping("first")
+    public String getFieldsOfStudyWithFirstLevelOfEducation(Model model) {
+        model.addAttribute("fieldsOfStudy", service.fetchAllByLevelOfEducation(LevelOfEducation.FIRST));
+        addAttributeImagesFolderPath(model);
+        return "field-of-study/fieldsOfStudy-first";
     }
 
     @GetMapping("{id}")
@@ -169,5 +180,12 @@ public class FieldOfStudyController {
 
     private void addAttributeSubjectsMapGroupedBySemesters(Long id, Model model) {
         model.addAttribute("semestersMap", service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id));
+    }
+
+    @GetMapping("second")
+    public String getFieldsOfStudyWithSecondLevelOfEducation(Model model) {
+        model.addAttribute("fieldsOfStudy", service.fetchAllByLevelOfEducation(LevelOfEducation.SECOND));
+        addAttributeImagesFolderPath(model);
+        return "field-of-study/fieldsOfStudy-second";
     }
 }
