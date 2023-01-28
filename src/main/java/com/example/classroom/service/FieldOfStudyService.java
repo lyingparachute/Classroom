@@ -5,6 +5,7 @@ import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.AcademicTitle;
+import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.Semester;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import lombok.RequiredArgsConstructor;
@@ -215,6 +216,22 @@ public class FieldOfStudyService {
         String imageName = fetchById(id).getImage();
         Path imagePath = Path.of("/img").resolve("fields-of-study");
         return imagePath.resolve(Objects.requireNonNullElse(imageName, "default.jpg")).toString();
+    }
+
+    public Map<LevelOfEducation, List<FieldOfStudy>> fetchAllGroupedByLevelOfEducation() {
+        return Map.ofEntries(
+                entry(LevelOfEducation.FIRST, repository.findAllByLevelOfEducation(LevelOfEducation.FIRST)),
+                entry(LevelOfEducation.SECOND, repository.findAllByLevelOfEducation(LevelOfEducation.SECOND))
+        );
+    }
+
+    public Map<String, List<FieldOfStudy>> fetchAllGroupedByName() {
+        List<String> uniqueNames = repository.findAll().stream().map(FieldOfStudy::getName).distinct().toList();
+        Map<String, List<FieldOfStudy>> map = new HashMap<>();
+        for (String name : uniqueNames) {
+            map.put(name, repository.findAllByNameContainingIgnoreCase(name));
+        }
+        return map;
     }
 
     private void removeReferencingObjects(FieldOfStudy fieldOfStudy) {

@@ -19,715 +19,125 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    <div class="row row-cols-1 row-cols-md-3 g-4">
 
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/energetyka.jpg}"/>
-                                    <a href="#!">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Energetyka</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
+                    <th:block
+                            th:each="levelOpt, iterStat : ${T(com.example.classroom.enums.LevelOfEducation).values()}">
+                        <h3 class="fw-bold mb-1 mt-4 mx-4" th:text="${levelOpt.value}"></h3>
 
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/1}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/12}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                        <div class="card my-3">
+                            <div class="card-body">
+                                <div class="row row-cols-1 row-cols-md-3 g-4">
+                                    <th:block th:each="fieldOpt, iterStat2 : ${fieldsOfStudyMap.get(levelOpt)}">
 
-                            </div>
-                        </div>
+                                        <div class="col">
+                                            <div class="card h-100">
+                                                <div class="bg-image hover-overlay ripple"
+                                                     data-mdb-ripple-color="light">
+                                                    <img class="img-fluid"
+                                                         th:alt="${fieldOpt.image}"
+                                                         th:if="${fieldOpt.image} != null"
+                                                         th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
+                                                    <img alt="default.jpg"
+                                                         class="img-fluid"
+                                                         th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                                                         th:unless="${fieldOpt.image} != null"/>
+                                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                                        <div class="mask"
+                                                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                                    </a>
+                                                </div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
+                                                    <span class="text-muted"
+                                                          th:if="${fieldOpt.mode} == ${T(com.example.classroom.enums.ModeOfStudy).PT}"
+                                                          th:text="${fieldOpt.mode.value}"></span>
+                                                    <p class="card-text" th:text="${fieldOpt.description}"></p>
+                                                </div>
+                                                <div class="card-footer text-center">
+                                                    <div class="dropdown">
+                                                        <button aria-expanded="false"
+                                                                class="btn btn-primary dropdown-toggle"
+                                                                data-mdb-toggle="dropdown"
+                                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
+                                                                type="button">
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a class="dropdown-item"
+                                                                   th:href="@{/dashboard/fields-of-study/1}">
+                                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
+                                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item"
+                                                                   th:href="@{/dashboard/fields-of-study/12}">
+                                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
+                                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/elektrotechnika.jpg}"/>
-                                    <a href="#!">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Elektrotechnika</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/1}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/1}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/automatyka-cybernetyka-i-robotyka.jpg}"/>
-                                    <a href="#!">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-
-                                <div class="card-body">
-                                    <h5 class="card-title">Automatyka, cybernetyka i robotyka</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/22}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/26}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/technologie-wodorowe-i-elektromobilność.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Technologie Wodorowe i Elektromobilność</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/1}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/12}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/inżynieria-materiałowa.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Inżynieria materiałowa</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/2}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/13}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/inżynieria-mechaniczno-medyczna.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Inżynieria mechaniczno-medyczna</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/3}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/14}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/informatyka.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Informatyka</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button
-                                                aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/24}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item"
-                                                   th:href="@{/dashboard/fields-of-study/25}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.pt}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/28}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a class="dropdown-item"
-                                                   th:href="@{/dashboard/fields-of-study/29}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.pt}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/elektronika-i-telekomunikacja.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Elektronika i Telekomunikacja</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/23}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/27}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>
+                    </th:block>
 
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/mechanika-i-budowa-maszyn.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Mechanika i Budowa Maszyn</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
+                    <!--                        <th:block th:each="fieldOpt, iterStat : ${fieldsOfStudy}">-->
+                    <!--                            <div class="col">-->
+                    <!--                                <div class="card h-100">-->
+                    <!--                                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">-->
+                    <!--                                            <img th:if="${fieldOpt.image} != null"-->
+                    <!--                                                 class="img-fluid"-->
+                    <!--                                                 th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>-->
+                    <!--                                            <img th:unless="${fieldOpt.image} != null"-->
+                    <!--                                                 class="img-fluid"-->
+                    <!--                                                 th:src="@{${imagesPath} + '/' + 'default.jpg'}"/>-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="card-body">-->
+                    <!--                                        <h5 class="card-title" th:text="${fieldOpt.name}"></h5>-->
+                    <!--                                        <p class="card-text" th:text="${fieldOpt.description}">-->
+                    <!--                                        </p>-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="card-footer text-center">-->
+                    <!--                                        <div class="dropdown">-->
+                    <!--                                            <button aria-expanded="false"-->
+                    <!--                                                    class="btn btn-primary dropdown-toggle"-->
+                    <!--                                                    data-mdb-toggle="dropdown"-->
+                    <!--                                                    th:text="#{fieldsOfStudy.item.card.btn.dropdown}"-->
+                    <!--                                                    type="button">-->
+                    <!--                                            </button>-->
+                    <!--                                            <ul class="dropdown-menu">-->
+                    <!--                                                <li>-->
+                    <!--                                                    <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/1}">-->
+                    <!--                                                        <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>-->
+                    <!--                                                        <i class="fas fa-regular fa-up-right-from-square"></i>-->
+                    <!--                                                    </a>-->
+                    <!--                                                </li>-->
+                    <!--                                                <li>-->
+                    <!--                                                    <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/12}">-->
+                    <!--                                                        <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>-->
+                    <!--                                                        <i class="fas fa-regular fa-up-right-from-square"></i>-->
+                    <!--                                                    </a>-->
+                    <!--                                                </li>-->
+                    <!--                                            </ul>-->
+                    <!--                                        </div>-->
+                    <!--                                    </div>-->
 
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/4}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/5}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.pt}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/15}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/16}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.pt}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/mechatronika.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Mechatronika</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/6}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/17}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/oceanotechnika.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Oceanotechnika</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button
-                                                aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                id="dropdownMenuButton"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-
-                                        <ul aria-labelledby="dropdownMenuButton" class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item"
-                                                   th:href="@{/dashboard/fields-of-study/7}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item"
-                                                   th:href="@{/dashboard/fields-of-study/8}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.pt}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item"
-                                                   th:href="@{/dashboard/fields-of-study/18}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a class="dropdown-item"
-                                                   th:href="@{/dashboard/fields-of-study/19}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.pt}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/projektowanie-i-budowa-jachtow.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Projektowanie i Budowa Jachtów</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/9}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/technologie-kosmiczne-i-satelitarne.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Technologie Kosmiczne i Satelitarne</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/20}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/transport-i-logistyka.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Transport i Logistyka</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/10}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/21}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img class="img-fluid"
-                                         th:src="@{/img/fields-of-study/zarzadzanie-i-inzynieria-produkcji.jpg}"/>
-                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldsOfStudy.get(0).id})}">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Zarządzanie i Inżynieria Produkcji</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's content.
-                                    </p>
-                                </div>
-
-                                <div class="card-footer text-center">
-                                    <div class="dropdown">
-                                        <button aria-expanded="false"
-                                                class="btn btn-primary dropdown-toggle"
-                                                data-mdb-toggle="dropdown"
-                                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
-                                                type="button">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/11}">
-                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </li>
-
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </th:block>-->
 
                 </div>
+
             </div>
-        </section>
+    </div>
+    </section>
     </div>
 </main>
 

@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("dashboard/fields-of-study")
@@ -31,6 +32,7 @@ public class FieldOfStudyController {
     @GetMapping
     public String getAllFieldsOfStudy(Model model) {
         model.addAttribute("fieldsOfStudy", service.fetchAll());
+        model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedByLevelOfEducation());
         model.addAttribute("imagesPath", Path.of("/img").resolve(UPLOAD_DIR));
         return "field-of-study/all-fieldsOfStudy";
     }
@@ -98,9 +100,9 @@ public class FieldOfStudyController {
         if (result.hasErrors())
             return "field-of-study/fieldOfStudy-edit-form";
 
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         dto.setImage(fileName);
-        FieldOfStudyDto updated = service.update(dto);
+        service.update(dto);
         FileUploadUtil.saveFile(UPLOAD_DIR, fileName, multipartFile);
 
         addAttributeFieldOfStudyFetchById(dto.getId(), model);
