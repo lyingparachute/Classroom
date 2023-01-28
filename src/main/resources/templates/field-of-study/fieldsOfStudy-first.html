@@ -14,27 +14,23 @@
         <section class="mb-4">
             <div class="card" id="tableCard">
                 <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
-                    <h3 class="mb-0 text-center">
-                        <strong th:text="#{fieldsOfStudy.header}"></strong>
-                    </h3>
-                </div>
-                <div class="card-body">
-
-                    <h3 class="fw-bold mb-1 mt-4 mx-4"
+                    <h3 class="mb-0 fw-bold text-center"
                         th:text="${T(com.example.classroom.enums.LevelOfEducation).FIRST.value}">
                     </h3>
+                </div>
+                <div class="card-body" th:fragment="fields-of-study-cards">
+                    <!-- ======= Go back button ======= -->
+                    <div th:replace="field-of-study/elements :: go-back-to-fieldsOfStudy"></div>
 
-                    <div class="card my-3" th:fragment="fields-of-study-cards">
-                        <div class="card-body">
-                            <div class="row row-cols-1 row-cols-md-3 g-4">
-                                <th:block th:each="fieldOpt, iterStat2 : ${fieldsOfStudy}">
-                                    <div class="col">
-                                        <div class="card h-100">
-                                            <div class="bg-image hover-overlay ripple"
-                                                 data-mdb-ripple-color="light">
-                                                <img class="img-fluid"
-                                                     th:alt="${fieldOpt.name}"
-                                                     th:if="${fieldOpt.image} != null"
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <th:block th:each="fieldOpt, iterStat2 : ${fieldsOfStudy}">
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="bg-image hover-overlay ripple"
+                                         data-mdb-ripple-color="light">
+                                        <img class="img-fluid"
+                                             th:alt="${fieldOpt.name}"
+                                             th:if="${fieldOpt.image} != null"
                                                      th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
                                                 <img alt="Default image"
                                                      class="img-fluid"
@@ -61,17 +57,10 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </th:block>
-                            </div>
                         </div>
-                    </div>
-
-
                 </div>
-
             </div>
-
         </section>
     </div>
 </main>
