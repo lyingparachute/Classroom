@@ -20,38 +20,31 @@
                 </div>
                 <div class="card-body">
 
-                    <th:block
-                            th:each="levelOpt, iterStat : ${T(com.example.classroom.enums.LevelOfEducation).values()}">
-                        <h3 class="fw-bold mb-1 mt-4 mx-4" th:text="${levelOpt.value}"></h3>
-
-                        <div class="card my-3">
-                            <div class="card-body">
                                 <div class="row row-cols-1 row-cols-md-3 g-4">
-                                    <th:block th:each="fieldOpt, iterStat2 : ${fieldsOfStudyMap.get(levelOpt)}">
 
+                                    <th:block th:each="fieldMapOpt, iterStat : ${fieldsOfStudyMap}">
                                         <div class="col">
                                             <div class="card h-100">
                                                 <div class="bg-image hover-overlay ripple"
                                                      data-mdb-ripple-color="light">
                                                     <img class="img-fluid"
-                                                         th:alt="${fieldOpt.image}"
-                                                         th:if="${fieldOpt.image} != null"
-                                                         th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
-                                                    <img alt="default.jpg"
+                                                         th:alt="${fieldMapOpt.value.get(0).name}"
+                                                         th:if="${fieldMapOpt.value.get(0).image} != null"
+                                                         th:src="@{${imagesPath} + '/' + ${fieldMapOpt.value.get(0).image}}"/>
+                                                    <img alt="Default image"
                                                          class="img-fluid"
                                                          th:src="@{${imagesPath} + '/' + 'default.jpg'}"
-                                                         th:unless="${fieldOpt.image} != null"/>
-                                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                                         th:unless="${fieldMapOpt.value.get(0).image} != null"/>
+                                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldMapOpt.value.get(0).id})}">
                                                         <div class="mask"
                                                              style="background-color: rgba(251, 251, 251, 0.15);"></div>
                                                     </a>
                                                 </div>
                                                 <div class="card-body">
-                                                    <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
-                                                    <span class="text-muted"
-                                                          th:if="${fieldOpt.mode} == ${T(com.example.classroom.enums.ModeOfStudy).PT}"
-                                                          th:text="${fieldOpt.mode.value}"></span>
-                                                    <p class="card-text" th:text="${fieldOpt.description}"></p>
+                                                    <h5 class="card-title"
+                                                        th:text="${fieldMapOpt.value.get(0).name}"></h5>
+                                                    <p class="card-text"
+                                                       th:text="${fieldMapOpt.value.get(0).description}"></p>
                                                 </div>
                                                 <div class="card-footer text-center">
                                                     <div class="dropdown">
@@ -62,20 +55,17 @@
                                                                 type="button">
                                                         </button>
                                                         <ul class="dropdown-menu">
-                                                            <li>
-                                                                <a class="dropdown-item"
-                                                                   th:href="@{/dashboard/fields-of-study/1}">
-                                                                    <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>
-                                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="dropdown-item"
-                                                                   th:href="@{/dashboard/fields-of-study/12}">
-                                                                    <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>
-                                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                                </a>
-                                                            </li>
+                                                            <th:block
+                                                                    th:each="fieldOpt, iterStat2 : ${fieldMapOpt.value}">
+                                                                <li>
+                                                                    <a class="dropdown-item"
+                                                                       th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                                                    <span th:text="${fieldOpt.levelOfEducation.value}
+                                                                    + ', ' + ${fieldOpt.mode.value.toLowerCase()}"></span>
+                                                                        <i class="fas fa-regular fa-up-right-from-square"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </th:block>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -83,61 +73,13 @@
                                         </div>
 
                                     </th:block>
+
                                 </div>
-                            </div>
-                        </div>
-                    </th:block>
-
-                    <!--                        <th:block th:each="fieldOpt, iterStat : ${fieldsOfStudy}">-->
-                    <!--                            <div class="col">-->
-                    <!--                                <div class="card h-100">-->
-                    <!--                                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">-->
-                    <!--                                            <img th:if="${fieldOpt.image} != null"-->
-                    <!--                                                 class="img-fluid"-->
-                    <!--                                                 th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>-->
-                    <!--                                            <img th:unless="${fieldOpt.image} != null"-->
-                    <!--                                                 class="img-fluid"-->
-                    <!--                                                 th:src="@{${imagesPath} + '/' + 'default.jpg'}"/>-->
-                    <!--                                    </div>-->
-                    <!--                                    <div class="card-body">-->
-                    <!--                                        <h5 class="card-title" th:text="${fieldOpt.name}"></h5>-->
-                    <!--                                        <p class="card-text" th:text="${fieldOpt.description}">-->
-                    <!--                                        </p>-->
-                    <!--                                    </div>-->
-                    <!--                                    <div class="card-footer text-center">-->
-                    <!--                                        <div class="dropdown">-->
-                    <!--                                            <button aria-expanded="false"-->
-                    <!--                                                    class="btn btn-primary dropdown-toggle"-->
-                    <!--                                                    data-mdb-toggle="dropdown"-->
-                    <!--                                                    th:text="#{fieldsOfStudy.item.card.btn.dropdown}"-->
-                    <!--                                                    type="button">-->
-                    <!--                                            </button>-->
-                    <!--                                            <ul class="dropdown-menu">-->
-                    <!--                                                <li>-->
-                    <!--                                                    <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/1}">-->
-                    <!--                                                        <span th:text="#{fieldsOfStudy.item.card.btn.1st.ft}"></span>-->
-                    <!--                                                        <i class="fas fa-regular fa-up-right-from-square"></i>-->
-                    <!--                                                    </a>-->
-                    <!--                                                </li>-->
-                    <!--                                                <li>-->
-                    <!--                                                    <a class="dropdown-item" th:href="@{/dashboard/fields-of-study/12}">-->
-                    <!--                                                        <span th:text="#{fieldsOfStudy.item.card.btn.2nd.ft}"></span>-->
-                    <!--                                                        <i class="fas fa-regular fa-up-right-from-square"></i>-->
-                    <!--                                                    </a>-->
-                    <!--                                                </li>-->
-                    <!--                                            </ul>-->
-                    <!--                                        </div>-->
-                    <!--                                    </div>-->
-
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <!--                        </th:block>-->
-
                 </div>
-
             </div>
-    </div>
-    </section>
+
+
+        </section>
     </div>
 </main>
 

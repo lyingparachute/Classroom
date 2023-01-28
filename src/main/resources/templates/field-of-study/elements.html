@@ -72,7 +72,9 @@
         <h4 th:text="#{fieldOfStudy.item.card.body.image}"></h4>
         <label class="form-label" for="customFile" th:text="#{fieldOfStudy.item.card.body.image.desc}"></label>
         <input accept="image/png, image/jpeg" class="form-control" id="customFile"
+               required
                name="imageUpload"
+               th:value="*{image}"
                type="file"/>
     </div>
 </div>
