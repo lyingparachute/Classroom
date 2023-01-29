@@ -44,6 +44,13 @@ public class FieldOfStudyController {
         return "field-of-study/fieldsOfStudy-first";
     }
 
+    @GetMapping("second")
+    public String getFieldsOfStudyWithSecondLevelOfEducation(Model model) {
+        model.addAttribute("fieldsOfStudy", service.fetchAllByLevelOfEducation(LevelOfEducation.SECOND));
+        addAttributeImagesFolderPath(model);
+        return "field-of-study/fieldsOfStudy-second";
+    }
+
     private static void addAttributeImagesFolderPath(Model model) {
         model.addAttribute("imagesPath", Path.of("/img").resolve(UPLOAD_DIR));
     }
@@ -82,7 +89,7 @@ public class FieldOfStudyController {
             addAttributeDepartments(model);
             return "fieldOfStudy-form";
         }
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         dto.setImage(fileName);
         FieldOfStudyDto created = service.create(dto);
         FileUploadUtil.saveFile(UPLOAD_DIR, fileName, multipartFile);
@@ -181,12 +188,4 @@ public class FieldOfStudyController {
     private void addAttributeSubjectsMapGroupedBySemesters(Long id, Model model) {
         model.addAttribute("semestersMap", service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id));
     }
-
-    @GetMapping("second")
-    public String getFieldsOfStudyWithSecondLevelOfEducation(Model model) {
-        model.addAttribute("fieldsOfStudy", service.fetchAllByLevelOfEducation(LevelOfEducation.SECOND));
-        addAttributeImagesFolderPath(model);
-        return "field-of-study/fieldsOfStudy-second";
-    }
-
 }
