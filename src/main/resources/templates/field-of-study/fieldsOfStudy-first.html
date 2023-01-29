@@ -39,34 +39,34 @@
                                         <img class="img-fluid"
                                              th:alt="${fieldOpt.name}"
                                              th:if="${fieldOpt.image} != null"
-                                                     th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
-                                                <img alt="Default image"
-                                                     class="img-fluid"
-                                                     th:src="@{${imagesPath} + '/' + 'default.jpg'}"
-                                                     th:unless="${fieldOpt.image} != null"/>
-                                                <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
-                                                    <div class="mask"
-                                                         style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                                                </a>
-                                            </div>
-                                            <div class="card-body">
-                                                <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
-                                                <span class="text-muted"
-                                                      th:if="${fieldOpt.mode} == ${T(com.example.classroom.enums.ModeOfStudy).PT}"
-                                                      th:text="${fieldOpt.mode.value}"></span>
-                                                <p class="card-text" th:text="${fieldOpt.description}"></p>
-                                            </div>
-                                            <div class="card-footer text-center">
-                                                <a class="btn btn-primary"
-                                                   th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
-                                                    <span th:text="#{button.view.fielOfStudy}"></span>
-                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                </a>
-                                            </div>
-                                        </div>
+                                             th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
+                                        <img alt="Default image"
+                                             class="img-fluid"
+                                             th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                                             th:unless="${fieldOpt.image} != null"/>
+                                        <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                            <div class="mask"
+                                                 style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                        </a>
                                     </div>
-                                </th:block>
-                        </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
+                                        <span class="text-muted"
+                                              th:if="${fieldOpt.mode} == ${T(com.example.classroom.enums.ModeOfStudy).PT}"
+                                              th:text="${fieldOpt.mode.value}"></span>
+                                        <p class="card-text" th:text="${fieldOpt.description}"></p>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <a class="btn btn-primary"
+                                           th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                            <span th:text="#{button.view.fielOfStudy}"></span>
+                                            <i class="fas fa-regular fa-up-right-from-square"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
                 </div>
             </div>
         </section>
