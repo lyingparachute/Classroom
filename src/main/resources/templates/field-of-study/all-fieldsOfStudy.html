@@ -12,28 +12,31 @@
 <main>
     <div class="container pt-4">
         <section class="mb-4">
-            <div id="tableCard" class="card">
+            <div class="card">
                 <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
-                    <h3 class="mb-0 text-center">
-                        <strong th:text="#{fieldsOfStudy.header}"></strong>
+                    <h3 class="mb-0 text-center"
+                        th:text="#{fieldsOfStudy.header}">
                     </h3>
                 </div>
-                <div class="card-body">
 
-                    <div class="row mb-4 ">
-                        <div class="col-auto">
-                            <a class="btn btn-secondary"
+                <div class="card-body">
+                    <div class="d-flex mb-4">
+                        <div class="p-1">
+                            <a class="btn btn-secondary btn-rounded"
                                th:href="@{/dashboard/fields-of-study/first}">
                                 <span th:text="#{fieldsOfStudy.button.first.level}"></span>
                                 <i class="fas fa-regular fa-up-right-from-square"></i>
                             </a>
                         </div>
-                        <div class="col-auto">
-                            <a class="btn btn-secondary"
+                        <div class="p-1">
+                            <a class="btn btn-secondary btn-rounded"
                                th:href="@{/dashboard/fields-of-study/second}">
                                 <span th:text="#{fieldsOfStudy.button.second.level}"></span>
                                 <i class="fas fa-regular fa-up-right-from-square"></i>
                             </a>
+                        </div>
+                        <div class="p-1 ms-auto">
+                            <div th:replace="field-of-study/buttons :: btn-add-new"></div>
                         </div>
                     </div>
 

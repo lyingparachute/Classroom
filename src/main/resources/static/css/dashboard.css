@@ -63,5 +63,9 @@ main {
 
 /* Button icons spacing */
 .mr-2 {
-    margin-right: 0.5rem!important;
+    margin-right: 0.5rem !important;
+}
+
+.ml-2 {
+    margin-left: 0.5rem !important;
 }

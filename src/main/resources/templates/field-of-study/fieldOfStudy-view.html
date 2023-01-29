@@ -13,15 +13,26 @@
         <section class="mb-4">
             <div id="itemCard" class="card">
                 <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
-                    <h3 class="mb-0 text-center">
-                        <strong th:text="${fieldOfStudy.name}"></strong>
+                    <h3 class="mb-0 text-center fw-bold"
+                        th:text="${fieldOfStudy.name}">
                     </h3>
                 </div>
-                <div class="card-body mx-4">
+                <div class="card-body">
+                    <!-- ======= Buttons ======= -->
+                    <div class="d-flex mb-4">
+                        <div class="p-1">
+                            <div th:replace="field-of-study/buttons :: btn-go-back"></div>
+                        </div>
+                        <div class="p-1 ms-auto">
+                            <div th:replace="field-of-study/buttons :: btn-view-subjects"></div>
+                            <div th:replace="field-of-study/buttons :: btn-edit-fieldOfStudy"></div>
+                            <div th:replace="field-of-study/buttons :: btn-delete-fieldOfStudy"></div>
+                        </div>
+                    </div>
+
                     <!-- ======= FieldOfStudy Details ======= -->
                     <div th:replace="field-of-study/elements :: view-item"></div>
-                    <!-- ======= Buttons ======= -->
-                    <div th:replace="field-of-study/buttons :: subjects-edit-delete-buttons"></div>
+
                 </div>
             </div>
         </section>
