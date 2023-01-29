@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <link rel="stylesheet" th:href="@{/css/fields-of-study.css}" type="text/css"/>
+</head>
+
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div class="card">
+                <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
+                    <h3 class="mb-0 text-center"
+                        th:text="#{departments.all.card.header}">
+                    </h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="d-flex mb-4">
+                        <div class="p-1 ms-auto">
+                            <div th:replace="department/buttons :: btn-add-new"></div>
+                        </div>
+                    </div>
+
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
+                        <th:block th:each="departmentOpt, iterStat : ${departments}">
+                            <div class="col">
+                                <!-- ======= Item Card ======= -->
+                                <div class="card h-100">
+                                    <div class="row g-0">
+                                        <div class="col-3">
+                                            <div class="bg-image hover-overlay ripple"
+                                                 data-mdb-ripple-color="light">
+                                                <img alt="Default image"
+
+                                                     style="width: 100%;"
+                                                     th:src="@{${imagesPath} + '/' + 'default.png'}"/>
+                                                <a th:href="@{/dashboard/departments/{id}(id=${departmentOpt.id})}">
+                                                    <div class="mask"
+                                                         style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-9">
+                                            <div class="card-body">
+                                                <h5 class="card-title" th:text="${departmentOpt.name}"></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div class="text-muted mt-4"
+                         th:text="#{departments.total} + ${departments.size()}">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+</body>
+</html>
