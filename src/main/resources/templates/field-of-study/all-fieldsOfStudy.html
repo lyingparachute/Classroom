@@ -53,12 +53,21 @@
                         <div aria-labelledby="ex1-tab-1" class="tab-pane fade show active" id="ex1-tabs-1"
                              role="tabpanel">
                             <div th:replace="field-of-study/elements :: all-fields-of-study-card-body"></div>
+                            <div class="text-muted mt-4"
+                                 th:text="#{fieldsOfStudy.total} + ${fieldsOfStudyMap.size()}">
+                            </div>
                         </div>
                         <div aria-labelledby="ex1-tab-2" class="tab-pane fade" id="ex1-tabs-2" role="tabpanel">
                             <div th:replace="field-of-study/elements :: first-fields-of-study-card-body"></div>
+                            <div class="text-muted mt-4"
+                                 th:text="#{fieldsOfStudy.total} + ${firstFieldsOfStudy.size()}">
+                            </div>
                         </div>
                         <div aria-labelledby="ex1-tab-3" class="tab-pane fade" id="ex1-tabs-3" role="tabpanel">
                             <div th:replace="field-of-study/elements :: second-fields-of-study-card-body"></div>
+                            <div class="text-muted mt-4"
+                                 th:text="#{fieldsOfStudy.total} + ${secondFieldsOfStudy.size()}">
+                            </div>
                         </div>
                     </div>
                     <!-- Tabs content -->
