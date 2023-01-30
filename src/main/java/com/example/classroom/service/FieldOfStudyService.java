@@ -220,19 +220,20 @@ public class FieldOfStudyService {
 
     public Map<LevelOfEducation, List<FieldOfStudyDto>> fetchAllGroupedByLevelOfEducation() {
         return Map.ofEntries(
-                entry(LevelOfEducation.FIRST, fetchAllByLevelOfEducation(LevelOfEducation.FIRST)),
-                entry(LevelOfEducation.SECOND, fetchAllByLevelOfEducation(LevelOfEducation.SECOND))
+                entry(LevelOfEducation.FIRST, fetchAllByLevelOfEducationSortedByName(LevelOfEducation.FIRST)),
+                entry(LevelOfEducation.SECOND, fetchAllByLevelOfEducationSortedByName(LevelOfEducation.SECOND))
         );
     }
 
-    public List<FieldOfStudyDto> fetchAllByLevelOfEducation(LevelOfEducation levelOfEducation) {
-        return repository.findAllByLevelOfEducation(levelOfEducation)
-                .stream().map(f -> mapper.map(f, FieldOfStudyDto.class)).toList();
+    public List<FieldOfStudyDto> fetchAllByLevelOfEducationSortedByName(LevelOfEducation levelOfEducation) {
+        return repository.findAllByLevelOfEducation(levelOfEducation, Sort.by(Sort.Direction.ASC, "name"))
+                .stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).toList();
     }
 
-    public Map<String, List<FieldOfStudyDto>> fetchAllGroupedAndSortedByName() {
-        List<String> uniqueNames = repository.findAll().stream().map(FieldOfStudy::getName).distinct().sorted().toList();
-        Map<String, List<FieldOfStudyDto>> map = new TreeMap<>();
+    public Map<String, List<FieldOfStudyDto>> fetchAllGroupedByNameAndSortedByName() {
+        List<String> uniqueNames = repository.findAll(Sort.by(Sort.Direction.ASC, "name"))
+                .stream().map(FieldOfStudy::getName).distinct().toList();
+        Map<String, List<FieldOfStudyDto>> map = new LinkedHashMap<>();
         for (String name : uniqueNames) {
             map.put(name, repository.findAllByNameContainingIgnoreCase(name)
                     .stream().map(f -> mapper.map(f, FieldOfStudyDto.class)).toList());

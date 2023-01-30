@@ -32,9 +32,9 @@ public class FieldOfStudyController {
 
     @GetMapping()
     public String getAllFieldsOfStudy(Model model) {
-        model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedAndSortedByName());
-        model.addAttribute("firstFieldsOfStudy", service.fetchAllByLevelOfEducation(LevelOfEducation.FIRST));
-        model.addAttribute("secondFieldsOfStudy", service.fetchAllByLevelOfEducation(LevelOfEducation.SECOND));
+        model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedByNameAndSortedByName());
+        model.addAttribute("firstFieldsOfStudy", service.fetchAllByLevelOfEducationSortedByName(LevelOfEducation.FIRST));
+        model.addAttribute("secondFieldsOfStudy", service.fetchAllByLevelOfEducationSortedByName(LevelOfEducation.SECOND));
         model.addAttribute("imagesPath", Path.of("/img").resolve(UPLOAD_DIR));
         return "field-of-study/all-fieldsOfStudy";
     }
