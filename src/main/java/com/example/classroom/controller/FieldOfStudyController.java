@@ -30,8 +30,13 @@ public class FieldOfStudyController {
     private final DepartmentService departmentService;
     private final SubjectService subjectService;
 
-    private static void addAttributeImagesFolderPath(Model model) {
+    @GetMapping()
+    public String getAllFieldsOfStudy(Model model) {
+        model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedAndSortedByName());
+        model.addAttribute("firstFieldsOfStudy", service.fetchAllByLevelOfEducation(LevelOfEducation.FIRST));
+        model.addAttribute("secondFieldsOfStudy", service.fetchAllByLevelOfEducation(LevelOfEducation.SECOND));
         model.addAttribute("imagesPath", Path.of("/img").resolve(UPLOAD_DIR));
+        return "field-of-study/all-fieldsOfStudy";
     }
 
     @GetMapping("{id}")
@@ -166,14 +171,5 @@ public class FieldOfStudyController {
 
     private void addAttributeSubjectsMapGroupedBySemesters(Long id, Model model) {
         model.addAttribute("semestersMap", service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id));
-    }
-
-    @GetMapping()
-    public String getAllFieldsOfStudy(Model model) {
-        model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedAndSortedByName());
-        model.addAttribute("firstFieldsOfStudy", service.fetchAllByLevelOfEducation(LevelOfEducation.FIRST));
-        model.addAttribute("secondFieldsOfStudy", service.fetchAllByLevelOfEducation(LevelOfEducation.SECOND));
-        addAttributeImagesFolderPath(model);
-        return "field-of-study/all-fieldsOfStudy";
     }
 }
