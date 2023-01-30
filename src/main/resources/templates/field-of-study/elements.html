@@ -141,6 +141,141 @@
     </div>
 </div>
 
+<!-- ======= View ALL FieldsOfStudy card body ======= -->
+<div class="row row-cols-1 row-cols-md-3 g-4" th:fragment="all-fields-of-study-card-body">
+    <th:block th:each="fieldMapOpt, iterStat : ${fieldsOfStudyMap}">
+        <div class="col">
+            <div class="card h-100">
+                <div class="bg-image hover-overlay ripple"
+                     data-mdb-ripple-color="light">
+                    <img class="img-fluid"
+                         th:alt="${fieldMapOpt.value.get(0).name}"
+                         th:if="${fieldMapOpt.value.get(0).image} != null"
+                         th:src="@{${imagesPath} + '/' + ${fieldMapOpt.value.get(0).image}}"/>
+                    <img alt="Default image"
+                         class="img-fluid"
+                         th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                         th:unless="${fieldMapOpt.value.get(0).image} != null"/>
+                    <a>
+                        <div class="mask"
+                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title"
+                        th:text="${fieldMapOpt.value.get(0).name}"></h5>
+                    <p class="card-text"
+                       th:text="${fieldMapOpt.value.get(0).description}"></p>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="dropdown">
+                        <button aria-expanded="false"
+                                class="btn btn-primary dropdown-toggle"
+                                data-mdb-toggle="dropdown"
+                                th:text="#{fieldsOfStudy.item.card.btn.dropdown}"
+                                type="button">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <th:block
+                                    th:each="fieldOpt, iterStat2 : ${fieldMapOpt.value}">
+                                <li>
+                                    <a class="dropdown-item"
+                                       th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                                                    <span th:text="${fieldOpt.levelOfEducation.value}
+                                                                    + ', ' + ${fieldOpt.mode.value.toLowerCase()}"></span>
+                                        <i class="fas fa-regular fa-up-right-from-square"></i>
+                                    </a>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+<!-- ======= View FIRST LEVEL FieldsOfStudy card body ======= -->
+<div class="row row-cols-1 row-cols-md-3 g-4" th:fragment="first-fields-of-study-card-body">
+    <th:block th:each="fieldOpt, iterStat2 : ${firstFieldsOfStudy}">
+        <div class="col">
+            <!-- ======= Item Card ======= -->
+            <div class="card h-100">
+                <div class="bg-image hover-overlay ripple"
+                     data-mdb-ripple-color="light">
+                    <img class="img-fluid"
+                         th:alt="${fieldOpt.name}"
+                         th:if="${fieldOpt.image} != null"
+                         th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
+                    <img alt="Default image"
+                         class="img-fluid"
+                         th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                         th:unless="${fieldOpt.image} != null"/>
+                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                        <div class="mask"
+                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
+                    <span class="text-muted"
+                          th:if="${fieldOpt.mode} == ${T(com.example.classroom.enums.ModeOfStudy).PT}"
+                          th:text="${fieldOpt.mode.value}"></span>
+                    <p class="card-text" th:text="${fieldOpt.description}"></p>
+                </div>
+                <div class="card-footer text-center">
+                    <a class="btn btn-primary"
+                       th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                        <span th:text="#{button.view.fielOfStudy}"></span>
+                        <i class="fas fa-regular fa-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+
+<!-- ======= View SECOND LEVEL FieldsOfStudy card body ======= -->
+<div class="row row-cols-1 row-cols-md-3 g-4" th:fragment="second-fields-of-study-card-body">
+    <th:block th:each="fieldOpt, iterStat2 : ${secondFieldsOfStudy}">
+        <div class="col">
+            <!-- ======= Item Card ======= -->
+            <div class="card h-100">
+                <div class="bg-image hover-overlay ripple"
+                     data-mdb-ripple-color="light">
+                    <img class="img-fluid"
+                         th:alt="${fieldOpt.name}"
+                         th:if="${fieldOpt.image} != null"
+                         th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
+                    <img alt="Default image"
+                         class="img-fluid"
+                         th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                         th:unless="${fieldOpt.image} != null"/>
+                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                        <div class="mask"
+                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
+                    <span class="text-muted"
+                          th:if="${fieldOpt.mode} == ${T(com.example.classroom.enums.ModeOfStudy).PT}"
+                          th:text="${fieldOpt.mode.value}"></span>
+                    <p class="card-text" th:text="${fieldOpt.description}"></p>
+                </div>
+                <div class="card-footer text-center">
+                    <a class="btn btn-primary"
+                       th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                        <span th:text="#{button.view.fielOfStudy}"></span>
+                        <i class="fas fa-regular fa-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+
 <!-- ======= View FieldOfStudy Subjects ======= -->
 <div th:fragment="subjects-view">
     <h4 class="card-title mb-4">
