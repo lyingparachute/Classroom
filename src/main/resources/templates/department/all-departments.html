@@ -14,6 +14,18 @@
         <section class="mb-4">
             <div class="card">
                 <div class="card-header py-4 title-bar">
+                    <!-- TODO Breadcrumb -->
+                    <nav class="d-flex">
+                        <h6 class="mb-0">
+                            <a class="text-reset" th:href="@{/}">Classroom</a>
+                            <span>/</span>
+                            <a class="text-reset" th:href="@{/dashboard}">Dashboard</a>
+                            <span>/</span>
+                            <a class="text-reset"><u th:text="${#httpServletRequest.requestURI}">Departments</u></a>
+                        </h6>
+                    </nav>
+
+
                     <div class="page-title"
                          th:text="#{departments.all.card.header}">
                     </div>
