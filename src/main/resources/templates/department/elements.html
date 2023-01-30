@@ -83,62 +83,80 @@
 <!-- ======= View FieldOfStudy card body ======= -->
 <div th:fragment="view-item">
     <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.fieldOfStudy}"></h4>
-        <span th:text="${fieldOfStudy.name}"></span>
+        <h4 th:text="#{department.item.card.body.name}"></h4>
+        <span th:text="${department.name}"></span>
     </div>
     <hr>
     <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.levelOfEducation}"></h4>
-        <span th:text="${fieldOfStudy.levelOfEducation.value}"></span>
+        <h4 th:text="#{department.item.card.body.address}"></h4>
+        <span th:text="${department.address}"></span>
     </div>
     <hr>
     <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.mode}"></h4>
-        <span th:text="${fieldOfStudy.mode.value}"></span>
+        <h4 th:text="#{department.item.card.body.telNumber}"></h4>
+        <span th:text="${department.telNumber}"></span>
     </div>
     <hr>
     <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.department}"></h4>
+        <h4 th:text="#{department.item.card.body.dean}"></h4>
         <a class="text-body"
-           th:href="@{/dashboard/departments/{id}(id=${fieldOfStudy.department.id})}">
-            <span th:text="${fieldOfStudy.department.name}"></span>
-            <i class="fas fa-regular fa-up-right-from-square"></i>
+           th:href="@{/dashboard/teachers/{id}(id=${department.dean.id})}">
+            <span th:text="${department.dean}"></span>
+            <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
         </a>
     </div>
     <hr>
-    <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.titleGained}"></h4>
-        <span th:text="${fieldOfStudy.title.fullTitle} + ' (' + ${fieldOfStudy.title.prefix} + ')'"></span>
+
+    <div class="mb-3">
+        <span class="h4 mr-2" th:text="#{department.item.card.body.fieldsOfStudy}"></span>
+        <a aria-controls="collapseExample" aria-expanded="false" class="btn btn-secondary btn-rounded"
+           data-mdb-toggle="collapse" href="#collapseExample" role="button"
+           th:text="#{button.show.hide}">
+        </a>
     </div>
-    <hr>
-    <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.noOfSemesters}"></h4>
-        <div th:text="${numberOfSemesters}"></div>
-    </div>
-    <hr>
-    <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.ectsPoints}"></h4>
-        <span th:text="${ects}"></span>
-    </div>
-    <hr>
-    <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.description}"></h4>
-        <div class="mb-2">
-            <span th:text="#{fieldOfStudy.item.card.body.description.text} + ${fieldOfStudy.title.fullTitle.toLowerCase()} + ':'"></span>
+
+    <div class="collapse mt-3" id="collapseExample">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <th:block th:each="fieldOpt, iterStat2 : ${department.fieldsOfStudy}">
+                <div class="col">
+                    <!-- ======= Item Card ======= -->
+                    <div class="card h-100">
+                        <div class="bg-image hover-overlay ripple"
+                             data-mdb-ripple-color="light">
+                            <img class="img-fluid"
+                                 th:alt="${fieldOpt.name}"
+                                 th:if="${fieldOpt.image} != null"
+                                 th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
+                            <img alt="Default image"
+                                 class="img-fluid"
+                                 th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                                 th:unless="${fieldOpt.image} != null"/>
+                            <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                <div class="mask"
+                                     style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
+                            <div class="text-muted"
+                                 th:text="${fieldOpt.levelOfEducation.value} + ', ' +
+                                            ${fieldOpt.mode.value}">
+                            </div>
+                            <p class="card-text" th:text="${fieldOpt.description}"></p>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="btn btn-primary"
+                               th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                <span th:text="#{button.view.fielOfStudy}"></span>
+                                <i class="fas fa-regular fa-up-right-from-square"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
         </div>
-        <th:block th:each="descriptionItem : ${descriptionList}">
-            <div class="mb-2">
-                <i class="fas fa-regular fa-check"></i>
-                <span th:text="${descriptionItem}"></span>
-            </div>
-        </th:block>
     </div>
-    <hr>
-    <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.image}"></h4>
-        <img class="img-fluid"
-             th:src="@{${imagePath}}"/>
-    </div>
+
 </div>
 
 <!-- ======= View FieldOfStudy Subjects ======= -->

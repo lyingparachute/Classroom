@@ -27,7 +27,7 @@
 </div>
 
 
-<!-- ======= Go Back Button ======= -->
+<!-- ======= Go Home Button ======= -->
 <div class="row my-2 justify-content-center" id="goBackButton" th:fragment="btn-go-home">
     <div class="col-auto">
         <a class="btn btn-primary btn-rounded" th:href="@{/dashboard/departments}">
@@ -46,7 +46,7 @@
 
 <!-- ======= Go back to field of study with id button ======= -->
 <a class="btn btn-primary btn-rounded"
-   th:fragment="btn-go-back-department"
+   th:fragment="btn-go-back-to-department"
    th:href="@{/dashboard/departments/{id}(id=${department.id})}">
     <i class="mr-2 fas fa-arrow-left-long "></i>
     <span th:text="#{button.go.back}"></span>
@@ -54,7 +54,8 @@
 
 <!-- ======= Go back to /departments ======= -->
 <a class="btn btn-primary btn-rounded"
-   th:fragment="btn-go-back-fieldsOfStudy"
+   th:fragment="btn-go-back-to-departments"
+
    th:href="@{/dashboard/departments}">
     <i class="mr-2 fas fa-arrow-left-long "></i>
     <span th:text="#{button.go.back}"></span>
@@ -86,7 +87,7 @@
 
 <!-- ======= Edit department Button ======= -->
 <a class="btn btn-outline-primary btn-rounded"
-   th:fragment="btn-edit-department"
+   th:fragment="btn-edit"
    th:href="@{/dashboard/departments/edit/{id}(id=${department.id})}">
     <i class="fas fa-pen mr-2"></i>
     <span th:text="#{button.edit}"></span>
@@ -94,7 +95,7 @@
 
 <!-- ======= Delete department Button ======= -->
 <a class="btn btn-outline-danger btn-rounded delBtn"
-   th:fragment="btn-delete-department"
+   th:fragment="btn-delete"
    th:href="@{/dashboard/departments/delete/{id}(id=${department.id})}">
     <i class="fa fa-trash-can fa-lg mr-2"></i>
     <span th:text="#{button.delete}"></span>
@@ -102,7 +103,7 @@
 
 <!-- ======= View FieldsOfStudy Button ======= -->
 <a class="btn btn-primary btn-rounded"
-   th:fragment="btn-view-subjects"
+   th:fragment="btn-view-fieldsOfStudy"
    th:href="@{/dashboard/departments/{id}/fields-of-study(id=${department.id})}">
     <i class="fas fa-microscope fa-fw mr-2"></i>
     <span th:text="#{button.subjects}"></span>
@@ -110,7 +111,7 @@
 
 <!-- ======= Edit FieldsOfStudy Button ======= -->
 <a class="btn btn-outline-primary btn-rounded"
-   th:fragment="btn-edit-subjects"
+   th:fragment="btn-edit-fieldsOfStudy"
    th:href="@{/dashboard/departments/edit/{id}/fields-of-study(id=${department.id})}">
     <i class="fas fa-pen mr-2"></i>
     <span th:text="#{button.edit}"></span>
