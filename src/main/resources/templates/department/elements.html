@@ -83,38 +83,48 @@
 <!-- ======= View FieldOfStudy card body ======= -->
 <div th:fragment="view-item">
     <div class="mb-4">
-        <h4 th:text="#{department.item.card.body.name}"></h4>
+        <h4 th:text="#{department.name}"></h4>
         <span th:text="${department.name}"></span>
     </div>
     <hr>
     <div class="mb-4">
-        <h4 th:text="#{department.item.card.body.address}"></h4>
+        <h4 th:text="#{department.address}"></h4>
         <span th:text="${department.address}"></span>
     </div>
     <hr>
     <div class="mb-4">
-        <h4 th:text="#{department.item.card.body.telNumber}"></h4>
+        <h4 th:text="#{department.telNumber}"></h4>
         <span th:text="${department.telNumber}"></span>
     </div>
     <hr>
     <div class="mb-4">
-        <h4 th:text="#{department.item.card.body.dean}"></h4>
-        <a class="text-body"
+        <h4 th:text="#{department.dean}"></h4>
+        <a class="text-body" th:if="${department.dean != null}"
            th:href="@{/dashboard/teachers/{id}(id=${department.dean.id})}">
             <span th:text="${department.dean}"></span>
             <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
         </a>
+        <div th:unless="${department.dean != null}">
+            <span th:text="#{department.dean.null}"></span>
+            <div th:replace="department/buttons :: btn-edit"></div>
+        </div>
     </div>
+
     <hr>
 
+    <!--    Fields of studies block -->
     <div class="mb-3">
-        <span class="h4 mr-2" th:text="#{department.item.card.body.fieldsOfStudy}"></span>
-        <a aria-controls="collapseExample" aria-expanded="false" class="btn btn-secondary btn-rounded"
+        <span class="h4 mr-2" th:text="#{department.fieldsOfStudy}"></span>
+        <a aria-controls="collapseExample"
+           aria-expanded="false" class="btn btn-secondary btn-rounded" th:if="${department.fieldsOfStudy.size() > 0}"
            data-mdb-toggle="collapse" href="#collapseExample" role="button"
            th:text="#{button.show.hide}">
         </a>
+        <div class="mb-3" th:unless="${department.fieldsOfStudy.size() > 0}">
+            <span th:text="#{department.fieldsOfStudy.empty}"></span>
+            <div th:replace="department/buttons :: btn-edit"></div>
+        </div>
     </div>
-
     <div class="collapse mt-3" id="collapseExample">
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <th:block th:each="fieldOpt, iterStat2 : ${department.fieldsOfStudy}">
@@ -157,120 +167,4 @@
         </div>
     </div>
 
-</div>
-
-<!-- ======= View FieldOfStudy Subjects ======= -->
-<div th:fragment="subjects-view">
-    <h4 class="card-title mb-4">
-                    <span class="h4 fw-bold"
-                          th:text="${fieldOfStudy.name} + ', '"></span>
-        <span class="h5"
-              th:text="${fieldOfStudy.levelOfEducation.value.toLowerCase()} + ' - '"></span>
-        <span class="h5"
-              th:text="${fieldOfStudy.title.fullTitle.toLowerCase()} + ', '"></span>
-        <span class="h5"
-              th:text="${fieldOfStudy.mode.value.toLowerCase()}"></span>
-    </h4>
-    <th:block th:each="semOpt, iterStat : ${T(com.example.classroom.enums.Semester).values()}">
-        <div class="card my-3" th:id="'sem' + ${iterStat} +  '-card'">
-            <div class="card-body">
-                <h5 class="card-title fw-bold" th:text="${semOpt.description}"></h5>
-                <div class="table-responsive">
-                    <table class="table table-hover border-primary">
-                        <thead>
-                        <tr>
-                            <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}"></th>
-                            <th scope="col"
-                                th:text="#{fieldOfStudy.subjects.table.thead.description}"></th>
-                            <th scope="col"
-                                th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="subject: ${semestersMap.get(semOpt)}">
-                            <th scope="row" th:text="${subject.name}"></th>
-                            <td th:text="${subject.description}"></td>
-                            <td th:text="${subject.hoursInSemester}"></td>
-                        </tr>
-                        </tbody>
-                        <caption class="fst-italic">
-                            <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>
-                            <span class="fw-bold"
-                                  th:text="${hoursInSemester.get(semOpt)}"></span>
-                            &nbsp;&nbsp;
-                            <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>
-                            <span class="fw-bold"
-                                  th:text="${hoursInSemester.get(semOpt)}"></span>
-                        </caption>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </th:block>
-</div>
-
-<!-- ======= Edit FieldOfStudy Subjects ======= -->
-<div th:fragment="edit-subjects">
-    <h4 class="card-title mb-4">
-                    <span class="h4 fw-bold"
-                          th:text="${fieldOfStudy.name} + ', '"></span>
-        <span class="h5"
-              th:text="${fieldOfStudy.levelOfEducation.value.toLowerCase()} + ' - '"></span>
-        <span class="h5"
-              th:text="${fieldOfStudy.title.fullTitle.toLowerCase()} + ', '"></span>
-        <span class="h5"
-              th:text="${fieldOfStudy.mode.value.toLowerCase()}"></span>
-    </h4>
-
-    <th:block th:each="semester, iterStat : ${T(com.example.classroom.enums.Semester).values()}">
-        <div class="card my-3">
-            <div class="card-body">
-                <h5 class="card-title fw-bold" th:text="${semester.description}"></h5>
-                <div class="table-responsive">
-                    <table class="table table-hover border-primary">
-                        <thead>
-                        <tr>
-                            <th class="bs-checkbox"
-                                data-field="state"
-                                rowspan="2" style="text-align: center; vertical-align: middle; width: 36px;">
-                                <div class="form-check">
-                                    <input aria-label="select all items" class="form-check-input th-inner"
-                                           id="flexCheckDefault"
-                                           name="btSelectAll"
-                                           type="checkbox"/>
-                                </div>
-                            </th>
-                            <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}"></th>
-                            <th scope="col"
-                                th:text="#{fieldOfStudy.subjects.table.thead.description}"></th>
-                            <th scope="col"
-                                th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}"></th>
-                            <th scope="col"
-                                th:text="#{fieldOfStudy.subjects.table.thead.ects}"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="subject : ${subjectsMap.get(semester)}">
-                            <td class="bs-checkbox">
-                                <div class="form-check">
-                                    <input class="form-check-input"
-                                           name="btSelectItem"
-                                           th:aria-label="${subject.name}"
-                                           th:data-index="${subject}"
-                                           th:field="*{subjects}"
-                                           th:value="${subject.id}"
-                                           type="checkbox"/>
-                                </div>
-                            </td>
-                            <th scope="row" th:text="${subject.name}"></th>
-                            <td th:text="${subject.description}"></td>
-                            <td th:text="${subject.hoursInSemester}"></td>
-                            <td th:text="${subject.ectsPoints}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </th:block>
 </div>
