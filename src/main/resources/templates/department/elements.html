@@ -1,82 +1,46 @@
-<!-- ======= Form for FieldOfStudy ======= -->
+<!-- ======= Form for Department ======= -->
 <div th:fragment="item-form">
     <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.edit.card.body.name}"></h4>
+        <h4 th:text="#{department.name}"></h4>
         <div class="form-outline">
             <input class="form-control"
-                   id="name"
                    th:field="*{name}"
                    type="text"/>
-            <label class="form-label" for="name" th:text="#{fieldOfStudy.name}"></label>
         </div>
         <div class="alert alert-danger" th:errors="*{name}"
              th:if="${#fields.hasErrors('name')}"></div>
     </div>
     <hr>
     <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.levelOfEducation}"></h4>
-        <select class="form-select" id="levelOfEducation" th:field="*{levelOfEducation}">
-            <option th:each="fieldOpt : ${T(com.example.classroom.enums.LevelOfEducation).values()}"
-                    th:text="${fieldOpt.value}"
-                    th:value="${fieldOpt}">
-            </option>
-        </select>
+        <h4 th:text="#{department.address}"></h4>
+        <div class="form-outline">
+            <input class="form-control"
+                   th:field="*{address}"
+                   type="text"/>
+        </div>
     </div>
     <hr>
     <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.mode}"></h4>
-        <select class="form-select" id="mode" th:field="*{mode}">
-            <option th:each="fieldOpt : ${T(com.example.classroom.enums.ModeOfStudy).values()}"
-                    th:text="${fieldOpt.value}"
-                    th:value="${fieldOpt}">
-            </option>
-        </select>
+        <h4 th:text="#{department.telNumber}"></h4>
+        <div class="form-outline">
+            <input class="form-control"
+                   th:field="*{telNumber}"
+                   type="number"/>
+        </div>
     </div>
     <hr>
     <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.department}"></h4>
-        <select class="form-select" id="department" th:field="*{department}">
-            <option th:each="fieldOpt : ${departments}"
-                    th:text="${fieldOpt.name}"
+        <h4 th:text="#{department.dean}"></h4>
+        <select class="form-select" id="dean" th:field="*{dean}">
+            <option th:each="fieldOpt : ${teachers}"
+                    th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}"
                     th:value="${fieldOpt.id}">
             </option>
         </select>
     </div>
     <hr>
-    <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.titleGained}"></h4>
-        <select class="form-select" id="titleGained" th:field="*{title}">
-            <option th:each="fieldOpt : ${T(com.example.classroom.enums.AcademicTitle).values()}"
-                    th:text="${fieldOpt.fullTitle}"
-                    th:value="${fieldOpt}">
-            </option>
-        </select>
-    </div>
-    <hr>
-    <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.description}"></h4>
-        <div class="form-outline">
-                                    <textarea class="form-control"
-                                              id="description"
-                                              rows="5"
-                                              th:field="*{description}"></textarea>
-            <label class="form-label" for="description"
-                   th:text="#{fieldOfStudy.description}"></label>
-            <div class="form-helper" th:text="#{fieldOfStudy.description.helper}"></div>
-        </div>
-        <div class="alert alert-danger" th:errors="*{description}"
-             th:if="${#fields.hasErrors('description')}"></div>
-    </div>
-    <hr>
-    <div class="mb-4">
-        <h4 th:text="#{fieldOfStudy.item.card.body.image}"></h4>
-        <label class="form-label" for="customFile" th:text="#{fieldOfStudy.item.card.body.image.desc}"></label>
-        <input accept="image/png, image/jpeg" class="form-control" id="customFile"
-               name="imageUpload"
-               required
-               th:value="*{image}"
-               type="file"/>
-    </div>
+    <!--    TODO - add fields of studies  -->
+
 </div>
 
 
@@ -150,7 +114,7 @@
                             <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
                             <div class="text-muted"
                                  th:text="${fieldOpt.levelOfEducation.value} + ', ' +
-                                            ${fieldOpt.mode.value}">
+                                            ${fieldOpt.mode.value.toLowerCase()}">
                             </div>
                             <p class="card-text" th:text="${fieldOpt.description}"></p>
                         </div>

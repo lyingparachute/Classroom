@@ -38,6 +38,8 @@
                         </div>
                     </div>
 
+                    <div class="alert alert-success" role="alert" th:if="${success}" th:text="${success}"></div>
+
                     <div class="row row-cols-1 row-cols-md-2 g-4">
                         <th:block th:each="departmentOpt, iterStat : ${departments}">
                             <div class="col">
