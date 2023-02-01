@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,8 +19,8 @@ public class DepartmentDto {
     private Long id;
     private String name;
     private String address;
-    @Pattern(regexp = "(\\+48|0)\\d{9}")
-    private int telNumber;
+    //    @Pattern(regexp = "(\\+48|0)\\d{9}")
+    private Integer telNumber;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Teacher dean;
