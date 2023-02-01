@@ -26,7 +26,6 @@
     </div>
 </div>
 
-
 <!-- ======= Go Home Button ======= -->
 <div class="row my-2 justify-content-center" id="goBackButton" th:fragment="btn-go-home">
     <div class="col-auto">
@@ -44,7 +43,7 @@
     <span th:text="#{button.go.back}"></span>
 </a>
 
-<!-- ======= Go back to field of study with id button ======= -->
+<!-- ======= Go back to department with id button ======= -->
 <a class="btn btn-primary btn-rounded"
    th:fragment="btn-go-back-to-department"
    th:href="@{/dashboard/departments/{id}(id=${department.id})}">
@@ -52,16 +51,15 @@
     <span th:text="#{button.go.back}"></span>
 </a>
 
-<!-- ======= Go back to /departments ======= -->
+<!-- ======= Go back to departments ======= -->
 <a class="btn btn-primary btn-rounded"
    th:fragment="btn-go-back-to-departments"
-
    th:href="@{/dashboard/departments}">
     <i class="mr-2 fas fa-arrow-left-long "></i>
     <span th:text="#{button.go.back}"></span>
 </a>
 
-<!-- ======= Add new field of study button ======= -->
+<!-- ======= Add new department button ======= -->
 <a class="btn btn-success btn-rounded"
    th:fragment="btn-add-new"
    th:href="@{/dashboard/departments/new}">
@@ -69,21 +67,6 @@
     <span th:text="#{department.button.add}"></span>
 </a>
 
-<!-- ======= Edit, Delete  Buttons ======= -->
-<div class="row my-2 justify-content-end" th:fragment="edit-delete-buttons">
-    <div class="col-auto">
-        <a class="btn btn-outline-primary btn-rounded"
-           th:href="@{/dashboard/departments/edit/{id}(id=${department.id})}">
-            <i class="fas fa-pen mr-2"></i><span th:text="#{button.edit}"></span>
-        </a>
-    </div>
-    <div class="col-auto">
-        <a class="btn btn-outline-danger btn-rounded delBtn"
-           th:href="@{/dashboard/departments/delete/{id}(id=${department.id})}">
-            <i class="fa fa-trash-can fa-lg mr-2"></i><span th:text="#{button.delete}"></span>
-        </a>
-    </div>
-</div>
 
 <!-- ======= Edit department Button ======= -->
 <a class="btn btn-outline-primary btn-rounded"
@@ -99,20 +82,4 @@
    th:href="@{/dashboard/departments/delete/{id}(id=${department.id})}">
     <i class="fa fa-trash-can fa-lg mr-2"></i>
     <span th:text="#{button.delete}"></span>
-</a>
-
-<!-- ======= View FieldsOfStudy Button ======= -->
-<a class="btn btn-primary btn-rounded"
-   th:fragment="btn-view-fieldsOfStudy"
-   th:href="@{/dashboard/departments/{id}/fields-of-study(id=${department.id})}">
-    <i class="fas fa-microscope fa-fw mr-2"></i>
-    <span th:text="#{button.subjects}"></span>
-</a>
-
-<!-- ======= Edit FieldsOfStudy Button ======= -->
-<a class="btn btn-outline-primary btn-rounded"
-   th:fragment="btn-edit-fieldsOfStudy"
-   th:href="@{/dashboard/departments/edit/{id}/fields-of-study(id=${department.id})}">
-    <i class="fas fa-pen mr-2"></i>
-    <span th:text="#{button.edit}"></span>
 </a>
