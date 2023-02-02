@@ -95,7 +95,37 @@
             <th:block th:each="fieldOpt, iterStat2 : ${department.fieldsOfStudy}">
                 <div class="col">
                     <!-- ======= FieldOfStudy Details ======= -->
-                    <div th:replace="field-of-study/elements :: field-of-study-item-card"></div>
+                    <div class="card h-100" th:fragment="field-of-study-item-card">
+                        <div class="bg-image hover-overlay ripple"
+                             data-mdb-ripple-color="light">
+                            <img class="field-of-study-item-card"
+                                 th:alt="${fieldOpt.name}"
+                                 th:if="${fieldOpt.image} != null"
+                                 th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
+                            <img class="field-of-study-item-card"
+                                 th:alt="${fieldOpt.name}"
+                                 th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                                 th:unless="${fieldOpt.image} != null"/>
+                            <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                <div class="mask"
+                                     style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
+                            <span class="text-muted"
+                                  th:text="${fieldOpt.levelOfEducation.value} + ', ' +
+                                  ${fieldOpt.mode.value.toLowerCase()}"></span>
+                            <p class="card-text" th:text="${fieldOpt.description}"></p>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="btn btn-primary"
+                               th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                <span th:text="#{button.view.fielOfStudy}"></span>
+                                <i class="fas fa-regular fa-up-right-from-square"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </th:block>
         </div>
