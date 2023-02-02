@@ -48,32 +48,44 @@
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-graduation-cap  fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
-                <!--* Library *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('library')}" th:href="@{/dashboard/library}"
-                   class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-book-open fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item8}"></span>
-                </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('library')}" th:href="@{/dashboard/library}"
-                   class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-book-open fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item8}"></span>
-                </a>
                 <!--* Facilities *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('departments')}" th:href="@{/dashboard/departments}"
+                <a th:href="@{/dashboard/departments}"
+                   th:if="${#httpServletRequest.requestURL.toString().contains('departments')}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-school fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item9}"></span>
+                        class="fas fa-school fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item9}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('departments')}" th:href="@{/dashboard/departments}"
+                <a th:href="@{/dashboard/departments}"
+                   th:unless="${#httpServletRequest.requestURL.toString().contains('departments')}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-school fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item9}"></span>
+                        class="fas fa-school fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item9}"></span>
+                </a>
+                <!--* Library *-->
+                <a class="list-group-item list-group-item-action py-2 ripple active"
+                   th:href="@{/dashboard/library}"
+                   th:if="${#httpServletRequest.requestURL.toString().contains('library')}"><i
+                        class="fas fa-book-open fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item8}"></span>
+                </a>
+                <a class="list-group-item list-group-item-action py-2 ripple"
+                   th:href="@{/dashboard/library}"
+                   th:unless="${#httpServletRequest.requestURL.toString().contains('library')}"><i
+                        class="fas fa-book-open fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item8}"></span>
                 </a>
                 <!--* Calendar *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('calendar')}" th:href="@{/dashboard/calendar}"
+                <a th:href="@{/dashboard/calendar}"
+                   th:if="${#httpServletRequest.requestURL.toString().contains('calendar')}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-calendar fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item10}"></span>
+                        class="fas fa-calendar fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item10}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('calendar')}" th:href="@{/dashboard/calendar}"
+                <a th:href="@{/dashboard/calendar}"
+                   th:unless="${#httpServletRequest.requestURL.toString().contains('calendar')}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-calendar fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item10}"></span>
+                        class="fas fa-calendar fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item10}"></span>
                 </a>
                 <!--* Analytics *-->
                 <a th:if="${#httpServletRequest.requestURL.toString().contains('analytics')}" th:href="@{/dashboard/analytics}"
@@ -83,15 +95,6 @@
                 <a th:unless="${#httpServletRequest.requestURL.toString().contains('analytics')}" th:href="@{/dashboard/analytics}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-chart-line fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item5}"></span>
-                </a>
-                <!--* Sales *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('sales')}" th:href="@{/dashboard/sales}"
-                   class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-money-bill fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item11}"></span>
-                </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('sales')}" th:href="@{/dashboard/sales}"
-                   class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-money-bill fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item11}"></span>
                 </a>
                 <!--* Settings *-->
                 <a th:if="${#httpServletRequest.requestURL.toString().contains('settings')}" th:href="@{/dashboard/settings}"
