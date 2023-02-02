@@ -142,6 +142,39 @@
     </div>
 </div>
 
+<!-- ======= Field of study Item Card ======= -->
+<div class="card h-100" th:fragment="field-of-study-item-card">
+    <div class="bg-image hover-overlay ripple"
+         data-mdb-ripple-color="light">
+        <img class="field-of-study-item-card"
+             th:alt="${fieldOpt.name}"
+             th:if="${fieldOpt.image} != null"
+             th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
+        <img class="field-of-study-item-card"
+             th:alt="${fieldOpt.name}"
+             th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+             th:unless="${fieldOpt.image} != null"/>
+        <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+            <div class="mask"
+                 style="background-color: rgba(251, 251, 251, 0.15);"></div>
+        </a>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
+        <span class="text-muted"
+              th:if="${fieldOpt.mode} == ${T(com.example.classroom.enums.ModeOfStudy).PT}"
+              th:text="${fieldOpt.mode.value}"></span>
+        <p class="card-text" th:text="${fieldOpt.description}"></p>
+    </div>
+    <div class="card-footer text-center">
+        <a class="btn btn-primary"
+           th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+            <span th:text="#{button.view.fielOfStudy}"></span>
+            <i class="fas fa-regular fa-up-right-from-square"></i>
+        </a>
+    </div>
+</div>
+
 <!-- ======= View ALL FieldsOfStudy card body ======= -->
 <div class="row row-cols-1 row-cols-md-3 g-4" th:fragment="all-fields-of-study-card-body">
     <th:block th:each="fieldMapOpt, iterStat : ${fieldsOfStudyMap}">
@@ -149,12 +182,12 @@
             <div class="card h-100">
                 <div class="bg-image hover-overlay ripple"
                      data-mdb-ripple-color="light">
-                    <img class="img-fluid"
+                    <img class="field-of-study-item-card"
                          th:alt="${fieldMapOpt.value.get(0).name}"
                          th:if="${fieldMapOpt.value.get(0).image} != null"
                          th:src="@{${imagesPath} + '/' + ${fieldMapOpt.value.get(0).image}}"/>
                     <img alt="Default image"
-                         class="img-fluid"
+                         class="field-of-study-item-card"
                          th:src="@{${imagesPath} + '/' + 'default.jpg'}"
                          th:unless="${fieldMapOpt.value.get(0).image} != null"/>
                     <a>
@@ -201,37 +234,8 @@
     <th:block th:each="fieldOpt, iterStat2 : ${firstFieldsOfStudy}">
         <div class="col">
             <!-- ======= Item Card ======= -->
-            <div class="card h-100">
-                <div class="bg-image hover-overlay ripple"
-                     data-mdb-ripple-color="light">
-                    <img class="img-fluid"
-                         th:alt="${fieldOpt.name}"
-                         th:if="${fieldOpt.image} != null"
-                         th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
-                    <img alt="Default image"
-                         class="img-fluid"
-                         th:src="@{${imagesPath} + '/' + 'default.jpg'}"
-                         th:unless="${fieldOpt.image} != null"/>
-                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
-                        <div class="mask"
-                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                    </a>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
-                    <span class="text-muted"
-                          th:if="${fieldOpt.mode} == ${T(com.example.classroom.enums.ModeOfStudy).PT}"
-                          th:text="${fieldOpt.mode.value}"></span>
-                    <p class="card-text" th:text="${fieldOpt.description}"></p>
-                </div>
-                <div class="card-footer text-center">
-                    <a class="btn btn-primary"
-                       th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
-                        <span th:text="#{button.view.fielOfStudy}"></span>
-                        <i class="fas fa-regular fa-up-right-from-square"></i>
-                    </a>
-                </div>
-            </div>
+            <div th:replace="field-of-study/elements :: field-of-study-item-card"></div>
+
         </div>
     </th:block>
 </div>
@@ -242,37 +246,7 @@
     <th:block th:each="fieldOpt, iterStat2 : ${secondFieldsOfStudy}">
         <div class="col">
             <!-- ======= Item Card ======= -->
-            <div class="card h-100">
-                <div class="bg-image hover-overlay ripple"
-                     data-mdb-ripple-color="light">
-                    <img class="img-fluid"
-                         th:alt="${fieldOpt.name}"
-                         th:if="${fieldOpt.image} != null"
-                         th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
-                    <img alt="Default image"
-                         class="img-fluid"
-                         th:src="@{${imagesPath} + '/' + 'default.jpg'}"
-                         th:unless="${fieldOpt.image} != null"/>
-                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
-                        <div class="mask"
-                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                    </a>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
-                    <span class="text-muted"
-                          th:if="${fieldOpt.mode} == ${T(com.example.classroom.enums.ModeOfStudy).PT}"
-                          th:text="${fieldOpt.mode.value}"></span>
-                    <p class="card-text" th:text="${fieldOpt.description}"></p>
-                </div>
-                <div class="card-footer text-center">
-                    <a class="btn btn-primary"
-                       th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
-                        <span th:text="#{button.view.fielOfStudy}"></span>
-                        <i class="fas fa-regular fa-up-right-from-square"></i>
-                    </a>
-                </div>
-            </div>
+            <div th:replace="field-of-study/elements :: field-of-study-item-card"></div>
         </div>
     </th:block>
 </div>

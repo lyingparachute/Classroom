@@ -85,3 +85,9 @@ main {
 .h3 {
     color: #043865 !important;
 }
+
+
+.field-of-study-item-card {
+    height: 300px;
+    width: 100%;
+}
