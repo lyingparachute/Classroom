@@ -25,7 +25,6 @@
                         </h6>
                     </nav>
 
-
                     <div class="page-title"
                          th:text="#{departments.all.card.header}">
                     </div>
@@ -38,7 +37,20 @@
                         </div>
                     </div>
 
-                    <div class="alert alert-success" role="alert" th:if="${success}" th:text="${success}"></div>
+                    <!-- Add department Success Alert -->
+                    <div class="alert alert-success alert-dismissible d-flex align-items-center fade show"
+                         th:if="${success}">
+                        <i class="fas fa-check-circle"></i>
+                        <strong class="mx-2" th:text="#{msg.success}"></strong>
+                        <span th:text="#{department.success.msg1}"></span>
+                        &nbsp;
+                        <a class="alert-link"
+                           th:href="@{/dashboard/departments/{id}(id=${success.id})}"
+                           th:text="${success.name}"></a>
+                        &nbsp;
+                        <span th:text="#{department.success.msg2}"></span>
+                        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+                    </div>
 
                     <div class="row row-cols-1 row-cols-md-2 g-4">
                         <th:block th:each="departmentOpt, iterStat : ${departments}">

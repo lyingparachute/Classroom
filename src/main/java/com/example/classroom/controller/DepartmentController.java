@@ -57,8 +57,8 @@ public class DepartmentController {
             addAttributesTeachersAndFieldsOfStudy(model);
             return "department/department-create-form";
         }
-        service.create(dto);
-        redirAttrs.addFlashAttribute("success", "Successfully added new department.");
+        DepartmentDto saved = service.create(dto);
+        redirAttrs.addFlashAttribute("success", saved);
         return "redirect:/dashboard/departments";
     }
 
