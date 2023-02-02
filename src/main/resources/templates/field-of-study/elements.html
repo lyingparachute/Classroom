@@ -37,6 +37,7 @@
     <div class="mb-4">
         <h4 th:text="#{fieldOfStudy.item.card.body.department}"></h4>
         <select class="form-select" id="department" th:field="*{department}">
+            <option th:value="0"></option>
             <option th:each="fieldOpt : ${departments}"
                     th:text="${fieldOpt.name}"
                     th:value="${fieldOpt.id}">
@@ -101,6 +102,7 @@
     <div class="mb-4">
         <h4 th:text="#{fieldOfStudy.item.card.body.department}"></h4>
         <a class="text-body"
+           th:if="${fieldOfStudy.department != null}"
            th:href="@{/dashboard/departments/{id}(id=${fieldOfStudy.department.id})}">
             <span th:text="${fieldOfStudy.department.name}"></span>
             <i class="fas fa-regular fa-up-right-from-square"></i>
