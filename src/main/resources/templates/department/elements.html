@@ -26,13 +26,14 @@
         <div class="form-outline">
             <input class="form-control"
                    th:field="*{telNumber}"
-                   type="number"/>
+                   type="tel"/>
         </div>
     </div>
     <hr>
     <div class="mb-4">
         <h4 th:text="#{department.dean}"></h4>
         <select class="form-select" id="dean" th:field="*{dean}">
+            <option th:value="0"></option>
             <option th:each="fieldOpt : ${teachers}"
                     th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}"
                     th:value="${fieldOpt.id}">
@@ -40,7 +41,54 @@
         </select>
     </div>
     <hr>
-    <!--    TODO - add fields of studies  -->
+
+    <div class="mb-3">
+        <span class="h4 mr-2" th:text="#{department.fieldsOfStudy}"></span>
+        <a aria-controls="collapseFieldsOfStudy"
+           aria-expanded="false" class="btn btn-secondary btn-rounded"
+           data-mdb-toggle="collapse" href="#collapseFieldsOfStudy" role="button"
+           th:text="#{button.show.hide}">
+        </a>
+    </div>
+    <div class="collapse mt-3" id="collapseFieldsOfStudy">
+        <div class="row row-cols-1 row-cols-md-3 g-3">
+            <th:block th:each="fieldOpt, iterStat : ${fieldsOfStudy}">
+                <div class="col">
+
+                    <!-- ======= FieldOfStudy Details ======= -->
+                    <div class="card field-of-study-item-card">
+
+                        <input class="form-check-input-checkbox" th:field="*{fieldsOfStudy}"
+                               th:id="${iterStat.count}"
+                               th:value="${fieldOpt.id}"
+                               type="checkbox"/>
+
+                        <div class="single-item-card">
+                            <div class="bg-image">
+                                <img class="field-of-study-img"
+                                     th:alt="${fieldOpt.name}"
+                                     th:if="${fieldOpt.image} != null"
+                                     th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
+                                <img class="field-of-study-img"
+                                     th:alt="${fieldOpt.name}"
+                                     th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                                     th:unless="${fieldOpt.image} != null"/>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <span class="h5" th:text="${fieldOpt.name}"></span>
+                                </div>
+                                <div class="field-of-study-details-muted"
+                                     th:text="${fieldOpt.levelOfEducation.value} + ', ' +
+                                  ${fieldOpt.mode.value.toLowerCase()}"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
 
 </div>
 
@@ -98,11 +146,11 @@
                     <div class="card h-100" th:fragment="field-of-study-item-card">
                         <div class="bg-image hover-overlay ripple"
                              data-mdb-ripple-color="light">
-                            <img class="field-of-study-item-card"
+                            <img class="field-of-study-img"
                                  th:alt="${fieldOpt.name}"
                                  th:if="${fieldOpt.image} != null"
                                  th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
-                            <img class="field-of-study-item-card"
+                            <img class="field-of-study-img"
                                  th:alt="${fieldOpt.name}"
                                  th:src="@{${imagesPath} + '/' + 'default.jpg'}"
                                  th:unless="${fieldOpt.image} != null"/>
