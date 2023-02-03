@@ -260,4 +260,11 @@ public class FieldOfStudyService {
         Set<Student> students = fieldOfStudy.getStudents();
         students.forEach(fieldOfStudy::removeStudent);
     }
+
+    public List<FieldOfStudyDto> fetchAllWithNoDepartment() {
+        return repository.findAll().stream()
+                .filter(fieldOfStudy -> fieldOfStudy.getDepartment() == null)
+                .map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
+                .toList();
+    }
 }

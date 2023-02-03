@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <header th:replace="fragments/header :: header"></header>
+    <link rel="stylesheet" th:href="@{/css/department-form.css}" type="text/css"/>
 </head>
 <body>
 <!-- ======= Navigation ======= -->
@@ -13,7 +14,7 @@
             <div class="card" id="itemCard">
                 <div class="card-header py-4 title-bar">
                     <div class="page-title"
-                         th:text="#{fieldOfStudy.new}">
+                         th:text="#{department.create}">
                     </div>
                 </div>
                 <div class="card-body mx-4">
@@ -23,7 +24,6 @@
                           th:object="${department}">
                         <!-- ======= FieldOfStudy Form ======= -->
                         <div th:replace="department/elements :: item-form"></div>
-
                         <!-- ======= Buttons ======= -->
                         <div th:replace="department/buttons :: CREATEcancelSubmitBtn"></div>
                     </form>
