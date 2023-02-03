@@ -45,6 +45,7 @@ public class DepartmentController {
     public String getNewDepartmentForm(Model model) {
         model.addAttribute("department", new DepartmentDto());
         addAttributesTeachersAndFieldsOfStudy(model);
+        addAttributeImagesPath(model, "fields-of-study");
         return "department/department-create-form";
     }
 
@@ -68,6 +69,6 @@ public class DepartmentController {
 
     private void addAttributesTeachersAndFieldsOfStudy(Model model) {
         model.addAttribute("teachers", teacherService.fetchAll());
-        model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAll());
+        model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAllWithNoDepartment());
     }
 }
