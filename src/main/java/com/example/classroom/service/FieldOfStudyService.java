@@ -164,16 +164,11 @@ public class FieldOfStudyService {
     }
 
     public Map<Semester, Integer> calculateEctsPointsForEachSemester(Long id) {
+        Map<Semester, Integer> resultMap = new EnumMap<>(Semester.class);
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(id);
-        return Map.ofEntries(
-                entry(Semester.FIRST, getSumOfEctsPointsForSemester(subjects, Semester.FIRST)),
-                entry(Semester.SECOND, getSumOfEctsPointsForSemester(subjects, Semester.SECOND)),
-                entry(Semester.THIRD, getSumOfEctsPointsForSemester(subjects, Semester.THIRD)),
-                entry(Semester.FOURTH, getSumOfEctsPointsForSemester(subjects, Semester.FOURTH)),
-                entry(Semester.FIFTH, getSumOfEctsPointsForSemester(subjects, Semester.FIFTH)),
-                entry(Semester.SIXTH, getSumOfEctsPointsForSemester(subjects, Semester.SIXTH)),
-                entry(Semester.SEVENTH, getSumOfEctsPointsForSemester(subjects, Semester.SEVENTH))
-        );
+        Arrays.stream(Semester.values())
+                .forEach(semester -> resultMap.put(semester, getSumOfEctsPointsForSemester(subjects, semester)));
+        return resultMap;
     }
 
     private Integer getSumOfEctsPointsForSemester(List<Subject> subjects, Semester semester) {
