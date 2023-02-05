@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <link rel="stylesheet" th:href="@{/css/department-form.css}" type="text/css"/>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div class="card" id="itemCard">
+                <div class="card-header py-4 title-bar">
+                    <div class="page-title"
+                         th:text="#{department.create}">
+                    </div>
+                </div>
+                <div class="card-body mx-4">
+                    <form class="form-group needs-validation"
+                          th:action="@{/dashboard/departments/update}"
+                          th:method="post"
+                          th:object="${department}">
+                        <input hidden id="input_id" th:field="*{id}" type="text">
+                        <!-- ======= FieldOfStudy Form ======= -->
+                        <div th:replace="department/elements :: item-form"></div>
+                        <!-- ======= Buttons ======= -->
+                        <div th:replace="department/buttons :: EDITcancelSubmitBtn"></div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+</body>
+</html>

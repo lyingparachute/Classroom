@@ -5,8 +5,11 @@
         <h4 th:text="#{department.name}"></h4>
         <div class="form-outline">
             <input class="form-control"
+                   data-mdb-showcounter="true"
                    th:field="*{name}"
-                   type="text"/>
+                   id="name-input"
+                   maxlength="50" type="text"/>
+            <div class="form-helper"></div>
         </div>
         <div class="alert alert-danger" th:errors="*{name}"
              th:if="${#fields.hasErrors('name')}"></div>
@@ -18,6 +21,7 @@
             <input class="form-control"
                    th:field="*{address}"
                    type="text"/>
+            <div class="form-helper" th:text="#{input.helper.address}"></div>
         </div>
     </div>
     <hr>
@@ -27,12 +31,18 @@
             <input class="form-control"
                    th:field="*{telNumber}"
                    type="tel"/>
+            <div class="form-helper" th:text="#{input.helper.telNumber}"></div>
         </div>
     </div>
     <hr>
     <div class="mb-4">
         <h4 th:text="#{department.dean}"></h4>
-        <select class="form-select" id="dean" th:field="*{dean}">
+        <div th:if="${teachers.isEmpty()}">
+            <span class="mr-1" th:text="#{department.new.noTeachers}"></span>
+            <div th:replace="teacher/buttons :: btn-add-new"></div>
+        </div>
+        <select class="form-select"
+                id="dean" th:field="*{dean}" th:unless="${teachers.isEmpty()}">
             <option th:value="0"></option>
             <option th:each="fieldOpt : ${teachers}"
                     th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}"
@@ -43,8 +53,13 @@
     <hr>
 
     <div class="mb-3">
-        <span class="h4 mr-2" th:text="#{department.fieldsOfStudy}"></span>
+        <h4 class="mr-2" th:text="#{department.fieldsOfStudy}"></h4>
+        <div th:if="${fieldsOfStudy.isEmpty()}">
+            <span class="mr-1" th:text="#{department.new.noFieldOfStudies}"></span>
+            <div th:replace="field-of-study/buttons :: btn-add-new"></div>
+        </div>
         <a aria-controls="collapseFieldsOfStudy"
+           th:unless="${fieldsOfStudy.isEmpty()}"
            aria-expanded="false" class="btn btn-secondary btn-rounded"
            data-mdb-toggle="collapse" href="#collapseFieldsOfStudy" role="button"
            th:text="#{button.show.hide}">
@@ -129,12 +144,12 @@
     <div class="mb-3">
         <span class="h4 mr-2" th:text="#{department.fieldsOfStudy}"></span>
         <a aria-controls="collapseExample"
-           aria-expanded="false" class="btn btn-secondary btn-rounded" th:if="${department.fieldsOfStudy.size() > 0}"
+           aria-expanded="false" class="btn btn-secondary btn-rounded" th:unless="${department.fieldsOfStudy.isEmpty()}"
            data-mdb-toggle="collapse" href="#collapseExample" role="button"
            th:text="#{button.show.hide}">
         </a>
-        <div class="mb-3" th:unless="${department.fieldsOfStudy.size() > 0}">
-            <span th:text="#{department.fieldsOfStudy.empty}"></span>
+        <div class="mb-3" th:if="${department.fieldsOfStudy.isEmpty()}">
+            <span th:text="#{department.fieldsOfStudy.isEmpty}"></span>
             <div th:replace="department/buttons :: btn-edit"></div>
         </div>
     </div>
