@@ -21,7 +21,9 @@
                     <form class="form-group needs-validation"
                           th:action="@{/dashboard/departments/new}"
                           th:method="post"
+                          novalidate
                           th:object="${department}">
+
                         <!-- ======= FieldOfStudy Form ======= -->
                         <div th:replace="department/elements :: item-form"></div>
                         <!-- ======= Buttons ======= -->

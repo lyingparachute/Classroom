@@ -24,10 +24,6 @@ public class DepartmentController {
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
 
-    private static void addAttributeImagesPath(Model model, String directory) {
-        model.addAttribute("imagesPath", Path.of("/img").resolve(directory));
-    }
-
     @GetMapping()
     public String getAllDepartments(Model model) {
         model.addAttribute("departments", service.fetchAll());
@@ -42,25 +38,32 @@ public class DepartmentController {
         return "department/department-view";
     }
 
+    private static void addAttributeImagesPath(Model model, String directory) {
+        model.addAttribute("imagesPath", Path.of("/img").resolve(directory));
+    }
+
+    private static void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, DepartmentDto saved) {
+        redirectAttributes.addFlashAttribute("success", saved);
+    }
+
     @GetMapping("new")
     public String getNewDepartmentForm(Model model) {
         model.addAttribute("department", new DepartmentDto());
-        addAttributesTeachersAndFieldsOfStudy(model);
-        addAttributeImagesPath(model, "fields-of-study");
+        addAttributesForCreateAndUpdateDepartment(model);
         return "department/department-create-form";
     }
 
-    @PostMapping(value = "new")
+    @PostMapping("new")
     public String createDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
-                                   RedirectAttributes redirectAttributes,
                                    BindingResult result,
+                                   RedirectAttributes redirectAttributes,
                                    Model model) {
         if (result.hasErrors()) {
-            addAttributesTeachersAndFieldsOfStudy(model);
+            addAttributesForCreateAndUpdateDepartment(model);
             return "department/department-create-form";
         }
         DepartmentDto saved = service.create(dto);
-        redirectAttributes.addFlashAttribute("success", saved);
+        addFlashAttributeSuccess(redirectAttributes, saved);
         redirectAttributes.addFlashAttribute("createSuccess", "saved");
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
@@ -68,22 +71,25 @@ public class DepartmentController {
     @GetMapping("edit/{id}")
     public String getEditDepartmentForm(@PathVariable Long id, Model model) {
         addAttributeDepartmentFetchById(id, model);
-        addAttributesTeachersAndFieldsOfStudy(model);
-        addAttributeImagesPath(model, "fields-of-study");
+        addAttributesForCreateAndUpdateDepartment(model);
         return "department/department-edit-form";
+    }
+
+    private void addAttributeDepartmentFetchById(Long id, Model model) {
+        model.addAttribute("department", service.fetchById(id));
     }
 
     @PostMapping(value = "update")
     public String editDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
-                                 RedirectAttributes redirectAttributes,
                                  BindingResult result,
+                                 RedirectAttributes redirectAttributes,
                                  Model model) {
         if (result.hasErrors()) {
-            addAttributesTeachersAndFieldsOfStudy(model);
+            addAttributesForCreateAndUpdateDepartment(model);
             return "department/department-edit-form";
         }
         DepartmentDto updated = service.update(dto);
-        redirectAttributes.addFlashAttribute("success", updated);
+        addFlashAttributeSuccess(redirectAttributes, updated);
         redirectAttributes.addFlashAttribute("updateSuccess", "updated");
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
@@ -92,17 +98,14 @@ public class DepartmentController {
     public String deleteDepartment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         DepartmentDto dto = service.fetchById(id);
         service.remove(id);
-        redirectAttributes.addFlashAttribute("success", dto);
+        addFlashAttributeSuccess(redirectAttributes, dto);
         redirectAttributes.addFlashAttribute("deleteSuccess", "deleted");
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
 
-    private void addAttributeDepartmentFetchById(Long id, Model model) {
-        model.addAttribute("department", service.fetchById(id));
-    }
-
-    private void addAttributesTeachersAndFieldsOfStudy(Model model) {
+    private void addAttributesForCreateAndUpdateDepartment(Model model) {
         model.addAttribute("teachers", teacherService.fetchAll());
         model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAllWithNoDepartment());
+        addAttributeImagesPath(model, "fields-of-study");
     }
 }

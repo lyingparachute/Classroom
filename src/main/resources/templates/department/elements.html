@@ -1,37 +1,50 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <!-- ======= Form for Department ======= -->
 <div th:fragment="item-form">
-    <div class="mb-4">
+    <div class="mb-4" th:classappend="${#fields.hasErrors('name')} ? mb-5">
         <h4 th:text="#{department.name}"></h4>
         <div class="form-outline">
             <input class="form-control"
                    data-mdb-showcounter="true"
                    th:field="*{name}"
                    id="name-input"
-                   maxlength="50" type="text"/>
+                   3 maxlength="50" th:classappend="${#fields.hasErrors('name')} ? is-invalid"
+                   type="text"/>
             <div class="form-helper"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('name')}" th:text="${error}"></span>
+            </div>
         </div>
-        <div class="alert alert-danger" th:errors="*{name}"
-             th:if="${#fields.hasErrors('name')}"></div>
+
     </div>
     <hr>
-    <div class="mb-4">
+    <div class="mb-4" th:classappend="${#fields.hasErrors('address')} ? mb-5">
         <h4 th:text="#{department.address}"></h4>
         <div class="form-outline">
             <input class="form-control"
                    th:field="*{address}"
                    type="text"/>
-            <div class="form-helper" th:text="#{input.helper.address}"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('address')}" th:text="${error}"></span>
+            </div>
+            <div class="form-helper" th:text="#{input.helper.address}"
+                 th:unless="${#fields.hasErrors('address')}"></div>
         </div>
     </div>
     <hr>
-    <div class="mb-4">
+    <div class="mb-4" th:classappend="${#fields.hasErrors('telNumber')} ? mb-5">
         <h4 th:text="#{department.telNumber}"></h4>
         <div class="form-outline">
             <input class="form-control"
                    th:field="*{telNumber}"
-                   type="tel"/>
-            <div class="form-helper" th:text="#{input.helper.telNumber}"></div>
+                   th:classappend="${#fields.hasErrors('telNumber')} ? is-invalid"
+                   type="tel"
+            />
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('telNumber')}" th:text="${error}"></span>
+            </div>
+            <div class="form-helper" th:text="#{input.helper.telNumber}"
+                 th:unless="${#fields.hasErrors('telNumber')}"></div>
         </div>
     </div>
     <hr>
@@ -122,7 +135,7 @@
     <hr>
     <div class="mb-4">
         <h4 th:text="#{department.telNumber}"></h4>
-        <span th:text="${department.telNumber}"></span>
+        <span th:text="'+48 ' + ${department.telNumber}"></span>
     </div>
     <hr>
     <div class="mb-4">
