@@ -1,5 +1,6 @@
 package com.example.classroom.service;
 
+import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.dto.FieldOfStudyDto;
 import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Student;
@@ -261,5 +262,16 @@ public class FieldOfStudyService {
                 .filter(fieldOfStudy -> fieldOfStudy.getDepartment() == null)
                 .map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
                 .toList();
+    }
+
+    public List<FieldOfStudyDto> fetchAllWithGivenDepartmentDtoOrNoDepartment(DepartmentDto department) {
+        return Stream.concat(
+                repository.findAll().stream()
+                        .filter(fieldOfStudy -> fieldOfStudy.getDepartment() == null)
+                        .map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)),
+                repository.findAll().stream()
+                        .filter(fieldOfStudy -> fieldOfStudy.getDepartment().getId().equals(department.getId()))
+                        .map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
+        ).toList();
     }
 }

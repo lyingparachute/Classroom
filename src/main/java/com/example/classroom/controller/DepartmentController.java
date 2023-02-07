@@ -38,18 +38,10 @@ public class DepartmentController {
         return "department/department-view";
     }
 
-    private static void addAttributeImagesPath(Model model, String directory) {
-        model.addAttribute("imagesPath", Path.of("/img").resolve(directory));
-    }
-
-    private static void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, DepartmentDto saved) {
-        redirectAttributes.addFlashAttribute("success", saved);
-    }
-
     @GetMapping("new")
     public String getNewDepartmentForm(Model model) {
         model.addAttribute("department", new DepartmentDto());
-        addAttributesForCreateAndUpdateDepartment(model);
+        addAttributesForCreateDepartment(model);
         return "department/department-create-form";
     }
 
@@ -59,7 +51,7 @@ public class DepartmentController {
                                    RedirectAttributes redirectAttributes,
                                    Model model) {
         if (result.hasErrors()) {
-            addAttributesForCreateAndUpdateDepartment(model);
+            addAttributesForCreateDepartment(model);
             return "department/department-create-form";
         }
         DepartmentDto saved = service.create(dto);
@@ -71,13 +63,10 @@ public class DepartmentController {
     @GetMapping("edit/{id}")
     public String getEditDepartmentForm(@PathVariable Long id, Model model) {
         addAttributeDepartmentFetchById(id, model);
-        addAttributesForCreateAndUpdateDepartment(model);
+        addAttributesForUpdateDepartment(id, model);
         return "department/department-edit-form";
     }
 
-    private void addAttributeDepartmentFetchById(Long id, Model model) {
-        model.addAttribute("department", service.fetchById(id));
-    }
 
     @PostMapping(value = "update")
     public String editDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
@@ -85,7 +74,7 @@ public class DepartmentController {
                                  RedirectAttributes redirectAttributes,
                                  Model model) {
         if (result.hasErrors()) {
-            addAttributesForCreateAndUpdateDepartment(model);
+            addAttributesForUpdateDepartment(dto.getId(), model);
             return "department/department-edit-form";
         }
         DepartmentDto updated = service.update(dto);
@@ -103,9 +92,28 @@ public class DepartmentController {
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
 
-    private void addAttributesForCreateAndUpdateDepartment(Model model) {
+    private void addAttributesForCreateDepartment(Model model) {
         model.addAttribute("teachers", teacherService.fetchAll());
         model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAllWithNoDepartment());
+        addAttributeImagesPath(model, "fields-of-study");
+    }
+
+    private static void addAttributeImagesPath(Model model, String directory) {
+        model.addAttribute("imagesPath", Path.of("/img").resolve(directory));
+    }
+
+    private static void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, DepartmentDto saved) {
+        redirectAttributes.addFlashAttribute("success", saved);
+    }
+
+    private void addAttributeDepartmentFetchById(Long id, Model model) {
+        model.addAttribute("department", service.fetchById(id));
+    }
+
+    private void addAttributesForUpdateDepartment(Long id, Model model) {
+        DepartmentDto dto = service.fetchById(id);
+        model.addAttribute("teachers", teacherService.fetchAll());
+        model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAllWithGivenDepartmentDtoOrNoDepartment(dto));
         addAttributeImagesPath(model, "fields-of-study");
     }
 }
