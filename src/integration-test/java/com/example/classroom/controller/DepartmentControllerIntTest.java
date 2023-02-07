@@ -90,7 +90,7 @@ class DepartmentControllerIntTest {
                         .as("Check %s's %s", "department", "Name").isEqualTo(expected.getName()),
                 () -> assertThat(actual.getAddress())
                         .as("Check %s's %s", "department", "Address").isEqualTo(expected.getAddress()),
-                () -> assertThat(actual.getTelNumber().toString())
+                () -> assertThat(actual.getTelNumber())
                         .as("Check %s's %s", "department", "Phone Number").isEqualTo(expected.getTelNumber()),
                 () -> assertThat(actual.getDean())
                         .as("Check %s's %s", "Department", "Dean").isEqualTo(dean),
@@ -116,7 +116,7 @@ class DepartmentControllerIntTest {
                         .as("Check %s's %s %s", "Dean", "Department", "Name").isEqualTo(expected.getName()),
                 () -> assertThat(dean.getDepartment().getAddress())
                         .as("Check %s's %s %s", "Dean", "Department", "Address").isEqualTo(expected.getAddress()),
-                () -> assertThat(dean.getDepartment().getTelNumber().toString())
+                () -> assertThat(dean.getDepartment().getTelNumber())
                         .as("Check %s's %s %s", "Dean", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
         );
         assertThat(actual.getFieldsOfStudy()).isNotNull().isNotEmpty().hasSize(2);
@@ -132,7 +132,7 @@ class DepartmentControllerIntTest {
                         fieldOfStudy -> fieldOfStudy.getDepartment().getId(),
                         fieldOfStudy -> fieldOfStudy.getDepartment().getName(),
                         fieldOfStudy -> fieldOfStudy.getDepartment().getAddress(),
-                        fieldOfStudy -> fieldOfStudy.getDepartment().getTelNumber().toString()
+                        fieldOfStudy -> fieldOfStudy.getDepartment().getTelNumber()
                 ).containsExactlyInAnyOrder(
                         tuple(fieldOfStudy1.getId(), fieldOfStudy1.getName(), fieldOfStudy1.getMode(),
                                 fieldOfStudy1.getTitle(), fieldOfStudy1.getLevelOfEducation(),
@@ -181,7 +181,7 @@ class DepartmentControllerIntTest {
                         .as("Check %s's %s", "Department", "Name").isEqualTo(expected.getName()),
                 () -> assertThat(actual.getAddress())
                         .as("Check %s's %s", "Department", "Address").isEqualTo(expected.getAddress()),
-                () -> assertThat(actual.getTelNumber().toString())
+                () -> assertThat(actual.getTelNumber())
                         .as("Check %s's %s", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
         );
         assertThat(actual.getDean()).as("Check if %s is not null", "Department's Dean").isNotNull();
@@ -205,7 +205,7 @@ class DepartmentControllerIntTest {
                         .as("Check %s's %s %s", "Dean", "Department", "Name").isEqualTo(expected.getName()),
                 () -> assertThat(dean.getDepartment().getAddress())
                         .as("Check %s's %s %s", "Dean", "Department", "Address").isEqualTo(expected.getAddress()),
-                () -> assertThat(dean.getDepartment().getTelNumber().toString())
+                () -> assertThat(dean.getDepartment().getTelNumber())
                         .as("Check %s's %s %s", "Dean", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
         );
         assertThat(actual.getFieldsOfStudy()).isNotNull().isNotEmpty().hasSize(2);
@@ -221,7 +221,7 @@ class DepartmentControllerIntTest {
                         fieldOfStudy -> fieldOfStudy.getDepartment().getId(),
                         fieldOfStudy -> fieldOfStudy.getDepartment().getName(),
                         fieldOfStudy -> fieldOfStudy.getDepartment().getAddress(),
-                        fieldOfStudy -> fieldOfStudy.getDepartment().getTelNumber().toString()
+                        fieldOfStudy -> fieldOfStudy.getDepartment().getTelNumber()
                 ).containsExactlyInAnyOrder(
                         tuple(fieldOfStudy1.getId(), fieldOfStudy1.getName(), fieldOfStudy1.getMode(),
                                 fieldOfStudy1.getTitle(), fieldOfStudy1.getLevelOfEducation(),
