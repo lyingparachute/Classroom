@@ -25,8 +25,7 @@ public class Department {
 
     private String address;
 
-    //    @Pattern(regexp = "(\\+48|0)[0-9]{9}")
-    private Integer telNumber;
+    private String telNumber;
 
     @JsonIgnore
     @ToString.Exclude
