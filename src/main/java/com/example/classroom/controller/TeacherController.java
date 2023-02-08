@@ -65,7 +65,7 @@ public class TeacherController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
         model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
-        return "teacher/teachers";
+        return "teacher/all-teachers";
     }
 
     @GetMapping("{id}")
@@ -78,7 +78,7 @@ public class TeacherController {
     public String getNewTeacherForm(Model model) {
         model.addAttribute("teacher/teacher", new TeacherDto());
         addAttributesSubjectsAndStudents(model);
-        return "teacher-form";
+        return "teacher/teacher-form";
     }
 
     @PostMapping(value = "new")
