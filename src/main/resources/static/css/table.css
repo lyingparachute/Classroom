@@ -55,23 +55,29 @@
 }
 #btnView {
     color: #2566a6;
+    background-color: #fff;
 }
 #btnView:hover {
-    color: #268df6;
+    color: #1e74cc;
+    background-color: #eee;
 }
 
 #btnEdit {
-    color: #575757;
+    color: #4f4f4f;
+    background-color: #fff;
 }
 
 #btnEdit:hover {
-    color: #a19f9f;
+    color: #6b6969;
+    background-color: #eee;
 }
 
 #btnDelete {
-    color: #9f2222;
-
+    color: #dc4c64;
+    background-color: #fff;
 }
+
 #btnDelete:hover {
     color: #ff2828;
+    background-color: #eee;
 }
