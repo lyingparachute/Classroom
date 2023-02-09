@@ -67,7 +67,7 @@ public class StudentController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
         model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
-        return "student/students";
+        return "student/all-students";
     }
 
     @GetMapping("{id}")
@@ -90,7 +90,7 @@ public class StudentController {
             return "student/student-form";
         }
         studentService.create(mapper.map(student, StudentDto.class));
-        return "student-create-success";
+        return "student/student-create-success";
     }
 
     @GetMapping("delete/{id}")
@@ -110,7 +110,7 @@ public class StudentController {
     public String editStudent(@Valid @ModelAttribute("student") Student student, BindingResult result, Model model) {
         if (result.hasErrors()) {
             addAttributesTeachersAndFieldsOfStudy(model);
-            return "student-edit-form";
+            return "student/student-edit-form";
         }
 
         StudentDto updated = studentService.update(mapper.map(student, StudentDto.class));
