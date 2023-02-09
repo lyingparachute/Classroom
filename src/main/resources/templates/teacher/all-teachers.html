@@ -68,7 +68,6 @@
                             <thead>
                             <tr>
                                 <th th:replace="fragments/sorting :: teachersSorting('firstName','Name')"></th>
-                                <th th:replace="fragments/sorting :: teachersSorting('age','Age')"></th>
 
                                 <th th:text="#{teacher.table.department}"></th>
                                 <th th:text="#{teacher.table.status}"></th>
@@ -103,8 +102,6 @@
                                         </div>
                                     </div>
                                 </td>
-
-                                <td th:text="${teacher.age}"></td>
 
                                 <td>
                                     <a class="text-body mb-1" th:unless="${teacher.department == null}"
