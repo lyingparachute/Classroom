@@ -49,16 +49,16 @@
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <button th:if="${name != null && !name.isEmpty()}"
-                                        id="btnClear"
-                                        class="btn btn-lg btn-light"
-                                        th:text="#{button.clear}">
-                                </button>
-                                <button th:unless="${name != null && !name.isEmpty()}"
+                                <button th:if="${name == null}"
                                         id="btnClearDisabled"
-                                        class="btn btn-lg btn-secondary"
+                                        class="btn btn-lg btn-light"
                                         th:text="#{button.clear}"
                                         disabled>
+                                </button>
+                                <button th:unless="${name == null}"
+                                        id="btnClear"
+                                        class="btn btn-lg btn-secondary"
+                                        th:text="#{button.clear}">
                                 </button>
                             </div>
                         </div>
@@ -68,13 +68,12 @@
                             <thead>
                             <tr>
                                 <th th:replace="fragments/sorting :: teachersSorting('firstName','Name')"></th>
-
                                 <th th:text="#{teacher.table.department}"></th>
                                 <th th:text="#{teacher.table.status}"></th>
-                                <th th:text="#{teacher.table.role}"></th>
+                                <th th:text="#{teacher.table.title}"></th>
                                 <th th:text="#{teacher.table.students}"></th>
                                 <th th:text="#{teacher.table.subjects}"></th>
-                                <th th:text="#{button.actions}"></th>
+                                <th class="text-center" th:text="#{button.actions}"></th>
                             </tr>
                             </thead>
 
@@ -116,10 +115,10 @@
                                 <td>
                                      <span class="badge badge-warning rounded-pill d-inline"
                                            th:if="${teacher.subjects.size() == 0}"
-                                           th:text="#{teacher.status.awaiting}"></span>
+                                           th:text="#{status.awaiting}"></span>
                                     <span class="badge badge-success rounded-pill d-inline"
                                           th:unless="${teacher.subjects.size() == 0}"
-                                          th:text="#{teacher.status.active}"></span>
+                                          th:text="#{status.active}"></span>
                                 </td>
                                 <td>
                                     <span th:if="${teacher.department == null}" th:text="#{teacher.role.prof}"></span>
@@ -130,31 +129,31 @@
                                 <td th:text="${teacher.subjects.size()}"></td>
 
                                 <td>
-                                    <div class="row-cols-1 align-items-center">
-                                        <a type="button"
-                                           id="btnView"
-                                           class="d-flex btn btn-link btn-rounded btn-sm fw-bold justify-content-center"
-                                           data-mdb-ripple-color="dark"
-                                           th:href="@{/dashboard/teachers/{id}(id=${teacher.id})}"
-                                           th:text="#{button.view}">
-                                        </a>
-                                        <a type="button"
-                                           id="btnEdit"
-                                           class="d-flex btn btn-link btn-rounded btn-sm fw-bold justify-content-center "
-                                           data-mdb-ripple-color="dark"
-                                           th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}"
-                                           th:text="#{button.edit}">
-                                        </a>
-                                        <a type="button"
-                                           id="btnDelete"
-                                           class="d-flex btn btn-link btn-rounded btn-sm fw-bold justify-content-center delBtn"
-                                           data-mdb-ripple-color="dark"
-                                           th:text="#{button.delete}"
-                                           th:href="@{/dashboard/teachers/delete/{id}(id=${teacher.id})}"
-                                           th:name="${teacher.firstName + '&nbsp;' + teacher.lastName}"
-                                           data-bs-toggle="modal"
-                                           data-bs-target="#deleteModal">
-                                        </a>
+                                    <div class="container">
+                                        <div class="row justify-content-center align-items-center">
+                                            <a type="button" id="btnView"
+                                               class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
+                                               data-mdb-ripple-color="dark"
+                                               th:href="@{/dashboard/teachers/{id}(id=${teacher.id})}"
+                                               th:text="#{button.view}">
+                                            </a>
+                                            <a type="button" id="btnEdit"
+                                               class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
+                                               data-mdb-ripple-color="dark"
+                                               th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}"
+                                               th:text="#{button.edit}">
+                                            </a>
+                                        </div>
+                                        <div class="row justify-content-center align-items-center">
+                                            <a type="button" id="btnDelete"
+                                               class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
+                                               data-mdb-ripple-color="dark"
+                                               th:text="#{button.delete}"
+                                               th:href="@{/dashboard/teachers/delete/{id}(id=${teacher.id})}"
+                                               th:name="${teacher.firstName + '&nbsp;' + teacher.lastName}"
+                                               data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            </a>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -206,8 +205,7 @@
                                                     name="size"
                                                     th:value="${pageSize}"
                                                     onchange="changePageSize()"
-                                                    class="size-select"
-                                            >
+                                                    class="size-select">
                                                 <option th:each="s : ${ {3, 6, 9, 12} }" th:value="${s}" th:text="${s}"
                                                         th:selected="${s == pageSize}"></option>
                                             </select>

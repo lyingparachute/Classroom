@@ -50,71 +50,113 @@
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <button th:if="${name != null && !name.isEmpty()}"
-                                        id="btnClear"
-                                        class="btn btn-lg btn-light"
-                                        th:text="#{button.clear}">
-                                </button>
-                                <button th:unless="${name != null && !name.isEmpty()}"
+                                <button th:if="${name == null }"
                                         id="btnClearDisabled"
                                         class="btn btn-lg btn-light"
                                         th:text="#{button.clear}"
                                         disabled>
                                 </button>
+                                <button th:unless="${name == null }"
+                                        id="btnClear"
+                                        class="btn btn-lg btn-secondary"
+                                        th:text="#{button.clear}">
+                                </button>
                             </div>
                         </div>
                     </form>
-                    <div id="studentsTable" class="table-responsive">
-                        <table class="table table-hover" th:if="${totalItems != 0}">
+                    <div class="table-responsive">
+                        <table class="table border-primary align-middle" th:if="${totalItems != 0}">
                             <thead>
                             <tr>
-                                <th th:replace="fragments/sorting :: studentsSorting('firstName','First Name')">
-                                </th>
-                                <th th:replace="fragments/sorting :: studentsSorting('lastName','Last Name')">
-                                </th>
-                                <th th:replace="fragments/sorting :: studentsSorting('age','Age')">
-                                </th>
-                                <th th:replace="fragments/sorting :: studentsSorting('email','Email')">
-                                </th>
-                                <th th:replace="fragments/sorting :: studentsSorting('fieldOfStudy','Field Of Study')">
-                                </th>
-                                <th rowspan="1" colspan="1" scope="col" th:text="#{student.no.of.teachers}">
-                                </th>
-                                <th rowspan="2" colspan="1" scope="col" th:text="#{button.actions}"
-                                    class="align-middle"/>
+                                <th th:replace="fragments/sorting :: studentsSorting('firstName','Name')"></th>
+                                <th th:replace="fragments/sorting :: studentsSorting('fieldOfStudy','Field Of Study')"></th>
+                                <th th:text="#{teacher.table.status}"></th>
+                                <th th:text="#{teacher.table.title}"></th>
+                                <th th:text="#{student.table.teachers}"></th>
+                                <th class="text-center" th:text="#{button.actions}"/>
                             </tr>
                             </thead>
 
                             <tbody>
-                            <tr th:each="student: ${students}"
-                                th:onClick="'javascript:openStudentViewModal(\''+ ${student.id} + '\');'"
-                                data-bs-toggle="modal"
-                                data-bs-target="#studentViewModal">
-                                <td th:text="${student.firstName}"/>
-                                <td th:text="${student.lastName}"/>
-                                <td th:text="${student.age}"/>
-                                <td th:text="${student.email}"/>
-                                <td th:text="${student.fieldOfStudy.name}"/>
-                                <td th:text="${student.getTeachers.size()}"/>
+                            <tr th:each="student: ${students}">
                                 <td>
-                                    <a id="btnView"
-                                       class="fa fa-eye fa-lg mr-2"
-                                       th:href="@{/dashboard/students/{id}(id=${student.id})}"
-                                       th:title="#{button.view}">
+
+                                    <div class="d-flex align-items-center">
+                                        <img th:src="@{/img/student_avatar.png}"
+                                             alt="profile_picture"
+                                             class="rounded-circle"
+                                             id="profilePicture"
+                                        />
+                                        <div class="ms-3">
+                                            <p class="fw-bold mb-0">
+                                                <a class="text-body"
+                                                   th:href="@{/dashboard/students/{id}(id=${student.id})}"
+                                                   th:text="${student.firstName} + ' ' + ${student.lastName}"></a>
+                                            </p>
+                                            <p class="text-muted mb-0" th:text="${student.email}"></p>
+                                            <p class="text-muted mb-0">
+                                                <span th:text="#{student.age}"></span>
+                                                <span th:text="${student.age}"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <a class="text-body mb-1" th:unless="${student.fieldOfStudy == null}"
+                                       th:href="@{/dashboard/fields-of-study/{id}(id=${student.fieldOfStudy.id})}">
+                                        <span th:text="${student.fieldOfStudy.name}"></span>
+                                        <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
                                     </a>
-                                    <a id="btnEdit"
-                                       class="fa fa-user-pen fa-lg mr-2"
-                                       th:href="@{/dashboard/students/edit/{id}(id=${student.id})}"
-                                       th:title="#{button.edit}">
-                                    </a>
-                                    <a id="btnDelete"
-                                       class="fa fa-trash-can fa-lg delBtn mr-2"
-                                       th:href="@{/dashboard/students/delete/{id}(id=${student.id})}"
-                                       th:title="#{button.delete}"
-                                       th:name="${student.firstName + '&nbsp;' + student.lastName}"
-                                       data-bs-toggle="modal"
-                                       data-bs-target="#deleteModal">
-                                    </a>
+                                    <p class="text-muted mb-1" th:if="${student.fieldOfStudy == null}"
+                                       th:text="#{student.no.fieldOfStudy}">
+                                    </p>
+                                </td>
+
+                                <td>
+                                     <span class="badge badge-warning rounded-pill d-inline"
+                                           th:if="${student.fieldOfStudy == 0}"
+                                           th:text="#{status.awaiting}"></span>
+                                    <span class="badge badge-success rounded-pill d-inline"
+                                          th:unless="${student.fieldOfStudy == 0}"
+                                          th:text="#{status.active}"></span>
+                                </td>
+                                <td>
+                                    <span th:unless="${student.fieldOfStudy.title == null}"
+                                          th:text="${student.fieldOfStudy.title.fullTitle}"></span>
+                                </td>
+
+                                <td th:text="${student.teachers.size()}"/>
+                                <td>
+                                    <div class="container">
+                                        <div class="row justify-content-center align-items-center">
+                                            <a type="button"
+                                               id="btnView"
+                                               class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
+                                               data-mdb-ripple-color="dark"
+                                               th:href="@{/dashboard/students/{id}(id=${student.id})}"
+                                               th:text="#{button.view}">
+                                            </a>
+                                            <a type="button"
+                                               id="btnEdit"
+                                               class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
+                                               data-mdb-ripple-color="dark"
+                                               th:href="@{/dashboard/students/edit/{id}(id=${student.id})}"
+                                               th:text="#{button.edit}">
+                                            </a>
+                                        </div>
+                                        <div class="row justify-content-center align-items-center">
+                                            <a type="button" id="btnDelete"
+                                               class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
+                                               data-mdb-ripple-color="dark"
+                                               th:text="#{button.delete}"
+                                               th:href="@{/dashboard/students/delete/{id}(id=${student.id})}"
+                                               th:name="${student.firstName + '&nbsp;' + student.lastName}"
+                                               data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            </a>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>
@@ -166,8 +208,7 @@
                                                     name="size"
                                                     th:value="${pageSize}"
                                                     onchange="changePageSize()"
-                                                    class="size-select"
-                                            >
+                                                    class="size-select">
                                                 <option th:each="s : ${ {3, 6, 9, 12} }" th:value="${s}"
                                                         th:text="${s}"
                                                         th:selected="${s == pageSize}"></option>
