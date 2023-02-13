@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <link rel="stylesheet" th:href="@{/css/modals.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css"/>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+
+            <div class="card" id="itemCard">
+                <div class="card-header py-4 title-bar">
+                    <div class="page-title"
+                         th:text="#{fieldOfStudy.subjects.card.header}">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex mb-4">
+                        <div class="p-1">
+                            <div th:replace="field-of-study/buttons :: btn-go-back-fieldOfStudy"></div>
+                        </div>
+                        <div class="p-1 ms-auto">
+                            <div th:replace="field-of-study/buttons :: btn-edit-subjects"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-auto">
+                            <h4 class="card-title mb-4">
+                                <span class="h4 fw-bold"
+                                      th:text="${fieldOfStudy.name} + ', '"></span>
+                                <span class="h5"
+                                      th:text="${fieldOfStudy.levelOfEducation.value.toLowerCase()} + ' - '"></span>
+                                <span class="h5"
+                                      th:text="${fieldOfStudy.title.fullTitle.toLowerCase()} + ', '"></span>
+                                <span class="h5"
+                                      th:text="${fieldOfStudy.mode.value.toLowerCase()}"></span>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <th:block th:each="semOpt, iterStat : ${T(com.example.classroom.enums.Semester).values()}">
+                        <div class="card my-3" th:id="'sem' + ${iterStat} +  '-card'">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold" th:text="${semOpt.description}"></h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover border-primary">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" th:text="#{fieldOfStudy.subjects.table.thead.name}"></th>
+                                            <th scope="col"
+                                                th:text="#{fieldOfStudy.subjects.table.thead.description}"></th>
+                                            <th scope="col"
+                                                th:text="#{fieldOfStudy.subjects.table.thead.hoursInSemester}"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="subject: ${semestersMap.get(semOpt)}">
+                                            <th scope="row" th:text="${subject.name}"></th>
+                                            <td th:text="${subject.description}"></td>
+                                            <td th:text="${subject.hoursInSemester}"></td>
+                                        </tr>
+                                        </tbody>
+                                        <caption class="fst-italic">
+                                            <span th:text="#{fieldOfStudy.subjects.table.caption1}"></span>
+                                            <span class="fw-bold"
+                                                  th:text="${hoursInSemester.get(semOpt)}"></span>
+                                            &nbsp;&nbsp;
+                                            <span th:text="#{fieldOfStudy.subjects.table.caption2}"></span>
+                                            <span class="fw-bold"
+                                                  th:text="${hoursInSemester.get(semOpt)}"></span>
+                                        </caption>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+
+                </div>
+            </div>
+
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+</body>
+</html>

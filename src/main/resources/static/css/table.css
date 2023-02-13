@@ -49,29 +49,24 @@
     text-align: center;
 }
 
-#btnAddItem{
+#btnAddItem {
     position: absolute;
     left: 40px;
 }
-#btnView {
-    color: #2566a6;
-}
-#btnView:hover {
-    color: #268df6;
-}
 
 #btnEdit {
-    color: #575757;
-}
-
-#btnEdit:hover {
-    color: #a19f9f;
+    color: #4f4f4f;
 }
 
 #btnDelete {
-    color: #9f2222;
-
+    color: #dc4c64 !important;
 }
-#btnDelete:hover {
-    color: #ff2828;
+
+#profilePicture {
+    width: 60px;
+    height: 60px
+}
+
+.btn .btn-link .btn-rounded {
+    text-align: center;
 }

@@ -67,31 +67,30 @@ public class StudentController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
         model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
-        return "students";
+        return "student/all-students";
     }
 
     @GetMapping("{id}")
     public String getStudent(@PathVariable Long id, Model model) {
-        StudentDto studentDto = studentService.fetchById(id);
-        model.addAttribute("student", studentDto);
-        return "student";
+        addAttributeStudentFetchedById(id, model);
+        return "student/student";
     }
 
     @GetMapping("new")
     public String getNewStudentForm(Model model) {
         model.addAttribute("student", new StudentDto());
-        addAllTeachersAndFieldsOfStudyAsModelAttribute(model);
-        return "student-form";
+        addAttributesTeachersAndFieldsOfStudy(model);
+        return "student/student-form";
     }
 
     @PostMapping(value = "new")
     public String createStudent(@Valid @ModelAttribute("student") Student student, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            addAllTeachersAndFieldsOfStudyAsModelAttribute(model);
-            return "student-form";
+            addAttributesTeachersAndFieldsOfStudy(model);
+            return "student/student-form";
         }
         studentService.create(mapper.map(student, StudentDto.class));
-        return "student-create-success";
+        return "student/student-create-success";
     }
 
     @GetMapping("delete/{id}")
@@ -102,17 +101,16 @@ public class StudentController {
 
     @GetMapping("edit/{id}")
     public String editStudentForm(@PathVariable Long id, Model model) {
-        StudentDto dto = studentService.fetchById(id);
-        model.addAttribute("student", dto);
-        addAllTeachersAndFieldsOfStudyAsModelAttribute(model);
-        return "student-edit-form";
+        addAttributeStudentFetchedById(id, model);
+        addAttributesTeachersAndFieldsOfStudy(model);
+        return "student/student-edit-form";
     }
 
     @PostMapping(value = "update")
     public String editStudent(@Valid @ModelAttribute("student") Student student, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            addAllTeachersAndFieldsOfStudyAsModelAttribute(model);
-            return "student-edit-form";
+            addAttributesTeachersAndFieldsOfStudy(model);
+            return "student/student-edit-form";
         }
 
         StudentDto updated = studentService.update(mapper.map(student, StudentDto.class));
@@ -121,10 +119,14 @@ public class StudentController {
         }
         model.addAttribute("student", updated);
 
-        return "student-edit-success";
+        return "student/student-edit-success";
     }
 
-    private void addAllTeachersAndFieldsOfStudyAsModelAttribute(Model model) {
+    private void addAttributeStudentFetchedById(Long id, Model model) {
+        model.addAttribute("student", studentService.fetchById(id));
+    }
+
+    private void addAttributesTeachersAndFieldsOfStudy(Model model) {
         model.addAttribute("teachers", teacherService.fetchAll());
         model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAll());
     }

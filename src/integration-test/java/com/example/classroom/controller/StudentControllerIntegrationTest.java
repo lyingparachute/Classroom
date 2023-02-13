@@ -149,7 +149,7 @@ class StudentControllerIntegrationTest {
                 .andExpect(status().isOk());
         //then
         Optional<Student> byId = studentRepository.findById(studentEntity.getId());
-        assertThat(byId.isPresent()).isTrue();
+        assertThat(byId).isPresent();
         Student actual = byId.get();
 
         assertThat(actual.getFirstName()).isEqualTo(studentDto.getFirstName());

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <link rel="stylesheet" th:href="@{/css/departments.css}" type="text/css"/>
+</head>
+<body>
+
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div class="card" id="itemCard">
+                <div class="card-header py-4 title-bar">
+                    <div class="page-title"
+                         th:text="${department.name}">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- ======= Buttons ======= -->
+                    <div class="d-flex mb-4">
+                        <div class="p-1">
+                            <div th:replace="department/buttons :: btn-go-back-to-departments"></div>
+                        </div>
+                        <div class="p-1 ms-auto">
+                            <div th:replace="department/buttons :: btn-edit"></div>
+                            <div th:replace="department/buttons :: btn-delete"></div>
+                        </div>
+                    </div>
+
+                    <!-- ======= FieldOfStudy Details ======= -->
+                    <div th:replace="department/elements :: view-item"></div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+</body>
+</html>

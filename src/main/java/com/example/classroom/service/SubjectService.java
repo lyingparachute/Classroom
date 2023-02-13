@@ -2,6 +2,7 @@ package com.example.classroom.service;
 
 import com.example.classroom.dto.SubjectDto;
 import com.example.classroom.entity.Subject;
+import com.example.classroom.enums.Semester;
 import com.example.classroom.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -13,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import static java.util.Map.entry;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +59,18 @@ public class SubjectService {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Subject> all = repository.findAll(pageable);
         return all.map(subject -> mapper.map(subject, SubjectDto.class));
+    }
+
+    public Map<Semester, List<Subject>> fetchAllGroupedBySemesters() {
+        return Map.ofEntries(
+                entry(Semester.FIRST, repository.findAllBySemester(Semester.FIRST)),
+                entry(Semester.SECOND, repository.findAllBySemester(Semester.SECOND)),
+                entry(Semester.THIRD, repository.findAllBySemester(Semester.THIRD)),
+                entry(Semester.FOURTH, repository.findAllBySemester(Semester.FOURTH)),
+                entry(Semester.FIFTH, repository.findAllBySemester(Semester.FIFTH)),
+                entry(Semester.SIXTH, repository.findAllBySemester(Semester.SIXTH)),
+                entry(Semester.SEVENTH, repository.findAllBySemester(Semester.SEVENTH))
+        );
     }
 
     public SubjectDto fetchById(Long id) {

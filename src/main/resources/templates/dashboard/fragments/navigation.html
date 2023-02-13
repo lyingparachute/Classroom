@@ -48,32 +48,44 @@
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-graduation-cap  fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
-                <!--* Library *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('library')}" th:href="@{/dashboard/library}"
-                   class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-book-open fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item8}"></span>
-                </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('library')}" th:href="@{/dashboard/library}"
-                   class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-book-open fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item8}"></span>
-                </a>
                 <!--* Facilities *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('departments')}" th:href="@{/dashboard/departments}"
+                <a th:href="@{/dashboard/departments}"
+                   th:if="${#httpServletRequest.requestURL.toString().contains('departments')}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-school fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item9}"></span>
+                        class="fas fa-school fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item9}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('departments')}" th:href="@{/dashboard/departments}"
+                <a th:href="@{/dashboard/departments}"
+                   th:unless="${#httpServletRequest.requestURL.toString().contains('departments')}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-school fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item9}"></span>
+                        class="fas fa-school fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item9}"></span>
+                </a>
+                <!--* Library *-->
+                <a class="list-group-item list-group-item-action py-2 ripple active"
+                   th:href="@{/dashboard/library}"
+                   th:if="${#httpServletRequest.requestURL.toString().contains('library')}"><i
+                        class="fas fa-book-open fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item8}"></span>
+                </a>
+                <a class="list-group-item list-group-item-action py-2 ripple"
+                   th:href="@{/dashboard/library}"
+                   th:unless="${#httpServletRequest.requestURL.toString().contains('library')}"><i
+                        class="fas fa-book-open fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item8}"></span>
                 </a>
                 <!--* Calendar *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('calendar')}" th:href="@{/dashboard/calendar}"
+                <a th:href="@{/dashboard/calendar}"
+                   th:if="${#httpServletRequest.requestURL.toString().contains('calendar')}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-calendar fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item10}"></span>
+                        class="fas fa-calendar fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item10}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('calendar')}" th:href="@{/dashboard/calendar}"
+                <a th:href="@{/dashboard/calendar}"
+                   th:unless="${#httpServletRequest.requestURL.toString().contains('calendar')}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-calendar fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item10}"></span>
+                        class="fas fa-calendar fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item10}"></span>
                 </a>
                 <!--* Analytics *-->
                 <a th:if="${#httpServletRequest.requestURL.toString().contains('analytics')}" th:href="@{/dashboard/analytics}"
@@ -83,15 +95,6 @@
                 <a th:unless="${#httpServletRequest.requestURL.toString().contains('analytics')}" th:href="@{/dashboard/analytics}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-chart-line fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item5}"></span>
-                </a>
-                <!--* Sales *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('sales')}" th:href="@{/dashboard/sales}"
-                   class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-money-bill fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item11}"></span>
-                </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('sales')}" th:href="@{/dashboard/sales}"
-                   class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-money-bill fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item11}"></span>
                 </a>
                 <!--* Settings *-->
                 <a th:if="${#httpServletRequest.requestURL.toString().contains('settings')}" th:href="@{/dashboard/settings}"
@@ -132,7 +135,7 @@
             <!-- Search form -->
             <form class="d-none d-md-flex input-group w-auto my-auto">
                 <input autocomplete="off" type="search" class="form-control rounded"
-                       placeholder='Search (ctrl + "/" to focus)' style="min-width: 225px"/>
+                       placeholder='Search' style="min-width: 225px"/>
                 <span class="input-group-text border-0"><i class="fas fa-search"></i></span>
             </form>
 
@@ -140,27 +143,19 @@
             <ul class="navbar-nav ms-auto d-flex flex-row">
                 <!-- Notification dropdown -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink"
+                    <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="notifications"
                        role="button" data-mdb-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
                         <span class="badge rounded-pill badge-notification bg-danger">1</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                    <ul aria-labelledby="notifications" class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#" th:text="#{dashboard.navigation.news.item1}"></a></li>
                         <li><a class="dropdown-item" href="#" th:text="#{dashboard.navigation.news.item2}"></a></li>
-                        <li>
-                            <a class="dropdown-item" href="#" th:text="#{dashboard.navigation.news.item3}"></a>
-                        </li>
+                        <li><a class="dropdown-item" href="#" th:text="#{dashboard.navigation.news.item3}"></a></li>
                     </ul>
                 </li>
 
-                <!-- Icon -->
-                <li class="nav-item">
-                    <a class="nav-link me-3 me-lg-0" href="#">
-                        <i class="fas fa-fill-drip"></i>
-                    </a>
-                </li>
-                <!-- Icon -->
+                <!-- Icon Github-->
                 <li class="nav-item me-3 me-lg-0">
                     <a class="nav-link" th:href="@{https://github.com/lyingparachute/Classroom}" target="_blank">
                         <i class="fab fa-github"></i>
@@ -172,21 +167,24 @@
                     <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdown"
                        role="button"
                        data-mdb-toggle="dropdown" aria-expanded="false">
-                        <i class="united kingdom flag m-0"></i>
+                        <i class="flag flag-united-kingdom m-0"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li>
-                            <a class="dropdown-item" href="#"><i class="united kingdom flag"></i><span th:text="#{dashboard.navigation.language.eng}">
+                            <a class="dropdown-item" href="#"><i class="flag flag-united-kingdom"></i><span
+                                    th:text="#{dashboard.navigation.language.eng}">
                                 <i class="fa fa-check text-success ms-2"></i></a>
                         </li>
                         <li>
                             <hr class="dropdown-divider"/>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#"><i class="poland flag"></i><span th:text="#{dashboard.navigation.language.pl}"></span></a>
+                            <a class="dropdown-item" href="#"><i class="flag flag-poland"></i><span
+                                    th:text="#{dashboard.navigation.language.pl}"></span></a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#"><i class="germany flag"></i><span th:text="#{dashboard.navigation.language.de}"></a>
+                            <a class="dropdown-item" href="#"><i class="flag flag-germany"></i><span
+                                    th:text="#{dashboard.navigation.language.de}"></a>
                         </li>
 
                     </ul>
@@ -195,14 +193,15 @@
                 <!-- Avatar -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center" href="#"
-                       id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                       aria-expanded="false" data-mdb-toggle="dropdown" id="avatar" role="button">
                         <img src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg" class="rounded-circle"
                              height="22"
                              alt="" loading="lazy"/>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                    <ul aria-labelledby="avatar" class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#" th:text="#{dashboard.navigation.avatar.profile}"></a></li>
-                        <li><a class="dropdown-item" href="#" th:text="#{dashboard.navigation.avatar.settings}"></a></li>
+                        <li><a class="dropdown-item" href="#" th:text="#{dashboard.navigation.avatar.settings}"></a>
+                        </li>
                         <li><a class="dropdown-item" href="#" th:text="#{dashboard.navigation.avatar.logout}"></a></li>
                     </ul>
                 </li>

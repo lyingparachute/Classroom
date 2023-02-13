@@ -25,6 +25,9 @@ public class FieldOfStudy {
 
     private String name;
 
+    @Lob
+    private String description;
+
     @Enumerated(EnumType.STRING)
     private LevelOfEducation levelOfEducation;
 
@@ -35,6 +38,9 @@ public class FieldOfStudy {
     @Column(name = "obtained_title")
     @Enumerated(EnumType.STRING)
     private AcademicTitle title;
+
+    @Column(length = 64)
+    private String image;
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {

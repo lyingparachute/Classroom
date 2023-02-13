@@ -3,7 +3,9 @@ package com.example.classroom.controller;
 import com.example.classroom.dto.TeacherDto;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.service.StudentService;
+import com.example.classroom.service.SubjectService;
 import com.example.classroom.service.TeacherService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -16,17 +18,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("dashboard/teachers")
+@RequiredArgsConstructor
 public class TeacherController {
 
     private final TeacherService teacherService;
     private final StudentService studentService;
+    private final SubjectService subjectService;
     private final ModelMapper mapper;
-
-    public TeacherController(TeacherService teacherService, StudentService studentService, ModelMapper mapper) {
-        this.teacherService = teacherService;
-        this.studentService = studentService;
-        this.mapper = mapper;
-    }
 
     @GetMapping
     public String getPaginatedTeachers(@RequestParam(required = false) String name,
@@ -67,31 +65,30 @@ public class TeacherController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
         model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
-        return "teachers";
+        return "teacher/all-teachers";
     }
 
     @GetMapping("{id}")
     public String getTeacher(@PathVariable Long id, Model model) {
-        TeacherDto studentDto = teacherService.fetchById(id);
-        model.addAttribute("teacher", studentDto);
-        return "teacher";
+        addAttributeTeacherById(id, model);
+        return "teacher/teacher";
     }
 
     @GetMapping("new")
     public String getNewTeacherForm(Model model) {
-        model.addAttribute("teacher", new TeacherDto());
-        model.addAttribute("students", studentService.fetchAll());
-        return "teacher-form";
+        model.addAttribute("teacher/teacher", new TeacherDto());
+        addAttributesSubjectsAndStudents(model);
+        return "teacher/teacher-form";
     }
 
     @PostMapping(value = "new")
     public String createTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, BindingResult result, Model model) {
-        if (result.hasErrors()){
-            model.addAttribute("students", studentService.fetchAll());
-            return "teacher-form";
+        if (result.hasErrors()) {
+            addAttributesSubjectsAndStudents(model);
+            return "teacher/teacher-form";
         }
         teacherService.create(mapper.map(teacher, TeacherDto.class));
-        return "teacher-create-success";
+        return "teacher/teacher-create-success";
     }
 
     @GetMapping("delete/{id}")
@@ -102,23 +99,31 @@ public class TeacherController {
 
     @GetMapping("edit/{id}")
     public String editTeacher(@PathVariable Long id, Model model) {
-        TeacherDto dto = teacherService.fetchById(id);
-        model.addAttribute("teacher", dto);
-        model.addAttribute("students", studentService.fetchAll());
-        return "teacher-edit-form";
+        addAttributeTeacherById(id, model);
+        addAttributesSubjectsAndStudents(model);
+        return "teacher/teacher-edit-form";
     }
 
     @PostMapping(value = "update")
     public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, BindingResult result, Model model) {
-        if (result.hasErrors()){
-            model.addAttribute("students", studentService.fetchAll());
-            return "teacher-edit-form";
+        if (result.hasErrors()) {
+            addAttributesSubjectsAndStudents(model);
+            return "teacher/teacher-edit-form";
         }
         TeacherDto updated = teacherService.update(mapper.map(teacher, TeacherDto.class));
         if (updated == null) {
             return "error/404";
         }
         model.addAttribute("teacher", updated);
-        return "teacher-edit-success";
+        return "teacher/teacher-edit-success";
+    }
+
+    private void addAttributesSubjectsAndStudents(Model model) {
+        model.addAttribute("subjects", subjectService.fetchAll());
+        model.addAttribute("students", studentService.fetchAll());
+    }
+
+    private void addAttributeTeacherById(Long id, Model model) {
+        model.addAttribute("teacher", teacherService.fetchById(id));
     }
 }

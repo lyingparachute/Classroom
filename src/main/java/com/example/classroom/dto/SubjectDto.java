@@ -22,6 +22,7 @@ public class SubjectDto {
     private String description;
     private Semester semester;
     private int hoursInSemester;
+    private int ectsPoints;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private FieldOfStudy fieldOfStudy;

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!-- ======= Go back to departments ======= -->
+<a class="btn btn-primary btn-rounded"
+   th:fragment="btn-go-back-to-teachers"
+   th:href="@{/dashboard/teachers}">
+    <i class="mr-1 fas fa-arrow-left-long "></i>
+    <span th:text="#{button.go.back}"></span>
+</a>
+
+<!-- ======= Add new teacher button ======= -->
+<a class="btn btn-success btn-rounded"
+   th:fragment="btn-add-new"
+   th:href="@{/dashboard/departments/new}">
+    <i class="mr-1 fas fa-plus"></i>
+    <span th:text="#{department.button.add}"></span>
+</a>
+
+<!-- ======= Edit teacher Button ======= -->
+<a class="btn btn-outline-primary btn-rounded"
+   th:fragment="btn-edit"
+   th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}">
+    <i class="fas fa-pen mr-1"></i>
+    <span th:text="#{button.edit}"></span>
+</a>
+
+</body>
+</html>

@@ -14,10 +14,10 @@
     <div class="container pt-4">
         <section class="mb-4">
             <div id="tableCard" class="card">
-                <div class="card-header py-3 bg-secondary bg-gradient bg-opacity-25">
-                    <h3 class="mb-0 text-center">
-                        <strong th:text="#{subjects.header}"></strong>
-                    </h3>
+                <div class="card-header py-4 title-bar">
+                    <div class="page-title"
+                         th:text="#{subjects.header}">
+                    </div>
                 </div>
                 <div class="card-body">
                     <form th:action="@{/dashboard/subjects}"
@@ -75,7 +75,7 @@
                                 </th>
                                 <th rowspan="1" colspan="1" scope="col" th:text="#{subject.no.of.teachers}">
                                 </th>
-                                <th rowspan="2" colspan="1" scope="col" th:text="#{button.action}"
+                                <th rowspan="2" colspan="1" scope="col" th:text="#{button.actions}"
                                     class="align-middle"/>
                             </tr>
                             </thead>

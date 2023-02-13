@@ -7,7 +7,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,10 +21,15 @@ import java.util.Set;
 @NoArgsConstructor
 public class DepartmentDto {
     private Long id;
+    @NotNull
+    @Size(min = 10, max = 50, message = "{department.name.size}")
     private String name;
+
     private String address;
-    @Pattern(regexp = "(\\+48|0)\\d{9}")
-    private int telNumber;
+
+    @NotEmpty(message = "{department.telNumber.empty}")
+    @Pattern(regexp = "\\d{9}", message = "{department.telNumber.size}")
+    private String telNumber;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Teacher dean;

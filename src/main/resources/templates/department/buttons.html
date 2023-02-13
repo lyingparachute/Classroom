@@ -1,0 +1,84 @@
+<!-- ======= Cancel Submit Button for CREATE method ======= -->
+<div class="row my-2 justify-content-end" id="cancelSubmitBtn" th:fragment="CREATEcancelSubmitBtn">
+    <div class="col-auto">
+        <a class="btn btn-secondary btn-rounded"
+           th:href="@{/dashboard/departments}">
+            <i class="fa fa-times-circle mr-1"></i>
+            <span th:text="#{button.cancel}"></span>
+        </a>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary btn-rounded" name="add" type="submit">
+            <i class="fas fa-check mr-1"></i><span th:text="#{button.submit}"></span></button>
+    </div>
+</div>
+
+<!-- ======= Cancel Submit Button for EDIT method ======= -->
+<div class="row my-2 justify-content-end" th:fragment="EDITcancelSubmitBtn">
+    <div class="col-auto">
+        <a class="btn btn-secondary btn-rounded"
+           th:href="@{/dashboard/departments/{id}(id=${department.id})}">
+            <i class="fa fa-times-circle mr-1"></i><span th:text="#{button.cancel}"></span></a>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary btn-rounded" name="add" type="submit">
+            <i class="fas fa-check mr-1"></i><span th:text="#{button.submit}"></span></button>
+    </div>
+</div>
+
+<!-- ======= Go Home Button ======= -->
+<div class="row my-2 justify-content-center" id="goBackButton" th:fragment="btn-go-home">
+    <div class="col-auto">
+        <a class="btn btn-primary btn-rounded" th:href="@{/dashboard/departments}">
+            <i class="fas fa-home mr-1"></i><span th:text="#{button.go.home}"></span>
+        </a>
+    </div>
+</div>
+
+<!-- ======= Go back button ======= -->
+<a class="btn btn-primary btn-rounded"
+   onclick="history.go(-1)"
+   th:fragment="btn-go-back">
+    <i class="mr-1 fas fa-arrow-left-long "></i>
+    <span th:text="#{button.go.back}"></span>
+</a>
+
+<!-- ======= Go back to department with id button ======= -->
+<a class="btn btn-primary btn-rounded"
+   th:fragment="btn-go-back-to-department"
+   th:href="@{/dashboard/departments/{id}(id=${department.id})}">
+    <i class="mr-1 fas fa-arrow-left-long "></i>
+    <span th:text="#{button.go.back}"></span>
+</a>
+
+<!-- ======= Go back to departments ======= -->
+<a class="btn btn-primary btn-rounded"
+   th:fragment="btn-go-back-to-departments"
+   th:href="@{/dashboard/departments}">
+    <i class="mr-1 fas fa-arrow-left-long "></i>
+    <span th:text="#{button.go.back}"></span>
+</a>
+
+<!-- ======= Add new department button ======= -->
+<a class="btn btn-success btn-rounded"
+   th:fragment="btn-add-new"
+   th:href="@{/dashboard/departments/new}">
+    <i class="mr-1 fas fa-plus"></i>
+    <span th:text="#{department.button.add}"></span>
+</a>
+
+<!-- ======= Edit department Button ======= -->
+<a class="btn btn-outline-primary btn-rounded"
+   th:fragment="btn-edit"
+   th:href="@{/dashboard/departments/edit/{id}(id=${department.id})}">
+    <i class="fas fa-pen mr-1"></i>
+    <span th:text="#{button.edit}"></span>
+</a>
+
+<!-- ======= Delete department Button ======= -->
+<a class="btn btn-outline-danger btn-rounded delBtn"
+   th:fragment="btn-delete"
+   th:href="@{/dashboard/departments/delete/{id}(id=${department.id})}">
+    <i class="fa fa-trash-can fa-lg mr-1"></i>
+    <span th:text="#{button.delete}"></span>
+</a>

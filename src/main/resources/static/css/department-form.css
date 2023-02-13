@@ -1,0 +1,64 @@
+
+.form-check-input-checkbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    cursor: pointer;
+}
+
+.field-of-study-item-card .card-body i {
+    opacity: 0;
+}
+
+.single-item-card .card-body .field-of-study-details-muted {
+    color: #757575;
+}
+
+.bg-image {
+    transition: filter 0.6s ease-in-out;
+    filter: brightness(60%);
+}
+
+input[type=checkbox]:hover ~ .single-item-card .bg-image {
+    filter: brightness(90%);
+}
+
+input[type=checkbox]:hover ~ .single-item-card .card-body {
+    background-color: #e3ebf7;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+input[type=checkbox]:checked ~ .single-item-card .bg-image {
+    filter: brightness(100%) !important;
+}
+
+input[type=checkbox]:checked ~ .single-item-card {
+    border: 2px solid #3b71ca;
+    border-radius: 0.7rem
+}
+
+input[type=checkbox]:checked ~ .single-item-card .card-body {
+    background-color: #3b71ca !important;
+    color: #ffffff;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+input[type=checkbox]:checked ~ .single-item-card .card-body .card-title i {
+    opacity: 1;
+}
+
+input[type=checkbox]:checked ~ .single-item-card .card-body .field-of-study-details-muted {
+    color: #e1e1e1 !important;
+}
+
+
+
+
+
+

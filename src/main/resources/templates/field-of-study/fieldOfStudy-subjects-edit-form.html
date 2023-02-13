@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div class="card" id="itemCard">
+                <div class="card-header py-4 title-bar">
+                    <div class="page-title"
+                         th:text="#{fieldOfStudy.edit.card.header}">
+                    </div>
+                </div>
+                <div class="card-body mx-4">
+                    <form class="form-group needs-validation"
+                          th:action="@{/dashboard/fields-of-study/subjects/update}"
+                          th:method="post"
+                          th:object="${fieldOfStudy}">
+                        <input hidden id="id_input_id" th:field="*{id}" type="text">
+                        <input hidden id="name" th:field="*{name}" th:value="${fieldOfStudy.name}" type="text">
+                        <input hidden id="description" th:field="*{description}" th:value="${fieldOfStudy.description}"
+                               type="text">
+                        <input hidden id="levelOfEducation" th:field="*{levelOfEducation}"
+                               th:value="${fieldOfStudy.levelOfEducation}" type="text">
+                        <input hidden id="mode" th:field="*{mode}" th:value="${fieldOfStudy.mode}" type="text">
+                        <input hidden id="title" th:field="*{title}" th:value="${fieldOfStudy.title}" type="text">
+                        <input hidden id="department" th:field="*{department}" th:value="${fieldOfStudy.department}"
+                               type="text">
+                        <!-- ======= Edit FieldOfStudy Subjects ======= -->
+                        <div th:replace="field-of-study/elements :: edit-subjects"></div>
+
+                        <!-- ======= Buttons ======= -->
+                        <div class="row my-2 justify-content-end" th:fragment="EDITcancelSubmitBtn">
+                            <div class="col-auto">
+                                <a class="btn btn-secondary"
+                                   th:href="@{/dashboard/fields-of-study/{id}/subjects(id=${fieldOfStudy.id})}">
+                                    <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary" name="add" type="submit">
+                                    <i class="fas fa-check mr-2"></i><span th:text="#{button.submit}"></span></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+</body>
+</html>

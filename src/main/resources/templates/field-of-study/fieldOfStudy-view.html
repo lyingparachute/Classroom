@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+</head>
+<body>
+
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header py-4 title-bar">
+                    <div class="page-title"
+                         th:text="${fieldOfStudy.name}">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- ======= Buttons ======= -->
+                    <div class="d-flex mb-4">
+                        <div class="p-1">
+                            <div th:replace="field-of-study/buttons :: btn-go-back-fieldsOfStudy"></div>
+                        </div>
+                        <div class="p-1 ms-auto">
+                            <div th:replace="field-of-study/buttons :: btn-view-subjects"></div>
+                            <div th:replace="field-of-study/buttons :: btn-edit-fieldOfStudy"></div>
+                            <div th:replace="field-of-study/buttons :: btn-delete-fieldOfStudy"></div>
+                        </div>
+                    </div>
+
+                    <!-- ======= FieldOfStudy Details ======= -->
+                    <div th:replace="field-of-study/elements :: view-item"></div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+</body>
+</html>

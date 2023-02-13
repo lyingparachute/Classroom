@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header py-4 title-bar">
+                    <div class="page-title"
+                         th:text="#{students.new}">
+                    </div>
+                </div>
+                <div class="card-body mx-4">
+                    <form class="form-group needs-validation"
+                          th:object="${student}"
+                          th:action="@{/dashboard/students/new}"
+                          th:method="post">
+                        <div th:replace="student/elements :: student-form"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+</body>
+</html>

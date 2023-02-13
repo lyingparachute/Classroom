@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <link rel="stylesheet" th:href="@{/css/modals.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css"/>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="tableCard" class="card">
+                <div class="card-header py-4 title-bar">
+                    <div class="page-title"
+                         th:text="#{teachers.header}">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="text-center h5"
+                         th:text="#{teachers.desc}">
+                    </div>
+                    <form id="teacherForm"
+                          th:action="@{/dashboard/teachers}"
+                          method="get">
+                        <div class="row justify-content-end mb-1 mt-3">
+                            <div class="col-auto">
+                                <a id="btnAddItem"
+                                   class="btn btn-outline-primary btn-lg"
+                                   th:href="@{/dashboard/teachers/new}"
+                                   th:value="#{teachers.new}">
+                                    <i class="fa-solid fa-user-plus mr-1"></i>
+                                    <span th:text="#{teachers.new}"></span>
+                                </a>
+                            </div>
+                            <div class="col-5">
+                                <div class="search">
+                                    <i class="fa fa-search"></i>
+                                    <input id="name" type="search" name="name"
+                                           class="form-control"
+                                           th:placeholder="#{teachers.input}" required
+                                           th:value="${name}"/>
+                                    <button type="submit"
+                                            value="Search"
+                                            class="btn btn-outline-success"
+                                            th:text="#{button.search}"></button>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <button th:if="${name == null}"
+                                        id="btnClearDisabled"
+                                        class="btn btn-lg btn-light"
+                                        th:text="#{button.clear}"
+                                        disabled>
+                                </button>
+                                <button th:unless="${name == null}"
+                                        id="btnClear"
+                                        class="btn btn-lg btn-secondary"
+                                        th:text="#{button.clear}">
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table border-primary align-middle" th:if="${totalItems != 0}">
+                            <thead>
+                            <tr>
+                                <th th:replace="fragments/sorting :: teachersSorting('firstName','Name')"></th>
+                                <th th:text="#{teacher.table.department}"></th>
+                                <th th:text="#{teacher.table.status}"></th>
+                                <th th:text="#{teacher.table.title}"></th>
+                                <th th:text="#{teacher.table.students}"></th>
+                                <th th:text="#{teacher.table.subjects}"></th>
+                                <th class="text-center" th:text="#{button.actions}"></th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="teacher: ${teachers}">
+
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img th:src="@{/img/teacher_avatar.png}"
+                                             alt="profile_picture"
+                                             class="rounded-circle"
+                                             id="profilePicture"
+                                        />
+                                        <div class="ms-3">
+                                            <p class="fw-bold mb-0">
+                                                <a class="text-body"
+                                                   th:href="@{/dashboard/teachers/{id}(id=${teacher.id})}"
+                                                   th:text="${teacher.firstName} + ' ' + ${teacher.lastName}"></a>
+                                            </p>
+                                            <p class="text-muted mb-0" th:text="${teacher.email}"></p>
+                                            <p class="text-muted mb-0">
+                                                <span th:text="#{teacher.age}"></span>
+                                                <span th:text="${teacher.age}"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <a class="text-body mb-1" th:unless="${teacher.department == null}"
+                                       th:href="@{/dashboard/departments/{id}(id=${teacher.department.id})}">
+                                        <span th:text="${teacher.department.name}"></span>
+                                        <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
+                                    </a>
+                                    <p class="text-muted mb-1" th:if="${teacher.department == null}"
+                                       th:text="#{teacher.no.department}">
+                                    </p>
+                                </td>
+                                <td>
+                                     <span class="badge badge-warning rounded-pill d-inline"
+                                           th:if="${teacher.subjects.size() == 0}"
+                                           th:text="#{status.awaiting}"></span>
+                                    <span class="badge badge-success rounded-pill d-inline"
+                                          th:unless="${teacher.subjects.size() == 0}"
+                                          th:text="#{status.active}"></span>
+                                </td>
+                                <td>
+                                    <span th:if="${teacher.department == null}" th:text="#{teacher.role.prof}"></span>
+                                    <span th:unless="${teacher.department == null}"
+                                          th:text="#{teacher.role.dean}"></span>
+                                </td>
+                                <td th:text="${teacher.students.size()}"></td>
+                                <td th:text="${teacher.subjects.size()}"></td>
+
+                                <td>
+                                    <div class="container">
+                                        <div class="row justify-content-center align-items-center">
+                                            <a type="button" id="btnView"
+                                               class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
+                                               data-mdb-ripple-color="dark"
+                                               th:href="@{/dashboard/teachers/{id}(id=${teacher.id})}"
+                                               th:text="#{button.view}">
+                                            </a>
+                                            <a type="button" id="btnEdit"
+                                               class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
+                                               data-mdb-ripple-color="dark"
+                                               th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}"
+                                               th:text="#{button.edit}">
+                                            </a>
+                                        </div>
+                                        <div class="row justify-content-center align-items-center">
+                                            <a type="button" id="btnDelete"
+                                               class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
+                                               data-mdb-ripple-color="dark"
+                                               th:text="#{button.delete}"
+                                               th:href="@{/dashboard/teachers/delete/{id}(id=${teacher.id})}"
+                                               th:name="${teacher.firstName + '&nbsp;' + teacher.lastName}"
+                                               data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <caption>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col text-start">
+                                            <span th:text="${firstItemShownOnPage} + ' - ' + ${lastItemShownOnPage} + ' of ' + ${totalItems}"></span>
+                                        </div>
+                                        <div class="col text-center">
+                                            <nav aria-label="Pagination" th:if="${totalPages > 0}">
+                                                <ul class="pagination justify-content-center">
+                                                    <li class="page-item"
+                                                        th:classappend="${currentPage == 1} ? 'disabled'">
+                                                        <a th:replace="fragments/paging :: teachersPaging(1, '<<', 'First Page')"></a>
+                                                    </li>
+                                                    <li class="page-item font-weight-bold"
+                                                        th:classappend="${currentPage == 1} ? 'disabled'">
+                                                        <a th:replace="fragments/paging :: teachersPaging(${currentPage - 1}, '<', 'Previous Page')"></a>
+                                                    </li>
+                                                    <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                                                        <a class="page-link" href="#">...</a>
+                                                    </li>
+                                                    <li class="page-item"
+                                                        th:classappend="${page == currentPage} ? 'active'"
+                                                        th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+                                                        <a th:replace="fragments/paging :: teachersPaging(${page}, ${page}, 'Page ' + ${page})"></a>
+                                                    </li>
+                                                    <li class="page-item disabled"
+                                                        th:if="${currentPage + 2 < totalPages}">
+                                                        <a class="page-link" href="#">...</a>
+                                                    </li>
+                                                    <li class="page-item font-weight-bold"
+                                                        th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                                        <a th:replace="fragments/paging :: teachersPaging(${currentPage + 1},'>', 'Next Page')"></a>
+                                                    </li>
+                                                    <li class="page-item"
+                                                        th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                                        <a th:replace="fragments/paging :: teachersPaging(${totalPages}, '>>', 'Last Page')"></a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                        <div class="col text-end">
+                                            <label for="pageSize" th:text="#{table.rows.per.page}"></label>
+                                            <select id="pageSize"
+                                                    form="teacherForm"
+                                                    name="size"
+                                                    th:value="${pageSize}"
+                                                    onchange="changePageSize()"
+                                                    class="size-select">
+                                                <option th:each="s : ${ {3, 6, 9, 12} }" th:value="${s}" th:text="${s}"
+                                                        th:selected="${s == pageSize}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </caption>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- Delete modal -->
+<div th:replace="fragments/modals :: deleteModal"></div>
+
+<!-- View modal -->
+<div th:replace="fragments/modals :: #teacherViewModal"></div>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/imports/scripts :: scripts"></div>
+
+<!-- Custom script -->
+<script type="text/javascript" th:src="@{/js/teachers.js}"></script>
+</body>
+</html>

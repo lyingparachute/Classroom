@@ -1,0 +1,117 @@
+<!-- ======= Cancel Submit Button for CREATE method ======= -->
+<div class="row my-2 justify-content-end" id="cancelSubmitBtn" th:fragment="CREATEcancelSubmitBtn">
+    <div class="col-auto">
+        <a class="btn btn-secondary btn-rounded"
+           onclick="history.go(-1)">
+            <i class="fa fa-times-circle mr-1"></i>
+            <span th:text="#{button.cancel}"></span>
+        </a>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary btn-rounded" name="add" type="submit">
+            <i class="fas fa-check mr-1"></i><span th:text="#{button.submit}"></span></button>
+    </div>
+</div>
+
+<!-- ======= Cancel Submit Button for EDIT method ======= -->
+<div class="row my-2 justify-content-end" th:fragment="EDITcancelSubmitBtn">
+    <div class="col-auto">
+        <a class="btn btn-secondary btn-rounded"
+           th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOfStudy.id})}">
+            <i class="fa fa-times-circle mr-1"></i><span th:text="#{button.cancel}"></span></a>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary btn-rounded" name="add" type="submit">
+            <i class="fas fa-check mr-1"></i><span th:text="#{button.submit}"></span></button>
+    </div>
+</div>
+
+
+<!-- ======= Go Back Button ======= -->
+<div class="row my-2 justify-content-center" id="goBackButton" th:fragment="btn-go-home">
+    <div class="col-auto">
+        <a class="btn btn-primary btn-rounded" th:href="@{/dashboard/fields-of-study}">
+            <i class="fas fa-home mr-1"></i><span th:text="#{button.go.home}"></span>
+        </a>
+    </div>
+</div>
+
+<!-- ======= Go back button ======= -->
+<a class="btn btn-primary btn-rounded"
+   onclick="history.go(-1)"
+   th:fragment="btn-go-back">
+    <i class="mr-1 fas fa-arrow-left-long "></i>
+    <span th:text="#{button.go.back}"></span>
+</a>
+
+<!-- ======= Go back to field of study with id button ======= -->
+<a class="btn btn-primary btn-rounded"
+   th:fragment="btn-go-back-fieldOfStudy"
+   th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOfStudy.id})}">
+    <i class="mr-1 fas fa-arrow-left-long "></i>
+    <span th:text="#{button.go.back}"></span>
+</a>
+
+<!-- ======= Go back to /fields-of-study ======= -->
+<a class="btn btn-primary btn-rounded"
+   th:fragment="btn-go-back-fieldsOfStudy"
+   th:href="@{/dashboard/fields-of-study}">
+    <i class="mr-1 fas fa-arrow-left-long "></i>
+    <span th:text="#{button.go.back}"></span>
+</a>
+
+<!-- ======= Add new field of study button ======= -->
+<a class="btn btn-success btn-rounded"
+   th:fragment="btn-add-new"
+   th:href="@{/dashboard/fields-of-study/new}">
+    <i class="mr-1 fas fa-plus"></i>
+    <span th:text="#{fieldsOfStudy.button.add}"></span>
+</a>
+
+<!-- ======= Edit, Delete  Buttons ======= -->
+<div class="row my-2 justify-content-end" th:fragment="edit-delete-buttons">
+    <div class="col-auto">
+        <a class="btn btn-outline-primary btn-rounded"
+           th:href="@{/dashboard/fields-of-study/edit/{id}(id=${fieldOfStudy.id})}">
+            <i class="fas fa-pen mr-1"></i><span th:text="#{button.edit}"></span>
+        </a>
+    </div>
+    <div class="col-auto">
+        <a class="btn btn-outline-danger btn-rounded delBtn"
+           th:href="@{/dashboard/fields-of-study/delete/{id}(id=${fieldOfStudy.id})}">
+            <i class="fa fa-trash-can fa-lg mr-1"></i><span th:text="#{button.delete}"></span>
+        </a>
+    </div>
+</div>
+
+<!-- ======= Edit FieldOfStudy Button ======= -->
+<a class="btn btn-outline-primary btn-rounded"
+   th:fragment="btn-edit-fieldOfStudy"
+   th:href="@{/dashboard/fields-of-study/edit/{id}(id=${fieldOfStudy.id})}">
+    <i class="fas fa-pen mr-1"></i>
+    <span th:text="#{button.edit}"></span>
+</a>
+
+<!-- ======= Delete FieldOfStudy Button ======= -->
+<a class="btn btn-outline-danger btn-rounded delBtn"
+   th:fragment="btn-delete-fieldOfStudy"
+   th:href="@{/dashboard/fields-of-study/delete/{id}(id=${fieldOfStudy.id})}">
+    <i class="fa fa-trash-can fa-lg mr-1"></i>
+    <span th:text="#{button.delete}"></span>
+</a>
+
+<!-- ======= View subjects Button ======= -->
+<a class="btn btn-primary btn-rounded"
+   th:fragment="btn-view-subjects"
+   th:href="@{/dashboard/fields-of-study/{id}/subjects(id=${fieldOfStudy.id})}">
+    <i class="fas fa-microscope fa-fw mr-1"></i>
+    <span th:text="#{button.subjects}"></span>
+</a>
+
+<!-- ======= Edit subjects Button ======= -->
+<a class="btn btn-outline-primary btn-rounded"
+   th:fragment="btn-edit-subjects"
+   th:href="@{/dashboard/fields-of-study/edit/{id}/subjects(id=${fieldOfStudy.id})}">
+    <i class="fas fa-pen mr-1"></i>
+    <span th:text="#{button.edit}"></span>
+</a>

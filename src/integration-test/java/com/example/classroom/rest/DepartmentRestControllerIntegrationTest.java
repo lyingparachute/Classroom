@@ -343,7 +343,7 @@ class DepartmentRestControllerIntegrationTest {
         DepartmentDto dto = new DepartmentDto();
         dto.setName("Wydział Najlepszy");
         dto.setAddress("ul. Kasztanowa 68, 22-098 Kasztanowo");
-        dto.setTelNumber(321321321);
+        dto.setTelNumber("321321321");
         dto.setDean(dean);
         dto.setFieldsOfStudy(new HashSet<>(fieldsOfStudy));
         return dto;

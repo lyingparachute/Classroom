@@ -1,84 +1,210 @@
-<!-- ======= Form for Subject ======= -->
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<!-- ======= Form for Department ======= -->
 <div th:fragment="item-form">
-    <input hidden type="text" id="id_input_id" th:field="*{id}">
-    <div class="row mb-4">
-        <label class="col-form-label col-sm-4"
-               for="first_name">
-            <span th:text="#{subject.name}"></span>
-        </label>
-        <div class="col-sm">
+    <div class="mb-4" th:classappend="${#fields.hasErrors('name')} ? mb-5">
+        <h4 th:text="#{department.name}"></h4>
+        <div class="form-outline">
             <input class="form-control"
-                   type="text"
-                   id="first_name"
-                   th:field="*{name}"/>
+                   data-mdb-showcounter="true"
+                   th:field="*{name}"
+                   id="name-input"
+                   3 maxlength="50" th:classappend="${#fields.hasErrors('name')} ? is-invalid"
+                   type="text"/>
+            <div class="form-helper"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('name')}" th:text="${error}"></span>
+            </div>
         </div>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('name')}"
-             th:errors="*{name}"></div>
+
     </div>
-    <div class="row mb-4">
-        <label class="col-form-label col-sm-4"
-               for="last_name">
-            <span th:text="#{subject.description}"></span>
-        </label>
-        <div class="col-sm">
+    <hr>
+    <div class="mb-4" th:classappend="${#fields.hasErrors('address')} ? mb-5">
+        <h4 th:text="#{department.address}"></h4>
+        <div class="form-outline">
             <input class="form-control"
-                   type="text"
-                   id="last_name"
-                   th:field="*{description}"/>
-        </div>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('description')}"
-             th:errors="*{description}"></div>
-    </div>
-    <div class="row mb-4">
-        <label class="col-sm-4 col-form-label"
-               for="age">
-            <span th:text="#{subject.hoursInSemester}"></span>
-        </label>
-        <div class="col-sm">
-            <input class="form-control"
-                   type="number" id="age"
-                   th:field="*{hoursInSemester}"/>
-        </div>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('hoursInSemester')}"
-             th:errors="*{hoursInSemester}">
+                   th:field="*{address}"
+                   type="text"/>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('address')}" th:text="${error}"></span>
+            </div>
+            <div class="form-helper" th:text="#{input.helper.address}"
+                 th:unless="${#fields.hasErrors('address')}"></div>
         </div>
     </div>
-    <div class="row mb-4">
-        <label class="col-form-label col-sm-4"
-               for="teachers_list">
-            <span th:text="#{subject.teachers.list}"></span>
-        </label>
-        <div class="col-sm text-left">
-            <th:block th:each="fieldOpt : ${teachers}">
-                <div>
-                    <input class="form-check-input m-2" type="checkbox" value="" id="teachers_list"
-                           th:field="*{teachers}"
-                           th:value="${fieldOpt.id}" th:text="${fieldOpt}">
+    <hr>
+    <div class="mb-4" th:classappend="${#fields.hasErrors('telNumber')} ? mb-5">
+        <h4 th:text="#{department.telNumber}"></h4>
+        <div class="form-outline">
+            <input class="form-control"
+                   th:field="*{telNumber}"
+                   th:classappend="${#fields.hasErrors('telNumber')} ? is-invalid"
+                   type="tel"
+            />
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('telNumber')}" th:text="${error}"></span>
+            </div>
+            <div class="form-helper" th:text="#{input.helper.telNumber}"
+                 th:unless="${#fields.hasErrors('telNumber')}"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{department.dean}"></h4>
+        <div th:if="${teachers.isEmpty()}">
+            <span class="mr-1" th:text="#{department.new.noTeachers}"></span>
+            <div th:replace="teacher/buttons :: btn-add-new"></div>
+        </div>
+        <select class="form-select"
+                id="dean" th:field="*{dean}" th:unless="${teachers.isEmpty()}">
+            <option th:value="0"></option>
+            <option th:each="fieldOpt : ${teachers}"
+                    th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}"
+                    th:value="${fieldOpt.id}">
+            </option>
+        </select>
+    </div>
+    <hr>
+
+    <div class="mb-3">
+        <h4 class="mr-2" th:text="#{department.fieldsOfStudy}"></h4>
+        <div th:if="${fieldsOfStudy.isEmpty()}">
+            <span class="mr-1" th:text="#{department.new.noFieldOfStudies}"></span>
+            <div th:replace="field-of-study/buttons :: btn-add-new"></div>
+        </div>
+        <a aria-controls="collapseFieldsOfStudy"
+           th:unless="${fieldsOfStudy.isEmpty()}"
+           aria-expanded="false" class="btn btn-secondary btn-rounded"
+           data-mdb-toggle="collapse" href="#collapseFieldsOfStudy" role="button"
+           th:text="#{button.show.hide}">
+        </a>
+    </div>
+    <div class="collapse mt-3" id="collapseFieldsOfStudy">
+        <div class="row row-cols-1 row-cols-md-3 g-3">
+            <th:block th:each="fieldOpt, iterStat : ${fieldsOfStudy}">
+                <div class="col">
+
+                    <!-- ======= FieldOfStudy Details ======= -->
+                    <div class="card field-of-study-item-card">
+
+                        <input class="form-check-input-checkbox" th:field="*{fieldsOfStudy}"
+                               th:id="${iterStat.count}"
+                               th:value="${fieldOpt.id}"
+                               type="checkbox"/>
+
+                        <div class="single-item-card">
+                            <div class="bg-image">
+                                <img class="field-of-study-img"
+                                     th:alt="${fieldOpt.name}"
+                                     th:if="${fieldOpt.image} != null"
+                                     th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
+                                <img class="field-of-study-img"
+                                     th:alt="${fieldOpt.name}"
+                                     th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                                     th:unless="${fieldOpt.image} != null"/>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <span class="h5" th:text="${fieldOpt.name}"></span>
+                                </div>
+                                <div class="field-of-study-details-muted"
+                                     th:text="${fieldOpt.levelOfEducation.value} + ', ' +
+                                  ${fieldOpt.mode.value.toLowerCase()}"></div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </th:block>
         </div>
     </div>
-    <!-- ======= Buttons ======= -->
-    <div th:replace="field-of-study/buttons :: cancelSubmitBtn"></div>
+
 </div>
 
-<!-- ======= View Subject card body ======= -->
+
+<!-- ======= View Department card body ======= -->
 <div th:fragment="view-item">
-  <ul class="list-group list-group-root well">
-    <li class="list-group-item" th:text="#{table.id} + ': ' + ${subject.id}"></li>
-    <li class="list-group-item" th:text="#{subject.name} + ': ' + ${subject.name}"></li>
-    <li class="list-group-item" th:text="#{subject.description} + ': ' + ${subject.description}"></li>
-    <li class="list-group-item" th:text="#{subject.hoursInSemester} + ': ' + ${subject.hoursInSemester}"></li>
-    <li class="list-group-item"> <span th:text="#{subject.teachers.list}"></span>
-      <ul class="list-group">
-        <a class="list-group-item"
-           th:each="fieldOpt : ${subject.teachers}"
-           th:href="@{/dashboard/teachers/{id}(id=${fieldOpt.id})}"
-           th:value="${fieldOpt.id}"
-           th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
+    <div class="mb-4">
+        <h4 th:text="#{department.name}"></h4>
+        <span th:text="${department.name}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{department.address}"></h4>
+        <span th:text="${department.address}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{department.telNumber}"></h4>
+        <span th:text="'+48 ' + ${department.telNumber}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{department.dean}"></h4>
+        <a class="text-body" th:if="${department.dean != null}"
+           th:href="@{/dashboard/teachers/{id}(id=${department.dean.id})}">
+            <span th:text="${department.dean}"></span>
+            <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
         </a>
-      </ul>
-    </li>
-  </ul>
+        <div th:unless="${department.dean != null}">
+            <span th:text="#{department.dean.null}"></span>
+            <div th:replace="department/buttons :: btn-edit"></div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!--  Fields of studies block -->
+    <div class="mb-3">
+        <span class="h4 mr-2" th:text="#{department.fieldsOfStudy}"></span>
+        <a aria-controls="collapseExample"
+           aria-expanded="false" class="btn btn-secondary btn-rounded" th:unless="${department.fieldsOfStudy.isEmpty()}"
+           data-mdb-toggle="collapse" href="#collapseExample" role="button"
+           th:text="#{button.show.hide}">
+        </a>
+        <div class="mb-3" th:if="${department.fieldsOfStudy.isEmpty()}">
+            <span th:text="#{department.fieldsOfStudy.isEmpty}"></span>
+            <div th:replace="department/buttons :: btn-edit"></div>
+        </div>
+    </div>
+    <div class="collapse mt-3" id="collapseExample">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <th:block th:each="fieldOpt, iterStat2 : ${department.fieldsOfStudy}">
+                <div class="col">
+                    <!-- ======= FieldOfStudy Details ======= -->
+                    <div class="card h-100" th:fragment="field-of-study-item-card">
+                        <div class="bg-image hover-overlay ripple"
+                             data-mdb-ripple-color="light">
+                            <img class="field-of-study-img"
+                                 th:alt="${fieldOpt.name}"
+                                 th:if="${fieldOpt.image} != null"
+                                 th:src="@{${imagesPath} + '/' + ${fieldOpt.image}}"/>
+                            <img class="field-of-study-img"
+                                 th:alt="${fieldOpt.name}"
+                                 th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                                 th:unless="${fieldOpt.image} != null"/>
+                            <a th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                <div class="mask"
+                                     style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${fieldOpt.name}"></h5>
+                            <span class="text-muted"
+                                  th:text="${fieldOpt.levelOfEducation.value} + ', ' +
+                                  ${fieldOpt.mode.value.toLowerCase()}"></span>
+                            <p class="card-text" th:text="${fieldOpt.description}"></p>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="btn btn-primary"
+                               th:href="@{/dashboard/fields-of-study/{id}(id=${fieldOpt.id})}">
+                                <span th:text="#{button.view.fielOfStudy}"></span>
+                                <i class="fas fa-regular fa-up-right-from-square"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
 
 </div>

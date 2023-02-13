@@ -1,127 +1,147 @@
 <!-- ======= Form for Student ======= -->
 <div th:fragment="student-form">
-  <input hidden type="text" id="id_input_id" th:field="*{id}">
-  <div class="row mb-4">
-    <label class="col-form-label col-sm-4"
-           for="first_name">
-      <span th:text="#{student.firstName}"></span>
-    </label>
-    <div class="col-sm">
-      <input class="form-control"
-             type="text"
-             id="first_name"
-             th:field="*{firstName}"
-      />
+    <input hidden id="id_input_id" th:field="*{id}" type="text">
+    <div class="row mb-4">
+        <label class="col-form-label col-sm-4"
+               for="first_name">
+            <span th:text="#{student.firstName}"></span>
+        </label>
+        <div class="col-sm">
+            <input class="form-control"
+                   id="first_name"
+                   th:field="*{firstName}"
+                   type="text"
+            />
+        </div>
+        <div class="alert alert-danger" th:errors="*{firstName}"
+             th:if="${#fields.hasErrors('firstName')}"></div>
     </div>
-    <div class="alert alert-danger" th:if="${#fields.hasErrors('firstName')}"
-         th:errors="*{firstName}"></div>
-  </div>
 
-  <div class="row mb-4">
-    <label class="col-form-label col-sm-4"
-           for="last_name">
-      <span th:text="#{student.lastName}"></span>
-    </label>
-    <div class="col-sm">
-      <input class="form-control"
-             type="text"
-             id="last_name"
-             th:field="*{lastName}"
-      />
+    <div class="row mb-4">
+        <label class="col-form-label col-sm-4"
+               for="last_name">
+            <span th:text="#{student.lastName}"></span>
+        </label>
+        <div class="col-sm">
+            <input class="form-control"
+                   id="last_name"
+                   th:field="*{lastName}"
+                   type="text"
+            />
+        </div>
+        <div class="alert alert-danger" th:errors="*{lastName}"
+             th:if="${#fields.hasErrors('lastName')}"></div>
     </div>
-    <div class="alert alert-danger" th:if="${#fields.hasErrors('lastName')}"
-         th:errors="*{lastName}"></div>
-  </div>
-  <div class="row mb-4">
-    <label class="col-form-label col-sm-4"
-           for="email">
-      <span th:text="#{student.email}"></span>
-    </label>
-    <div class="col-sm">
-      <input class="form-control"
-             type="text"
-             id="email"
-             th:field="*{email}"
-      />
+    <div class="row mb-4">
+        <label class="col-form-label col-sm-4"
+               for="email">
+            <span th:text="#{student.email}"></span>
+        </label>
+        <div class="col-sm">
+            <input class="form-control"
+                   id="email"
+                   th:field="*{email}"
+                   type="text"
+            />
+        </div>
+        <div class="alert alert-danger" th:errors="*{email}"
+             th:if="${#fields.hasErrors('email')}"></div>
     </div>
-    <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}"
-         th:errors="*{email}"></div>
-  </div>
-  <div class="row mb-4">
-    <label class="col-sm-4 col-form-label"
-           for="age">
-      <span th:text="#{student.age}"></span>
-    </label>
-    <div class="col-sm">
-      <input class="form-control"
-             type="number" id="age"
-             th:field="*{age}"/>
+    <div class="row mb-4">
+        <label class="col-sm-4 col-form-label"
+               for="age">
+            <span th:text="#{student.age}"></span>
+        </label>
+        <div class="col-sm">
+            <input class="form-control"
+                   id="age" th:field="*{age}"
+                   type="number"/>
+        </div>
+        <div class="alert alert-danger" th:errors="*{age}"
+             th:if="${#fields.hasErrors('age')}">
+        </div>
     </div>
-    <div class="alert alert-danger" th:if="${#fields.hasErrors('age')}"
-         th:errors="*{age}">
-    </div>
-  </div>
-  <div class="row mb-4">
-    <label class="col-form-label col-sm-4"
-           for="field_of_study">
-      <span th:text="#{student.fieldOfStudy}"></span>
-    </label>
-    <div class="col-sm">
-      <select class="form-select" id="field_of_study" th:field="*{fieldOfStudy}">
-        <option th:each="fieldOpt : ${fieldsOfStudy}"
-                th:text="${fieldOpt.name}
+    <div class="row mb-4">
+        <label class="col-form-label col-sm-4"
+               for="field_of_study">
+            <span th:text="#{student.fieldOfStudy}"></span>
+        </label>
+        <div class="col-sm">
+            <select class="form-select" id="field_of_study" th:field="*{fieldOfStudy}">
+                <option th:each="fieldOpt : ${fieldsOfStudy}"
+                        th:text="${fieldOpt.name}
                 + ', Study mode: ' + ${fieldOpt.mode.value}
                 + ', Level of education: ' + ${fieldOpt.levelOfEducation.value}
                 + ', Obtained title: ' + ${fieldOpt.title.fullTitle}"
-                th:value="${fieldOpt.id}">
-        </option>
-      </select>
-    </div>
-  </div>
-  <div class="row mb-4">
-    <label class="col-form-label col-sm-4"
-           for="teachers_list">
-      <span th:text="#{student.teachersList}"></span>
-    </label>
-    <div class="col-sm text-left">
-      <th:block th:each="fieldOpt : ${teachers}">
-        <div>
-          <input class="form-check-input m-2" type="checkbox" value="" id="teachers_list"
-                 th:field="*{teachers}"
-                 th:value="${fieldOpt.id}" th:text="${fieldOpt}">
+                        th:value="${fieldOpt.id}">
+                </option>
+            </select>
         </div>
-      </th:block>
     </div>
-  </div>
-  <!-- ======= Buttons ======= -->
-  <div th:replace="fragments/buttons :: #studentCancelSubmitBtn"></div>
+    <div class="row mb-4">
+        <label class="col-form-label col-sm-4"
+               for="teachers_list">
+            <span th:text="#{student.teachersList}"></span>
+        </label>
+        <div class="col-sm text-left">
+            <th:block th:each="fieldOpt : ${teachers}">
+                <div>
+                    <input class="form-check-input m-2" id="teachers_list" th:field="*{teachers}" th:text="${fieldOpt}"
+                           th:value="${fieldOpt.id}"
+                           type="checkbox" value="">
+                </div>
+            </th:block>
+        </div>
+    </div>
+    <!-- ======= Buttons ======= -->
+    <div th:replace="fragments/buttons :: #studentCancelSubmitBtn"></div>
 </div>
 
 <!-- ======= View Student card body ======= -->
 <div th:fragment="view-student">
-  <ul class="list-group">
-    <li class="list-group-item" th:text="#{student.id} + ': ' + ${student.id}"></li>
-    <li class="list-group-item" th:text="#{student.firstName} + ': ' + ${student.firstName}"></li>
-    <li class="list-group-item" th:text="#{student.lastName} + ': ' + ${student.lastName}"></li>
-    <li class="list-group-item" th:text="#{student.email} + ': ' + ${student.email}"></li>
-    <li class="list-group-item" th:text="#{student.age} + ': ' + ${student.age}"></li>
-    <li class="list-group-item">
-      <span th:text="#{student.fieldOfStudy} + ': ' "></span>
-      <a th:href="@{/dashboard/fields-of-study/{id}(id=${student.fieldOfStudy.id})}"
-         th:text="${student.fieldOfStudy.name}"></a>
-    </li>
-    <li class="list-group-item"><span th:text="#{student.teachersList}"></span>
-      <ul class="list-group">
-        <a class="list-group-item"
-           th:each="fieldOpt : ${student.teachers}"
-           th:href="@{/dashboard/teachers/{id}(id=${fieldOpt.id})}"
-           th:value="${fieldOpt.id}"
-           th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}">
+    <div class="mb-4">
+        <h4 th:text="#{student.firstName}"></h4>
+        <span th:text="${student.firstName}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{student.lastName}"></h4>
+        <span th:text="${student.lastName}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{student.email}"></h4>
+        <span th:text="${student.email}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{student.age}"></h4>
+        <span th:text="${student.age}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{student.fieldOfStudy}"></h4>
+        <a class="text-body"
+           th:href="@{/dashboard/fields-of-study/{id}(id=${student.fieldOfStudy.id})}">
+            <span th:text="${student.fieldOfStudy.name}"></span>
+            <i class="fas fa-regular fa-up-right-from-square"></i>
         </a>
-      </ul>
-    </li>
-  </ul>
-
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{student.teachersList}"></h4>
+        <th:block th:each="fieldOpt, count : ${student.teachers}">
+            <div class="mb-2">
+                <span th:text="${count.index + 1} + '. '"></span>
+                <a class="text-body"
+                   th:href="@{/dashboard/teachers/{id}(id=${fieldOpt.id})}">
+                <span th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}"
+                      th:value="${fieldOpt.id}"></span>
+                    <i class="fas fa-regular fa-up-right-from-square"></i>
+                </a>
+            </div>
+        </th:block>
+    </div>
 </div>
 
 

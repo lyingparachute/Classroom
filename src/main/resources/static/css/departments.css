@@ -1,0 +1,12 @@
+.itemCard {
+    max-height: 130px;
+}
+
+.itemCard .bg-image {
+    max-width: 100px;
+    height: auto;
+}
+
+.card-body .card-title {
+    color: #043865;
+}
