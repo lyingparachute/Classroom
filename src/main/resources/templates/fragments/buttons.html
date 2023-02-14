@@ -49,28 +49,7 @@
   </div>
 </div>
 
-<!-- Edit and Delete buttons -->
-<div id="teacherEditDeleteBtn" class="row my-2 justify-content-end">
-  <div class="col-auto">
-    <a class="btn btn-outline-primary" th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}">
-      <i class="fas fa-pen mr-2"></i><span th:text="#{button.edit}"></span>
-    </a>
-  </div>
-  <div class="col-auto">
-    <a class="btn btn-outline-danger" th:href="@{/dashboard/teachers/delete/{id}(id=${teacher.id})}">
-      <i class="fa fa-trash-can fa-lg mr-2"></i><span th:text="#{button.delete}"></span>
-    </a>
-  </div>
-</div>
 
-<!-- Go Back button -->
-<div id="teacherGoBackBtn" class="row my-2 justify-content-center">
-  <div class="col-auto">
-    <a class="btn btn-primary" th:href="@{/dashboard/teachers}">
-      <i class="fas fa-home mr-2"></i><span th:text="#{button.go.back}"></span>
-    </a>
-  </div>
-</div>
 
 <!-- =======
 Subject buttons
