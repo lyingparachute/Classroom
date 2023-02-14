@@ -6,9 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -26,10 +23,6 @@ public class Teacher {
     private String firstName;
     private String lastName;
     private int age;
-
-    @NotNull
-    @NotEmpty(message = "{message.empty}")
-    @Email(message = "{message.email.valid}")
     private String email;
 
     @JsonIgnore
