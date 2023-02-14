@@ -75,7 +75,7 @@ public class TeacherController {
 
     @GetMapping("new")
     public String getNewTeacherForm(Model model) {
-        model.addAttribute("teacher/teacher", new TeacherDto());
+        model.addAttribute("teacher", new TeacherDto());
         addAttributesSubjectsAndStudents(model);
         return "teacher/teacher-create-form";
     }
