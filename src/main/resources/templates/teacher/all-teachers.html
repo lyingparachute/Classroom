@@ -22,6 +22,28 @@
                     <div class="text-center h5"
                          th:text="#{teachers.desc}">
                     </div>
+
+                    <!-- Success Alert -->
+                    <div class="alert alert-success alert-dismissible d-flex align-items-center fade show"
+                         th:if="${success}">
+                        <i class="fas fa-check-circle"></i>
+                        <strong class="mx-1" th:text="#{msg.success}"></strong>
+                        <span th:text="#{teacher.success.msg1}"></span>
+                        <a class="alert-link mx-1"
+                           th:unless="${deleteSuccess}"
+                           th:href="@{/dashboard/teachers/{id}(id=${success.id})}"
+                           th:text="${success.firstName} + '&nbsp;' + ${success.lastName}"></a>
+                        <strong class="mx-1"
+                                th:if="${deleteSuccess}"
+                                th:text="${success.firstName} + '&nbsp;' + ${success.lastName}"></strong>
+                        <span th:text="#{teacher.success.msg2}"></span>
+                        <strong class="mx-1" th:if="${createSuccess}" th:text="${createSuccess}"></strong>
+                        <strong class="mx-1" th:if="${updateSuccess}" th:text="${updateSuccess}"></strong>
+                        <strong class="mx-1" th:if="${deleteSuccess}" th:text="${deleteSuccess}"></strong>
+                        <span th:text="#{teacher.success.msg3}"></span>
+                        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+                    </div>
+
                     <form id="teacherForm"
                           th:action="@{/dashboard/teachers}"
                           method="get">

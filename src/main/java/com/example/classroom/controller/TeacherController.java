@@ -1,17 +1,16 @@
 package com.example.classroom.controller;
 
 import com.example.classroom.dto.TeacherDto;
-import com.example.classroom.entity.Teacher;
 import com.example.classroom.service.StudentService;
 import com.example.classroom.service.SubjectService;
 import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -21,10 +20,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeacherController {
 
-    private final TeacherService teacherService;
+    private final TeacherService service;
     private final StudentService studentService;
     private final SubjectService subjectService;
-    private final ModelMapper mapper;
+    public static final String REDIRECT_DASHBOARD_TEACHERS = "redirect:/dashboard/teachers";
 
     @GetMapping
     public String getPaginatedTeachers(@RequestParam(required = false) String name,
@@ -35,9 +34,9 @@ public class TeacherController {
                                        Model model) {
         Page<TeacherDto> pageTeachers;
         if (name == null) {
-            pageTeachers = teacherService.fetchAllPaginated(page, size, sortField, sortDir);
+            pageTeachers = service.fetchAllPaginated(page, size, sortField, sortDir);
         } else {
-            pageTeachers = teacherService.findByFirstOrLastNamePaginated(page, size, sortField, sortDir, name);
+            pageTeachers = service.findByFirstOrLastNamePaginated(page, size, sortField, sortDir, name);
             model.addAttribute("name", name);
         }
         List<TeacherDto> teachers = pageTeachers.getContent();
@@ -71,30 +70,29 @@ public class TeacherController {
     @GetMapping("{id}")
     public String getTeacher(@PathVariable Long id, Model model) {
         addAttributeTeacherById(id, model);
-        return "teacher/teacher";
+        return "teacher/teacher-view";
     }
 
     @GetMapping("new")
     public String getNewTeacherForm(Model model) {
         model.addAttribute("teacher/teacher", new TeacherDto());
         addAttributesSubjectsAndStudents(model);
-        return "teacher/teacher-form";
+        return "teacher/teacher-create-form";
     }
 
     @PostMapping(value = "new")
-    public String createTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, BindingResult result, Model model) {
+    public String createTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
+                                BindingResult result,
+                                RedirectAttributes redirectAttributes,
+                                Model model) {
         if (result.hasErrors()) {
             addAttributesSubjectsAndStudents(model);
-            return "teacher/teacher-form";
+            return "teacher/teacher-create-form";
         }
-        teacherService.create(mapper.map(teacher, TeacherDto.class));
-        return "teacher/teacher-create-success";
-    }
-
-    @GetMapping("delete/{id}")
-    public String deleteStudent(@PathVariable Long id) {
-        teacherService.remove(id);
-        return "redirect:/dashboard/teachers";
+        TeacherDto saved = service.create(dto);
+        addFlashAttributeSuccess(redirectAttributes, saved);
+        redirectAttributes.addFlashAttribute("createSuccess", "saved");
+        return REDIRECT_DASHBOARD_TEACHERS;
     }
 
     @GetMapping("edit/{id}")
@@ -105,17 +103,28 @@ public class TeacherController {
     }
 
     @PostMapping(value = "update")
-    public String editTeacher(@Valid @ModelAttribute("teacher") Teacher teacher, BindingResult result, Model model) {
+    public String editTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
+                              BindingResult result,
+                              RedirectAttributes redirectAttributes,
+                              Model model) {
         if (result.hasErrors()) {
             addAttributesSubjectsAndStudents(model);
             return "teacher/teacher-edit-form";
         }
-        TeacherDto updated = teacherService.update(mapper.map(teacher, TeacherDto.class));
-        if (updated == null) {
-            return "error/404";
-        }
+        TeacherDto updated = service.update(dto);
         model.addAttribute("teacher", updated);
-        return "teacher/teacher-edit-success";
+        addFlashAttributeSuccess(redirectAttributes, updated);
+        redirectAttributes.addFlashAttribute("updateSuccess", "updated");
+        return REDIRECT_DASHBOARD_TEACHERS;
+    }
+
+    @GetMapping("delete/{id}")
+    public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        TeacherDto dto = service.fetchById(id);
+        service.remove(id);
+        addFlashAttributeSuccess(redirectAttributes, dto);
+        redirectAttributes.addFlashAttribute("deleteSuccess", "deleted");
+        return REDIRECT_DASHBOARD_TEACHERS;
     }
 
     private void addAttributesSubjectsAndStudents(Model model) {
@@ -124,6 +133,10 @@ public class TeacherController {
     }
 
     private void addAttributeTeacherById(Long id, Model model) {
-        model.addAttribute("teacher", teacherService.fetchById(id));
+        model.addAttribute("teacher", service.fetchById(id));
+    }
+
+    private void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, TeacherDto dto) {
+        redirectAttributes.addFlashAttribute("success", dto);
     }
 }

@@ -1,7 +1,7 @@
 <!-- ======= Form for Teacher ======= -->
 <div th:fragment="teacher-form">
-    <input hidden id="id_input_id" th:field="*{id}" type="text">
-    <div class="row mb-4">
+
+<div class="row mb-4">
         <label class="col-form-label col-sm-4"
                for="first_name">
             <span th:text="#{teacher.firstName}"></span>
@@ -99,8 +99,6 @@
         </div>
     </div>
 
-    <!-- ======= Buttons ======= -->
-    <div th:replace="fragments/buttons :: #teacherDiscardSubmitBtn"></div>
 
 </div>
 
