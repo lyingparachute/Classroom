@@ -20,10 +20,11 @@
                     <form class="form-group needs-validation"
                           th:object="${teacher}"
                           th:action="@{/dashboard/teachers/new}"
-                          th:method="post">
+                          th:method="post"
+                          novalidate>
                         <div th:replace="teacher/elements :: teacher-form"></div>
                         <!-- ======= Buttons ======= -->
-                        <div th:replace="teacher/buttons :: EDITcancelSubmitBtn"></div>
+                        <div th:replace="teacher/buttons :: CREATEcancelSubmitBtn"></div>
                     </form>
                 </div>
             </div>
