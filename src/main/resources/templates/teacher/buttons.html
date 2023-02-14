@@ -6,7 +6,15 @@
 </head>
 <body>
 
-<!-- ======= Go back to departments ======= -->
+<!-- ======= Go back to teacher with id button ======= -->
+<a class="btn btn-primary btn-rounded"
+   th:fragment="btn-go-back-to-teacher"
+   th:href="@{/dashboard/teachers/{id}(id=${teacher.id})}">
+    <i class="mr-1 fas fa-arrow-left-long "></i>
+    <span th:text="#{button.go.back}"></span>
+</a>
+
+<!-- ======= Go back to all teachers ======= -->
 <a class="btn btn-primary btn-rounded"
    th:fragment="btn-go-back-to-teachers"
    th:href="@{/dashboard/teachers}">
@@ -28,6 +36,14 @@
    th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}">
     <i class="fas fa-pen mr-1"></i>
     <span th:text="#{button.edit}"></span>
+</a>
+
+<!-- ======= Delete teacher Button ======= -->
+<a class="btn btn-outline-danger btn-rounded delBtn"
+   th:fragment="btn-delete"
+   th:href="@{/dashboard/teachers/delete/{id}(id=${teacher.id})}">
+    <i class="fa fa-trash-can fa-lg mr-1"></i>
+    <span th:text="#{button.delete}"></span>
 </a>
 
 </body>
