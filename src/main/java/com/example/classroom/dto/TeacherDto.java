@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,19 +21,20 @@ import java.util.Set;
 public class TeacherDto {
     private Long id;
     @NotNull
-    @NotEmpty(message = "{message.empty}")
-    @Length(min = 2, max = 60, message = "{message.name}")
+    @NotEmpty(message = "{message.firstName.empty}")
+    @Length(min = 2, max = 30, message = "{message.firstName.length}")
     private String firstName;
     @NotNull
-    @NotEmpty(message = "{message.empty}")
-    @Length(min = 2, max = 60, message = "{message.last.name}")
+    @NotEmpty(message = "{message.lastName.empty}")
+    @Length(min = 2, max = 30, message = "{message.lastName.length}")
     private String lastName;
     @NotNull
-    @Min(value = 18, message = "{message.min.age}")
+    @Min(value = 21, message = "{teacher.age.min}")
+    @Max(value = 80, message = "{teacher.age.max}")
     private int age;
     @NotNull
-    @NotEmpty(message = "{message.empty}")
-    @Email(message = "{message.valid.email}")
+    @NotEmpty(message = "{message.email.empty}")
+    @Email(message = "{message.email.valid}")
     private String email;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
