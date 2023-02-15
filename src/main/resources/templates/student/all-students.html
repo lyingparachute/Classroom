@@ -148,7 +148,7 @@
                                         </div>
                                         <div class="row justify-content-center align-items-center">
                                             <a type="button" id="btnDelete"
-                                               class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
+                                               class="delBtn col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                data-mdb-ripple-color="dark"
                                                th:text="#{button.delete}"
                                                th:href="@{/dashboard/students/delete/{id}(id=${student.id})}"
@@ -232,10 +232,6 @@
 
 <!-- Delete modal -->
 <div th:replace="fragments/modals :: deleteModal"></div>
-
-<!-- View modal -->
-<div th:replace="fragments/modals :: #studentViewModal"></div>
-
 <!-- JS Scripts -->
 <div th:replace="fragments/imports/scripts :: scripts"></div>
 <!-- Custom script -->
