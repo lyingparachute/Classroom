@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString
+//@ToString
 @Table(name = "fields_of_study")
 public class FieldOfStudy {
     @Id
@@ -97,9 +97,9 @@ public class FieldOfStudy {
     /**
      * Add new Subject. The method keeps relationships consistency:
      * * this teacher is added to teachers
-     *   on the subject side
+     * on the subject side
      */
-    public void addSubject(Subject subject){
+    public void addSubject(Subject subject) {
         //prevent endless loop
         if (subjects.contains(subject)) {
             return;
@@ -111,7 +111,7 @@ public class FieldOfStudy {
     /**
      * Remove Subject. The method keeps relationships consistency:
      * * this teacher is removed from teachers
-     *   on the subject side
+     * on the subject side
      */
     public void removeSubject(Subject subject) {
         //prevent endless loop
@@ -125,9 +125,9 @@ public class FieldOfStudy {
     /**
      * Add new Student. The method keeps relationships consistency:
      * * this teacher is added to teachers
-     *   on the student side
+     * on the student side
      */
-    public void addStudent(Student student){
+    public void addStudent(Student student) {
         //prevent endless loop
         if (students.contains(student)) {
             return;
@@ -139,7 +139,7 @@ public class FieldOfStudy {
     /**
      * Remove Student. The method keeps relationships consistency:
      * * this teacher is removed from teachers
-     *   on the student side
+     * on the student side
      */
     public void removeStudent(Student student) {
         //prevent endless loop
@@ -148,6 +148,12 @@ public class FieldOfStudy {
         }
         students.remove(student);
         student.setFieldOfStudy(null);
+    }
+
+    @Override
+    public String toString() {
+        return name + ", " + levelOfEducation.getValue().toLowerCase() +
+                ", " + mode.getValue().toLowerCase();
     }
 
     @Override
