@@ -112,7 +112,6 @@ public class TeacherController {
             return "teacher/teacher-edit-form";
         }
         TeacherDto updated = service.update(dto);
-        model.addAttribute("teacher", updated);
         addFlashAttributeSuccess(redirectAttributes, updated);
         redirectAttributes.addFlashAttribute("updateSuccess", "updated");
         return REDIRECT_DASHBOARD_TEACHERS;
