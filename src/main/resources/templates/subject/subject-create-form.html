@@ -22,6 +22,8 @@
                           th:action="@{/dashboard/subjects/new}"
                           th:method="post">
                         <div th:replace="subject/elements :: subject-form"></div>
+                        <!-- ======= Buttons ======= -->
+                        <div th:replace="subject/buttons :: CREATEcancelSubmitBtn"></div>
                     </form>
                 </div>
             </div>

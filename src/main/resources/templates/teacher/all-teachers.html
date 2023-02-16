@@ -26,11 +26,11 @@
                 <strong class="mx-1"
                         th:if="${deleteSuccess}"
                         th:text="${success.firstName} + '&nbsp;' + ${success.lastName}"></strong>
-                <span th:text="#{teacher.success.msg2}"></span>
+                <span th:text="#{alert.success.msg2}"></span>
                 <strong class="mx-1" th:if="${createSuccess}" th:text="${createSuccess}"></strong>
                 <strong class="mx-1" th:if="${updateSuccess}" th:text="${updateSuccess}"></strong>
                 <strong class="mx-1" th:if="${deleteSuccess}" th:text="${deleteSuccess}"></strong>
-                <span th:text="#{teacher.success.msg3}"></span>
+                <span th:text="#{alert.success.msg3}"></span>
                 <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
             </div>
         </section>

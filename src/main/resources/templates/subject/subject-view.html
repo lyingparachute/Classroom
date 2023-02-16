@@ -18,10 +18,18 @@
                     </div>
                 </div>
                 <div class="card-body mx-4">
+                    <!-- ======= Buttons ======= -->
+                    <div class="d-flex mb-4">
+                        <div class="p-1">
+                            <div th:replace="subject/buttons :: btn-go-back-to-subjects"></div>
+                        </div>
+                        <div class="p-1 ms-auto">
+                            <div th:replace="subject/buttons :: btn-edit"></div>
+                            <div th:replace="subject/buttons :: btn-delete"></div>
+                        </div>
+                    </div>
                     <!-- ======= Subject Details ======= -->
                     <div th:replace="subject/elements :: view-subject"></div>
-                    <!-- ======= Buttons ======= -->
-                    <div th:replace="fragments/buttons :: subjectEditDeleteBtn"></div>
                 </div>
             </div>
         </section>

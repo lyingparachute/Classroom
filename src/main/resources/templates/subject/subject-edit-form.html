@@ -21,7 +21,10 @@
                           th:object="${subject}"
                           th:action="@{/dashboard/subjects/update}"
                           th:method="post">
+                        <input hidden id="id_input_id" th:field="*{id}" type="text">
                         <div th:replace="subject/elements :: subject-form"></div>
+                        <!-- ======= Buttons ======= -->
+                        <div th:replace="subject/buttons :: EDITcancelSubmitBtn"></div>
                     </form>
                 </div>
             </div>
