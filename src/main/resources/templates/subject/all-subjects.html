@@ -63,52 +63,48 @@
                     </form>
                     <div id="subjectsTable" class="table-responsive">
                         <table class="table table-hover" th:if="${totalItems != 0}">
-                            <thead>
-                            <tr>
-                                <th th:replace="fragments/sorting :: subjectsSorting('id','ID number')">
-                                </th>
-                                <th th:replace="fragments/sorting :: subjectsSorting('name','Subject Name')">
-                                </th>
-                                <th th:replace="fragments/sorting :: subjectsSorting('description','Description')">
-                                </th>
-                                <th th:replace="fragments/sorting :: subjectsSorting('hoursInSemester','Hours In Semester')">
-                                </th>
-                                <th rowspan="1" colspan="1" scope="col" th:text="#{subject.no.of.teachers}">
-                                </th>
-                                <th rowspan="2" colspan="1" scope="col" th:text="#{button.actions}"
-                                    class="align-middle"/>
-                            </tr>
-                            </thead>
+                            <th:block th:fragment="table-content">
+                                <thead>
+                                <tr>
+                                    <th th:replace="fragments/sorting :: subjectsSorting('id','ID number')"></th>
+                                    <th th:replace="fragments/sorting :: subjectsSorting('name','Subject Name')"></th>
+                                    <th th:replace="fragments/sorting :: subjectsSorting('description','Description')"></th>
+                                    <th th:replace="fragments/sorting :: subjectsSorting('hoursInSemester','Hours In Semester')"></th>
+                                    <th th:text="#{subject.no.of.teachers}"></th>
+                                    <th th:text="#{button.actions}" class="align-middle"></th>
+                                </tr>
+                                </thead>
 
-                            <tbody>
-                            <tr th:each="subject: ${subjects}">
-                                <td th:text="${subject.id}"/>
-                                <td th:text="${subject.name}"/>
-                                <td th:text="${subject.description}"/>
-                                <td th:text="${subject.hoursInSemester}"/>
-                                <td th:text="${subject.teachers.size()}"/>
-                                <td>
-                                    <a id="btnView"
-                                       class="fa fa-eye fa-lg mr-2"
-                                       th:href="@{/dashboard/subjects/{id}(id=${subject.id})}"
-                                       th:title="#{button.view}">
-                                    </a>
-                                    <a id="btnEdit"
-                                       class="fa fa-user-pen fa-lg mr-2"
-                                       th:href="@{/dashboard/subjects/edit/{id}(id=${subject.id})}"
-                                       th:title="#{button.edit}">
-                                    </a>
-                                    <a id="btnDelete"
-                                       class="fa fa-trash-can fa-lg delBtn mr-2"
-                                       th:href="@{/dashboard/subjects/delete/{id}(id=${subject.id})}"
-                                       th:title="#{button.delete}"
-                                       th:name="${subject.name}"
-                                       data-bs-toggle="modal"
-                                       data-bs-target="#deleteModal">
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
+                                <tbody>
+                                <tr th:each="subject: ${subjects}">
+                                    <td th:text="${subject.id}"/>
+                                    <td th:text="${subject.name}"/>
+                                    <td th:text="${subject.description}"/>
+                                    <td th:text="${subject.hoursInSemester}"/>
+                                    <td th:text="${subject.teachers.size()}"/>
+                                    <td>
+                                        <a id="btnView"
+                                           class="fa fa-eye fa-lg mr-2"
+                                           th:href="@{/dashboard/subjects/{id}(id=${subject.id})}"
+                                           th:title="#{button.view}">
+                                        </a>
+                                        <a id="btnEdit"
+                                           class="fa fa-user-pen fa-lg mr-2"
+                                           th:href="@{/dashboard/subjects/edit/{id}(id=${subject.id})}"
+                                           th:title="#{button.edit}">
+                                        </a>
+                                        <a id="btnDelete"
+                                           class="fa fa-trash-can fa-lg delBtn mr-2"
+                                           th:href="@{/dashboard/subjects/delete/{id}(id=${subject.id})}"
+                                           th:title="#{button.delete}"
+                                           th:name="${subject.name}"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#deleteModal">
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </th:block>
                             <caption>
                                 <div class="container">
                                     <div class="row">
