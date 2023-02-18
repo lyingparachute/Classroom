@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.Max;
@@ -36,9 +35,8 @@ public class SubjectDto {
     @PositiveOrZero
     @Max(value = 100, message = "{subject.hoursInSemester.max}")
     private int hoursInSemester;
-    @Max(60)
-    @Min(0)
-    @Column(name = "ects")
+    @Max(value = 60, message = "{subject.ects.max}")
+    @Min(value = 5, message = "{subject.ects.min}")
     private int ectsPoints;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

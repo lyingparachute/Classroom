@@ -6,7 +6,7 @@
             <input class="form-control"
                    data-mdb-showcounter="true"
                    th:field="*{name}"
-                   maxlength="60" th:classappend="${#fields.hasErrors('name')} ? is-invalid"
+                   maxlength="30" th:classappend="${#fields.hasErrors('name')} ? is-invalid"
                    type="text"/>
             <div class="form-helper"></div>
             <div class="invalid-tooltip">
@@ -18,11 +18,10 @@
     <div class="mb-4" th:classappend="${#fields.hasErrors('description')} ? mb-5">
         <h4 th:text="#{subject.description}"></h4>
         <div class="form-outline">
-            <input class="form-control"
-                   data-mdb-showcounter="true"
-                   th:field="*{description}"
-                   maxlength="60" th:classappend="${#fields.hasErrors('description')} ? is-invalid"
-                   type="text"/>
+            <textarea class="form-control"
+                      data-mdb-showcounter="true"
+                      th:field="*{description}"
+                      maxlength="500" th:classappend="${#fields.hasErrors('description')} ? is-invalid"></textarea>
             <div class="form-helper"></div>
             <div class="invalid-tooltip">
                 <span class="mr-1" th:each="error: ${#fields.errors('description')}" th:text="${error}"></span>
@@ -34,7 +33,6 @@
         <h4 th:text="#{subject.semester}"></h4>
         <select class="form-select"
                 th:field="*{semester}">
-            <option th:value="0"></option>
             <option th:each="fieldOpt : ${T(com.example.classroom.enums.Semester).values()}"
                     th:text="${fieldOpt.fullName}"
                     th:value="${fieldOpt}">
@@ -78,7 +76,7 @@
             <select class="form-select" id="field_of_study" th:field="*{fieldOfStudy}">
                 <option th:value="0"></option>
                 <option th:each="fieldOpt : ${fieldsOfStudy}"
-                        th:text="${fieldOpt} + ', ' +
+                        th:text="${fieldOpt.name} + ', ' +
                         ${fieldOpt.levelOfEducation.value} + ', ' +
                         ${fieldOpt.mode.value}"
                         th:value="${fieldOpt.id}">
@@ -88,10 +86,7 @@
     </div>
     <hr>
     <div class="row mb-4">
-        <label class="col-form-label col-sm-4"
-               for="teachers_list">
-            <span th:text="#{subject.teachers.list}"></span>
-        </label>
+        <h4 th:text="#{subject.teachers.list}"></h4>
         <div class="col-sm text-left">
             <th:block th:each="fieldOpt : ${teachers}">
                 <div>
