@@ -105,9 +105,17 @@
                                     <td th:text="${subject.name}"></td>
                                     <td th:text="${subject.description}"></td>
                                     <td th:text="${subject.hoursInSemester}"></td>
-                                    <td th:text="${subject.fieldOfStudy}"></td>
+                                    <td>
+                                        <a class="text-body mb-1" th:unless="${subject.fieldOfStudy == null}"
+                                           th:href="@{/dashboard/fields-of-study/{id}(id=${subject.fieldOfStudy.id})}">
+                                            <span th:text="${subject.fieldOfStudy}"></span>
+                                            <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
+                                        </a>
+                                        <p class="text-muted mb-1" th:if="${subject.fieldOfStudy == null}"
+                                           th:text="#{subject.no.fieldOfStudy}">
+                                        </p>
+                                    </td>
                                     <td th:text="${subject.teachers.size()}">
-
                                     </td>
                                     <td>
                                         <div class="container">
