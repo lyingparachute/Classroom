@@ -411,38 +411,46 @@ class FieldOfStudyServiceTest {
         }
     }
 
-    @Test
-    void fetchAllSubjectsFromFieldOfStudyGroupedBySemesters_shouldReturnMapOfSemesters_andSubjectsList() {
-        //given
-        Long id = 1L;
-        Subject subject1 = initData.createSubjectOne(null, List.of());
-        Subject subject2 = initData.createSubjectTwo(null, List.of());
-        List<Subject> subjects = List.of(subject1, subject2);
-        //when
-        when(repository.findAllSubjectsFromFieldOfStudy(anyLong())).thenReturn(subjects);
-        Map<Semester, List<Subject>> actual = service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id);
-        //then
-        verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
-        verifyNoMoreInteractions(repository);
-        assertThat(actual).as("Check actual Map content")
-                .containsValues(List.of(subject1), List.of(subject2));
+    @Nested
+    class FetchAllSubjectsFromFieldOfStudyGroupedBySemesters {
+        @Test
+        void returnsMapOfSemestersAndSubjectsList_givenId() {
+            //given
+            Long id = 1L;
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectFour(null, List.of());
+            List<Subject> subjects = List.of(subject1, subject2, subject3);
+            //when
+            when(repository.findAllSubjectsFromFieldOfStudy(anyLong())).thenReturn(subjects);
+            Map<Semester, List<Subject>> actual = service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id);
+            //then
+            verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check actual Map content")
+                    .containsValues(List.of(subject1, subject3), List.of(subject2));
+        }
     }
 
-    @Test
-    void calculateHoursInEachSemesterFromFieldOfStudy_shouldReturnMapOfSemestersAndIntegers() {
-        //given
-        Long id = 1L;
-        Subject subject1 = initData.createSubjectOne(null, List.of());
-        Subject subject2 = initData.createSubjectTwo(null, List.of());
-        List<Subject> subjects = List.of(subject1, subject2);
-        //when
-        when(repository.findAllSubjectsFromFieldOfStudy(anyLong())).thenReturn(subjects);
-        Map<Semester, Integer> actual = service.calculateHoursInEachSemesterFromFieldOfStudy(id);
-        //then
-        verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
-        verifyNoMoreInteractions(repository);
-        assertThat(actual).as("Check actual Map content")
-                .containsValues(subject1.getHoursInSemester(), subject2.getHoursInSemester());
+    @Nested
+    class CalculateHoursInEachSemesterFromFieldOfStudy {
+        @Test
+        void returnsMapOfSemestersAndIntegers_givenId() {
+            //given
+            Long id = 1L;
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectFour(null, List.of());
+            List<Subject> subjects = List.of(subject1, subject2, subject3);
+            //when
+            when(repository.findAllSubjectsFromFieldOfStudy(anyLong())).thenReturn(subjects);
+            Map<Semester, Integer> actual = service.calculateHoursInEachSemesterFromFieldOfStudy(id);
+            //then
+            verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check actual Map content")
+                    .containsValues(subject1.getHoursInSemester() + subject3.getHoursInSemester(), subject2.getHoursInSemester());
+        }
     }
 
     @Nested
@@ -482,9 +490,28 @@ class FieldOfStudyServiceTest {
             verify(repository).findById(anyLong());
             verifyNoMoreInteractions(repository);
             assertThat(actual).isEmpty();
-
         }
     }
 
+    @Nested
+    class CalculateEctsPointsForEachSemester {
+        @Test
+        void returnsMapOfSemesterAndNumberOfEctsPoints_givenId() {
+            //given
+            Long id = 1L;
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectFour(null, List.of());
+            List<Subject> subjects = List.of(subject1, subject2, subject3);
+            //when
+            when(repository.findAllSubjectsFromFieldOfStudy(anyLong())).thenReturn(subjects);
+            Map<Semester, Integer> actual = service.calculateEctsPointsForEachSemester(id);
+            //then
+            verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check actual Map content")
+                    .containsValues(subject1.getEctsPoints() + subject3.getEctsPoints(), subject2.getEctsPoints());
+        }
+    }
 
 }
