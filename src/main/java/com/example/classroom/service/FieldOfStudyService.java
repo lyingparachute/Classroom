@@ -34,6 +34,28 @@ public class FieldOfStudyService {
         return mapper.map(saved, FieldOfStudyDto.class);
     }
 
+    @Transactional
+    public FieldOfStudyDto update(FieldOfStudyDto dto) {
+        FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
+        removeDepartment(fieldOfStudy);
+        mapper.map(dto, fieldOfStudy);
+        addReferencingObjects(fieldOfStudy);
+        FieldOfStudy saved = repository.save(fieldOfStudy);
+        return mapper.map(saved, FieldOfStudyDto.class);
+    }
+
+    @Transactional
+    public FieldOfStudyDto updateSubjects(FieldOfStudyDto dto) {
+        FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
+        removeSubjects(fieldOfStudy);
+        mapper.map(dto, fieldOfStudy);
+        addReferencingObjects(fieldOfStudy);
+        FieldOfStudy saved = repository.save(fieldOfStudy);
+        return mapper.map(saved, FieldOfStudyDto.class);
+    }
+
     public List<FieldOfStudyDto> fetchAll() {
         List<FieldOfStudy> all = repository.findAll();
         return all.stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).toList();
@@ -89,34 +111,12 @@ public class FieldOfStudyService {
         return List.of();
     }
 
-    @Transactional
-    public FieldOfStudyDto update(FieldOfStudyDto dto) {
-        FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
-        removeDepartment(fieldOfStudy);
-        mapper.map(dto, fieldOfStudy);
-        addReferencingObjects(fieldOfStudy);
-        FieldOfStudy saved = repository.save(fieldOfStudy);
-        return mapper.map(saved, FieldOfStudyDto.class);
-    }
-
-    @Transactional
-    public FieldOfStudyDto updateSubjects(FieldOfStudyDto dto) {
-        FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
-        removeSubjects(fieldOfStudy);
-        mapper.map(dto, fieldOfStudy);
-        addReferencingObjects(fieldOfStudy);
-        FieldOfStudy saved = repository.save(fieldOfStudy);
-        return mapper.map(saved, FieldOfStudyDto.class);
-    }
-
     public Map<Semester, Integer> calculateEctsPointsForEachSemester(Long id) {
-        Map<Semester, Integer> resultMap = new EnumMap<>(Semester.class);
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(id);
-        Arrays.stream(Semester.values())
-                .forEach(semester -> resultMap.put(semester, getSumOfEctsPointsForSemester(subjects, semester)));
-        return resultMap;
+        return Arrays.stream(Semester.values()).collect(Collectors.toMap(
+                s -> s,
+                s -> getSumOfEctsPointsForSemester(subjects, s)
+        ));
     }
 
     private Integer getSumOfEctsPointsForSemester(List<Subject> subjects, Semester semester) {
@@ -129,15 +129,6 @@ public class FieldOfStudyService {
         return calculateEctsPointsForEachSemester(id).values()
                 .stream().mapToInt(Integer::intValue)
                 .sum();
-    }
-
-
-    private void addReferencingObjects(FieldOfStudy fieldOfStudy) {
-        Set<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
-        Set<Student> students = new HashSet<>(fieldOfStudy.getStudents());
-        fieldOfStudy.setDepartment(fieldOfStudy.getDepartment());
-        subjects.forEach(fieldOfStudy::addSubject);
-        students.forEach(fieldOfStudy::addStudent);
     }
 
     public int getNumberOfSemesters(Long id) {
@@ -194,6 +185,14 @@ public class FieldOfStudyService {
                         .filter(fieldOfStudy -> Objects.equals(fieldOfStudy.getDepartment().getId(), dto.getId()))
                         .map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
         ).toList();
+    }
+
+    private void addReferencingObjects(FieldOfStudy fieldOfStudy) {
+        Set<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
+        Set<Student> students = new HashSet<>(fieldOfStudy.getStudents());
+        fieldOfStudy.setDepartment(fieldOfStudy.getDepartment());
+        subjects.forEach(fieldOfStudy::addSubject);
+        students.forEach(fieldOfStudy::addStudent);
     }
 
     private void removeReferencingObjects(FieldOfStudy fieldOfStudy) {
