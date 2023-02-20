@@ -8,14 +8,13 @@
                    data-mdb-showcounter="true"
                    th:field="*{name}"
                    id="name-input"
-                   3 maxlength="50" th:classappend="${#fields.hasErrors('name')} ? is-invalid"
+                   maxlength="50" th:classappend="${#fields.hasErrors('name')} ? is-invalid"
                    type="text"/>
             <div class="form-helper"></div>
             <div class="invalid-tooltip">
                 <span class="mr-1" th:each="error: ${#fields.errors('name')}" th:text="${error}"></span>
             </div>
         </div>
-
     </div>
     <hr>
     <div class="mb-4" th:classappend="${#fields.hasErrors('address')} ? mb-5">
@@ -23,6 +22,7 @@
         <div class="form-outline">
             <input class="form-control"
                    th:field="*{address}"
+                   th:classappend="${#fields.hasErrors('address')} ? is-invalid"
                    type="text"/>
             <div class="invalid-tooltip">
                 <span class="mr-1" th:each="error: ${#fields.errors('address')}" th:text="${error}"></span>
@@ -146,7 +146,7 @@
             <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
         </a>
         <div th:unless="${department.dean != null}">
-            <span th:text="#{department.dean.null}"></span>
+            <span th:text="#{department.dean.isNull}"></span>
             <div th:replace="department/buttons :: btn-edit"></div>
         </div>
     </div>

@@ -1,84 +1,80 @@
 <!-- ======= Form for Subject ======= -->
 <div th:fragment="subject-form">
-    <input hidden type="text" id="id_input_id" th:field="*{id}">
-    <div class="row mb-4">
-        <label class="col-form-label col-sm-4"
-               for="first_name">
-            <span th:text="#{subject.name}"></span>
-        </label>
-        <div class="col-sm">
+    <div class="mb-4" th:classappend="${#fields.hasErrors('name')} ? mb-5">
+        <h4 th:text="#{subject.name}"></h4>
+        <div class="form-outline">
             <input class="form-control"
-                   type="text"
-                   id="first_name"
-                   th:field="*{name}"/>
-        </div>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('name')}"
-             th:errors="*{name}"></div>
-    </div>
-    <div class="row mb-4">
-        <label class="col-form-label col-sm-4"
-               for="last_name">
-            <span th:text="#{subject.description}"></span>
-        </label>
-        <div class="col-sm">
-            <input class="form-control"
-                   type="text"
-                   id="last_name"
-                   th:field="*{description}"/>
-        </div>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('description')}"
-             th:errors="*{description}"></div>
-    </div>
-
-    <div class="row mb-4">
-        <label class="col-sm-4 col-form-label"
-               for="semester">
-            <span th:text="#{subject.semester}"></span>
-        </label>
-        <div class="col-sm">
-            <select class="form-select" id="semester" th:field="*{semester}">
-                <option th:each="fieldOpt : ${T(com.example.classroom.enums.Semester).values()}"
-                        th:text="${fieldOpt.fullName}"
-                        th:value="${fieldOpt}">
-                </option>
-            </select>
+                   data-mdb-showcounter="true"
+                   th:field="*{name}"
+                   maxlength="30" th:classappend="${#fields.hasErrors('name')} ? is-invalid"
+                   type="text"/>
+            <div class="form-helper"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('name')}" th:text="${error}"></span>
+            </div>
         </div>
     </div>
-    <div class="row mb-4">
-        <label class="col-sm-4 col-form-label"
-               for="age">
-            <span th:text="#{subject.hoursInSemester}"></span>
-        </label>
-        <div class="col-sm">
-            <input class="form-control"
-                   type="number" id="age"
-                   th:field="*{hoursInSemester}"/>
-        </div>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('hoursInSemester')}"
-             th:errors="*{hoursInSemester}">
+    <hr>
+    <div class="mb-4" th:classappend="${#fields.hasErrors('description')} ? mb-5">
+        <h4 th:text="#{subject.description}"></h4>
+        <div class="form-outline">
+            <textarea class="form-control"
+                      data-mdb-showcounter="true"
+                      th:field="*{description}"
+                      maxlength="500" th:classappend="${#fields.hasErrors('description')} ? is-invalid"></textarea>
+            <div class="form-helper"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('description')}" th:text="${error}"></span>
+            </div>
         </div>
     </div>
-    <div class="row mb-4">
-        <label class="col-sm-4 col-form-label"
-               for="ectsPoints">
-            <span th:text="#{subject.ects}"></span>
-        </label>
-        <div class="col-sm">
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{subject.semester}"></h4>
+        <select class="form-select"
+                th:field="*{semester}">
+            <option th:each="fieldOpt : ${T(com.example.classroom.enums.Semester).values()}"
+                    th:text="${fieldOpt.fullName}"
+                    th:value="${fieldOpt}">
+            </option>
+        </select>
+    </div>
+    <hr>
+    <div class="mb-4" th:classappend="${#fields.hasErrors('hoursInSemester')} ? mb-5">
+        <h4 th:text="#{subject.hoursInSemester}"></h4>
+        <div class="form-outline">
             <input class="form-control"
-                   id="ectsPoints" th:field="*{ectsPoints}"
+                   th:field="*{hoursInSemester}"
+                   th:classappend="${#fields.hasErrors('hoursInSemester')} ? is-invalid"
                    type="number"/>
-        </div>
-        <div class="alert alert-danger" th:errors="*{ectsPoints}"
-             th:if="${#fields.hasErrors('ectsPoints')}">
+            <div class="form-helper" th:text="#{input.helper.hoursInSemester}"
+                 th:unless="${#fields.hasErrors('hoursInSemester')}"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('hoursInSemester')}" th:text="${error}"></span>
+            </div>
         </div>
     </div>
+    <hr>
+    <div class="mb-4" th:classappend="${#fields.hasErrors('ectsPoints')} ? mb-5">
+        <h4 th:text="#{subject.ects}"></h4>
+        <div class="form-outline">
+            <input class="form-control"
+                   th:field="*{ectsPoints}"
+                   th:classappend="${#fields.hasErrors('ectsPoints')} ? is-invalid"
+                   type="number"/>
+            <div class="form-helper" th:text="#{input.helper.ects}"
+                 th:unless="${#fields.hasErrors('ectsPoints')}"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('ectsPoints')}" th:text="${error}"></span>
+            </div>
+        </div>
+    </div>
+    <hr>
     <div class="row mb-4">
-        <label class="col-form-label col-sm-4"
-               for="field_of_study">
-            <span th:text="#{student.fieldOfStudy}"></span>
-        </label>
+        <h4 th:text="#{subject.fieldOfStudy}"></h4>
         <div class="col-sm">
             <select class="form-select" id="field_of_study" th:field="*{fieldOfStudy}">
+                <option th:value="0"></option>
                 <option th:each="fieldOpt : ${fieldsOfStudy}"
                         th:text="${fieldOpt.name} + ', ' +
                         ${fieldOpt.levelOfEducation.value} + ', ' +
@@ -88,12 +84,9 @@
             </select>
         </div>
     </div>
-
+    <hr>
     <div class="row mb-4">
-        <label class="col-form-label col-sm-4"
-               for="teachers_list">
-            <span th:text="#{subject.teachers.list}"></span>
-        </label>
+        <h4 th:text="#{subject.teachers.list}"></h4>
         <div class="col-sm text-left">
             <th:block th:each="fieldOpt : ${teachers}">
                 <div>
@@ -104,8 +97,6 @@
             </th:block>
         </div>
     </div>
-    <!-- ======= Buttons ======= -->
-    <div th:replace="fragments/buttons :: #subjectCancelSubmitBtn"></div>
 </div>
 
 <!-- ======= View Subject card body ======= -->

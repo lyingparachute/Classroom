@@ -1,17 +1,16 @@
 package com.example.classroom.controller;
 
 import com.example.classroom.dto.StudentDto;
-import com.example.classroom.entity.Student;
 import com.example.classroom.service.FieldOfStudyService;
 import com.example.classroom.service.StudentService;
 import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -21,10 +20,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentService studentService;
+    private final StudentService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
-    private final ModelMapper mapper;
+    public static final String REDIRECT_DASHBOARD_STUDENTS = "redirect:/dashboard/students";
+
 
     @GetMapping
     public String getPaginatedStudents(@RequestParam(required = false) String name,
@@ -37,9 +37,9 @@ public class StudentController {
 
         Page<StudentDto> pageStudents;
         if (name == null) {
-            pageStudents = studentService.fetchAllPaginated(page, size, sortField, sortDir);
+            pageStudents = service.fetchAllPaginated(page, size, sortField, sortDir);
         } else {
-            pageStudents = studentService.findByFirstOrLastNamePaginated(page, size, sortField, sortDir, name);
+            pageStudents = service.findByFirstOrLastNamePaginated(page, size, sortField, sortDir, name);
             model.addAttribute("name", name);
         }
         List<StudentDto> students = pageStudents.getContent();
@@ -72,62 +72,74 @@ public class StudentController {
 
     @GetMapping("{id}")
     public String getStudent(@PathVariable Long id, Model model) {
-        addAttributeStudentFetchedById(id, model);
-        return "student/student";
+        addAttributeStudentById(id, model);
+        return "student/student-view";
     }
 
     @GetMapping("new")
     public String getNewStudentForm(Model model) {
         model.addAttribute("student", new StudentDto());
         addAttributesTeachersAndFieldsOfStudy(model);
-        return "student/student-form";
+        return "student/student-create-form";
     }
 
     @PostMapping(value = "new")
-    public String createStudent(@Valid @ModelAttribute("student") Student student, BindingResult result, Model model) {
+    public String createStudent(@Valid @ModelAttribute("student") StudentDto dto,
+                                BindingResult result,
+                                RedirectAttributes redirectAttributes,
+                                Model model) {
         if (result.hasErrors()) {
             addAttributesTeachersAndFieldsOfStudy(model);
-            return "student/student-form";
+            return "student/student-create-form";
         }
-        studentService.create(mapper.map(student, StudentDto.class));
-        return "student/student-create-success";
-    }
-
-    @GetMapping("delete/{id}")
-    public String deleteStudent(@PathVariable Long id) {
-        studentService.remove(id);
-        return "redirect:/dashboard/students";
+        StudentDto saved = service.create(dto);
+        addFlashAttributeSuccess(redirectAttributes, saved);
+        redirectAttributes.addFlashAttribute("createSuccess", "saved");
+        return REDIRECT_DASHBOARD_STUDENTS;
     }
 
     @GetMapping("edit/{id}")
     public String editStudentForm(@PathVariable Long id, Model model) {
-        addAttributeStudentFetchedById(id, model);
+        addAttributeStudentById(id, model);
         addAttributesTeachersAndFieldsOfStudy(model);
         return "student/student-edit-form";
     }
 
     @PostMapping(value = "update")
-    public String editStudent(@Valid @ModelAttribute("student") Student student, BindingResult result, Model model) {
+    public String editStudent(@Valid @ModelAttribute("student") StudentDto dto,
+                              BindingResult result,
+                              RedirectAttributes redirectAttributes,
+                              Model model) {
         if (result.hasErrors()) {
             addAttributesTeachersAndFieldsOfStudy(model);
             return "student/student-edit-form";
         }
 
-        StudentDto updated = studentService.update(mapper.map(student, StudentDto.class));
-        if (updated == null) {
-            return "error/404";
-        }
-        model.addAttribute("student", updated);
-
-        return "student/student-edit-success";
+        StudentDto updated = service.update(dto);
+        addFlashAttributeSuccess(redirectAttributes, updated);
+        redirectAttributes.addFlashAttribute("updateSuccess", "updated");
+        return REDIRECT_DASHBOARD_STUDENTS;
     }
 
-    private void addAttributeStudentFetchedById(Long id, Model model) {
-        model.addAttribute("student", studentService.fetchById(id));
+    @GetMapping("delete/{id}")
+    public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        StudentDto dto = service.fetchById(id);
+        service.remove(id);
+        addFlashAttributeSuccess(redirectAttributes, dto);
+        redirectAttributes.addFlashAttribute("deleteSuccess", "deleted");
+        return REDIRECT_DASHBOARD_STUDENTS;
+    }
+
+    private void addAttributeStudentById(Long id, Model model) {
+        model.addAttribute("student", service.fetchById(id));
     }
 
     private void addAttributesTeachersAndFieldsOfStudy(Model model) {
         model.addAttribute("teachers", teacherService.fetchAll());
         model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAll());
+    }
+
+    private void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, StudentDto dto) {
+        redirectAttributes.addFlashAttribute("success", dto);
     }
 }

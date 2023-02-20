@@ -4,6 +4,7 @@
     <header th:replace="fragments/header :: header"></header>
 </head>
 <body>
+
 <!-- ======= Navigation ======= -->
 <div th:replace="dashboard/fragments/navigation :: #navigation"></div>
 
@@ -11,16 +12,24 @@
     <div class="container pt-4">
         <section class="mb-4">
             <div id="itemCard" class="card">
-                <div class="card-header py-3 bg-success bg-gradient text-dark bg-opacity-25">
+                <div class="card-header py-4 title-bar">
                     <div class="page-title"
-                         th:text="#{student.edit.success} + ' ' + ${student.id}">
+                         th:text="#{student.view} + ' ' + ${student.id}">
                     </div>
                 </div>
-                <div class="card-body mx-4">
+                <div class="card-body">
+                    <!-- ======= Buttons ======= -->
+                    <div class="d-flex mb-4">
+                        <div class="p-1">
+                            <div th:replace="student/buttons :: btn-go-back-to-students"></div>
+                        </div>
+                        <div class="p-1 ms-auto">
+                            <div th:replace="student/buttons :: btn-edit"></div>
+                            <div th:replace="student/buttons :: btn-delete"></div>
+                        </div>
+                    </div>
                     <!-- ======= Student Details ======= -->
                     <div th:replace="student/elements :: view-student"></div>
-                    <!-- ======= Buttons ======= -->
-                    <div th:replace="fragments/buttons :: #studentGoBackBtn"></div>
                 </div>
             </div>
         </section>

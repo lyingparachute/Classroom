@@ -21,7 +21,10 @@
                           th:object="${teacher}"
                           th:action="@{/dashboard/teachers/update}"
                           method="post">
+                        <input hidden id="id_input_id" th:field="*{id}" type="text">
                         <div th:replace="teacher/elements :: teacher-form"></div>
+                        <!-- ======= Buttons ======= -->
+                        <div th:replace="teacher/buttons :: EDITcancelSubmitBtn"></div>
                     </form>
                 </div>
             </div>

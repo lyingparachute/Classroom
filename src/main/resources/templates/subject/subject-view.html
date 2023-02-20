@@ -4,24 +4,32 @@
     <header th:replace="fragments/header :: header"></header>
 </head>
 <body>
+
 <!-- ======= Navigation ======= -->
 <div th:replace="dashboard/fragments/navigation :: #navigation"></div>
-
 
 <main>
     <div class="container pt-4">
         <section class="mb-4">
             <div id="itemCard" class="card">
-                <div class="card-header py-3 bg-success bg-gradient text-dark bg-opacity-25">
+                <div class="card-header py-4 title-bar">
                     <div class="page-title"
-                         th:text="#{subject.edit.success} + ${subject.id}">
+                         th:text="#{subject.view} + ' ' + ${subject.id}">
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body mx-4">
+                    <!-- ======= Buttons ======= -->
+                    <div class="d-flex mb-4">
+                        <div class="p-1">
+                            <div th:replace="subject/buttons :: btn-go-back-to-subjects"></div>
+                        </div>
+                        <div class="p-1 ms-auto">
+                            <div th:replace="subject/buttons :: btn-edit"></div>
+                            <div th:replace="subject/buttons :: btn-delete"></div>
+                        </div>
+                    </div>
                     <!-- ======= Subject Details ======= -->
                     <div th:replace="subject/elements :: view-subject"></div>
-                    <!-- ======= Buttons ======= -->
-                    <div th:replace="fragments/buttons :: subjectGoBackBtn"></div>
                 </div>
             </div>
         </section>

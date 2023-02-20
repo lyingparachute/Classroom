@@ -11,17 +11,20 @@
     <div class="container pt-4">
         <section class="mb-4">
             <div id="itemCard" class="card">
-                <div class="card-header py-3 bg-success bg-gradient text-dark bg-opacity-25">
+                <div class="card-header py-4 title-bar">
                     <div class="page-title"
-                         th:text="#{teacher.add.success}">
+                         th:text="#{subjects.new}">
                     </div>
                 </div>
-                <div class="card-body">
-                    <!-- ======= Student Details ======= -->
-                    <div th:replace="teacher/elements :: view-teacher"></div>
-                    <!-- ======= Buttons ======= -->
-                    <div th:replace="fragments/buttons :: #teacherGoBackBtn"></div>
-
+                <div class="card-body mx-4">
+                    <form class="form-group needs-validation"
+                          th:object="${subject}"
+                          th:action="@{/dashboard/subjects/new}"
+                          th:method="post">
+                        <div th:replace="subject/elements :: subject-form"></div>
+                        <!-- ======= Buttons ======= -->
+                        <div th:replace="subject/buttons :: CREATEcancelSubmitBtn"></div>
+                    </form>
                 </div>
             </div>
         </section>

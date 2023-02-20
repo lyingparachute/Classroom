@@ -2,17 +2,16 @@ package com.example.classroom.controller;
 
 
 import com.example.classroom.dto.SubjectDto;
-import com.example.classroom.entity.Subject;
 import com.example.classroom.service.FieldOfStudyService;
 import com.example.classroom.service.SubjectService;
 import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -22,10 +21,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectController {
 
-    private final SubjectService subjectService;
+    private final SubjectService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
-    private final ModelMapper mapper;
+    public static final String REDIRECT_DASHBOARD_SUBJECTS = "redirect:/dashboard/subjects";
+    public static final String SUBJECT_EDIT_FORM = "subject/subject-edit-form";
 
     @GetMapping
     public String getSubjects(@RequestParam(required = false) String name,
@@ -36,9 +36,9 @@ public class SubjectController {
                               Model model) {
         Page<SubjectDto> pageSubjects;
         if (name == null) {
-            pageSubjects = subjectService.fetchAllPaginated(page, size, sortField, sortDir);
+            pageSubjects = service.fetchAllPaginated(page, size, sortField, sortDir);
         } else {
-            pageSubjects = subjectService.findByNamePaginated(page, size, sortField, sortDir, name);
+            pageSubjects = service.findByNamePaginated(page, size, sortField, sortDir, name);
             model.addAttribute("name", name);
         }
         List<SubjectDto> subjects = pageSubjects.getContent();
@@ -66,74 +66,78 @@ public class SubjectController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
         model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
-        return "subject/subjects";
+        return "subject/all-subjects";
     }
 
     @GetMapping("{id}")
     public String getSubject(@PathVariable Long id, Model model) {
-        addAttributeSubjectFetchById(id, model);
-        return "subject/subject";
+        addAttributeSubjectById(id, model);
+        return "subject/subject-view";
     }
 
     @GetMapping("new")
     public String getNewSubjectForm(Model model) {
         model.addAttribute("subject", new SubjectDto());
-        addAttributeTeachers(model);
-        addAttributeFieldsOfStudy(model);
-        return "subject/subject-form";
+        addAttributeTeachersAndFieldsOfStudy(model);
+        return "subject/subject-create-form";
     }
 
     @PostMapping(value = "new")
-    public String createSubject(@Valid @ModelAttribute("subject") Subject subject, BindingResult result, Model model) {
+    public String createSubject(@Valid @ModelAttribute("subject") SubjectDto dto,
+                                BindingResult result,
+                                RedirectAttributes redirectAttributes,
+                                Model model) {
         if (result.hasErrors()) {
-            addAttributeTeachers(model);
-            addAttributeFieldsOfStudy(model);
-            return "subject/subject-form";
+            addAttributeTeachersAndFieldsOfStudy(model);
+            return "subject/subject-create-form";
         }
-        subjectService.create(mapper.map(subject, SubjectDto.class));
-        addAttributeSubjectFetchById(subject.getId(), model);
-        return "subject/subject-create-success";
-    }
-
-    @GetMapping("delete/{id}")
-    public String deleteSubject(@PathVariable Long id) {
-        subjectService.remove(id);
-        return "redirect:/dashboard/subjects";
+        SubjectDto saved = service.create(dto);
+        addFlashAttributeSuccess(redirectAttributes, saved);
+        redirectAttributes.addFlashAttribute("createSuccess", "saved");
+        return REDIRECT_DASHBOARD_SUBJECTS;
     }
 
     @GetMapping("edit/{id}")
     public String editSubjectForm(@PathVariable Long id, Model model) {
-        addAttributeSubjectFetchById(id, model);
-        addAttributeTeachers(model);
-        addAttributeFieldsOfStudy(model);
-        return "subject/subject-edit-form";
+        addAttributeSubjectById(id, model);
+        addAttributeTeachersAndFieldsOfStudy(model);
+        return SUBJECT_EDIT_FORM;
     }
 
     @PostMapping(value = "update")
-    public String editSubject(@Valid @ModelAttribute("subject") Subject subject, BindingResult result, Model model) {
+    public String editSubject(@Valid @ModelAttribute("subject") SubjectDto dto,
+                              BindingResult result,
+                              RedirectAttributes redirectAttributes,
+                              Model model) {
         if (result.hasErrors()) {
-            addAttributeTeachers(model);
-            return "subject/subject-edit-form";
+            addAttributeTeachersAndFieldsOfStudy(model);
+            return SUBJECT_EDIT_FORM;
         }
-
-        SubjectDto updated = subjectService.update(mapper.map(subject, SubjectDto.class));
-        if (updated == null) {
-            return "error/404";
-        }
-        model.addAttribute("subject", updated);
-
-        return "subject/subject-edit-success";
+        SubjectDto updated = service.update(dto);
+        addFlashAttributeSuccess(redirectAttributes, updated);
+        redirectAttributes.addFlashAttribute("updateSuccess", "updated");
+        return REDIRECT_DASHBOARD_SUBJECTS;
     }
 
-    private void addAttributeSubjectFetchById(Long id, Model model) {
-        model.addAttribute("subject", subjectService.fetchById(id));
+    @GetMapping("delete/{id}")
+    public String deleteSubject(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        SubjectDto dto = service.fetchById(id);
+        service.remove(id);
+        addFlashAttributeSuccess(redirectAttributes, dto);
+        redirectAttributes.addFlashAttribute("deleteSuccess", "deleted");
+        return REDIRECT_DASHBOARD_SUBJECTS;
     }
 
-    private void addAttributeTeachers(Model model) {
+    private void addAttributeSubjectById(Long id, Model model) {
+        model.addAttribute("subject", service.fetchById(id));
+    }
+
+    private void addAttributeTeachersAndFieldsOfStudy(Model model) {
         model.addAttribute("teachers", teacherService.fetchAll());
+        model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAll());
     }
 
-    private void addAttributeFieldsOfStudy(Model model) {
-        model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAll());
+    private void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, SubjectDto dto) {
+        redirectAttributes.addFlashAttribute("success", dto);
     }
 }
