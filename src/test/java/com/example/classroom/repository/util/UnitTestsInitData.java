@@ -6,10 +6,7 @@ import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
 
-import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class UnitTestsInitData {
 
@@ -53,7 +50,7 @@ public class UnitTestsInitData {
     }
 
     // *** Create Teachers *** //
-    @Transactional
+
     public Teacher createTeacherOne(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setId(1L);
@@ -65,7 +62,7 @@ public class UnitTestsInitData {
         return teacher;
     }
 
-    @Transactional
+
     public Teacher createTeacherTwo(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setId(2L);
@@ -77,7 +74,7 @@ public class UnitTestsInitData {
         return teacher;
     }
 
-    @Transactional
+
     public Teacher createTeacherThree(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setId(3L);
@@ -96,7 +93,7 @@ public class UnitTestsInitData {
     }
 
     // *** Create Subjects *** //
-    @Transactional
+
     public Subject createSubjectOne(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setId(1L);
@@ -104,11 +101,12 @@ public class UnitTestsInitData {
         subject.setDescription("Calculating integrals");
         subject.setSemester(Semester.FIFTH);
         subject.setHoursInSemester(100);
+        subject.setEctsPoints(20);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         return subject;
     }
 
-    @Transactional
+
     public Subject createSubjectTwo(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setId(2L);
@@ -116,11 +114,12 @@ public class UnitTestsInitData {
         subject.setDescription("Painting");
         subject.setSemester(Semester.SECOND);
         subject.setHoursInSemester(120);
+        subject.setEctsPoints(15);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         return subject;
     }
 
-    @Transactional
+
     public Subject createSubjectThree(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setId(3L);
@@ -128,18 +127,19 @@ public class UnitTestsInitData {
         subject.setDescription("General Science");
         subject.setSemester(Semester.FIRST);
         subject.setHoursInSemester(150);
+        subject.setEctsPoints(10);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         return subject;
     }
 
-    @Transactional
     public Subject createSubjectFour(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setId(4L);
-        subject.setName("Computer Science");
-        subject.setDescription("Learning Java and Spring");
-        subject.setSemester(Semester.SIXTH);
+        subject.setName("Some Subject");
+        subject.setDescription("No desc");
+        subject.setSemester(Semester.FIFTH);
         subject.setHoursInSemester(360);
+        subject.setEctsPoints(5);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         return subject;
     }
@@ -150,7 +150,6 @@ public class UnitTestsInitData {
     }
 
     // *** Create Fields Of Study *** //
-    @Transactional
     public FieldOfStudy createFieldOfStudyOne(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setId(1L);
@@ -162,7 +161,6 @@ public class UnitTestsInitData {
         return fieldOfStudy;
     }
 
-    @Transactional
     public FieldOfStudy createFieldOfStudyTwo(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setId(2L);
@@ -174,7 +172,6 @@ public class UnitTestsInitData {
         return fieldOfStudy;
     }
 
-    @Transactional
     public FieldOfStudy createFieldOfStudyThree(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setId(3L);
@@ -185,23 +182,13 @@ public class UnitTestsInitData {
         addReferencingObjectsToFieldOfStudy(department, subjects, students, fieldOfStudy);
         return fieldOfStudy;
     }
-
     private void addReferencingObjectsToFieldOfStudy(Department department, List<Subject> subjects, List<Student> students, FieldOfStudy fieldOfStudy) {
         fieldOfStudy.setDepartment(department);
         subjects.forEach(fieldOfStudy::addSubject);
         students.forEach(fieldOfStudy::addStudent);
     }
 
-    private void removeReferencingObjectsFromFieldOfStudy(FieldOfStudy fieldOfStudy) {
-        Set<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
-        Set<Student> students = new HashSet<>(fieldOfStudy.getStudents());
-        fieldOfStudy.setDepartment(null);
-        subjects.forEach(fieldOfStudy::removeSubject);
-        students.forEach(fieldOfStudy::removeStudent);
-    }
-
     // *** Create Departments *** //
-    @Transactional
     public Department createDepartmentOne(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
         Department department = new Department();
         department.setId(1L);
@@ -212,7 +199,6 @@ public class UnitTestsInitData {
         return department;
     }
 
-    @Transactional
     public Department createDepartmentTwo(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
         Department department = new Department();
         department.setId(2L);
@@ -223,7 +209,6 @@ public class UnitTestsInitData {
         return department;
     }
 
-    @Transactional
     public Department createDepartmentThree(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
         Department department = new Department();
         department.setId(3L);
