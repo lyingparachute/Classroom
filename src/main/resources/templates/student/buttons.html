@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!-- ======= Go back to student with id button ======= -->
+<a class="btn btn-primary btn-rounded"
+   th:fragment="btn-go-back-to-teacher"
+   th:href="@{/dashboard/students/{id}(id=${student.id})}">
+    <i class="mr-1 fas fa-arrow-left-long "></i>
+    <span th:text="#{button.go.back}"></span>
+</a>
+
+<!-- ======= Go back to all student ======= -->
+<a class="btn btn-primary btn-rounded"
+   th:fragment="btn-go-back-to-students"
+   th:href="@{/dashboard/students}">
+    <i class="mr-1 fas fa-arrow-left-long "></i>
+    <span th:text="#{button.go.back}"></span>
+</a>
+
+<!-- ======= Edit student Button ======= -->
+<a class="btn btn-outline-primary btn-rounded"
+   th:fragment="btn-edit"
+   th:href="@{/dashboard/students/edit/{id}(id=${student.id})}">
+    <i class="fas fa-pen mr-1"></i>
+    <span th:text="#{button.edit}"></span>
+</a>
+
+<!-- ======= Delete student Button ======= -->
+<a class="btn btn-outline-danger btn-rounded delBtn"
+   th:fragment="btn-delete"
+   th:href="@{/dashboard/students/delete/{id}(id=${student.id})}">
+    <i class="fa fa-trash-can fa-lg mr-1"></i>
+    <span th:text="#{button.delete}"></span>
+</a>
+
+<!-- ======= Cancel Submit Button for CREATE method ======= -->
+<div class="row my-2 justify-content-end" id="cancelSubmitBtn" th:fragment="CREATEcancelSubmitBtn">
+    <div class="col-auto">
+        <a class="btn btn-secondary btn-rounded"
+           th:href="@{/dashboard/students}">
+            <i class="fa fa-times-circle mr-1"></i>
+            <span th:text="#{button.cancel}"></span>
+        </a>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary btn-rounded" name="add" type="submit">
+            <i class="fas fa-check mr-1"></i><span th:text="#{button.submit}"></span></button>
+    </div>
+</div>
+
+<!-- Cancel Submit Button for EDIT method -->
+<div class="row my-2 justify-content-end" th:fragment="EDITcancelSubmitBtn">
+    <div class="col-auto">
+        <a class="btn btn-secondary btn-rounded"
+           th:href="@{/dashboard/students/{id}(id=${student.id})}">
+            <i class="fa fa-times-circle mr-1"></i><span th:text="#{button.cancel}"></span></a>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary btn-rounded" name="add" type="submit">
+            <i class="fas fa-check mr-1"></i><span th:text="#{button.submit}"></span></button>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -22,6 +22,8 @@
                           th:action="@{/dashboard/students/update}"
                           method="post">
                         <div th:replace="student/elements :: student-form"></div>
+                        <!-- ======= Buttons ======= -->
+                        <div th:replace="student/buttons :: EDITcancelSubmitBtn"></div>
                     </form>
                 </div>
             </div>

@@ -17,11 +17,19 @@
                          th:text="#{student.view} + ' ' + ${student.id}">
                     </div>
                 </div>
-                <div class="card-body mx-4">
+                <div class="card-body">
+                    <!-- ======= Buttons ======= -->
+                    <div class="d-flex mb-4">
+                        <div class="p-1">
+                            <div th:replace="student/buttons :: btn-go-back-to-students"></div>
+                        </div>
+                        <div class="p-1 ms-auto">
+                            <div th:replace="student/buttons :: btn-edit"></div>
+                            <div th:replace="student/buttons :: btn-delete"></div>
+                        </div>
+                    </div>
                     <!-- ======= Student Details ======= -->
                     <div th:replace="student/elements :: view-student"></div>
-                    <!-- ======= Buttons ======= -->
-                    <div th:replace="fragments/buttons :: #studentEditDeleteBtn"></div>
                 </div>
             </div>
         </section>
