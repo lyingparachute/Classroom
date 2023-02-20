@@ -156,7 +156,7 @@ public class UnitTestsInitData {
         fieldOfStudy.setName("Inżynieria mechaniczno-medyczna");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.SECOND);
         fieldOfStudy.setMode(ModeOfStudy.FT);
-        fieldOfStudy.setTitle(AcademicTitle.MGR);
+        fieldOfStudy.setTitle(AcademicTitle.ENG);
         addReferencingObjectsToFieldOfStudy(department, subjects, students, fieldOfStudy);
         return fieldOfStudy;
     }

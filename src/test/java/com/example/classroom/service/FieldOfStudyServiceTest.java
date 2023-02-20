@@ -514,4 +514,73 @@ class FieldOfStudyServiceTest {
         }
     }
 
+    @Nested
+    class GetSumOfEctsPointsFromAllSemesters {
+        @Test
+        void returnsIntegerValueOfEctsPoints_givenId() {
+            //given
+            Long id = 1L;
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectFour(null, List.of());
+            List<Subject> subjects = List.of(subject1, subject2, subject3);
+            int expected = subject1.getEctsPoints() + subject3.getEctsPoints() + subject2.getEctsPoints();
+            //when
+            when(repository.findAllSubjectsFromFieldOfStudy(anyLong())).thenReturn(subjects);
+            Integer actual = service.getSumOfEctsPointsFromAllSemesters(id);
+            //then
+            verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check return value").isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class GetNumberOfSemesters {
+        @Test
+        void returnsSix_givenFieldOfStudyWithBachTitle() {
+            //given
+            int expected = 6;
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            int actual = service.getNumberOfSemesters(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check return value").isEqualTo(expected);
+        }
+
+        @Test
+        void returnsSeven_givenFieldOfStudyWithEngTitle() {
+            //given
+            int expected = 7;
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            int actual = service.getNumberOfSemesters(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check return value").isEqualTo(expected);
+        }
+
+        @Test
+        void returnsDefault_givenFieldOfStudyWithOtherTitle() {
+            //given
+            int expected = 3;
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            int actual = service.getNumberOfSemesters(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check return value").isEqualTo(expected);
+        }
+    }
+
 }
