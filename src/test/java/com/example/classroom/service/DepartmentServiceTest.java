@@ -136,7 +136,7 @@ class DepartmentServiceTest {
             expected.setId(entityBeforeUpdate.getId());
             expected.setName("Wydział Chemiczny");
             expected.setAddress("ul. Broniewicza 115, 00-245 Kęty");
-            expected.setTelNumber(987654321);
+            expected.setTelNumber("987654321");
             expected.setDean(dean);
             expected.addFieldOfStudy(fieldOfStudy1);
             expected.addFieldOfStudy(fieldOfStudy2);

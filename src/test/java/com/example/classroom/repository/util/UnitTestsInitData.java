@@ -52,12 +52,6 @@ public class UnitTestsInitData {
         teachers.forEach(student::addTeacher);
     }
 
-    private void removeReferencingObjectsFromStudent(Student student) {
-        student.setFieldOfStudy(null);
-        Set<Teacher> teachers = new HashSet<>(student.getTeachers());
-        teachers.forEach(student::removeTeacher);
-    }
-
     // *** Create Teachers *** //
     @Transactional
     public Teacher createTeacherOne(Department department, List<Subject> subjects, List<Student> students) {
@@ -99,14 +93,6 @@ public class UnitTestsInitData {
         teacher.setDepartment(department);
         students.forEach(teacher::addStudent);
         subjects.forEach(teacher::addSubject);
-    }
-
-    private void removeReferencingObjectsFromTeacher(final Teacher teacher) {
-        Set<Student> students = new HashSet<>(teacher.getStudents());
-        Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
-        teacher.setDepartment(null);
-        students.forEach(teacher::removeStudent);
-        subjects.forEach(teacher::removeSubject);
     }
 
     // *** Create Subjects *** //
@@ -161,12 +147,6 @@ public class UnitTestsInitData {
     private static void addReferencingObjectsToSubject(FieldOfStudy fieldOfStudy, List<Teacher> teachers, Subject subject) {
         subject.setFieldOfStudy(fieldOfStudy);
         teachers.forEach(subject::addTeacher);
-    }
-
-    private void removeReferencingObjectsFromSubject(Subject subject) {
-        Set<Teacher> teachers = new HashSet<>(subject.getTeachers());
-        subject.setFieldOfStudy(null);
-        teachers.forEach(subject::removeTeacher);
     }
 
     // *** Create Fields Of Study *** //
@@ -227,7 +207,7 @@ public class UnitTestsInitData {
         department.setId(1L);
         department.setName("Wydział Elektroniki, Telekomunikacji i Informatyki");
         department.setAddress("ul. Gabriela Narutowicza 11/12 80-233 Gdańsk");
-        department.setTelNumber(123456789);
+        department.setTelNumber("123456789");
         addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
         return department;
     }
@@ -238,7 +218,7 @@ public class UnitTestsInitData {
         department.setId(2L);
         department.setName("Wydział Chemiczny");
         department.setAddress("ul. Broniewicza 115, 00-245 Kęty");
-        department.setTelNumber(987654321);
+        department.setTelNumber("987654321");
         addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
         return department;
     }
@@ -249,7 +229,7 @@ public class UnitTestsInitData {
         department.setId(3L);
         department.setName("Wydział Architektury");
         department.setAddress("ul. Jabłoniowa 34, 11-112 Stalowa Wola");
-        department.setTelNumber(321321321);
+        department.setTelNumber("321321321");
         addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
         return department;
     }
@@ -257,12 +237,6 @@ public class UnitTestsInitData {
     private void addReferencingObjectsToDepartment(Teacher dean, List<FieldOfStudy> fieldsOfStudy, Department department) {
         department.setDean(dean);
         fieldsOfStudy.forEach(department::addFieldOfStudy);
-    }
-
-    private void removeReferencingObjectsFromDepartment(Department department) {
-        Set<FieldOfStudy> fieldsOfStudy = new HashSet<>(department.getFieldsOfStudy());
-        department.setDean(null);
-        fieldsOfStudy.forEach(department::removeFieldOfStudy);
     }
 }
 

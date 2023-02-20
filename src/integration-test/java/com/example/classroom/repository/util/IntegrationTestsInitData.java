@@ -251,7 +251,7 @@ public class IntegrationTestsInitData {
         Department department = new Department();
         department.setName("Wydział Elektroniki, Telekomunikacji i Informatyki");
         department.setAddress("ul. Gabriela Narutowicza 11/12 80-233 Gdańsk");
-        department.setTelNumber(123456789);
+        department.setTelNumber("123456789");
         addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
         return departmentRepository.save(department);
     }
@@ -261,7 +261,7 @@ public class IntegrationTestsInitData {
         Department department = new Department();
         department.setName("Wydział Chemiczny");
         department.setAddress("ul. Broniewicza 115, 00-245 Kęty");
-        department.setTelNumber(987654321);
+        department.setTelNumber("987654321");
         addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
         return departmentRepository.save(department);
     }
@@ -271,7 +271,7 @@ public class IntegrationTestsInitData {
         Department department = new Department();
         department.setName("Wydział Architektury");
         department.setAddress("ul. Jabłoniowa 34, 11-112 Stalowa Wola");
-        department.setTelNumber(321321321);
+        department.setTelNumber("321321321");
         addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
         return departmentRepository.save(department);
     }
