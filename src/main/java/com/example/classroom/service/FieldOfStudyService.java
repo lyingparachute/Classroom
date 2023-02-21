@@ -159,14 +159,15 @@ public class FieldOfStudyService {
     }
 
     public Map<String, List<FieldOfStudyDto>> fetchAllGroupedByNameAndSortedByName() {
-        List<String> uniqueNames = repository.findAll(Sort.by(Sort.Direction.ASC, "name"))
-                .stream().map(FieldOfStudy::getName).distinct().toList();
-        Map<String, List<FieldOfStudyDto>> map = new LinkedHashMap<>();
-        for (String name : uniqueNames) {
-            map.put(name, repository.findAllByNameContainingIgnoreCase(name)
-                    .stream().map(f -> mapper.map(f, FieldOfStudyDto.class)).toList());
-        }
-        return map;
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"))
+                .stream().map(FieldOfStudy::getName).distinct()
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        name -> repository.findAllByNameContainingIgnoreCase(name)
+                                .stream().map(f -> mapper.map(f, FieldOfStudyDto.class)).toList(),
+                        (key1, key2) -> key1,
+                        LinkedHashMap::new
+                ));
     }
 
     public List<FieldOfStudyDto> fetchAllWithNoDepartment() {
