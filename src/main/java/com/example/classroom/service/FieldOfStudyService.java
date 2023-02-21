@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -84,7 +85,7 @@ public class FieldOfStudyService {
     public Map<Semester, List<Subject>> fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(Long fieldOfStudyId) {
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
         return Arrays.stream(Semester.values()).collect(Collectors.toMap(
-                s -> s,
+                Function.identity(),
                 s -> filterSubjectsBySemester(subjects, s).toList()
         ));
     }
@@ -92,7 +93,7 @@ public class FieldOfStudyService {
     public Map<Semester, Integer> calculateHoursInEachSemesterFromFieldOfStudy(Long fieldOfStudyId) {
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
         return Arrays.stream(Semester.values()).collect(Collectors.toMap(
-                s -> s,
+                Function.identity(),
                 s -> filterSubjectsBySemester(subjects, s).mapToInt(Subject::getHoursInSemester).sum()
         ));
     }
@@ -114,7 +115,7 @@ public class FieldOfStudyService {
     public Map<Semester, Integer> calculateEctsPointsForEachSemester(Long id) {
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(id);
         return Arrays.stream(Semester.values()).collect(Collectors.toMap(
-                s -> s,
+                Function.identity(),
                 s -> getSumOfEctsPointsForSemester(subjects, s)
         ));
     }
