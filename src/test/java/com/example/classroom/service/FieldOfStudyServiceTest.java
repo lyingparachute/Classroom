@@ -1,5 +1,6 @@
 package com.example.classroom.service;
 
+import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.dto.FieldOfStudyDto;
 import com.example.classroom.entity.*;
 import com.example.classroom.enums.AcademicTitle;
@@ -696,6 +697,60 @@ class FieldOfStudyServiceTest {
             assertThat(actual).as("Check if result map contains correct map entries")
                     .containsEntry(fieldOfStudyDto1.getName(), List.of(fieldOfStudyDto1, fieldOfStudyDto2))
                     .containsEntry(fieldOfStudyDto3.getName(), List.of(fieldOfStudyDto3, fieldOfStudyDto4));
+        }
+    }
+
+    @Nested
+    class FetchAllWithNoDepartment {
+        @Test
+        void returnsListOfFieldsOfStudies_withNoDepartmentAssigned() {
+            //given
+            Department department1 = initData.createDepartmentOne(null, List.of());
+            Department department2 = initData.createDepartmentOne(null, List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy4 = initData.createFieldOfStudyFour(department2, List.of(), List.of());
+            FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto3 = mapper.map(fieldOfStudy3, FieldOfStudyDto.class);
+            List<FieldOfStudy> resultOfRepositoryFindAll =
+                    List.of(fieldOfStudy1, fieldOfStudy2, fieldOfStudy3, fieldOfStudy4);
+            //when
+            when(repository.findAll()).thenReturn(resultOfRepositoryFindAll);
+            List<FieldOfStudyDto> actual = service.fetchAllWithNoDepartment();
+            //then
+            verify(repository).findAll();
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check if result list contains correct values")
+                    .contains(fieldOfStudyDto2, fieldOfStudyDto3);
+        }
+    }
+
+    @Nested
+    class FetchAllWithGivenDepartmentDtoOrNoDepartment {
+        @Test
+        void returnsListOfFieldsOfStudies_withNoDepartmentAssigned_orWithGivenDepartmentAssigned_givenDepartmentDto() {
+            //given
+            Department department1 = initData.createDepartmentOne(null, List.of());
+            DepartmentDto departmentDto1 = mapper.map(department1, DepartmentDto.class);
+            Department department2 = initData.createDepartmentOne(null, List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(department1, List.of(), List.of());
+            FieldOfStudy fieldOfStudy4 = initData.createFieldOfStudyFour(department2, List.of(), List.of());
+            FieldOfStudyDto fieldOfStudyDto1 = mapper.map(fieldOfStudy1, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto3 = mapper.map(fieldOfStudy3, FieldOfStudyDto.class);
+            List<FieldOfStudy> resultOfRepositoryFindAll =
+                    List.of(fieldOfStudy1, fieldOfStudy2, fieldOfStudy3, fieldOfStudy4);
+            //when
+            when(repository.findAll()).thenReturn(resultOfRepositoryFindAll);
+            List<FieldOfStudyDto> actual = service.fetchAllWithGivenDepartmentDtoOrNoDepartment(departmentDto1);
+            //then
+            verify(repository, times(2)).findAll();
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check if result list contains correct values")
+                    .contains(fieldOfStudyDto1, fieldOfStudyDto2, fieldOfStudyDto3);
         }
     }
 }
