@@ -680,10 +680,10 @@ class FieldOfStudyServiceTest {
             FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
             FieldOfStudyDto fieldOfStudyDto3 = mapper.map(fieldOfStudy3, FieldOfStudyDto.class);
             FieldOfStudyDto fieldOfStudyDto4 = mapper.map(fieldOfStudy4, FieldOfStudyDto.class);
-            List<FieldOfStudy> resultOfRepositoryFindAllSearch =
+            List<FieldOfStudy> resultOfRepositoryFindAll =
                     List.of(fieldOfStudy4, fieldOfStudy3, fieldOfStudy1, fieldOfStudy2);
             //when
-            when(repository.findAll(any(Sort.class))).thenReturn(resultOfRepositoryFindAllSearch);
+            when(repository.findAll(any(Sort.class))).thenReturn(resultOfRepositoryFindAll);
             when(repository.findAllByNameContainingIgnoreCase(fieldOfStudy1.getName()))
                     .thenReturn(List.of(fieldOfStudy1, fieldOfStudy2));
             when(repository.findAllByNameContainingIgnoreCase(fieldOfStudy3.getName()))
