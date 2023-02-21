@@ -242,6 +242,63 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
+    class UpdateSubjectsTest {
+        @Test
+        void returnsUpdatedFieldOfStudy_withAddedSubjects_givenFieldOfStudyDto() {
+            //given
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+
+            FieldOfStudy entityBeforeUpdate = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy expected = new FieldOfStudy();
+            expected.setId(10L);
+            expected.addSubject(subject1);
+            expected.addSubject(subject2);
+            FieldOfStudyDto dto = mapper.map(expected, FieldOfStudyDto.class);
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(entityBeforeUpdate));
+            when(repository.save(any(FieldOfStudy.class))).thenReturn(expected);
+            service.updateSubjects(dto);
+            //then
+            verify(repository).findById(anyLong());
+            verify(repository).save(argumentCaptor.capture());
+            FieldOfStudy actual = argumentCaptor.getValue();
+
+            assertThat(actual).as("Check if %s is not null", "FieldOfStudy").isNotNull();
+            assertAll("FieldOfStudy's properties",
+                    () -> assertThat(actual.getId())
+                            .as("Check %s's %s", "FieldOfStudy", "ID").isEqualTo(expected.getId())
+            );
+            assertThat(actual.getSubjects()).as("Check %s's %s properties", "FieldOfStudy", "subjects")
+                    .extracting(
+                            Subject::getId,
+                            Subject::getName,
+                            Subject::getDescription,
+                            Subject::getSemester,
+                            Subject::getHoursInSemester,
+                            Subject::getFieldOfStudy
+                    ).containsExactlyInAnyOrder(
+                            Tuple.tuple(subject1.getId(), subject1.getName(), subject1.getDescription(),
+                                    subject1.getSemester(), subject1.getHoursInSemester(), expected),
+                            Tuple.tuple(subject2.getId(), subject2.getName(), subject2.getDescription(),
+                                    subject2.getSemester(), subject2.getHoursInSemester(), expected));
+        }
+
+        @Test
+        void throwsIllegalArgumentException_givenWrongFieldOfStudyDto() {
+            //given
+            FieldOfStudy expected = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudyDto dto = mapper.map(expected, FieldOfStudyDto.class);
+            //when
+            Throwable thrown = catchThrowable(() -> service.update(dto));
+            //then
+            assertThat(thrown)
+                    .isExactlyInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId());
+        }
+    }
+
+    @Nested
     class FindAllFieldsOfStudyTest {
         @Test
         void fetchAll_shouldReturnAllFieldsOfStudy() {
