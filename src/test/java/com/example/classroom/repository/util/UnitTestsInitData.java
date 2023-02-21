@@ -182,6 +182,18 @@ public class UnitTestsInitData {
         addReferencingObjectsToFieldOfStudy(department, subjects, students, fieldOfStudy);
         return fieldOfStudy;
     }
+
+    public FieldOfStudy createFieldOfStudyFour(Department department, List<Subject> subjects, List<Student> students) {
+        FieldOfStudy fieldOfStudy = new FieldOfStudy();
+        fieldOfStudy.setId(4L);
+        fieldOfStudy.setName("Biotechnologia");
+        fieldOfStudy.setLevelOfEducation(LevelOfEducation.SECOND);
+        fieldOfStudy.setMode(ModeOfStudy.FT);
+        fieldOfStudy.setTitle(AcademicTitle.DR);
+        addReferencingObjectsToFieldOfStudy(department, subjects, students, fieldOfStudy);
+        return fieldOfStudy;
+    }
+
     private void addReferencingObjectsToFieldOfStudy(Department department, List<Subject> subjects, List<Student> students, FieldOfStudy fieldOfStudy) {
         fieldOfStudy.setDepartment(department);
         subjects.forEach(fieldOfStudy::addSubject);

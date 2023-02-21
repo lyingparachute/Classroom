@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Map;
@@ -616,6 +617,51 @@ class FieldOfStudyServiceTest {
             verify(repository).findById(anyLong());
             verifyNoMoreInteractions(repository);
             assertThat(actual).as("Check image path value").isEqualTo(expectedPath);
+        }
+    }
+
+    @Nested
+    class FetchAllByLevelOfEducationSortedByName {
+        @Test
+        void returnsListOfFieldsOfStudies_filteredByLevelOfEducation_sortedByNameAscending_givenFirstLevelOfEducation() {
+            //given
+            LevelOfEducation levelOfEducation = LevelOfEducation.FIRST;
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            FieldOfStudyDto fieldOfStudyDto1 = mapper.map(fieldOfStudy1, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
+            List<FieldOfStudy> resultOfRepositorySearch = List.of(fieldOfStudy2, fieldOfStudy1);
+            //when
+            when(repository.findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class)))
+                    .thenReturn(resultOfRepositorySearch);
+            List<FieldOfStudyDto> actual = service.fetchAllByLevelOfEducationSortedByName(levelOfEducation);
+            //then
+            verify(repository).findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class));
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check if result list contains items in exact order")
+                    .contains(fieldOfStudyDto1, atIndex(1))
+                    .contains(fieldOfStudyDto2, atIndex(0));
+        }
+
+        @Test
+        void returnsListOfFieldsOfStudies_filteredByLevelOfEducation_sortedByNameAscending_givenSecondLevelOfEducation() {
+            //given
+            LevelOfEducation levelOfEducation = LevelOfEducation.SECOND;
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyFour(null, List.of(), List.of());
+            FieldOfStudyDto fieldOfStudyDto1 = mapper.map(fieldOfStudy1, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
+            List<FieldOfStudy> resultOfRepositorySearch = List.of(fieldOfStudy2, fieldOfStudy1);
+            //when
+            when(repository.findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class)))
+                    .thenReturn(resultOfRepositorySearch);
+            List<FieldOfStudyDto> actual = service.fetchAllByLevelOfEducationSortedByName(levelOfEducation);
+            //then
+            verify(repository).findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class));
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check if result list contains items in exact order")
+                    .contains(fieldOfStudyDto1, atIndex(1))
+                    .contains(fieldOfStudyDto2, atIndex(0));
         }
     }
 
