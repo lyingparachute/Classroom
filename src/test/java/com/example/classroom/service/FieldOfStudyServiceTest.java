@@ -583,4 +583,40 @@ class FieldOfStudyServiceTest {
         }
     }
 
+    @Nested
+    class getImagePath {
+        @Test
+        void returnsImagePathAsString_givenFieldOfStudyIdWithImgAssigned() {
+            //given
+            String imgName = "someImage.jpg";
+            String expectedPath = "/img/fields-of-study/" + imgName;
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            fieldOfStudy.setImage("someImage.jpg");
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            String actual = service.getImagePath(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check image path value").isEqualTo(expectedPath);
+        }
+
+        @Test
+        void returnsDefaultImagePathAsString_givenFieldOfStudyIdWithImgAssigned() {
+            //given
+            String defaultImgName = "default.jpg";
+            String expectedPath = "/img/fields-of-study/" + defaultImgName;
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            String actual = service.getImagePath(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check image path value").isEqualTo(expectedPath);
+        }
+    }
+
 }
