@@ -179,9 +179,7 @@ public class FieldOfStudyService {
 
     public List<FieldOfStudyDto> fetchAllWithGivenDepartmentDtoOrNoDepartment(DepartmentDto dto) {
         return Stream.concat(
-                repository.findAll().stream()
-                        .filter(fieldOfStudy -> fieldOfStudy.getDepartment() == null)
-                        .map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)),
+                fetchAllWithNoDepartment().stream(),
                 repository.findAll().stream()
                         .filter(fieldOfStudy -> fieldOfStudy.getDepartment() != null)
                         .filter(fieldOfStudy -> Objects.equals(fieldOfStudy.getDepartment().getId(), dto.getId()))
