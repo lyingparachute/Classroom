@@ -46,9 +46,9 @@ class FieldOfStudyServiceTest {
     private ArgumentCaptor<FieldOfStudy> argumentCaptor;
 
     @Nested
-    class SaveFieldOfStudyTest {
+    class CreateTest {
         @Test
-        void create_shouldSaveFieldOfStudy_givenFieldOfStudyDto() {
+        void returnsSavedFieldOfStudy_givenFieldOfStudyDto() {
             //given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -130,9 +130,9 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class UpdateFieldOfStudyTest {
+    class UpdateTest {
         @Test
-        void update_shouldUpdateFieldOfStudy_givenFieldOfStudyDto() {
+        void returnsUpdatedFieldOfStudy_givenFieldOfStudyDto() {
             //given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -228,7 +228,7 @@ class FieldOfStudyServiceTest {
         }
 
         @Test
-        void update_throwsIllegalArgumentException_givenWrongFieldOfStudyDto() {
+        void throwsIllegalArgumentException_givenWrongFieldOfStudyDto() {
             //given
             FieldOfStudy expected = initData.createFieldOfStudyOne(null, List.of(), List.of());
             FieldOfStudyDto dto = mapper.map(expected, FieldOfStudyDto.class);
@@ -299,9 +299,9 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class FindAllFieldsOfStudyTest {
+    class FetchAllTest {
         @Test
-        void fetchAll_shouldReturnAllFieldsOfStudy() {
+        void returnsAllFieldsOfStudy() {
             //given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -371,9 +371,9 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class FindFieldOfStudyTest {
+    class FetchByIdTest {
         @Test
-        void fetchById_shouldFindFieldOfStudy_givenId() {
+        void returnsFieldOfStudyDto_givenId() {
             //given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -417,7 +417,7 @@ class FieldOfStudyServiceTest {
         }
 
         @Test
-        void fetchById_throwsIllegalArgumentException_givenWrongId() {
+        void throwsIllegalArgumentException_givenWrongId() {
             //given
             Long id = 10L;
             //when
@@ -430,9 +430,9 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class DeleteFieldOfStudyTest {
+    class RemoveTest {
         @Test
-        void remove_shouldDeleteFieldOfStudy_givenId() {
+        void removesFieldOfStudy_givenId() {
             //given
             FieldOfStudy expected = initData.createFieldOfStudyOne(null, List.of(), List.of());
             //when
@@ -444,7 +444,7 @@ class FieldOfStudyServiceTest {
         }
 
         @Test
-        void remove_throwsIllegalArgumentException_givenWrongId() {
+        void throwsIllegalArgumentException_givenWrongId() {
             //given
             Long id = 1L;
             //when
@@ -471,7 +471,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class FetchAllSubjectsFromFieldOfStudyGroupedBySemesters {
+    class FetchAllSubjectsFromFieldOfStudyGroupedBySemestersTest {
         @Test
         void returnsMapOfSemestersAndSubjectsList_givenId() {
             //given
@@ -492,7 +492,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class CalculateHoursInEachSemesterFromFieldOfStudy {
+    class CalculateHoursInEachSemesterFromFieldOfStudyTest {
         @Test
         void returnsMapOfSemestersAndIntegers_givenId() {
             //given
@@ -513,7 +513,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class SplitDescription {
+    class SplitDescriptionTest {
         @Test
         void shouldReturnListOfString_givenStringWithSpecialCharacter() {
             //given
@@ -553,7 +553,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class CalculateEctsPointsForEachSemester {
+    class CalculateEctsPointsForEachSemesterTest {
         @Test
         void returnsMapOfSemesterAndNumberOfEctsPoints_givenId() {
             //given
@@ -574,7 +574,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class GetSumOfEctsPointsFromAllSemesters {
+    class GetSumOfEctsPointsFromAllSemestersTest {
         @Test
         void returnsIntegerValueOfEctsPoints_givenId() {
             //given
@@ -595,7 +595,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class GetNumberOfSemesters {
+    class GetNumberOfSemestersTest {
         @Test
         void returnsSix_givenFieldOfStudyWithBachTitle() {
             //given
@@ -643,7 +643,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class getImagePath {
+    class getImagePathTest {
         @Test
         void returnsImagePathAsString_givenFieldOfStudyIdWithImgAssigned() {
             //given
@@ -679,7 +679,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class FetchAllByLevelOfEducationSortedByName {
+    class FetchAllByLevelOfEducationSortedByNameTest {
         @Test
         void returnsListOfFieldsOfStudies_filteredByLevelOfEducation_sortedByNameAscending_givenFirstLevelOfEducation() {
             //given
@@ -724,7 +724,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class FetchAllGroupedByNameAndSortedByName {
+    class FetchAllGroupedByNameAndSortedByNameTest {
         @Test
         void returnsMap_nameAsKey_listOfFieldsOfStudiesAsValue_sortedByNameAscending() {
             //given
@@ -758,7 +758,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class FetchAllWithNoDepartment {
+    class FetchAllWithNoDepartmentTest {
         @Test
         void returnsListOfFieldsOfStudies_withNoDepartmentAssigned() {
             //given
@@ -784,7 +784,7 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class FetchAllWithGivenDepartmentDtoOrNoDepartment {
+    class FetchAllWithGivenDepartmentDtoOrNoDepartmentTest {
         @Test
         void returnsListOfFieldsOfStudies_withNoDepartmentAssigned_orWithGivenDepartmentAssigned_givenDepartmentDto() {
             //given
