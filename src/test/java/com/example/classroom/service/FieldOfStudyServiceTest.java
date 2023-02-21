@@ -665,4 +665,37 @@ class FieldOfStudyServiceTest {
         }
     }
 
+    @Nested
+    class FetchAllGroupedByNameAndSortedByName {
+        @Test
+        void returnsMap_nameAsKey_listOfFieldsOfStudiesAsValue_sortedByNameAscending() {
+            //given
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy4 = initData.createFieldOfStudyFour(null, List.of(), List.of());
+            fieldOfStudy2.setName(fieldOfStudy1.getName());
+            fieldOfStudy4.setName(fieldOfStudy3.getName());
+            FieldOfStudyDto fieldOfStudyDto1 = mapper.map(fieldOfStudy1, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto3 = mapper.map(fieldOfStudy3, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto4 = mapper.map(fieldOfStudy4, FieldOfStudyDto.class);
+            List<FieldOfStudy> resultOfRepositoryFindAllSearch =
+                    List.of(fieldOfStudy4, fieldOfStudy3, fieldOfStudy1, fieldOfStudy2);
+            //when
+            when(repository.findAll(any(Sort.class))).thenReturn(resultOfRepositoryFindAllSearch);
+            when(repository.findAllByNameContainingIgnoreCase(fieldOfStudy1.getName()))
+                    .thenReturn(List.of(fieldOfStudy1, fieldOfStudy2));
+            when(repository.findAllByNameContainingIgnoreCase(fieldOfStudy3.getName()))
+                    .thenReturn(List.of(fieldOfStudy3, fieldOfStudy4));
+            Map<String, List<FieldOfStudyDto>> actual = service.fetchAllGroupedByNameAndSortedByName();
+            //then
+            verify(repository).findAll(any(Sort.class));
+            verify(repository, times(2)).findAllByNameContainingIgnoreCase(anyString());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check if result map contains correct map entries")
+                    .containsEntry(fieldOfStudyDto1.getName(), List.of(fieldOfStudyDto1, fieldOfStudyDto2))
+                    .containsEntry(fieldOfStudyDto3.getName(), List.of(fieldOfStudyDto3, fieldOfStudyDto4));
+        }
+    }
 }
