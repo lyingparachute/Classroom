@@ -56,7 +56,6 @@ public class Subject {
     private Set<Teacher> teachers = new HashSet<>();
 
     public Set<Teacher> getTeachers() {
-        //defensive copy, nobody will be able to change Set from the outside
         return new HashSet<>(teachers);
     }
 
@@ -90,7 +89,6 @@ public class Subject {
      * on the teacher side
      */
     public void addTeacher(Teacher teacher) {
-        //prevent endless loop
         if (teachers.contains(teacher)) {
             return;
         }
@@ -104,7 +102,6 @@ public class Subject {
      * on the teacher side
      */
     public void removeTeacher(Teacher teacher) {
-        //prevent endless loop
         if (!teachers.contains(teacher)) {
             return;
         }
