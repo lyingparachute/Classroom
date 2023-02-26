@@ -42,7 +42,6 @@ public class DepartmentService {
         addReferencingObjects(department);
         Department saved = repository.save(department);
         return mapper.map(saved, DepartmentDto.class);
-
     }
 
     public List<DepartmentDto> fetchAll() {
