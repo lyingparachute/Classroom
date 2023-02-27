@@ -1,7 +1,6 @@
 package com.example.classroom.controller;
 
 import com.example.classroom.dto.TeacherDto;
-import com.example.classroom.service.StudentService;
 import com.example.classroom.service.SubjectService;
 import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.List;
 public class TeacherController {
 
     private final TeacherService service;
-    private final StudentService studentService;
     private final SubjectService subjectService;
     public static final String REDIRECT_DASHBOARD_TEACHERS = "redirect:/dashboard/teachers";
 
