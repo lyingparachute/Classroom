@@ -101,13 +101,19 @@ public class StudentService {
         repository.delete(student);
     }
 
-    private void addReferencingObjects(Student student) {
+    private void addReferencingObjects(final Student student) {
         student.setFieldOfStudy(student.getFieldOfStudy());
-        Set<Teacher> teachers = new HashSet<>(student.getTeachers());
-        teachers.forEach(student::addTeacher);
+        assignTeachers(student);
     }
 
-    private void removeReferencingObjects(Student student) {
+    private void assignTeachers(final Student student) {
+        student.getFieldOfStudy().getSubjects().stream()
+                .map(Subject::getTeachers)
+                .flatMap(Set::stream)
+                .forEach(student::addTeacher);
+    }
+
+    private void removeReferencingObjects(final Student student) {
         student.setFieldOfStudy(null);
         Set<Teacher> teachers = new HashSet<>(student.getTeachers());
         teachers.forEach(student::removeTeacher);
