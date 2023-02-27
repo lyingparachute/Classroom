@@ -142,14 +142,12 @@ class DepartmentServiceTest {
             expected.addFieldOfStudy(fieldOfStudy2);
             DepartmentDto dto = mapper.map(expected, DepartmentDto.class);
             given(repository.findById(anyLong())).willReturn(Optional.of(entityBeforeUpdate));
-            given(repository.save(any(Department.class))).willReturn(expected);
             //when
-            service.update(dto);
+            DepartmentDto updated = service.update(dto);
             //then
             then(repository).should().findById(anyLong());
-            then(repository).should().save(argumentCaptor.capture());
             then(repository).shouldHaveNoMoreInteractions();
-            Department actual = argumentCaptor.getValue();
+            Department actual = mapper.map(updated, Department.class);
 
             assertThat(actual).as("Check if %s is not null", "Department").isNotNull();
             assertAll("Department's properties",

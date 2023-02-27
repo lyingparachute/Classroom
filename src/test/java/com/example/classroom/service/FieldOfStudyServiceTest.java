@@ -157,12 +157,10 @@ class FieldOfStudyServiceTest {
             FieldOfStudyDto dto = mapper.map(expected, FieldOfStudyDto.class);
             //when
             when(repository.findById(anyLong())).thenReturn(Optional.of(entityBeforeUpdate));
-            when(repository.save(any(FieldOfStudy.class))).thenReturn(expected);
-            service.update(dto);
+            FieldOfStudyDto updated = service.update(dto);
             //then
             verify(repository).findById(anyLong());
-            verify(repository).save(argumentCaptor.capture());
-            FieldOfStudy actual = argumentCaptor.getValue();
+            FieldOfStudy actual = mapper.map(updated, FieldOfStudy.class);
 
             assertThat(actual).as("Check if %s is not null", "FieldOfStudy").isNotNull();
             assertAll("FieldOfStudy's properties",

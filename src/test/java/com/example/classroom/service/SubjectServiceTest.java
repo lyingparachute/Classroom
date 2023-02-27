@@ -141,12 +141,10 @@ class SubjectServiceTest {
             SubjectDto dto = mapper.map(expected, SubjectDto.class);
             //when
             when(repository.findById(anyLong())).thenReturn(Optional.of(entityBeforeUpdate));
-            when(repository.save(any(Subject.class))).thenReturn(expected);
-            service.update(dto);
+            SubjectDto updated = service.update(dto);
             //then
             verify(repository).findById(anyLong());
-            verify(repository).save(argumentCaptor.capture());
-            Subject actual = argumentCaptor.getValue();
+            Subject actual = mapper.map(updated, Subject.class);
 
             assertThat(actual).as("Check if %s is not null", "Subject").isNotNull();
             assertAll("Subject's properties",

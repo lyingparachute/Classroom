@@ -1,10 +1,7 @@
 package com.example.classroom.service;
 
 import com.example.classroom.dto.TeacherDto;
-import com.example.classroom.entity.Department;
-import com.example.classroom.entity.Student;
-import com.example.classroom.entity.Subject;
-import com.example.classroom.entity.Teacher;
+import com.example.classroom.entity.*;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.UnitTestsInitData;
 import org.assertj.core.groups.Tuple;
@@ -52,13 +49,14 @@ class TeacherServiceTest {
         @Test
         void create_shouldSaveTeacher_givenTeacherDto() {
             //given
-            Subject subject1 = initData.createSubjectOne(null, List.of());
-            Subject subject2 = initData.createSubjectTwo(null, List.of());
             Department department = initData.createDepartmentOne(null, List.of());
             Student student1 = initData.createStudentOne(null, List.of());
             Student student2 = initData.createStudentTwo(null, List.of());
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(department, List.of(), List.of(student1, student2));
+            Subject subject1 = initData.createSubjectOne(fieldOfStudy, List.of());
+            Subject subject2 = initData.createSubjectTwo(fieldOfStudy, List.of());
 
-            Teacher expected = initData.createTeacherOne(department, List.of(subject1, subject2), List.of(student1, student2));
+            Teacher expected = initData.createTeacherOne(department, List.of(subject1, subject2), List.of());
             TeacherDto dto = mapper.map(expected, TeacherDto.class);
             //when
             when(repository.save(any(Teacher.class))).thenReturn(expected);
@@ -133,12 +131,12 @@ class TeacherServiceTest {
         @Test
         void update_shouldUpdateTeacher_givenTeacherDto() {
             //given
-            Subject subject1 = initData.createSubjectOne(null, List.of());
-            Subject subject2 = initData.createSubjectTwo(null, List.of());
             Department department = initData.createDepartmentOne(null, List.of());
             Student student1 = initData.createStudentOne(null, List.of());
             Student student2 = initData.createStudentTwo(null, List.of());
-
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(department, List.of(), List.of(student1, student2));
+            Subject subject1 = initData.createSubjectOne(fieldOfStudy, List.of());
+            Subject subject2 = initData.createSubjectTwo(fieldOfStudy, List.of());
             Teacher entityBeforeUpdate = initData.createTeacherOne(null, List.of(), List.of());
             Teacher expected = new Teacher();
             expected.setId(entityBeforeUpdate.getId());
@@ -149,18 +147,15 @@ class TeacherServiceTest {
             expected.setDepartment(department);
             expected.addSubject(subject1);
             expected.addSubject(subject2);
-            expected.addStudent(student1);
-            expected.addStudent(student2);
             TeacherDto dto = mapper.map(expected, TeacherDto.class);
             //when
             when(repository.findById(anyLong())).thenReturn(Optional.of(entityBeforeUpdate));
-            when(repository.save(any(Teacher.class))).thenReturn(expected);
-            service.update(dto);
+            TeacherDto updated = service.update(dto);
             //then
             verify(repository).findById(anyLong());
-            verify(repository).save(argumentCaptor.capture());
-            Teacher actual = argumentCaptor.getValue();
 
+//            Teacher actual = argumentCaptor.getValue();
+            Teacher actual = mapper.map(updated, Teacher.class);
             assertThat(actual).as("Check if %s is not null", "Teacher").isNotNull();
             assertAll("Teacher's properties",
                     () -> assertThat(actual.getId())
