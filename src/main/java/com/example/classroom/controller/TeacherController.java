@@ -1,7 +1,6 @@
 package com.example.classroom.controller;
 
 import com.example.classroom.dto.TeacherDto;
-import com.example.classroom.service.StudentService;
 import com.example.classroom.service.SubjectService;
 import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.List;
 public class TeacherController {
 
     private final TeacherService service;
-    private final StudentService studentService;
     private final SubjectService subjectService;
     public static final String REDIRECT_DASHBOARD_TEACHERS = "redirect:/dashboard/teachers";
 
@@ -76,7 +74,7 @@ public class TeacherController {
     @GetMapping("new")
     public String getNewTeacherForm(Model model) {
         model.addAttribute("teacher", new TeacherDto());
-        addAttributesSubjectsAndStudents(model);
+        addAttributesSubjects(model);
         return "teacher/teacher-create-form";
     }
 
@@ -86,7 +84,7 @@ public class TeacherController {
                                 RedirectAttributes redirectAttributes,
                                 Model model) {
         if (result.hasErrors()) {
-            addAttributesSubjectsAndStudents(model);
+            addAttributesSubjects(model);
             return "teacher/teacher-create-form";
         }
         TeacherDto saved = service.create(dto);
@@ -98,7 +96,7 @@ public class TeacherController {
     @GetMapping("edit/{id}")
     public String editTeacher(@PathVariable Long id, Model model) {
         addAttributeTeacherById(id, model);
-        addAttributesSubjectsAndStudents(model);
+        addAttributesSubjects(model);
         return "teacher/teacher-edit-form";
     }
 
@@ -108,7 +106,7 @@ public class TeacherController {
                               RedirectAttributes redirectAttributes,
                               Model model) {
         if (result.hasErrors()) {
-            addAttributesSubjectsAndStudents(model);
+            addAttributesSubjects(model);
             return "teacher/teacher-edit-form";
         }
         TeacherDto updated = service.update(dto);
@@ -126,9 +124,8 @@ public class TeacherController {
         return REDIRECT_DASHBOARD_TEACHERS;
     }
 
-    private void addAttributesSubjectsAndStudents(Model model) {
+    private void addAttributesSubjects(Model model) {
         model.addAttribute("subjects", subjectService.fetchAll());
-        model.addAttribute("students", studentService.fetchAll());
     }
 
     private void addAttributeTeacherById(Long id, Model model) {

@@ -1,10 +1,12 @@
 package com.example.classroom.service;
 
+import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.dto.FieldOfStudyDto;
 import com.example.classroom.entity.*;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
+import com.example.classroom.enums.Semester;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.util.UnitTestsInitData;
 import org.assertj.core.groups.Tuple;
@@ -14,19 +16,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FieldOfStudyServiceTest {
@@ -46,9 +46,9 @@ class FieldOfStudyServiceTest {
     private ArgumentCaptor<FieldOfStudy> argumentCaptor;
 
     @Nested
-    class SaveFieldOfStudyTest {
+    class CreateTest {
         @Test
-        void create_shouldSaveFieldOfStudy_givenFieldOfStudyDto() {
+        void returnsSavedFieldOfStudy_givenFieldOfStudyDto() {
             //given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -130,9 +130,9 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class UpdateFieldOfStudyTest {
+    class UpdateTest {
         @Test
-        void update_shouldUpdateFieldOfStudy_givenFieldOfStudyDto() {
+        void returnsUpdatedFieldOfStudy_givenFieldOfStudyDto() {
             //given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -157,12 +157,10 @@ class FieldOfStudyServiceTest {
             FieldOfStudyDto dto = mapper.map(expected, FieldOfStudyDto.class);
             //when
             when(repository.findById(anyLong())).thenReturn(Optional.of(entityBeforeUpdate));
-            when(repository.save(any(FieldOfStudy.class))).thenReturn(expected);
-            service.update(dto);
+            FieldOfStudyDto updated = service.update(dto);
             //then
             verify(repository).findById(anyLong());
-            verify(repository).save(argumentCaptor.capture());
-            FieldOfStudy actual = argumentCaptor.getValue();
+            FieldOfStudy actual = mapper.map(updated, FieldOfStudy.class);
 
             assertThat(actual).as("Check if %s is not null", "FieldOfStudy").isNotNull();
             assertAll("FieldOfStudy's properties",
@@ -228,7 +226,7 @@ class FieldOfStudyServiceTest {
         }
 
         @Test
-        void update_throwsIllegalArgumentException_givenWrongFieldOfStudyDto() {
+        void throwsIllegalArgumentException_givenWrongFieldOfStudyDto() {
             //given
             FieldOfStudy expected = initData.createFieldOfStudyOne(null, List.of(), List.of());
             FieldOfStudyDto dto = mapper.map(expected, FieldOfStudyDto.class);
@@ -242,9 +240,66 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class FindAllFieldsOfStudyTest {
+    class UpdateSubjectsTest {
         @Test
-        void fetchAll_shouldReturnAllFieldsOfStudy() {
+        void returnsUpdatedFieldOfStudy_withAddedSubjects_givenFieldOfStudyDto() {
+            //given
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+
+            FieldOfStudy entityBeforeUpdate = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy expected = new FieldOfStudy();
+            expected.setId(10L);
+            expected.addSubject(subject1);
+            expected.addSubject(subject2);
+            FieldOfStudyDto dto = mapper.map(expected, FieldOfStudyDto.class);
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(entityBeforeUpdate));
+            when(repository.save(any(FieldOfStudy.class))).thenReturn(expected);
+            service.updateSubjects(dto);
+            //then
+            verify(repository).findById(anyLong());
+            verify(repository).save(argumentCaptor.capture());
+            FieldOfStudy actual = argumentCaptor.getValue();
+
+            assertThat(actual).as("Check if %s is not null", "FieldOfStudy").isNotNull();
+            assertAll("FieldOfStudy's properties",
+                    () -> assertThat(actual.getId())
+                            .as("Check %s's %s", "FieldOfStudy", "ID").isEqualTo(expected.getId())
+            );
+            assertThat(actual.getSubjects()).as("Check %s's %s properties", "FieldOfStudy", "subjects")
+                    .extracting(
+                            Subject::getId,
+                            Subject::getName,
+                            Subject::getDescription,
+                            Subject::getSemester,
+                            Subject::getHoursInSemester,
+                            Subject::getFieldOfStudy
+                    ).containsExactlyInAnyOrder(
+                            Tuple.tuple(subject1.getId(), subject1.getName(), subject1.getDescription(),
+                                    subject1.getSemester(), subject1.getHoursInSemester(), expected),
+                            Tuple.tuple(subject2.getId(), subject2.getName(), subject2.getDescription(),
+                                    subject2.getSemester(), subject2.getHoursInSemester(), expected));
+        }
+
+        @Test
+        void throwsIllegalArgumentException_givenWrongFieldOfStudyDto() {
+            //given
+            FieldOfStudy expected = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudyDto dto = mapper.map(expected, FieldOfStudyDto.class);
+            //when
+            Throwable thrown = catchThrowable(() -> service.update(dto));
+            //then
+            assertThat(thrown)
+                    .isExactlyInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId());
+        }
+    }
+
+    @Nested
+    class FetchAllTest {
+        @Test
+        void returnsAllFieldsOfStudy() {
             //given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -311,65 +366,12 @@ class FieldOfStudyServiceTest {
                             .isNotNull().isNotEmpty().hasSize(1).contains(student2).doesNotContain(student1)
             );
         }
-
-        @Test
-        void fetchAllPaginated_shouldReturnAllFieldsOfStudyPaginated_givenPageNo_pageSize_sortDir() {
-            //given
-            int pageNo = 2;
-            int pageSize = 1;
-            String sortField = "name";
-            String sortDirection = Sort.Direction.DESC.name();
-
-            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-
-            Student student1 = initData.createStudentOne(null, List.of(teacher1));
-            Student student2 = initData.createStudentTwo(null, List.of(teacher2));
-
-            Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-            Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
-
-            Department department1 = initData.createDepartmentOne(teacher1, List.of());
-            Department department2 = initData.createDepartmentTwo(teacher2, List.of());
-
-            FieldOfStudy expectedFieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
-            FieldOfStudy expectedFieldOfStudy2 = initData.createFieldOfStudyTwo(department2, List.of(subject2), List.of(student2));
-            Page<FieldOfStudy> fieldsOfStudy = new PageImpl<>(List.of(expectedFieldOfStudy1));
-            //when
-            when(repository.findAll(any(Pageable.class))).thenReturn(fieldsOfStudy);
-            Page<FieldOfStudyDto> actualPage = service.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
-            //then
-            verify(repository).findAll(any(Pageable.class));
-            List<FieldOfStudyDto> actualContent = actualPage.getContent();
-            assertThat(actualContent).as("Check %s list size", "fieldsOfStudy").hasSize(1);
-            FieldOfStudyDto actualFieldOfStudy = actualContent.get(0);
-            assertAll("FieldOfStudy1 properties",
-                    () -> assertThat(actualFieldOfStudy.getId())
-                            .as("Check %s's %s", "FieldOfStudy1", "ID").isEqualTo(expectedFieldOfStudy1.getId()),
-                    () -> assertThat(actualFieldOfStudy.getName())
-                            .as("Check %s's %s", "FieldOfStudy1", "Name").isEqualTo(expectedFieldOfStudy1.getName()),
-                    () -> assertThat(actualFieldOfStudy.getLevelOfEducation())
-                            .as("Check %s's %s", "FieldOfStudy1", "Level of education").isEqualTo(expectedFieldOfStudy1.getLevelOfEducation()),
-                    () -> assertThat(actualFieldOfStudy.getMode())
-                            .as("Check %s's %s", "FieldOfStudy1", "Study mode").isEqualTo(expectedFieldOfStudy1.getMode()),
-                    () -> assertThat(actualFieldOfStudy.getTitle())
-                            .as("Check %s's %s", "FieldOfStudy1", "Obtained title").isEqualTo(expectedFieldOfStudy1.getTitle()),
-                    () -> assertThat(actualFieldOfStudy.getDepartment())
-                            .as("Check %s's %s", "FieldOfStudy1", "Obtained title").isEqualTo(department1),
-                    () -> assertThat(actualFieldOfStudy.getSubjects())
-                            .as("Check if %s' %s list contains subject", "actualFieldOfStudy", "subjects")
-                            .isNotNull().isNotEmpty().hasSize(1).contains(subject1).doesNotContain(subject2),
-                    () -> assertThat(actualFieldOfStudy.getStudents())
-                            .as("Check if %s' %s list contains student", "actualFieldOfStudy", "students")
-                            .isNotNull().isNotEmpty().hasSize(1).contains(student1).doesNotContain(student2)
-            );
-        }
     }
 
     @Nested
-    class FindFieldOfStudyTest {
+    class FetchByIdTest {
         @Test
-        void fetchById_shouldFindFieldOfStudy_givenId() {
+        void returnsFieldOfStudyDto_givenId() {
             //given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -413,7 +415,7 @@ class FieldOfStudyServiceTest {
         }
 
         @Test
-        void fetchById_throwsIllegalArgumentException_givenWrongId() {
+        void throwsIllegalArgumentException_givenWrongId() {
             //given
             Long id = 10L;
             //when
@@ -426,9 +428,9 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class DeleteFieldOfStudyTest {
+    class RemoveTest {
         @Test
-        void remove_shouldDeleteFieldOfStudy_givenId() {
+        void removesFieldOfStudy_givenId() {
             //given
             FieldOfStudy expected = initData.createFieldOfStudyOne(null, List.of(), List.of());
             //when
@@ -440,7 +442,7 @@ class FieldOfStudyServiceTest {
         }
 
         @Test
-        void remove_throwsIllegalArgumentException_givenWrongId() {
+        void throwsIllegalArgumentException_givenWrongId() {
             //given
             Long id = 1L;
             //when
@@ -467,128 +469,343 @@ class FieldOfStudyServiceTest {
     }
 
     @Nested
-    class FindFieldsOfStudyByNameTest {
+    class FetchAllSubjectsFromFieldOfStudyGroupedBySemestersTest {
         @Test
-        void findByName_returnsFieldsOfStudySearchedByName_givenName() {
+        void returnsMapOfSemestersAndSubjectsList_givenId() {
             //given
-            String name = "in";
-            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-
-            Student student1 = initData.createStudentOne(null, List.of(teacher1));
-            Student student2 = initData.createStudentTwo(null, List.of(teacher2));
-
-            Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-            Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
-
-            Department department1 = initData.createDepartmentOne(teacher1, List.of());
-            Department department2 = initData.createDepartmentTwo(teacher2, List.of());
-
-            FieldOfStudy expectedFieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
-            FieldOfStudy expectedFieldOfStudy2 = initData.createFieldOfStudyTwo(department2, List.of(subject2), List.of(student2));
-            List<FieldOfStudy> fieldsOfStudy = List.of(expectedFieldOfStudy1);
+            Long id = 1L;
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectFour(null, List.of());
+            List<Subject> subjects = List.of(subject1, subject2, subject3);
             //when
-            when(repository.findAllByNameContainingIgnoreCase(anyString())).thenReturn(fieldsOfStudy);
-            List<FieldOfStudyDto> actual = service.findByName(name);
+            when(repository.findAllSubjectsFromFieldOfStudy(anyLong())).thenReturn(subjects);
+            Map<Semester, List<Subject>> actual = service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id);
             //then
-            verify(repository).findAllByNameContainingIgnoreCase(anyString());
-            assertThat(actual).as("Check %s list size", "fieldsOfStudy").hasSize(1);
-            FieldOfStudyDto actualFieldOfStudy = actual.get(0);
-            assertAll("FieldOfStudy1 properties",
-                    () -> assertThat(actualFieldOfStudy.getId())
-                            .as("Check %s's %s", "FieldOfStudy1", "ID").isEqualTo(expectedFieldOfStudy1.getId()),
-                    () -> assertThat(actualFieldOfStudy.getName())
-                            .as("Check %s's %s", "FieldOfStudy1", "Name").isEqualTo(expectedFieldOfStudy1.getName()),
-                    () -> assertThat(actualFieldOfStudy.getLevelOfEducation())
-                            .as("Check %s's %s", "FieldOfStudy1", "Level of education").isEqualTo(expectedFieldOfStudy1.getLevelOfEducation()),
-                    () -> assertThat(actualFieldOfStudy.getMode())
-                            .as("Check %s's %s", "FieldOfStudy1", "Study mode").isEqualTo(expectedFieldOfStudy1.getMode()),
-                    () -> assertThat(actualFieldOfStudy.getTitle())
-                            .as("Check %s's %s", "FieldOfStudy1", "Obtained title").isEqualTo(expectedFieldOfStudy1.getTitle()),
-                    () -> assertThat(actualFieldOfStudy.getDepartment())
-                            .as("Check %s's %s", "FieldOfStudy1", "Obtained title").isEqualTo(department1),
-                    () -> assertThat(actualFieldOfStudy.getSubjects())
-                            .as("Check if %s' %s list contains subject", "actualFieldOfStudy", "subjects")
-                            .isNotNull().isNotEmpty().hasSize(1).contains(subject1).doesNotContain(subject2),
-                    () -> assertThat(actualFieldOfStudy.getStudents())
-                            .as("Check if %s' %s list contains student", "actualFieldOfStudy", "students")
-                            .isNotNull().isNotEmpty().hasSize(1).contains(student1).doesNotContain(student2)
-            );
+            verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check actual Map content")
+                    .containsValues(List.of(subject1, subject3), List.of(subject2));
+        }
+    }
+
+    @Nested
+    class CalculateHoursInEachSemesterFromFieldOfStudyTest {
+        @Test
+        void returnsMapOfSemestersAndIntegers_givenId() {
+            //given
+            Long id = 1L;
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectFour(null, List.of());
+            List<Subject> subjects = List.of(subject1, subject2, subject3);
+            //when
+            when(repository.findAllSubjectsFromFieldOfStudy(anyLong())).thenReturn(subjects);
+            Map<Semester, Integer> actual = service.calculateHoursInEachSemesterFromFieldOfStudy(id);
+            //then
+            verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check actual Map content")
+                    .containsValues(subject1.getHoursInSemester() + subject3.getHoursInSemester(), subject2.getHoursInSemester());
+        }
+    }
+
+    @Nested
+    class SplitDescriptionTest {
+        @Test
+        void shouldReturnListOfString_givenStringWithSpecialCharacter() {
+            //given
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            String description = "some;description;test";
+            String descItem1 = "some";
+            String descItem2 = "description";
+            String descItem3 = "test";
+            fieldOfStudy.setDescription(description);
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            List<String> actual = service.splitDescription(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).hasSize(3);
+            assertThat(actual.get(0)).isEqualTo(descItem1);
+            assertThat(actual.get(1)).isEqualTo(descItem2);
+            assertThat(actual.get(2)).isEqualTo(descItem3);
         }
 
         @Test
-        void findByNamePaginated_returnsFieldsOfStudySearchedByNamePaginated_givenName() {
+        void shouldReturnEmptyList_givenNull() {
             //given
-            int pageNo = 1;
-            int pageSize = 2;
-            String sortField = "name";
-            String sortDirection = Sort.Direction.ASC.name();
-            String name = "in";
-            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
-            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
-
-            Student student1 = initData.createStudentOne(null, List.of(teacher1));
-            Student student2 = initData.createStudentTwo(null, List.of(teacher2));
-
-            Subject subject1 = initData.createSubjectOne(null, List.of(teacher1));
-            Subject subject2 = initData.createSubjectTwo(null, List.of(teacher2));
-
-            Department department1 = initData.createDepartmentOne(teacher1, List.of());
-            Department department2 = initData.createDepartmentTwo(teacher2, List.of());
-
-            FieldOfStudy expectedFieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
-            FieldOfStudy expectedFieldOfStudy2 = initData.createFieldOfStudyTwo(department2, List.of(), List.of());
-            FieldOfStudy expectedFieldOfStudy3 = initData.createFieldOfStudyThree(department2, List.of(subject2), List.of(student2));
-            Page<FieldOfStudy> expectedResultList = new PageImpl<>(List.of(expectedFieldOfStudy1, expectedFieldOfStudy3));
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            fieldOfStudy.setDescription(null);
             //when
-            when(repository.findAllByNameContainingIgnoreCase(anyString(), any(Pageable.class))).thenReturn(expectedResultList);
-            Page<FieldOfStudyDto> actual = service.findByNamePaginated(pageNo, pageSize, sortField, sortDirection, name);
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            List<String> actual = service.splitDescription(id);
             //then
-            verify(repository).findAllByNameContainingIgnoreCase(anyString(), any(Pageable.class));
-            List<FieldOfStudyDto> content = actual.getContent();
-            assertThat(content).as("Check %s's list size", "subjects").hasSize(2);
-            FieldOfStudyDto actualFieldOfStudy1 = content.get(0);
-            FieldOfStudyDto actualFieldOfStudy2 = content.get(1);
-            assertAll("FieldOfStudy1 properties",
-                    () -> assertThat(actualFieldOfStudy1.getId())
-                            .as("Check %s's %s", "FieldOfStudy1", "ID").isEqualTo(expectedFieldOfStudy1.getId()),
-                    () -> assertThat(actualFieldOfStudy1.getName())
-                            .as("Check %s's %s", "FieldOfStudy1", "Name").isEqualTo(expectedFieldOfStudy1.getName()),
-                    () -> assertThat(actualFieldOfStudy1.getLevelOfEducation())
-                            .as("Check %s's %s", "FieldOfStudy1", "Level of education").isEqualTo(expectedFieldOfStudy1.getLevelOfEducation()),
-                    () -> assertThat(actualFieldOfStudy1.getMode())
-                            .as("Check %s's %s", "FieldOfStudy1", "Study mode").isEqualTo(expectedFieldOfStudy1.getMode()),
-                    () -> assertThat(actualFieldOfStudy1.getTitle())
-                            .as("Check %s's %s", "FieldOfStudy1", "Obtained title").isEqualTo(expectedFieldOfStudy1.getTitle()),
-                    () -> assertThat(actualFieldOfStudy1.getDepartment())
-                            .as("Check %s's %s", "FieldOfStudy1", "Obtained title").isEqualTo(department1),
-                    () -> assertThat(actualFieldOfStudy1.getSubjects())
-                            .as("Check if %s' %s list contains subject", "actualFieldOfStudy1", "subjects")
-                            .isNotNull().isNotEmpty().hasSize(1).contains(subject1).doesNotContain(subject2),
-                    () -> assertThat(actualFieldOfStudy1.getStudents())
-                            .as("Check if %s' %s list contains student", "actualFieldOfStudy1", "students")
-                            .isNotNull().isNotEmpty().hasSize(1).contains(student1).doesNotContain(student2)
-            );
-            assertAll("FieldOfStudy3 properties",
-                    () -> assertThat(actualFieldOfStudy2.getId())
-                            .as("Check %s's %s", "FieldOfStudy2", "ID").isEqualTo(expectedFieldOfStudy3.getId()),
-                    () -> assertThat(actualFieldOfStudy2.getName())
-                            .as("Check %s's %s", "FieldOfStudy2", "Name").isEqualTo(expectedFieldOfStudy3.getName()),
-                    () -> assertThat(actualFieldOfStudy2.getLevelOfEducation())
-                            .as("Check %s's %s", "FieldOfStudy2", "Level of education").isEqualTo(expectedFieldOfStudy3.getLevelOfEducation()),
-                    () -> assertThat(actualFieldOfStudy2.getMode())
-                            .as("Check %s's %s", "FieldOfStudy2", "Study mode").isEqualTo(expectedFieldOfStudy3.getMode()),
-                    () -> assertThat(actualFieldOfStudy2.getTitle())
-                            .as("Check %s's %s", "FieldOfStudy2", "Obtained title").isEqualTo(expectedFieldOfStudy3.getTitle()),
-                    () -> assertThat(actualFieldOfStudy2.getDepartment())
-                            .as("Check %s's %s", "FieldOfStudy2", "Obtained title").isEqualTo(department2),
-                    () -> assertThat(actualFieldOfStudy2.getSubjects())
-                            .as("Check if %s' %s list contains subject", "actualFieldOfStudy2", "subjects")
-                            .isNotNull().isNotEmpty().hasSize(1).contains(subject2).doesNotContain(subject1),
-                    () -> assertThat(actualFieldOfStudy2.getStudents())
-                            .as("Check if %s' %s list contains student", "actualFieldOfStudy2", "students")
-                            .isNotNull().isNotEmpty().hasSize(1).contains(student2).doesNotContain(student1)
-            );
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).isEmpty();
+        }
+    }
+
+    @Nested
+    class CalculateEctsPointsForEachSemesterTest {
+        @Test
+        void returnsMapOfSemesterAndNumberOfEctsPoints_givenId() {
+            //given
+            Long id = 1L;
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectFour(null, List.of());
+            List<Subject> subjects = List.of(subject1, subject2, subject3);
+            //when
+            when(repository.findAllSubjectsFromFieldOfStudy(anyLong())).thenReturn(subjects);
+            Map<Semester, Integer> actual = service.calculateEctsPointsForEachSemester(id);
+            //then
+            verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check actual Map content")
+                    .containsValues(subject1.getEctsPoints() + subject3.getEctsPoints(), subject2.getEctsPoints());
+        }
+    }
+
+    @Nested
+    class GetSumOfEctsPointsFromAllSemestersTest {
+        @Test
+        void returnsIntegerValueOfEctsPoints_givenId() {
+            //given
+            Long id = 1L;
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectFour(null, List.of());
+            List<Subject> subjects = List.of(subject1, subject2, subject3);
+            int expected = subject1.getEctsPoints() + subject3.getEctsPoints() + subject2.getEctsPoints();
+            //when
+            when(repository.findAllSubjectsFromFieldOfStudy(anyLong())).thenReturn(subjects);
+            Integer actual = service.getSumOfEctsPointsFromAllSemesters(id);
+            //then
+            verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check return value").isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class GetNumberOfSemestersTest {
+        @Test
+        void returnsSix_givenFieldOfStudyWithBachTitle() {
+            //given
+            int expected = 6;
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            int actual = service.getNumberOfSemesters(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check return value").isEqualTo(expected);
+        }
+
+        @Test
+        void returnsSeven_givenFieldOfStudyWithEngTitle() {
+            //given
+            int expected = 7;
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            int actual = service.getNumberOfSemesters(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check return value").isEqualTo(expected);
+        }
+
+        @Test
+        void returnsDefault_givenFieldOfStudyWithOtherTitle() {
+            //given
+            int expected = 3;
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            int actual = service.getNumberOfSemesters(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check return value").isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class getImagePathTest {
+        @Test
+        void returnsImagePathAsString_givenFieldOfStudyIdWithImgAssigned() {
+            //given
+            String imgName = "someImage.jpg";
+            String expectedPath = "/img/fields-of-study/" + imgName;
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            fieldOfStudy.setImage("someImage.jpg");
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            String actual = service.getImagePath(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check image path value").isEqualTo(expectedPath);
+        }
+
+        @Test
+        void returnsDefaultImagePathAsString_givenFieldOfStudyIdWithImgAssigned() {
+            //given
+            String defaultImgName = "default.jpg";
+            String expectedPath = "/img/fields-of-study/" + defaultImgName;
+            Long id = 1L;
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            //when
+            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
+            String actual = service.getImagePath(id);
+            //then
+            verify(repository).findById(anyLong());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check image path value").isEqualTo(expectedPath);
+        }
+    }
+
+    @Nested
+    class FetchAllByLevelOfEducationSortedByNameTest {
+        @Test
+        void returnsListOfFieldsOfStudies_filteredByLevelOfEducation_sortedByNameAscending_givenFirstLevelOfEducation() {
+            //given
+            LevelOfEducation levelOfEducation = LevelOfEducation.FIRST;
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            FieldOfStudyDto fieldOfStudyDto1 = mapper.map(fieldOfStudy1, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
+            List<FieldOfStudy> resultOfRepositorySearch = List.of(fieldOfStudy2, fieldOfStudy1);
+            //when
+            when(repository.findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class)))
+                    .thenReturn(resultOfRepositorySearch);
+            List<FieldOfStudyDto> actual = service.fetchAllByLevelOfEducationSortedByName(levelOfEducation);
+            //then
+            verify(repository).findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class));
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check if result list contains items in exact order")
+                    .contains(fieldOfStudyDto1, atIndex(1))
+                    .contains(fieldOfStudyDto2, atIndex(0));
+        }
+
+        @Test
+        void returnsListOfFieldsOfStudies_filteredByLevelOfEducation_sortedByNameAscending_givenSecondLevelOfEducation() {
+            //given
+            LevelOfEducation levelOfEducation = LevelOfEducation.SECOND;
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyFour(null, List.of(), List.of());
+            FieldOfStudyDto fieldOfStudyDto1 = mapper.map(fieldOfStudy1, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
+            List<FieldOfStudy> resultOfRepositorySearch = List.of(fieldOfStudy2, fieldOfStudy1);
+            //when
+            when(repository.findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class)))
+                    .thenReturn(resultOfRepositorySearch);
+            List<FieldOfStudyDto> actual = service.fetchAllByLevelOfEducationSortedByName(levelOfEducation);
+            //then
+            verify(repository).findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class));
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check if result list contains items in exact order")
+                    .contains(fieldOfStudyDto1, atIndex(1))
+                    .contains(fieldOfStudyDto2, atIndex(0));
+        }
+    }
+
+    @Nested
+    class FetchAllGroupedByNameAndSortedByNameTest {
+        @Test
+        void returnsMap_nameAsKey_listOfFieldsOfStudiesAsValue_sortedByNameAscending() {
+            //given
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy4 = initData.createFieldOfStudyFour(null, List.of(), List.of());
+            fieldOfStudy2.setName(fieldOfStudy1.getName());
+            fieldOfStudy4.setName(fieldOfStudy3.getName());
+            FieldOfStudyDto fieldOfStudyDto1 = mapper.map(fieldOfStudy1, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto3 = mapper.map(fieldOfStudy3, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto4 = mapper.map(fieldOfStudy4, FieldOfStudyDto.class);
+            List<FieldOfStudy> resultOfRepositoryFindAll =
+                    List.of(fieldOfStudy4, fieldOfStudy3, fieldOfStudy1, fieldOfStudy2);
+            //when
+            when(repository.findAll(any(Sort.class))).thenReturn(resultOfRepositoryFindAll);
+            when(repository.findAllByNameContainingIgnoreCase(fieldOfStudy1.getName()))
+                    .thenReturn(List.of(fieldOfStudy1, fieldOfStudy2));
+            when(repository.findAllByNameContainingIgnoreCase(fieldOfStudy3.getName()))
+                    .thenReturn(List.of(fieldOfStudy3, fieldOfStudy4));
+            Map<String, List<FieldOfStudyDto>> actual = service.fetchAllGroupedByNameAndSortedByName();
+            //then
+            verify(repository).findAll(any(Sort.class));
+            verify(repository, times(2)).findAllByNameContainingIgnoreCase(anyString());
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check if result map contains correct map entries")
+                    .containsEntry(fieldOfStudyDto1.getName(), List.of(fieldOfStudyDto1, fieldOfStudyDto2))
+                    .containsEntry(fieldOfStudyDto3.getName(), List.of(fieldOfStudyDto3, fieldOfStudyDto4));
+        }
+    }
+
+    @Nested
+    class FetchAllWithNoDepartmentTest {
+        @Test
+        void returnsListOfFieldsOfStudies_withNoDepartmentAssigned() {
+            //given
+            Department department1 = initData.createDepartmentOne(null, List.of());
+            Department department2 = initData.createDepartmentOne(null, List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy4 = initData.createFieldOfStudyFour(department2, List.of(), List.of());
+            FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto3 = mapper.map(fieldOfStudy3, FieldOfStudyDto.class);
+            List<FieldOfStudy> resultOfRepositoryFindAll =
+                    List.of(fieldOfStudy1, fieldOfStudy2, fieldOfStudy3, fieldOfStudy4);
+            //when
+            when(repository.findAll()).thenReturn(resultOfRepositoryFindAll);
+            List<FieldOfStudyDto> actual = service.fetchAllWithNoDepartment();
+            //then
+            verify(repository).findAll();
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check if result list contains correct values")
+                    .contains(fieldOfStudyDto2, fieldOfStudyDto3);
+        }
+    }
+
+    @Nested
+    class FetchAllWithGivenDepartmentDtoOrNoDepartmentTest {
+        @Test
+        void returnsListOfFieldsOfStudies_withNoDepartmentAssigned_orWithGivenDepartmentAssigned_givenDepartmentDto() {
+            //given
+            Department department1 = initData.createDepartmentOne(null, List.of());
+            DepartmentDto departmentDto1 = mapper.map(department1, DepartmentDto.class);
+            Department department2 = initData.createDepartmentOne(null, List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy3 = initData.createFieldOfStudyThree(department1, List.of(), List.of());
+            FieldOfStudy fieldOfStudy4 = initData.createFieldOfStudyFour(department2, List.of(), List.of());
+            FieldOfStudyDto fieldOfStudyDto1 = mapper.map(fieldOfStudy1, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto2 = mapper.map(fieldOfStudy2, FieldOfStudyDto.class);
+            FieldOfStudyDto fieldOfStudyDto3 = mapper.map(fieldOfStudy3, FieldOfStudyDto.class);
+            List<FieldOfStudy> resultOfRepositoryFindAll =
+                    List.of(fieldOfStudy1, fieldOfStudy2, fieldOfStudy3, fieldOfStudy4);
+            //when
+            when(repository.findAll()).thenReturn(resultOfRepositoryFindAll);
+            List<FieldOfStudyDto> actual = service.fetchAllWithGivenDepartmentDtoOrNoDepartment(departmentDto1);
+            //then
+            verify(repository, times(2)).findAll();
+            verifyNoMoreInteractions(repository);
+            assertThat(actual).as("Check if result list contains correct values")
+                    .contains(fieldOfStudyDto1, fieldOfStudyDto2, fieldOfStudyDto3);
         }
     }
 }

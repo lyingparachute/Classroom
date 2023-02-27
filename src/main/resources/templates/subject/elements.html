@@ -132,11 +132,29 @@
     <hr>
     <div class="mb-4">
         <h4 th:text="#{subject.teachers.list}"></h4>
-        <th:block th:each="fieldOpt, count : ${subject.teachers}">
+        <span th:if="${subject.teachers.size() == 0}" th:text="#{subject.no.teachers}"></span>
+        <th:block th:unless="${subject.teachers.size() == 0}" th:each="fieldOpt, count : ${subject.teachers}">
             <div class="mb-2">
                 <span th:text="${count.index + 1} + '. '"></span>
                 <a class="text-body"
                    th:href="@{/dashboard/teachers/{id}(id=${fieldOpt.id})}">
+                <span th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}"
+                      th:value="${fieldOpt.id}"></span>
+                    <i class="fas fa-regular fa-up-right-from-square"></i>
+                </a>
+            </div>
+        </th:block>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{subject.students.list}"></h4>
+        <span th:if="${subject.fieldOfStudy.students.size() == 0}" th:text="#{subject.no.students}"></span>
+        <th:block th:unless="${subject.fieldOfStudy.students.size() == 0}"
+                  th:each="fieldOpt, count : ${subject.fieldOfStudy.students}">
+            <div class="mb-2">
+                <span th:text="${count.index + 1} + '. '"></span>
+                <a class="text-body"
+                   th:href="@{/dashboard/students/{id}(id=${fieldOpt.id})}">
                 <span th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}"
                       th:value="${fieldOpt.id}"></span>
                     <i class="fas fa-regular fa-up-right-from-square"></i>

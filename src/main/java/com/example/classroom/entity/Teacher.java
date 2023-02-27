@@ -48,12 +48,10 @@ public class Teacher {
     private Set<Student> students = new HashSet<>();
 
     public Set<Subject> getSubjects() {
-        //defensive copy, nobody will be able to change Set from the outside
         return new HashSet<>(subjects);
     }
 
     public Set<Student> getStudents() {
-        //defensive copy, nobody will be able to change Set from the outside
         return new HashSet<>(students);
     }
 
@@ -81,7 +79,6 @@ public class Teacher {
      * on the student side
      */
     public void addStudent(Student student) {
-        //prevent endless loop
         if (students.contains(student)) {
             return;
         }
@@ -95,7 +92,6 @@ public class Teacher {
      * on the student side
      */
     public void removeStudent(Student student) {
-        //prevent endless loop
         if (!students.contains(student)) {
             return;
         }
@@ -109,7 +105,6 @@ public class Teacher {
      * on the subject side
      */
     public void addSubject(Subject subject) {
-        //prevent endless loop
         if (subjects.contains(subject)) {
             return;
         }
@@ -123,7 +118,6 @@ public class Teacher {
      * on the subject side
      */
     public void removeSubject(Subject subject) {
-        //prevent endless loop
         if (!subjects.contains(subject)) {
             return;
         }

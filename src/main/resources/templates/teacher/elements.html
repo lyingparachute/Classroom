@@ -6,7 +6,7 @@
             <input class="form-control"
                    data-mdb-showcounter="true"
                    th:field="*{firstName}"
-                   maxlength="60" th:classappend="${#fields.hasErrors('firstName')} ? is-invalid"
+                   maxlength="30" th:classappend="${#fields.hasErrors('firstName')} ? is-invalid"
                    type="text"/>
             <div class="form-helper"></div>
             <div class="invalid-tooltip">
@@ -21,7 +21,7 @@
             <input class="form-control"
                    data-mdb-showcounter="true"
                    th:field="*{lastName}"
-                   maxlength="60" th:classappend="${#fields.hasErrors('lastName')} ? is-invalid"
+                   maxlength="30" th:classappend="${#fields.hasErrors('lastName')} ? is-invalid"
                    type="text"/>
             <div class="form-helper"></div>
             <div class="invalid-tooltip">
@@ -160,7 +160,8 @@
     <hr>
     <div class="mb-4">
         <h4 th:text="#{teacher.subjects}"></h4>
-        <th:block th:each="fieldOpt, count : ${teacher.subjects}">
+        <span th:if="${teacher.subjects.size() == 0}" th:text="#{teacher.no.subjects}"></span>
+        <th:block th:unless="${teacher.subjects.size() == 0}" th:each="fieldOpt, count : ${teacher.subjects}">
             <div class="mb-2">
                 <span th:text="${count.index + 1} + '. '"></span>
                 <a class="text-body"
@@ -175,7 +176,8 @@
     <hr>
     <div class="mb-4">
         <h4 th:text="#{teacher.studentList}"></h4>
-        <th:block th:each="fieldOpt, count : ${teacher.students}">
+        <span th:if="${teacher.students.size() == 0}" th:text="#{teacher.no.students}"></span>
+        <th:block th:unless="${teacher.students.size() == 0}" th:each="fieldOpt, count : ${teacher.students}">
             <div class="mb-2">
                 <span th:text="${count.index + 1} + '. '"></span>
                 <a class="text-body"

@@ -6,10 +6,7 @@ import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
 
-import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class UnitTestsInitData {
 
@@ -52,14 +49,8 @@ public class UnitTestsInitData {
         teachers.forEach(student::addTeacher);
     }
 
-    private void removeReferencingObjectsFromStudent(Student student) {
-        student.setFieldOfStudy(null);
-        Set<Teacher> teachers = new HashSet<>(student.getTeachers());
-        teachers.forEach(student::removeTeacher);
-    }
-
     // *** Create Teachers *** //
-    @Transactional
+
     public Teacher createTeacherOne(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setId(1L);
@@ -71,7 +62,7 @@ public class UnitTestsInitData {
         return teacher;
     }
 
-    @Transactional
+
     public Teacher createTeacherTwo(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setId(2L);
@@ -83,7 +74,7 @@ public class UnitTestsInitData {
         return teacher;
     }
 
-    @Transactional
+
     public Teacher createTeacherThree(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setId(3L);
@@ -101,16 +92,8 @@ public class UnitTestsInitData {
         subjects.forEach(teacher::addSubject);
     }
 
-    private void removeReferencingObjectsFromTeacher(final Teacher teacher) {
-        Set<Student> students = new HashSet<>(teacher.getStudents());
-        Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
-        teacher.setDepartment(null);
-        students.forEach(teacher::removeStudent);
-        subjects.forEach(teacher::removeSubject);
-    }
-
     // *** Create Subjects *** //
-    @Transactional
+
     public Subject createSubjectOne(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setId(1L);
@@ -118,11 +101,12 @@ public class UnitTestsInitData {
         subject.setDescription("Calculating integrals");
         subject.setSemester(Semester.FIFTH);
         subject.setHoursInSemester(100);
+        subject.setEctsPoints(20);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         return subject;
     }
 
-    @Transactional
+
     public Subject createSubjectTwo(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setId(2L);
@@ -130,11 +114,12 @@ public class UnitTestsInitData {
         subject.setDescription("Painting");
         subject.setSemester(Semester.SECOND);
         subject.setHoursInSemester(120);
+        subject.setEctsPoints(15);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         return subject;
     }
 
-    @Transactional
+
     public Subject createSubjectThree(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setId(3L);
@@ -142,18 +127,19 @@ public class UnitTestsInitData {
         subject.setDescription("General Science");
         subject.setSemester(Semester.FIRST);
         subject.setHoursInSemester(150);
+        subject.setEctsPoints(10);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         return subject;
     }
 
-    @Transactional
     public Subject createSubjectFour(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setId(4L);
-        subject.setName("Computer Science");
-        subject.setDescription("Learning Java and Spring");
-        subject.setSemester(Semester.SIXTH);
+        subject.setName("Some Subject");
+        subject.setDescription("No desc");
+        subject.setSemester(Semester.FIFTH);
         subject.setHoursInSemester(360);
+        subject.setEctsPoints(5);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         return subject;
     }
@@ -163,26 +149,18 @@ public class UnitTestsInitData {
         teachers.forEach(subject::addTeacher);
     }
 
-    private void removeReferencingObjectsFromSubject(Subject subject) {
-        Set<Teacher> teachers = new HashSet<>(subject.getTeachers());
-        subject.setFieldOfStudy(null);
-        teachers.forEach(subject::removeTeacher);
-    }
-
     // *** Create Fields Of Study *** //
-    @Transactional
     public FieldOfStudy createFieldOfStudyOne(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setId(1L);
         fieldOfStudy.setName("Inżynieria mechaniczno-medyczna");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.SECOND);
         fieldOfStudy.setMode(ModeOfStudy.FT);
-        fieldOfStudy.setTitle(AcademicTitle.MGR);
+        fieldOfStudy.setTitle(AcademicTitle.ENG);
         addReferencingObjectsToFieldOfStudy(department, subjects, students, fieldOfStudy);
         return fieldOfStudy;
     }
 
-    @Transactional
     public FieldOfStudy createFieldOfStudyTwo(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setId(2L);
@@ -194,12 +172,22 @@ public class UnitTestsInitData {
         return fieldOfStudy;
     }
 
-    @Transactional
     public FieldOfStudy createFieldOfStudyThree(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setId(3L);
         fieldOfStudy.setName("Informatyka");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
+        fieldOfStudy.setMode(ModeOfStudy.FT);
+        fieldOfStudy.setTitle(AcademicTitle.DR);
+        addReferencingObjectsToFieldOfStudy(department, subjects, students, fieldOfStudy);
+        return fieldOfStudy;
+    }
+
+    public FieldOfStudy createFieldOfStudyFour(Department department, List<Subject> subjects, List<Student> students) {
+        FieldOfStudy fieldOfStudy = new FieldOfStudy();
+        fieldOfStudy.setId(4L);
+        fieldOfStudy.setName("Biotechnologia");
+        fieldOfStudy.setLevelOfEducation(LevelOfEducation.SECOND);
         fieldOfStudy.setMode(ModeOfStudy.FT);
         fieldOfStudy.setTitle(AcademicTitle.DR);
         addReferencingObjectsToFieldOfStudy(department, subjects, students, fieldOfStudy);
@@ -212,44 +200,33 @@ public class UnitTestsInitData {
         students.forEach(fieldOfStudy::addStudent);
     }
 
-    private void removeReferencingObjectsFromFieldOfStudy(FieldOfStudy fieldOfStudy) {
-        Set<Subject> subjects = new HashSet<>(fieldOfStudy.getSubjects());
-        Set<Student> students = new HashSet<>(fieldOfStudy.getStudents());
-        fieldOfStudy.setDepartment(null);
-        subjects.forEach(fieldOfStudy::removeSubject);
-        students.forEach(fieldOfStudy::removeStudent);
-    }
-
     // *** Create Departments *** //
-    @Transactional
     public Department createDepartmentOne(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
         Department department = new Department();
         department.setId(1L);
         department.setName("Wydział Elektroniki, Telekomunikacji i Informatyki");
         department.setAddress("ul. Gabriela Narutowicza 11/12 80-233 Gdańsk");
-        department.setTelNumber(123456789);
+        department.setTelNumber("123456789");
         addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
         return department;
     }
 
-    @Transactional
     public Department createDepartmentTwo(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
         Department department = new Department();
         department.setId(2L);
         department.setName("Wydział Chemiczny");
         department.setAddress("ul. Broniewicza 115, 00-245 Kęty");
-        department.setTelNumber(987654321);
+        department.setTelNumber("987654321");
         addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
         return department;
     }
 
-    @Transactional
     public Department createDepartmentThree(Teacher dean, List<FieldOfStudy> fieldsOfStudy) {
         Department department = new Department();
         department.setId(3L);
         department.setName("Wydział Architektury");
         department.setAddress("ul. Jabłoniowa 34, 11-112 Stalowa Wola");
-        department.setTelNumber(321321321);
+        department.setTelNumber("321321321");
         addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
         return department;
     }
@@ -257,12 +234,6 @@ public class UnitTestsInitData {
     private void addReferencingObjectsToDepartment(Teacher dean, List<FieldOfStudy> fieldsOfStudy, Department department) {
         department.setDean(dean);
         fieldsOfStudy.forEach(department::addFieldOfStudy);
-    }
-
-    private void removeReferencingObjectsFromDepartment(Department department) {
-        Set<FieldOfStudy> fieldsOfStudy = new HashSet<>(department.getFieldsOfStudy());
-        department.setDean(null);
-        fieldsOfStudy.forEach(department::removeFieldOfStudy);
     }
 }
 

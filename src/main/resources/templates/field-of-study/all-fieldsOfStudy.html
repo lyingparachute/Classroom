@@ -16,7 +16,7 @@
                  th:if="${success}">
                 <i class="fas fa-check-circle"></i>
                 <strong class="mx-1" th:text="#{msg.success}"></strong>
-                <span th:text="#{teacher.success.msg1}"></span>
+                <span th:text="#{fieldOfStudy.success.msg1}"></span>
                 <a class="alert-link mx-1"
                    th:unless="${deleteSuccess}"
                    th:href="@{/dashboard/fields-of-study/{id}(id=${success.id})}"

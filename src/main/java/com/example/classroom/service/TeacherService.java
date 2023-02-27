@@ -1,6 +1,7 @@
 package com.example.classroom.service;
 
 import com.example.classroom.dto.TeacherDto;
+import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Student;
 import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
@@ -41,8 +42,7 @@ public class TeacherService {
         removeReferencingObjects(teacher);
         mapper.map(dto, teacher);
         addReferencingObjects(teacher);
-        Teacher saved = repository.save(teacher);
-        return mapper.map(saved, TeacherDto.class);
+        return mapper.map(teacher, TeacherDto.class);
 
     }
 
@@ -102,11 +102,18 @@ public class TeacherService {
     }
 
     private void addReferencingObjects(final Teacher teacher) {
-        Set<Student> students = new HashSet<>(teacher.getStudents());
         Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
         teacher.setDepartment(teacher.getDepartment());
-        students.forEach(teacher::addStudent);
+        assignStudentsToTeacher(teacher);
         subjects.forEach(teacher::addSubject);
+    }
+
+    private void assignStudentsToTeacher(Teacher teacher) {
+        teacher.getSubjects().stream()
+                .map(Subject::getFieldOfStudy)
+                .map(FieldOfStudy::getStudents)
+                .flatMap(Set::stream)
+                .forEach(teacher::addStudent);
     }
 
     private void removeReferencingObjects(final Teacher teacher) {

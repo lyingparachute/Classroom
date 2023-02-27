@@ -48,7 +48,7 @@ class TeacherGetControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                .andExpect(view().name("teacher"));
+                .andExpect(view().name("teacher/teacher-view"));
     }
 
     @Test
@@ -93,7 +93,7 @@ class TeacherGetControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                .andExpect(view().name("teachers"));
+                .andExpect(view().name("teacher/all-teachers"));
     }
 
     @Test
@@ -170,7 +170,7 @@ class TeacherGetControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                .andExpect(view().name("teachers"));
+                .andExpect(view().name("teacher/all-teachers"));
     }
 
     @Test

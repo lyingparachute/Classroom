@@ -2,6 +2,7 @@ package com.example.classroom.service;
 
 import com.example.classroom.dto.StudentDto;
 import com.example.classroom.entity.Student;
+import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -67,8 +68,7 @@ public class StudentService {
         removeReferencingObjects(student);
         mapper.map(dto, student);
         addReferencingObjects(student);
-        Student saved = repository.save(student);
-        return mapper.map(saved, StudentDto.class);
+        return mapper.map(student, StudentDto.class);
     }
 
     @Transactional
@@ -93,23 +93,29 @@ public class StudentService {
         return all.map(student -> mapper.map(student, StudentDto.class));
     }
 
-    private void addReferencingObjects(Student student) {
-        student.setFieldOfStudy(student.getFieldOfStudy());
-        Set<Teacher> teachers = new HashSet<>(student.getTeachers());
-        teachers.forEach(student::addTeacher);
-    }
-
-    private void removeReferencingObjects(Student student) {
-        student.setFieldOfStudy(null);
-        Set<Teacher> teachers = new HashSet<>(student.getTeachers());
-        teachers.forEach(student::removeTeacher);
-    }
-
     @Transactional
     public void remove(Long id) {
         Student student = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
         removeReferencingObjects(student);
         repository.delete(student);
+    }
+
+    private void addReferencingObjects(final Student student) {
+        student.setFieldOfStudy(student.getFieldOfStudy());
+        assignTeachers(student);
+    }
+
+    private void assignTeachers(final Student student) {
+        student.getFieldOfStudy().getSubjects().stream()
+                .map(Subject::getTeachers)
+                .flatMap(Set::stream)
+                .forEach(student::addTeacher);
+    }
+
+    private void removeReferencingObjects(final Student student) {
+        student.setFieldOfStudy(null);
+        Set<Teacher> teachers = new HashSet<>(student.getTeachers());
+        teachers.forEach(student::removeTeacher);
     }
 }

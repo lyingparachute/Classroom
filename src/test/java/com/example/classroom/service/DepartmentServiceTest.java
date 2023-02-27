@@ -136,20 +136,18 @@ class DepartmentServiceTest {
             expected.setId(entityBeforeUpdate.getId());
             expected.setName("Wydział Chemiczny");
             expected.setAddress("ul. Broniewicza 115, 00-245 Kęty");
-            expected.setTelNumber(987654321);
+            expected.setTelNumber("987654321");
             expected.setDean(dean);
             expected.addFieldOfStudy(fieldOfStudy1);
             expected.addFieldOfStudy(fieldOfStudy2);
             DepartmentDto dto = mapper.map(expected, DepartmentDto.class);
             given(repository.findById(anyLong())).willReturn(Optional.of(entityBeforeUpdate));
-            given(repository.save(any(Department.class))).willReturn(expected);
             //when
-            service.update(dto);
+            DepartmentDto updated = service.update(dto);
             //then
             then(repository).should().findById(anyLong());
-            then(repository).should().save(argumentCaptor.capture());
             then(repository).shouldHaveNoMoreInteractions();
-            Department actual = argumentCaptor.getValue();
+            Department actual = mapper.map(updated, Department.class);
 
             assertThat(actual).as("Check if %s is not null", "Department").isNotNull();
             assertAll("Department's properties",

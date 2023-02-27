@@ -11,8 +11,23 @@
 
 <main>
     <div class="container pt-4">
-        <section class="mb-4">
+        <!--Alert Section -->
+        <section>
+            <div class="alert alert-success alert-dismissible d-flex align-items-center fade show"
+                 th:if="${updateSuccess}">
+                <i class="fas fa-check-circle"></i>
+                <strong class="mx-1" th:text="#{msg.success}"></strong>
+                <span th:text="#{fieldOfStudy.subjects.edit.success.msg1}"></span>
+                <strong class="mx-1" th:text="${fieldOfStudy.name}"></strong>
+                <span th:text="#{fieldOfStudy.subjects.edit.success.msg2}"></span>
+                <strong class="mx-1" th:text="#{fieldOfStudy.subjects.edit.success.msg3}"></strong>
+                <span th:text="#{fieldOfStudy.subjects.edit.success.msg4}"></span>
+                <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+            </div>
+        </section>
 
+        <!--All subjects of field of study Section -->
+        <section class="mb-4">
             <div class="card" id="itemCard">
                 <div class="card-header py-4 title-bar">
                     <div class="page-title"

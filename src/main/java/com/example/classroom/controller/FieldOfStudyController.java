@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -25,10 +26,11 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class FieldOfStudyController {
 
-    public static final String UPLOAD_DIR = "fields-of-study/";
     private final FieldOfStudyService service;
     private final DepartmentService departmentService;
     private final SubjectService subjectService;
+    public static final String UPLOAD_DIR = "fields-of-study/";
+    public static final String REDIRECT_DASHBOARD_FIELDS_OF_STUDY = "redirect:/dashboard/fields-of-study";
 
     @GetMapping()
     public String getAllFieldsOfStudy(Model model) {
@@ -59,32 +61,28 @@ public class FieldOfStudyController {
 
     @GetMapping("new")
     public String getCreateFieldOfStudyForm(Model model) {
-        addAttributeFieldOfStudyDto(model);
+        model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
         addAttributeDepartments(model);
         return "field-of-study/fieldOfStudy-create-form";
     }
 
-    @PostMapping("new")
+    @PostMapping(value = "new")
     public String createFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
                                      @RequestParam(value = "imageUpload") MultipartFile multipartFile,
+                                     RedirectAttributes redirectAttributes,
                                      BindingResult result,
                                      Model model) throws IOException {
         if (result.hasErrors()) {
             addAttributeDepartments(model);
-            return "fieldOfStudy-form";
+            return "field-of-study/fieldOfStudy-create-form";
         }
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         dto.setImage(fileName);
-        FieldOfStudyDto created = service.create(dto);
+        FieldOfStudyDto saved = service.create(dto);
         FileUploadUtil.saveFile(UPLOAD_DIR, fileName, multipartFile);
-        addAttributes(created.getId(), model);
-        return "field-of-study/fieldOfStudy-create-success";
-    }
-
-    @GetMapping("delete/{id}")
-    public String deleteFieldOfStudy(@PathVariable Long id, Model model) {
-        service.remove(id);
-        return "redirect:/dashboard/fields-of-study";
+        addFlashAttributeSuccess(redirectAttributes, saved);
+        redirectAttributes.addFlashAttribute("createSuccess", "saved");
+        return REDIRECT_DASHBOARD_FIELDS_OF_STUDY;
     }
 
     @GetMapping("edit/{id}")
@@ -98,18 +96,19 @@ public class FieldOfStudyController {
     public String editFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
                                    @RequestParam(value = "imageUpload") MultipartFile multipartFile,
                                    BindingResult result,
+                                   RedirectAttributes redirectAttributes,
                                    Model model) throws IOException {
-        if (result.hasErrors())
+        if (result.hasErrors()) {
+            addAttributeDepartments(model);
             return "field-of-study/fieldOfStudy-edit-form";
-
+        }
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         dto.setImage(fileName);
-        service.update(dto);
+        FieldOfStudyDto updated = service.update(dto);
         FileUploadUtil.saveFile(UPLOAD_DIR, fileName, multipartFile);
-
-        addAttributeFieldOfStudyFetchById(dto.getId(), model);
-        addAttributes(dto.getId(), model);
-        return "field-of-study/fieldOfStudy-edit-success";
+        addFlashAttributeSuccess(redirectAttributes, updated);
+        redirectAttributes.addFlashAttribute("updateSuccess", "updated");
+        return REDIRECT_DASHBOARD_FIELDS_OF_STUDY;
     }
 
     @GetMapping("edit/{id}/subjects")
@@ -121,9 +120,20 @@ public class FieldOfStudyController {
     }
 
     @PostMapping("subjects/update")
-    public String editSubjects(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto) {
+    public String editSubjects(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
+                               RedirectAttributes redirectAttributes) {
         service.updateSubjects(dto);
+        redirectAttributes.addFlashAttribute("updateSuccess", "update success");
         return "redirect:/dashboard/fields-of-study/" + dto.getId() + "/subjects";
+    }
+
+    @GetMapping("delete/{id}")
+    public String deleteFieldOfStudy(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        FieldOfStudyDto dto = service.fetchById(id);
+        service.remove(id);
+        addFlashAttributeSuccess(redirectAttributes, dto);
+        redirectAttributes.addFlashAttribute("deleteSuccess", "deleted");
+        return REDIRECT_DASHBOARD_FIELDS_OF_STUDY;
     }
 
     private void addAttributes(Long id, Model model) {
@@ -161,15 +171,15 @@ public class FieldOfStudyController {
         model.addAttribute("fieldOfStudy", service.fetchById(id));
     }
 
-    private void addAttributeFieldOfStudyDto(Model model) {
-        model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
-    }
-
     private void addAttributeAllSubjectsMapGroupedBySemesters(Model model) {
         model.addAttribute("subjectsMap", subjectService.fetchAllGroupedBySemesters());
     }
 
     private void addAttributeSubjectsMapGroupedBySemesters(Long id, Model model) {
         model.addAttribute("semestersMap", service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id));
+    }
+
+    private void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, FieldOfStudyDto dto) {
+        redirectAttributes.addFlashAttribute("success", dto);
     }
 }

@@ -142,12 +142,10 @@ class StudentServiceTest {
             StudentDto dto = mapper.map(expected, StudentDto.class);
             //when
             when(repository.findById(anyLong())).thenReturn(Optional.of(entityBeforeUpdate));
-            when(repository.save(any(Student.class))).thenReturn(expected);
-            service.update(dto);
+            StudentDto updated = service.update(dto);
             //then
             verify(repository).findById(anyLong());
-            verify(repository).save(argumentCaptor.capture());
-            Student actual = argumentCaptor.getValue();
+            Student actual = mapper.map(updated, Student.class);
             assertThat(actual).as("Check if %s is not null", "Student").isNotNull();
             assertAll("Student's properties",
                     () -> assertThat(actual.getId())
