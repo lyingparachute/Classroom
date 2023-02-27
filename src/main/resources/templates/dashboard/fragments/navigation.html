@@ -179,11 +179,12 @@
                             <hr class="dropdown-divider"/>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#"><i class="flag flag-poland"></i><span
+                            <a class="dropdown-item" th:href="@{''(lang=pl)}">
+                                <i class="flag flag-poland"></i><span
                                     th:text="#{dashboard.navigation.language.pl}"></span></a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#"><i class="flag flag-germany"></i><span
+                            <a class="dropdown-item" th:href="@{''(lang=de)}"><i class="flag flag-germany"></i><span
                                     th:text="#{dashboard.navigation.language.de}"></a>
                         </li>
 
@@ -199,10 +200,13 @@
                              alt="" loading="lazy"/>
                     </a>
                     <ul aria-labelledby="avatar" class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#" th:text="#{dashboard.navigation.avatar.profile}"></a></li>
-                        <li><a class="dropdown-item" href="#" th:text="#{dashboard.navigation.avatar.settings}"></a>
+                        <li><a class="dropdown-item" th:href="@{/dashboard/profile}"
+                               th:text="#{dashboard.navigation.avatar.profile}"></a></li>
+                        <li><a class="dropdown-item" th:href="@{/dashboard/settings}"
+                               th:text="#{dashboard.navigation.avatar.settings}"></a>
                         </li>
-                        <li><a class="dropdown-item" href="#" th:text="#{dashboard.navigation.avatar.logout}"></a></li>
+                        <li><a class="dropdown-item" th:href="@{/logout}"
+                               th:text="#{dashboard.navigation.avatar.logout}"></a></li>
                     </ul>
                 </li>
             </ul>
