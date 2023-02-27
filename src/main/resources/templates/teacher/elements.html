@@ -6,7 +6,7 @@
             <input class="form-control"
                    data-mdb-showcounter="true"
                    th:field="*{firstName}"
-                   maxlength="60" th:classappend="${#fields.hasErrors('firstName')} ? is-invalid"
+                   maxlength="30" th:classappend="${#fields.hasErrors('firstName')} ? is-invalid"
                    type="text"/>
             <div class="form-helper"></div>
             <div class="invalid-tooltip">
@@ -21,7 +21,7 @@
             <input class="form-control"
                    data-mdb-showcounter="true"
                    th:field="*{lastName}"
-                   maxlength="60" th:classappend="${#fields.hasErrors('lastName')} ? is-invalid"
+                   maxlength="30" th:classappend="${#fields.hasErrors('lastName')} ? is-invalid"
                    type="text"/>
             <div class="form-helper"></div>
             <div class="invalid-tooltip">
