@@ -316,7 +316,8 @@
               th:text="${fieldOfStudy.mode.value.toLowerCase()}"></span>
     </h4>
 
-    <th:block th:each="semester, iterStat : ${T(com.example.classroom.enums.Semester).values()}">
+    <th:block th:each="semester, iterStat : ${T(com.example.classroom.enums.Semester).values()}"
+              th:if="${iterStat.count <= numberOfSemesters}">
         <div class="card my-3">
             <div class="card-body">
                 <h5 class="card-title fw-bold" th:text="${semester.description}"></h5>
