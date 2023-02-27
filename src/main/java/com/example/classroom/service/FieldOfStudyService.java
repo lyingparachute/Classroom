@@ -42,8 +42,7 @@ public class FieldOfStudyService {
         removeDepartment(fieldOfStudy);
         mapper.map(dto, fieldOfStudy);
         addReferencingObjects(fieldOfStudy);
-        FieldOfStudy saved = repository.save(fieldOfStudy);
-        return mapper.map(saved, FieldOfStudyDto.class);
+        return mapper.map(fieldOfStudy, FieldOfStudyDto.class);
     }
 
     @Transactional

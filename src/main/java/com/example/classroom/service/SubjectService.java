@@ -41,8 +41,7 @@ public class SubjectService {
         removeReferencingObjects(subject);
         mapper.map(dto, subject);
         addReferencingObjects(subject);
-        Subject saved = repository.save(subject);
-        return mapper.map(saved, SubjectDto.class);
+        return mapper.map(subject, SubjectDto.class);
 
     }
 

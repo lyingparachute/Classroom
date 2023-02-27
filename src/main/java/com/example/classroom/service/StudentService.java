@@ -2,6 +2,7 @@ package com.example.classroom.service;
 
 import com.example.classroom.dto.StudentDto;
 import com.example.classroom.entity.Student;
+import com.example.classroom.entity.Subject;
 import com.example.classroom.entity.Teacher;
 import com.example.classroom.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -67,8 +68,7 @@ public class StudentService {
         removeReferencingObjects(student);
         mapper.map(dto, student);
         addReferencingObjects(student);
-        Student saved = repository.save(student);
-        return mapper.map(saved, StudentDto.class);
+        return mapper.map(student, StudentDto.class);
     }
 
     @Transactional

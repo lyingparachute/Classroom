@@ -42,8 +42,7 @@ public class TeacherService {
         removeReferencingObjects(teacher);
         mapper.map(dto, teacher);
         addReferencingObjects(teacher);
-        Teacher saved = repository.save(teacher);
-        return mapper.map(saved, TeacherDto.class);
+        return mapper.map(teacher, TeacherDto.class);
 
     }
 
