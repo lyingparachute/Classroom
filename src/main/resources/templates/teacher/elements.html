@@ -64,15 +64,17 @@
         <h4 th:text="#{teacher.subjects}"></h4>
         <div class="col-sm text-left">
 
-            <table class="table table-hover" th:if="${totalItems != 0}">
+            <table id="subjects_table" class="table table-hover dataTable" th:if="${totalItems != 0}">
                 <thead>
                 <tr>
                     <th class="bs-checkbox"
                         data-field="state"
+
                         rowspan="2" style="text-align: center; vertical-align: middle; width: 36px;">
                         <div class="form-check">
                             <input aria-label="select all items" class="form-check-input th-inner"
-                                   id="flexCheckDefault"
+                                   onclick="checkAll(this)"
+                                   id="check_all"
                                    name="btSelectAll"
                                    type="checkbox"/>
                         </div>
@@ -87,7 +89,8 @@
                 <tbody>
                 <tr th:each="subject, iterStat : ${subjects}">
                     <td>
-                        <input class="form-check-input" name="btSelectItem"
+                        <input class="form-check-input"
+                               name="row-check"
                                th:field="*{subjects}"
                                th:value="${subject.id}"
                                th:aria-label="${subject.name}"

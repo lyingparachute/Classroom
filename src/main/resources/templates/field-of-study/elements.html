@@ -316,11 +316,12 @@
               th:text="${fieldOfStudy.mode.value.toLowerCase()}"></span>
     </h4>
 
-    <th:block th:each="semester, iterStat : ${T(com.example.classroom.enums.Semester).values()}">
+    <th:block th:each="semester, iterStat : ${T(com.example.classroom.enums.Semester).values()}"
+              th:if="${iterStat.count <= numberOfSemesters}">
         <div class="card my-3">
             <div class="card-body">
                 <h5 class="card-title fw-bold" th:text="${semester.description}"></h5>
-                <div class="table-responsive">
+                <div th:id="${'select-all-' + iterStat.count}" class="table-responsive">
                     <table class="table table-hover border-primary">
                         <thead>
                         <tr>
@@ -329,7 +330,7 @@
                                 rowspan="2" style="text-align: center; vertical-align: middle; width: 36px;">
                                 <div class="form-check">
                                     <input aria-label="select all items" class="form-check-input th-inner"
-                                           id="flexCheckDefault"
+                                           th:id="${iterStat.count}"
                                            name="btSelectAll"
                                            type="checkbox"/>
                                 </div>
@@ -344,7 +345,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="subject : ${subjectsMap.get(semester)}">
+                        <tr th:each="subject, subjectStat : ${subjectsMap.get(semester)}">
                             <td class="bs-checkbox">
                                 <div class="form-check">
                                     <input class="form-check-input"
@@ -353,6 +354,7 @@
                                            th:data-index="${subject}"
                                            th:field="*{subjects}"
                                            th:value="${subject.id}"
+                                           th:id="${'sem-opt-' + subjectStat.count}"
                                            type="checkbox"/>
                                 </div>
                             </td>
