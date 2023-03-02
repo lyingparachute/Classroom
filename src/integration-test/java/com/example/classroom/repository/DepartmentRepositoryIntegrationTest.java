@@ -5,6 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -44,6 +47,21 @@ class DepartmentRepositoryIntegrationTest {
         //then
         assertThat(actual).isNotNull().hasSize(2)
                 .containsExactlyInAnyOrder(expected1, expected2);
+    }
+
+    @Test
+    void shouldFindAllByNameContainingIgnoreCase_givenNameAndPageable() {
+        //given
+        String name = "MECH";
+        Pageable pageable = PageRequest.ofSize(1);
+        Department expected1 = createDepartmentMechatroniczny();
+        Department expected2 = createDepartmentMechaniczny();
+        //when
+        Page<Department> actual = repository.findAllByNameContainingIgnoreCase(name, pageable);
+        //then
+        assertThat(actual).isNotNull().hasSize(1)
+                .contains(expected1)
+                .doesNotContain(expected2);
     }
 
     private Department createDepartmentMechaniczny() {
