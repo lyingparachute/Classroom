@@ -25,7 +25,6 @@ class DepartmentRepositoryIntegrationTest {
         repository.findAll().forEach(department -> department.getFieldsOfStudy()
                 .forEach(department::removeFieldOfStudy));
         repository.deleteAll();
-        initTestData();
     }
 
     @Test
@@ -35,57 +34,51 @@ class DepartmentRepositoryIntegrationTest {
     }
 
     @Test
-    void shouldFindAllByNameContainingIgnoreCase() {
+    void shouldFindAllByNameContainingIgnoreCase_givenName() {
         //given
         String name = "MECH";
-        Department expected = new Department();
-        expected.setName("Wydział mechaniczny");
-        underTest.save(expected);
+        Department expected1 = createDepartmentMechatroniczny();
+        Department expected2 = createDepartmentMechaniczny();
         //when
-        List<Department> actual = underTest.findAllByNameContainingIgnoreCase(name);
+        List<Department> actual = repository.findAllByNameContainingIgnoreCase(name);
         //then
-        assertThat(actual).isNotNull().hasSize(1);
-        Department actualDepartment = actual.get(0);
-        assertThat(actualDepartment).isInstanceOf(Department.class);
-        assertThat(actualDepartment.getName()).isEqualTo(expected.getName());
+        assertThat(actual).isNotNull().hasSize(2)
+                .containsExactlyInAnyOrder(expected1, expected2);
     }
 
-    private void initTestData() {
-        createDepartmentMechaniczny();
-        createDepartmentMechatroniczny();
-        createDepartmentArchitektury();
-        createDepartmentChemiczny();
-    }
-
-    private void createDepartmentMechaniczny() {
+    private Department createDepartmentMechaniczny() {
         Department department = new Department();
         department.setName("Wydział Mechaniczny");
         department.setAddress("ul. Mechaniczna 1, 24-192 Oborniki");
         department.setTelNumber("987739874");
         entityManager.persist(department);
+        return department;
     }
 
-    private void createDepartmentMechatroniczny() {
+    private Department createDepartmentMechatroniczny() {
         Department department = new Department();
-        department.setName("Wydział Architektury");
+        department.setName("Wydział Mechatroniczny");
         department.setAddress("ul. Mechatroniczna 12, 99-112 Gdynia");
         department.setTelNumber("333444555");
         entityManager.persist(department);
+        return department;
     }
 
-    private void createDepartmentArchitektury() {
+    private Department createDepartmentArchitektury() {
         Department department = new Department();
         department.setName("Wydział Architektury");
         department.setAddress("ul. Jabłoniowa 34, 11-112 Stalowa Wola");
         department.setTelNumber("321321321");
         entityManager.persist(department);
+        return department;
     }
 
-    private void createDepartmentChemiczny() {
+    private Department createDepartmentChemiczny() {
         Department department = new Department();
         department.setName("Wydział Chemiczny");
         department.setAddress("ul. Broniewicza 115, 00-245 Kęty");
         department.setTelNumber("987654321");
         entityManager.persist(department);
+        return department;
     }
 }
