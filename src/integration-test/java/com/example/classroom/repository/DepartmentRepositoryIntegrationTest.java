@@ -2,6 +2,7 @@ package com.example.classroom.repository;
 
 import com.example.classroom.entity.Department;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -36,32 +37,47 @@ class DepartmentRepositoryIntegrationTest {
         assertThat(repository).isNotNull();
     }
 
-    @Test
-    void shouldFindAllByNameContainingIgnoreCase_givenName() {
-        //given
-        String name = "MECH";
-        Department expected1 = createDepartmentMechatroniczny();
-        Department expected2 = createDepartmentMechaniczny();
-        //when
-        List<Department> actual = repository.findAllByNameContainingIgnoreCase(name);
-        //then
-        assertThat(actual).isNotNull().hasSize(2)
-                .containsExactlyInAnyOrder(expected1, expected2);
-    }
+    @Nested
+    class FindAllByNameContainingIgnoreCase {
+        @Test
+        void returnsEmptyList_givenWrongName() {
+            //given
+            String name = "ARCH";
+            createDepartmentMechatroniczny();
+            createDepartmentMechaniczny();
+            //when
+            List<Department> actual = repository.findAllByNameContainingIgnoreCase(name);
+            //then
+            assertThat(actual).isNotNull().isEmpty();
+        }
 
-    @Test
-    void shouldFindAllByNameContainingIgnoreCase_givenNameAndPageable() {
-        //given
-        String name = "MECH";
-        Pageable pageable = PageRequest.ofSize(1);
-        Department expected1 = createDepartmentMechatroniczny();
-        Department expected2 = createDepartmentMechaniczny();
-        //when
-        Page<Department> actual = repository.findAllByNameContainingIgnoreCase(name, pageable);
-        //then
-        assertThat(actual).isNotNull().hasSize(1)
-                .contains(expected1)
-                .doesNotContain(expected2);
+        @Test
+        void returnsListOfDepartments_givenName() {
+            //given
+            String name = "MECH";
+            Department expected1 = createDepartmentMechatroniczny();
+            Department expected2 = createDepartmentMechaniczny();
+            //when
+            List<Department> actual = repository.findAllByNameContainingIgnoreCase(name);
+            //then
+            assertThat(actual).isNotNull().hasSize(2)
+                    .containsExactlyInAnyOrder(expected1, expected2);
+        }
+
+        @Test
+        void returnsListOfDepartmentsOnGivenPage_givenNameAndPageable() {
+            //given
+            String name = "MECH";
+            Pageable pageable = PageRequest.ofSize(1);
+            Department expected1 = createDepartmentMechatroniczny();
+            Department expected2 = createDepartmentMechaniczny();
+            //when
+            Page<Department> actual = repository.findAllByNameContainingIgnoreCase(name, pageable);
+            //then
+            assertThat(actual).isNotNull().hasSize(1)
+                    .contains(expected1)
+                    .doesNotContain(expected2);
+        }
     }
 
     private Department createDepartmentMechaniczny() {
