@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
@@ -74,10 +77,33 @@ class FieldOfStudyRepositoryTest {
 
         @Test
         void returnsListOfFieldsOfStudies_givenName() {
+            //given
+            String name = "mech";
+            FieldOfStudy expected1 = createFieldOfStudy1();
+            FieldOfStudy expected2 = createFieldOfStudy2();
+            FieldOfStudy expected3 = createFieldOfStudy3();
+            //when
+            List<FieldOfStudy> actual = repository.findAllByNameContainingIgnoreCase(name);
+            //then
+            assertThat(actual).isNotNull().hasSize(2)
+                    .containsExactlyInAnyOrder(expected1, expected2)
+                    .doesNotContain(expected3);
         }
 
         @Test
         void returnsListOfFieldsOfStudiesOnGivenPage_givenNameAndPageable() {
+            //given
+            String name = "mech";
+            Pageable pageable = PageRequest.ofSize(1);
+            FieldOfStudy expected1 = createFieldOfStudy1();
+            FieldOfStudy expected2 = createFieldOfStudy2();
+            FieldOfStudy expected3 = createFieldOfStudy3();
+            //when
+            Page<FieldOfStudy> actual = repository.findAllByNameContainingIgnoreCase(name, pageable);
+            //then
+            assertThat(actual).isNotNull().hasSize(1)
+                    .contains(expected1)
+                    .doesNotContain(expected2, expected3);
         }
     }
 
