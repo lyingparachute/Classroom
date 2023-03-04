@@ -5,6 +5,7 @@ import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
+import com.example.classroom.enums.Semester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,8 @@ class FieldOfStudyRepositoryTest {
 
     @Autowired
     EntityManager entityManager;
+
+    SubjectRepositoryTest subjectRepositoryTest = new SubjectRepositoryTest();
 
     @BeforeEach
     void setUp() {
@@ -124,12 +127,9 @@ class FieldOfStudyRepositoryTest {
         @Test
         void returnsListOfSubjects_givenId() {
             //given
-            Subject subject1 = SubjectRepositoryTest.createSubject1();
-            entityManager.persist(subject1);
-            Subject subject2 = SubjectRepositoryTest.createSubject2();
-            entityManager.persist(subject2);
-            Subject subject3 = SubjectRepositoryTest.createSubject3();
-            entityManager.persist(subject3);
+            Subject subject1 = createSubject1();
+            Subject subject2 = createSubject2();
+            Subject subject3 = createSubject3();
             FieldOfStudy fieldOfStudy = createFieldOfStudy1();
             fieldOfStudy.addSubject(subject1);
             fieldOfStudy.addSubject(subject2);
@@ -147,14 +147,16 @@ class FieldOfStudyRepositoryTest {
 
         @Test
         void returnsEmptyList_givenLevelOfEducationAndSortOrder() {
+
         }
 
         @Test
         void returnsListOfFieldsOfStudies_givenLevelOfEducationAndSortOrder() {
+
         }
     }
 
-    FieldOfStudy createFieldOfStudy1() {
+    private FieldOfStudy createFieldOfStudy1() {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Inżynieria mechaniczno-medyczna");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.SECOND);
@@ -164,7 +166,7 @@ class FieldOfStudyRepositoryTest {
         return fieldOfStudy;
     }
 
-    FieldOfStudy createFieldOfStudy2() {
+    private FieldOfStudy createFieldOfStudy2() {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Mechatronika");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
@@ -174,7 +176,7 @@ class FieldOfStudyRepositoryTest {
         return fieldOfStudy;
     }
 
-    FieldOfStudy createFieldOfStudy3() {
+    private FieldOfStudy createFieldOfStudy3() {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Informatyka");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
@@ -184,5 +186,33 @@ class FieldOfStudyRepositoryTest {
         return fieldOfStudy;
     }
 
+    private Subject createSubject1() {
+        Subject subject = new Subject();
+        subject.setName("Mathematics");
+        subject.setDescription("Calculating integrals");
+        subject.setSemester(Semester.FIFTH);
+        subject.setHoursInSemester(100);
+        entityManager.persist(subject);
+        return subject;
+    }
 
+    private Subject createSubject2() {
+        Subject subject = new Subject();
+        subject.setName("Art");
+        subject.setDescription("Painting");
+        subject.setSemester(Semester.SECOND);
+        subject.setHoursInSemester(120);
+        entityManager.persist(subject);
+        return subject;
+    }
+
+    private Subject createSubject3() {
+        Subject subject = new Subject();
+        subject.setName("Science");
+        subject.setDescription("General Science");
+        subject.setSemester(Semester.FIRST);
+        subject.setHoursInSemester(150);
+        entityManager.persist(subject);
+        return subject;
+    }
 }
