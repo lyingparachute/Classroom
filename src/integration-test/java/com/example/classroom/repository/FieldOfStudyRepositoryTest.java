@@ -1,6 +1,7 @@
 package com.example.classroom.repository;
 
 import com.example.classroom.entity.FieldOfStudy;
+import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
@@ -112,10 +113,32 @@ class FieldOfStudyRepositoryTest {
 
         @Test
         void returnsEmptyList_givenId_fieldOfStudyWithoutSubjects() {
+            //given
+            FieldOfStudy fieldOfStudy = createFieldOfStudy1();
+            //when
+            List<Subject> actual = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudy.getId());
+            //then
+            assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfSubjects_givenId() {
+            //given
+            Subject subject1 = SubjectRepositoryTest.createSubject1();
+            entityManager.persist(subject1);
+            Subject subject2 = SubjectRepositoryTest.createSubject2();
+            entityManager.persist(subject2);
+            Subject subject3 = SubjectRepositoryTest.createSubject3();
+            entityManager.persist(subject3);
+            FieldOfStudy fieldOfStudy = createFieldOfStudy1();
+            fieldOfStudy.addSubject(subject1);
+            fieldOfStudy.addSubject(subject2);
+            //when
+            List<Subject> actual = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudy.getId());
+            //then
+            assertThat(actual).isNotNull().hasSize(2)
+                    .contains(subject1, subject2)
+                    .doesNotContain(subject3);
         }
     }
 
@@ -131,7 +154,7 @@ class FieldOfStudyRepositoryTest {
         }
     }
 
-    public FieldOfStudy createFieldOfStudy1() {
+    FieldOfStudy createFieldOfStudy1() {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Inżynieria mechaniczno-medyczna");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.SECOND);
@@ -141,7 +164,7 @@ class FieldOfStudyRepositoryTest {
         return fieldOfStudy;
     }
 
-    public FieldOfStudy createFieldOfStudy2() {
+    FieldOfStudy createFieldOfStudy2() {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Mechatronika");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
@@ -151,7 +174,7 @@ class FieldOfStudyRepositoryTest {
         return fieldOfStudy;
     }
 
-    public FieldOfStudy createFieldOfStudy3() {
+    FieldOfStudy createFieldOfStudy3() {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Informatyka");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
@@ -160,4 +183,6 @@ class FieldOfStudyRepositoryTest {
         entityManager.persist(fieldOfStudy);
         return fieldOfStudy;
     }
+
+
 }
