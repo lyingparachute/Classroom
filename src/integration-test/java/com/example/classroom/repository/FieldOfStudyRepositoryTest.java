@@ -30,8 +30,6 @@ class FieldOfStudyRepositoryTest {
     @Autowired
     EntityManager entityManager;
 
-    SubjectRepositoryTest subjectRepositoryTest = new SubjectRepositoryTest();
-
     @BeforeEach
     void setUp() {
         repository.findAll().forEach(fieldOfStudy -> fieldOfStudy.getStudents()
