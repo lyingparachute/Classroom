@@ -147,12 +147,47 @@ class FieldOfStudyRepositoryTest {
 
         @Test
         void returnsEmptyList_givenLevelOfEducationAndSortOrder() {
-
+            //given
+            LevelOfEducation levelOfEducation = LevelOfEducation.SECOND;
+            Sort sort = Sort.by("name");
+            createFieldOfStudy2();
+            createFieldOfStudy3();
+            //when
+            List<FieldOfStudy> actual = repository.findAllByLevelOfEducation(levelOfEducation, sort);
+            //then
+            assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
-        void returnsListOfFieldsOfStudies_givenLevelOfEducationAndSortOrder() {
+        void returnsListOfFieldsOfStudies_givenFirstLevelOfEducationAndSortOrder() {
+            //given
+            LevelOfEducation levelOfEducation = LevelOfEducation.FIRST;
+            Sort sort = Sort.by("name");
+            FieldOfStudy expected1 = createFieldOfStudy1();
+            FieldOfStudy expected2 = createFieldOfStudy2();
+            FieldOfStudy expected3 = createFieldOfStudy3();
+            //when
+            List<FieldOfStudy> actual = repository.findAllByLevelOfEducation(levelOfEducation, sort);
+            //then
+            assertThat(actual).isNotNull().hasSize(2)
+                    .containsExactly(expected3, expected2)
+                    .doesNotContain(expected1);
+        }
 
+        @Test
+        void returnsListOfFieldsOfStudies_givenSecondLevelOfEducationAndSortOrder() {
+            //given
+            LevelOfEducation levelOfEducation = LevelOfEducation.SECOND;
+            Sort sort = Sort.by("name");
+            FieldOfStudy expected1 = createFieldOfStudy1();
+            FieldOfStudy expected2 = createFieldOfStudy2();
+            FieldOfStudy expected3 = createFieldOfStudy3();
+            //when
+            List<FieldOfStudy> actual = repository.findAllByLevelOfEducation(levelOfEducation, sort);
+            //then
+            assertThat(actual).isNotNull().hasSize(1)
+                    .contains(expected1)
+                    .doesNotContain(expected2, expected3);
         }
     }
 
