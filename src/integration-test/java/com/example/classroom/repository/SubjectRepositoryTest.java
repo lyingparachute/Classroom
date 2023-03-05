@@ -2,12 +2,15 @@ package com.example.classroom.repository;
 
 import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.Semester;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.persistence.EntityManager;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 class SubjectRepositoryTest {
@@ -18,12 +21,25 @@ class SubjectRepositoryTest {
     @Autowired
     EntityManager entityManager;
 
+    @BeforeEach
+    void setUp() {
+        repository.findAll().forEach(subject -> subject.getTeachers()
+                .forEach(subject::removeTeacher));
+        repository.deleteAll();
+    }
+
+    @Test
+    void injectedComponentsAreNotNull() {
+        assertThat(entityManager).isNotNull();
+        assertThat(repository).isNotNull();
+    }
 
     @Nested
     class FindAllByNameContainingIgnoreCase {
 
         @Test
         void returnsEmptyListOfSubjects_givenNonExistingName() {
+
         }
 
         @Test
