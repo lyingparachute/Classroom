@@ -93,12 +93,32 @@ class SubjectRepositoryTest {
 
         @Test
         void returnsEmptyListOfSubjects_givenNonExistingSemester() {
-
+            //given
+            Semester semester = Semester.THIRD;
+            Subject expected1 = createSubject1();
+            Subject expected2 = createSubject2();
+            Subject expected3 = createSubject3();
+            //when
+            List<Subject> actual = repository.findAllBySemester(semester);
+            //then
+            assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfSubjects_givenSemester() {
-
+            //given
+            Semester semester = Semester.FIRST;
+            Subject expected1 = createSubject1();
+            expected1.setSemester(semester);
+            entityManager.persist(expected1);
+            Subject expected2 = createSubject2();
+            Subject expected3 = createSubject3();
+            //when
+            List<Subject> actual = repository.findAllBySemester(semester);
+            //then
+            assertThat(actual).isNotNull().hasSize(2)
+                    .containsExactlyInAnyOrder(expected1, expected3)
+                    .doesNotContain(expected2);
         }
     }
 
