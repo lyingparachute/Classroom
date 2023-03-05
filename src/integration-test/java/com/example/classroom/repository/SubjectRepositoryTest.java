@@ -42,7 +42,7 @@ class SubjectRepositoryTest {
     class FindAllByNameContainingIgnoreCase {
 
         @Test
-        void returnsEmptyListOfSubjects_givenNonExistingName() {
+        void returnsEmptyList_givenNonExistingName() {
             //given
             String name = "ARCH";
             createSubject1();
@@ -92,7 +92,7 @@ class SubjectRepositoryTest {
     class FindAllBySemester {
 
         @Test
-        void returnsEmptyListOfSubjects_givenNonExistingSemester() {
+        void returnsEmptyList_givenNonExistingSemester() {
             //given
             Semester semester = Semester.THIRD;
             Subject expected1 = createSubject1();
