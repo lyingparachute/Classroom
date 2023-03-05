@@ -40,7 +40,7 @@ class DepartmentRepositoryIntegrationTest {
     @Nested
     class FindAllByNameContainingIgnoreCase {
         @Test
-        void returnsEmptyList_givenWrongName() {
+        void returnsEmptyList_givenNonExistingName() {
             //given
             String name = "ARCH";
             createDepartmentMechatroniczny();
