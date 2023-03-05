@@ -7,8 +7,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,15 +43,46 @@ class SubjectRepositoryTest {
 
         @Test
         void returnsEmptyListOfSubjects_givenNonExistingName() {
-
+            //given
+            String name = "ARCH";
+            createSubject1();
+            createSubject2();
+            createSubject3();
+            //when
+            List<Subject> actual = repository.findAllByNameContainingIgnoreCase(name);
+            //then
+            assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfSubjects_givenName() {
+            //given
+            String name = "s";
+            Subject expected1 = createSubject1();
+            Subject expected2 = createSubject2();
+            Subject expected3 = createSubject3();
+            //when
+            List<Subject> actual = repository.findAllByNameContainingIgnoreCase(name);
+            //then
+            assertThat(actual).isNotNull().hasSize(2)
+                    .containsExactlyInAnyOrder(expected1, expected3)
+                    .doesNotContain(expected2);
         }
 
         @Test
         void returnsListOfSubjects_givenNameAndPageable() {
+            //given
+            String name = "s";
+            Pageable pageable = PageRequest.ofSize(1);
+            Subject expected1 = createSubject1();
+            Subject expected2 = createSubject2();
+            Subject expected3 = createSubject3();
+            //when
+            Page<Subject> actual = repository.findAllByNameContainingIgnoreCase(name, pageable);
+            //then
+            assertThat(actual).isNotNull().hasSize(1)
+                    .contains(expected1)
+                    .doesNotContain(expected2, expected3);
         }
 
     }
@@ -73,6 +108,7 @@ class SubjectRepositoryTest {
         subject.setDescription("Calculating integrals");
         subject.setSemester(Semester.FIFTH);
         subject.setHoursInSemester(100);
+        subject.setEctsPoints(5);
         entityManager.persist(subject);
         return subject;
     }
@@ -83,6 +119,7 @@ class SubjectRepositoryTest {
         subject.setDescription("Painting");
         subject.setSemester(Semester.SECOND);
         subject.setHoursInSemester(120);
+        subject.setEctsPoints(10);
         entityManager.persist(subject);
         return subject;
     }
@@ -93,6 +130,7 @@ class SubjectRepositoryTest {
         subject.setDescription("General Science");
         subject.setSemester(Semester.FIRST);
         subject.setHoursInSemester(150);
+        subject.setEctsPoints(15);
         entityManager.persist(subject);
         return subject;
     }
