@@ -225,6 +225,7 @@ class FieldOfStudyRepositoryTest {
         subject.setDescription("Calculating integrals");
         subject.setSemester(Semester.FIFTH);
         subject.setHoursInSemester(100);
+        subject.setEctsPoints(5);
         entityManager.persist(subject);
         return subject;
     }
@@ -235,6 +236,7 @@ class FieldOfStudyRepositoryTest {
         subject.setDescription("Painting");
         subject.setSemester(Semester.SECOND);
         subject.setHoursInSemester(120);
+        subject.setEctsPoints(10);
         entityManager.persist(subject);
         return subject;
     }
@@ -245,6 +247,7 @@ class FieldOfStudyRepositoryTest {
         subject.setDescription("General Science");
         subject.setSemester(Semester.FIRST);
         subject.setHoursInSemester(150);
+        subject.setEctsPoints(15);
         entityManager.persist(subject);
         return subject;
     }

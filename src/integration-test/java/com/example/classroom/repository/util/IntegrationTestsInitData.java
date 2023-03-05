@@ -142,6 +142,7 @@ public class IntegrationTestsInitData {
         subject.setDescription("Calculating integrals");
         subject.setSemester(Semester.FIFTH);
         subject.setHoursInSemester(100);
+        subject.setEctsPoints(5);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         subjectRepository.save(subject);
         return subject;
@@ -154,6 +155,7 @@ public class IntegrationTestsInitData {
         subject.setDescription("Painting");
         subject.setSemester(Semester.SECOND);
         subject.setHoursInSemester(120);
+        subject.setEctsPoints(10);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         subjectRepository.save(subject);
         return subject;
@@ -166,6 +168,7 @@ public class IntegrationTestsInitData {
         subject.setDescription("General Science");
         subject.setSemester(Semester.FIRST);
         subject.setHoursInSemester(150);
+        subject.setEctsPoints(15);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         subjectRepository.save(subject);
         return subject;
