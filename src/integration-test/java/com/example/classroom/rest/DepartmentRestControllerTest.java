@@ -4,6 +4,7 @@ import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.entity.Department;
 import com.example.classroom.entity.FieldOfStudy;
 import com.example.classroom.entity.Teacher;
+import com.example.classroom.exception.DepartmentNotFoundException;
 import com.example.classroom.repository.util.UnitTestsInitData;
 import com.example.classroom.service.DepartmentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +50,7 @@ class DepartmentRestControllerTest {
     @Nested
     class GetDepartment {
         @Test
-        void returns200_givenCorrectId() throws Exception {
+        void returns200_givenExistingId() throws Exception {
             //given
             Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
@@ -82,5 +83,39 @@ class DepartmentRestControllerTest {
                             .contains(fieldOfStudy1, fieldOfStudy2)
             );
         }
+
+        @Test
+        void returns404_givenNonExistingId() throws Exception {
+            //given
+            Long id = 100L;
+            given(service.fetchById(id)).willThrow(new DepartmentNotFoundException(
+                    "Invalid Department id: " + id));
+            //when
+            mockMvc.perform(get("/api/departments/{id}", id)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNotFound())
+                    .andDo(print())
+                    .andReturn();
+            //then
+            then(service).should().fetchById(anyLong());
+        }
+
+        @Test
+        void returns404_givenNull() throws Exception {
+            //given
+            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+            given(service.fetchById(expected.getId())).willReturn(null);
+            //when
+            mockMvc.perform(get("/api/departments/{id}", expected.getId())
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNotFound())
+                    .andDo(print());
+            //then
+            then(service).should().fetchById(anyLong());
+        }
+
     }
 }
