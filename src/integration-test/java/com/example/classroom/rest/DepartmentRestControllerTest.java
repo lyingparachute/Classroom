@@ -50,7 +50,7 @@ class DepartmentRestControllerTest {
     @Nested
     class GetDepartment {
         @Test
-        void returns200_givenExistingId() throws Exception {
+        void returns200_withDepartmentInBody_givenExistingId() throws Exception {
             //given
             Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
@@ -116,6 +116,48 @@ class DepartmentRestControllerTest {
             //then
             then(service).should().fetchById(anyLong());
         }
+    }
 
+    @Nested
+    class GetDepartments {
+        @Test
+        void returns200_withListOfDepartmentsInBody() throws Exception {
+            //given
+            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            Department expected1 = initData.createDepartmentOne(dean, List.of(fieldOfStudy1));
+            Department expected2 = initData.createDepartmentTwo(dean, List.of(fieldOfStudy2));
+            DepartmentDto dto1 = mapper.map(expected1, DepartmentDto.class);
+            DepartmentDto dto2 = mapper.map(expected2, DepartmentDto.class);
+            given(service.fetchAll()).willReturn(List.of(dto1, dto2));
+            //when
+            MvcResult mvcResult = mockMvc.perform(get("/api/departments")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn();
+            //then
+            List<Department> actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), List.class);
+            then(service).should().fetchAll();
+            assertThat(actual).isNotNull().hasSize(2);
+//            LinkedHashMap actualDepartment1 = actual.get(0);
+//            assertThat(actualDepartment1).containsEntry("name", expected1.getName());
+        }
+
+        @Test
+        void returns404_whenNoDepartmentsInDatabase() throws Exception {
+            //given
+            Long id = 100L;
+            given(service.fetchAll()).willReturn(List.of());
+            //when
+            mockMvc.perform(get("/api/departments")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNotFound())
+                    .andDo(print())
+                    .andReturn();
+            //then
+            then(service).should().fetchAll();
+        }
     }
 }
