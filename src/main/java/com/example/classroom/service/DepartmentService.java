@@ -3,6 +3,7 @@ package com.example.classroom.service;
 import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.entity.Department;
 import com.example.classroom.entity.FieldOfStudy;
+import com.example.classroom.exception.DepartmentNotFoundException;
 import com.example.classroom.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -35,7 +36,7 @@ public class DepartmentService {
     @Transactional
     public DepartmentDto update(DepartmentDto dto) {
         Department department = repository.findById(dto.getId())
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new DepartmentNotFoundException(
                         "Invalid Department '" + dto.getName() + "' with ID: " + dto.getId()));
         removeReferencingObjects(department);
         mapper.map(dto, department);
@@ -62,14 +63,14 @@ public class DepartmentService {
     public DepartmentDto fetchById(Long id) {
         Optional<Department> byId = repository.findById(id);
         return byId.map(department -> mapper.map(department, DepartmentDto.class))
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new DepartmentNotFoundException(
                         "Invalid Department id: " + id));
     }
 
     @Transactional
     public void remove(Long id) {
         Department department = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new DepartmentNotFoundException(
                         "Invalid Department id: " + id));
         removeReferencingObjects(department);
         repository.delete(department);
