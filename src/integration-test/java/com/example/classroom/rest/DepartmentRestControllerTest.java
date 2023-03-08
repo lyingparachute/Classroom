@@ -287,7 +287,7 @@ class DepartmentRestControllerTest {
     @Nested
     class UpdateDepartment {
         @Test
-        void returns201_withDepartmentInBody_givenCorrectDepartment() throws Exception {
+        void returns200_withDepartmentInBody_givenCorrectDepartment() throws Exception {
             //given
             Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
