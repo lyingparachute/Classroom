@@ -388,4 +388,16 @@ class DepartmentRestControllerTest {
             then(service).should().remove(expected.getId());
         }
     }
+
+    @Nested
+    class DeleteAllDepartments {
+        @Test
+        void returns202() throws Exception {
+            mockMvc.perform(delete("/api/departments"))
+                    .andExpect(status().isAccepted())
+                    .andDo(print());
+            //then
+            then(service).should().removeAll();
+        }
+    }
 }
