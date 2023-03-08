@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -26,10 +27,12 @@ import java.util.Map;
 import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -193,5 +196,93 @@ class DepartmentRestControllerTest {
             //then
             then(service).should().fetchAll();
         }
+    }
+
+    @Nested
+    class CreateDepartment {
+        @Test
+        void returns201_withDepartmentInBody_givenCorrectDepartment() throws Exception {
+            //given
+            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+            DepartmentDto dto = mapper.map(expected, DepartmentDto.class);
+            given(service.create(any(DepartmentDto.class))).willReturn(dto);
+            //when
+            MvcResult mvcResult = mockMvc.perform(post("/api/departments")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isCreated())
+                    .andDo(print())
+                    .andReturn();
+            //then
+            then(service).should().create(any(DepartmentDto.class));
+            DepartmentDto actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), DepartmentDto.class);
+            assertAll("Department properties",
+                    () -> assertThat(actual.getId())
+                            .as("Check %s %s", "department", "ID").isEqualTo(expected.getId()),
+                    () -> assertThat(actual.getName())
+                            .as("Check %s %s", "department", "Name").isEqualTo(expected.getName()),
+                    () -> assertThat(actual.getAddress())
+                            .as("Check %s %s", "department", "Address").isEqualTo(expected.getAddress()),
+                    () -> assertThat(actual.getTelNumber())
+                            .as("Check %s %s", "department", "Telephone Number").isEqualTo(expected.getTelNumber()),
+                    () -> assertThat(actual.getDean())
+                            .as("Check %s's %s", "Department", "Dean").isEqualTo(dean),
+                    () -> assertThat(actual.getFieldsOfStudy())
+                            .as("Check if %s contains %s", "department", "fieldsOfStudy")
+                            .contains(fieldOfStudy1, fieldOfStudy2)
+            );
+        }
+
+        @Test
+        void returns400_givenNullFromService() throws Exception {
+            //given
+            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+            DepartmentDto dto = mapper.map(expected, DepartmentDto.class);
+            given(service.create(any(DepartmentDto.class))).willReturn(null);
+            //when
+            mockMvc.perform(post("/api/departments")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn();
+            //then
+            then(service).should().create(any(DepartmentDto.class));
+        }
+
+        @Test
+        void returns400_withErrorMsg_givenInvalidName_andInvalidPhoneNumber() throws Exception {
+            //given
+            String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
+            String expectedErrorMsgForName = "Department's name must be between 10 and 50 characters long.";
+            String expectedErrorMsgForPhoneNumber = "Phone number must contain exactly 9 numbers.";
+            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+            expected.setName("a");
+            expected.setTelNumber("1");
+            DepartmentDto dto = mapper.map(expected, DepartmentDto.class);
+            //when
+            MvcResult mvcResult = mockMvc.perform(post("/api/departments")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn();
+            //then
+            String actualResponseBody = mvcResult.getResponse().getContentAsString();
+            assertThat(actualResponseBody).as("Check error message")
+                    .contains(expectedHttpStatusCodeAsString,
+                            expectedErrorMsgForName,
+                            expectedErrorMsgForPhoneNumber);
+        }
+
     }
 }
