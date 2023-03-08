@@ -53,12 +53,12 @@ public class DepartmentRestController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
         service.remove(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteAllDepartments() {
         service.removeAll();
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.accepted().build();
     }
 }
