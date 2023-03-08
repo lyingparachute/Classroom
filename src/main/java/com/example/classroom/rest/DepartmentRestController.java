@@ -43,7 +43,7 @@ public class DepartmentRestController {
     }
 
     @PutMapping
-    public ResponseEntity<DepartmentDto> putDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
+    public ResponseEntity<DepartmentDto> updateDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
         DepartmentDto updated = service.update(departmentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
