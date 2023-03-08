@@ -64,8 +64,7 @@ class DepartmentRestControllerTest {
             DepartmentDto dto = mapper.map(expected, DepartmentDto.class);
             given(service.fetchById(expected.getId())).willReturn(dto);
             //when
-            MvcResult mvcResult = mockMvc.perform(get("/api/departments/{id}", expected.getId())
-                            .contentType(MediaType.APPLICATION_JSON))
+            MvcResult mvcResult = mockMvc.perform(get("/api/departments/{id}", expected.getId()))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andReturn();
@@ -96,8 +95,7 @@ class DepartmentRestControllerTest {
             given(service.fetchById(id)).willThrow(new DepartmentNotFoundException(
                     "Invalid Department id: " + id));
             //when
-            mockMvc.perform(get("/api/departments/{id}", id)
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/departments/{id}", id))
                     .andExpect(status().isNotFound())
                     .andDo(print())
                     .andReturn();
@@ -114,8 +112,7 @@ class DepartmentRestControllerTest {
             Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
             given(service.fetchById(expected.getId())).willReturn(null);
             //when
-            mockMvc.perform(get("/api/departments/{id}", expected.getId())
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/departments/{id}", expected.getId()))
                     .andExpect(status().isNotFound())
                     .andDo(print());
             //then
@@ -138,8 +135,7 @@ class DepartmentRestControllerTest {
             DepartmentDto dto2 = mapper.map(expected2, DepartmentDto.class);
             given(service.fetchAll()).willReturn(List.of(dto1, dto2));
             //when
-            MvcResult mvcResult = mockMvc.perform(get("/api/departments")
-                            .contentType(MediaType.APPLICATION_JSON))
+            MvcResult mvcResult = mockMvc.perform(get("/api/departments"))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andReturn();
@@ -187,8 +183,7 @@ class DepartmentRestControllerTest {
             Long id = 100L;
             given(service.fetchAll()).willReturn(List.of());
             //when
-            mockMvc.perform(get("/api/departments")
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/departments"))
                     .andExpect(status().isNotFound())
                     .andDo(print())
                     .andReturn();
