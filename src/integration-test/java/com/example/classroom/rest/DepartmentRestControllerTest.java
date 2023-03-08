@@ -370,4 +370,22 @@ class DepartmentRestControllerTest {
                             expectedErrorMsgForPhoneNumber);
         }
     }
+
+    @Nested
+    class DeleteDepartment {
+        @Test
+        void returns202_givenCorrectId() throws Exception {
+            //given
+            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+            Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+            //when
+            mockMvc.perform(delete("/api/departments/{id}", expected.getId()))
+                    .andExpect(status().isAccepted())
+                    .andDo(print());
+            //then
+            then(service).should().remove(expected.getId());
+        }
+    }
 }
