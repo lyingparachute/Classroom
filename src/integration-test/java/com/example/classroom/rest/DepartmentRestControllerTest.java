@@ -19,8 +19,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -123,11 +126,12 @@ class DepartmentRestControllerTest {
         @Test
         void returns200_withListOfDepartmentsInBody() throws Exception {
             //given
-            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher dean1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher dean2 = initData.createTeacherThree(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
-            Department expected1 = initData.createDepartmentOne(dean, List.of(fieldOfStudy1));
-            Department expected2 = initData.createDepartmentTwo(dean, List.of(fieldOfStudy2));
+            Department expected1 = initData.createDepartmentOne(dean1, List.of(fieldOfStudy1));
+            Department expected2 = initData.createDepartmentTwo(dean2, List.of(fieldOfStudy2));
             DepartmentDto dto1 = mapper.map(expected1, DepartmentDto.class);
             DepartmentDto dto2 = mapper.map(expected2, DepartmentDto.class);
             given(service.fetchAll()).willReturn(List.of(dto1, dto2));
@@ -138,11 +142,41 @@ class DepartmentRestControllerTest {
                     .andDo(print())
                     .andReturn();
             //then
-            List<Department> actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), List.class);
+            List<LinkedHashMap> actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), List.class);
             then(service).should().fetchAll();
             assertThat(actual).isNotNull().hasSize(2);
-//            LinkedHashMap actualDepartment1 = actual.get(0);
-//            assertThat(actualDepartment1).containsEntry("name", expected1.getName());
+            var actualDepartment1 = actual.get(0);
+            var actualDean1 = (LinkedHashMap) actualDepartment1.get("dean");
+            var actualDepartment2 = actual.get(1);
+            var actualDean2 = (LinkedHashMap) actualDepartment2.get("dean");
+            assertThat(actualDepartment1).as("Check department1 properties")
+                    .containsAllEntriesOf(Map.ofEntries(
+                            entry("name", expected1.getName()),
+                            entry("address", expected1.getAddress()),
+                            entry("telNumber", expected1.getTelNumber())
+                    ));
+            assertThat(actualDean1).as("Check department1's dean properties")
+                    .containsAllEntriesOf(Map.ofEntries(
+                            entry("id", dean1.getId().intValue()),
+                            entry("firstName", dean1.getFirstName()),
+                            entry("lastName", dean1.getLastName()),
+                            entry("age", dean1.getAge()),
+                            entry("email", dean1.getEmail())
+                    ));
+            assertThat(actualDepartment2).as("Check department2 properties")
+                    .containsAllEntriesOf(Map.ofEntries(
+                            entry("name", expected2.getName()),
+                            entry("address", expected2.getAddress()),
+                            entry("telNumber", expected2.getTelNumber())
+                    ));
+            assertThat(actualDean2).as("Check department2's dean properties")
+                    .containsAllEntriesOf(Map.ofEntries(
+                            entry("id", dean2.getId().intValue()),
+                            entry("firstName", dean2.getFirstName()),
+                            entry("lastName", dean2.getLastName()),
+                            entry("age", dean2.getAge()),
+                            entry("email", dean2.getEmail())
+                    ));
         }
 
         @Test
