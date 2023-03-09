@@ -154,6 +154,7 @@ public class UnitTestsInitData {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setId(1L);
         fieldOfStudy.setName("Inżynieria mechaniczno-medyczna");
+        fieldOfStudy.setDescription("Student portafi stworzyć model sztucznej nogi");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.SECOND);
         fieldOfStudy.setMode(ModeOfStudy.FT);
         fieldOfStudy.setTitle(AcademicTitle.ENG);
@@ -165,6 +166,7 @@ public class UnitTestsInitData {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setId(2L);
         fieldOfStudy.setName("Mechatronika");
+        fieldOfStudy.setDescription("Student zna podstawy mechanizmów korbowych");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
         fieldOfStudy.setMode(ModeOfStudy.PT);
         fieldOfStudy.setTitle(AcademicTitle.BACH);
@@ -176,6 +178,7 @@ public class UnitTestsInitData {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setId(3L);
         fieldOfStudy.setName("Informatyka");
+        fieldOfStudy.setDescription("Student zna podstawy programowania obiektowego");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
         fieldOfStudy.setMode(ModeOfStudy.FT);
         fieldOfStudy.setTitle(AcademicTitle.DR);
@@ -187,6 +190,7 @@ public class UnitTestsInitData {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setId(4L);
         fieldOfStudy.setName("Biotechnologia");
+        fieldOfStudy.setDescription("Student umie ściągać");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.SECOND);
         fieldOfStudy.setMode(ModeOfStudy.FT);
         fieldOfStudy.setTitle(AcademicTitle.DR);
