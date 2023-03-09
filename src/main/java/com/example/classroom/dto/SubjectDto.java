@@ -28,7 +28,7 @@ public class SubjectDto {
     @NotEmpty(message = "{message.name.empty}")
     @Length(min = 2, max = 30, message = "{message.name.length}")
     private String name;
-    @Length(max = 500, message = "{message.name.length}")
+    @Length(max = 500, message = "{message.description.length}")
     private String description;
     @Enumerated(EnumType.STRING)
     private Semester semester;
