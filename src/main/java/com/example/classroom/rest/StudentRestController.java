@@ -42,7 +42,7 @@ public class StudentRestController {
     }
 
     @PutMapping
-    public ResponseEntity<StudentDto> putStudent(@RequestBody StudentDto studentDto){
+    public ResponseEntity<StudentDto> updateStudent(@RequestBody StudentDto studentDto) {
         StudentDto updated = service.update(studentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
