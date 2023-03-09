@@ -1,11 +1,11 @@
 package com.example.classroom.repository;
 
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Subject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

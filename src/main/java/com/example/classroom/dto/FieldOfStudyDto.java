@@ -1,11 +1,11 @@
 package com.example.classroom.dto;
 
-import com.example.classroom.entity.Department;
-import com.example.classroom.entity.Student;
-import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
+import com.example.classroom.model.Department;
+import com.example.classroom.model.Student;
+import com.example.classroom.model.Subject;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A DTO for the {@link com.example.classroom.entity.FieldOfStudy} entity
+ * A DTO for the {@link com.example.classroom.model.FieldOfStudy} entity
  */
 @Data
 @NoArgsConstructor

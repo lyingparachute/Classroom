@@ -1,4 +1,4 @@
-package com.example.classroom.entity;
+package com.example.classroom.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

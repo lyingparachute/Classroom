@@ -1,8 +1,8 @@
 package com.example.classroom.controller;
 
 import com.example.classroom.dto.StudentDto;
-import com.example.classroom.entity.Student;
-import com.example.classroom.entity.Teacher;
+import com.example.classroom.model.Student;
+import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;

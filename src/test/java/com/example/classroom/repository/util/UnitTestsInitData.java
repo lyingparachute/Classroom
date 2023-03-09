@@ -1,10 +1,10 @@
 package com.example.classroom.repository.util;
 
-import com.example.classroom.entity.*;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
+import com.example.classroom.model.*;
 
 import java.util.List;
 

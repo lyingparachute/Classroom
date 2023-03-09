@@ -1,6 +1,6 @@
 package com.example.classroom.controller;
 
-import com.example.classroom.entity.Subject;
+import com.example.classroom.model.Subject;
 import com.example.classroom.repository.SubjectRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;

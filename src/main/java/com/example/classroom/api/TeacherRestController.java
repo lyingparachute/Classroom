@@ -1,4 +1,4 @@
-package com.example.classroom.rest;
+package com.example.classroom.api;
 
 import com.example.classroom.dto.TeacherDto;
 import com.example.classroom.service.TeacherService;

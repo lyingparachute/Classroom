@@ -1,6 +1,6 @@
 package com.example.classroom;
 
-import com.example.classroom.entity.*;
+import com.example.classroom.model.*;
 import com.example.classroom.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

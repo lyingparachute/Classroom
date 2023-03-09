@@ -1,10 +1,10 @@
-package com.example.classroom.rest;
+package com.example.classroom.api;
 
 import com.example.classroom.dto.SubjectDto;
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Subject;
-import com.example.classroom.entity.Teacher;
 import com.example.classroom.enums.Semester;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Subject;
+import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.SubjectRepository;
 import com.example.classroom.repository.TeacherRepository;

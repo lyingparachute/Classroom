@@ -1,9 +1,9 @@
-package com.example.classroom.rest;
+package com.example.classroom.api;
 
 import com.example.classroom.dto.DepartmentDto;
-import com.example.classroom.entity.Department;
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Teacher;
+import com.example.classroom.model.Department;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.DepartmentRepository;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.TeacherRepository;

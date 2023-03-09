@@ -1,10 +1,10 @@
 package com.example.classroom.service;
 
 import com.example.classroom.dto.TeacherDto;
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Student;
-import com.example.classroom.entity.Subject;
-import com.example.classroom.entity.Teacher;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Student;
+import com.example.classroom.model.Subject;
+import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -1,7 +1,7 @@
-package com.example.classroom.rest;
+package com.example.classroom.api;
 
-import com.example.classroom.dto.StudentDto;
-import com.example.classroom.service.StudentService;
+import com.example.classroom.dto.DepartmentDto;
+import com.example.classroom.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,31 +11,31 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/students")
+@RequestMapping("api/departments")
 @RequiredArgsConstructor
-public class StudentRestController {
+public class DepartmentRestController {
 
-    private final StudentService service;
+    private final DepartmentService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<StudentDto> getStudent(@PathVariable Long id) {
-        StudentDto dto = service.fetchById(id);
+    public ResponseEntity<DepartmentDto> getDepartment(@PathVariable Long id) {
+        DepartmentDto dto = service.fetchById(id);
         return dto != null ?
                 ResponseEntity.ok(dto) :
                 ResponseEntity.notFound().build();
     }
 
     @GetMapping()
-    public ResponseEntity<List<StudentDto>> getStudents() {
-        List<StudentDto> students = service.fetchAll();
-        return students.isEmpty() ?
+    public ResponseEntity<List<DepartmentDto>> getDepartments() {
+        List<DepartmentDto> departments = service.fetchAll();
+        return departments.isEmpty() ?
                 ResponseEntity.notFound().build() :
-                ResponseEntity.ok(students);
+                ResponseEntity.ok(departments);
     }
 
     @PostMapping
-    public ResponseEntity<StudentDto> createStudent(@Valid @RequestBody StudentDto studentDto) {
-        StudentDto created = service.create(studentDto);
+    public ResponseEntity<DepartmentDto> createDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
+        DepartmentDto created = service.create(departmentDto);
         return created != null ?
                 ResponseEntity.status(HttpStatus.CREATED)
                         .body(created) :
@@ -43,21 +43,21 @@ public class StudentRestController {
     }
 
     @PutMapping
-    public ResponseEntity<StudentDto> updateStudent(@Valid @RequestBody StudentDto studentDto) {
-        StudentDto updated = service.update(studentDto);
+    public ResponseEntity<DepartmentDto> updateDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
+        DepartmentDto updated = service.update(departmentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
                 ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
         service.remove(id);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllStudents() {
+    public ResponseEntity<Void> deleteAllDepartments() {
         service.removeAll();
         return ResponseEntity.accepted().build();
     }

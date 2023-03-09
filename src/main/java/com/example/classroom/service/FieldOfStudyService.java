@@ -2,12 +2,12 @@ package com.example.classroom.service;
 
 import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.dto.FieldOfStudyDto;
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Student;
-import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.Semester;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Student;
+import com.example.classroom.model.Subject;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

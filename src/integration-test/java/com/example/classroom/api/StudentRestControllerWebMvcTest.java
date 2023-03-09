@@ -1,9 +1,9 @@
-package com.example.classroom.rest;
+package com.example.classroom.api;
 
 import com.example.classroom.dto.StudentDto;
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Student;
-import com.example.classroom.entity.Teacher;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Student;
+import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.util.UnitTestsInitData;
 import com.example.classroom.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
