@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class StudentRestController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentDto> createStudent(@RequestBody StudentDto studentDto) {
+    public ResponseEntity<StudentDto> createStudent(@Valid @RequestBody StudentDto studentDto) {
         StudentDto created = service.create(studentDto);
         return created != null ?
                 ResponseEntity.status(HttpStatus.CREATED)
@@ -42,7 +43,7 @@ public class StudentRestController {
     }
 
     @PutMapping
-    public ResponseEntity<StudentDto> updateStudent(@RequestBody StudentDto studentDto) {
+    public ResponseEntity<StudentDto> updateStudent(@Valid @RequestBody StudentDto studentDto) {
         StudentDto updated = service.update(studentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
