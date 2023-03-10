@@ -70,7 +70,7 @@ class DepartmentRestControllerWebMvcTest {
                     .andReturn();
             //then
             DepartmentDto actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), DepartmentDto.class);
-            then(service).should().fetchById(anyLong());
+            then(service).should().fetchById(expected.getId());
             assertAll("Department properties",
                     () -> assertThat(actual.getId())
                             .as("Check %s %s", "department", "ID").isEqualTo(expected.getId()),
@@ -116,7 +116,7 @@ class DepartmentRestControllerWebMvcTest {
                     .andExpect(status().isNotFound())
                     .andDo(print());
             //then
-            then(service).should().fetchById(anyLong());
+            then(service).should().fetchById(expected.getId());
         }
     }
 
@@ -180,7 +180,6 @@ class DepartmentRestControllerWebMvcTest {
         @Test
         void returns404_whenNoDepartmentsInDatabase() throws Exception {
             //given
-            Long id = 100L;
             given(service.fetchAll()).willReturn(List.of());
             //when
             mockMvc.perform(get("/api/departments"))
@@ -211,7 +210,7 @@ class DepartmentRestControllerWebMvcTest {
                     .andDo(print())
                     .andReturn();
             //then
-            then(service).should().create(any(DepartmentDto.class));
+            then(service).should().create(dto);
             DepartmentDto actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), DepartmentDto.class);
             assertAll("Department properties",
                     () -> assertThat(actual.getId())
@@ -247,7 +246,7 @@ class DepartmentRestControllerWebMvcTest {
                     .andDo(print())
                     .andReturn();
             //then
-            then(service).should().create(any(DepartmentDto.class));
+            then(service).should().create(dto);
         }
 
         @Test
@@ -298,7 +297,7 @@ class DepartmentRestControllerWebMvcTest {
                     .andDo(print())
                     .andReturn();
             //then
-            then(service).should().update(any(DepartmentDto.class));
+            then(service).should().update(dto);
             DepartmentDto actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), DepartmentDto.class);
             assertAll("Department properties",
                     () -> assertThat(actual.getId())
@@ -334,7 +333,7 @@ class DepartmentRestControllerWebMvcTest {
                     .andDo(print())
                     .andReturn();
             //then
-            then(service).should().update(any(DepartmentDto.class));
+            then(service).should().update(dto);
         }
 
         @Test
