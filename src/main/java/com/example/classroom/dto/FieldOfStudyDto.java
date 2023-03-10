@@ -25,7 +25,7 @@ import java.util.Set;
 public class FieldOfStudyDto {
     private Long id;
     @NotEmpty(message = "{message.name.empty}")
-    @Size(min = 10, max = 30, message = "{message.name.length}")
+    @Size(min = 10, max = 50, message = "{message.name.length.50}")
     private String name;
     @Length(max = 500, message = "{message.description.length}")
     private String description;
