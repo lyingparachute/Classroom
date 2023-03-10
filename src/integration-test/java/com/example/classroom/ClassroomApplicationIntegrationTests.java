@@ -12,7 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@ActiveProfiles("test")
+@ActiveProfiles("integration")
 @SpringBootTest
 class ClassroomApplicationIntegrationTests {
 
