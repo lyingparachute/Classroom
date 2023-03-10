@@ -10,7 +10,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +24,10 @@ import java.util.Set;
 @NoArgsConstructor
 public class FieldOfStudyDto {
     private Long id;
+    @NotEmpty(message = "{message.name.empty}")
+    @Size(min = 10, max = 50, message = "{message.name.length}")
     private String name;
+    @Length(max = 500, message = "{message.description.length}")
     private String description;
     private LevelOfEducation levelOfEducation;
     private ModeOfStudy mode;
