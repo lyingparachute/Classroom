@@ -1,7 +1,6 @@
 package com.example.classroom.api;
 
 import com.example.classroom.dto.SubjectDto;
-import com.example.classroom.model.Department;
 import com.example.classroom.model.FieldOfStudy;
 import com.example.classroom.model.Subject;
 import com.example.classroom.model.Teacher;
@@ -108,10 +107,10 @@ class SubjectRestControllerWebMvcTest {
         @Test
         void returns404_givenNull() throws Exception {
             //given
-            Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
-            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
-            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
-            Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            Subject expected = initData.createSubjectOne(fieldOfStudy, List.of(teacher1, teacher2));
             given(service.fetchById(expected.getId())).willReturn(null);
             //when
             mockMvc.perform(get("/api/subjects/{id}", expected.getId()))
@@ -125,7 +124,7 @@ class SubjectRestControllerWebMvcTest {
     @Nested
     class GetSubjects {
         @Test
-        void returns200_withListOfDtosInBody() throws Exception {
+        void returns200_withListOfSubjectsInBody() throws Exception {
             //given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -181,7 +180,6 @@ class SubjectRestControllerWebMvcTest {
         @Test
         void returns404_whenNoSubjectsInDatabase() throws Exception {
             //given
-            Long id = 100L;
             given(service.fetchAll()).willReturn(List.of());
             //when
             mockMvc.perform(get("/api/subjects"))
@@ -317,7 +315,7 @@ class SubjectRestControllerWebMvcTest {
     @Nested
     class UpdateSubject {
         @Test
-        void returns200_withDepartmentInBody_givenCorrectDepartment() throws Exception {
+        void returns200_withDtoInBody_givenCorrectDto() throws Exception {
             //given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherOne(null, List.of(), List.of());
