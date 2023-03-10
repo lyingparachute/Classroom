@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:8
+    container_name: classroom_mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: classroom
+      MYSQL_USER: classroomUser
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./home/igor/IdeaProjects/Classroom/src/main/resources/import/students.sql
