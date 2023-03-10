@@ -254,6 +254,33 @@ class StudentRestControllerWebMvcTest {
         }
 
         @Test
+        void returns400_withErrorMsg_givenEmptyDtoFields() throws Exception {
+            //given
+            String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
+            String expectedErrorMsgForFirstNameEmpty = "First name cannot be empty.";
+            String expectedErrorMsgForLastNameEmpty = "Last name cannot be empty.";
+            String expectedErrorMsgForAge = "Student must be at lest 18 years old.";
+            String expectedErrorMsgForEmail = "Email cannot be empty.";
+            Student expected = new Student();
+            StudentDto dto = mapper.map(expected, StudentDto.class);
+            //when
+            MvcResult mvcResult = mockMvc.perform(post("/api/students")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn();
+            //then
+            String actualResponseBody = mvcResult.getResponse().getContentAsString();
+            assertThat(actualResponseBody).as("Check error message")
+                    .contains(expectedHttpStatusCodeAsString,
+                            expectedErrorMsgForFirstNameEmpty,
+                            expectedErrorMsgForLastNameEmpty,
+                            expectedErrorMsgForAge,
+                            expectedErrorMsgForEmail);
+        }
+
+        @Test
         void returns400_withErrorMsg_givenInvalidDtoFields() throws Exception {
             //given
             String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
@@ -280,33 +307,6 @@ class StudentRestControllerWebMvcTest {
                     .contains(expectedHttpStatusCodeAsString,
                             expectedErrorMsgForFirstNameLength,
                             expectedErrorMsgForLastNameLength,
-                            expectedErrorMsgForAge,
-                            expectedErrorMsgForEmail);
-        }
-
-        @Test
-        void returns400_withErrorMsg_givenEmptyDtoFields() throws Exception {
-            //given
-            String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
-            String expectedErrorMsgForFirstNameEmpty = "First name cannot be empty.";
-            String expectedErrorMsgForLastNameEmpty = "Last name cannot be empty.";
-            String expectedErrorMsgForAge = "Student must be at lest 18 years old.";
-            String expectedErrorMsgForEmail = "Email cannot be empty.";
-            Student expected = new Student();
-            StudentDto dto = mapper.map(expected, StudentDto.class);
-            //when
-            MvcResult mvcResult = mockMvc.perform(post("/api/students")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(dto)))
-                    .andExpect(status().isBadRequest())
-                    .andDo(print())
-                    .andReturn();
-            //then
-            String actualResponseBody = mvcResult.getResponse().getContentAsString();
-            assertThat(actualResponseBody).as("Check error message")
-                    .contains(expectedHttpStatusCodeAsString,
-                            expectedErrorMsgForFirstNameEmpty,
-                            expectedErrorMsgForLastNameEmpty,
                             expectedErrorMsgForAge,
                             expectedErrorMsgForEmail);
         }
@@ -373,6 +373,33 @@ class StudentRestControllerWebMvcTest {
         }
 
         @Test
+        void returns400_withErrorMsg_givenEmptyDtoFields() throws Exception {
+            //given
+            String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
+            String expectedErrorMsgForFirstNameEmpty = "First name cannot be empty.";
+            String expectedErrorMsgForLastNameEmpty = "Last name cannot be empty.";
+            String expectedErrorMsgForAge = "Student must be at lest 18 years old.";
+            String expectedErrorMsgForEmail = "Email cannot be empty.";
+            Student expected = new Student();
+            StudentDto dto = mapper.map(expected, StudentDto.class);
+            //when
+            MvcResult mvcResult = mockMvc.perform(put("/api/students")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn();
+            //then
+            String actualResponseBody = mvcResult.getResponse().getContentAsString();
+            assertThat(actualResponseBody).as("Check error message")
+                    .contains(expectedHttpStatusCodeAsString,
+                            expectedErrorMsgForFirstNameEmpty,
+                            expectedErrorMsgForLastNameEmpty,
+                            expectedErrorMsgForAge,
+                            expectedErrorMsgForEmail);
+        }
+
+        @Test
         void returns400_withErrorMsg_givenInvalidDtoFields() throws Exception {
             //given
             String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
@@ -399,33 +426,6 @@ class StudentRestControllerWebMvcTest {
                     .contains(expectedHttpStatusCodeAsString,
                             expectedErrorMsgForFirstNameLength,
                             expectedErrorMsgForLastNameLength,
-                            expectedErrorMsgForAge,
-                            expectedErrorMsgForEmail);
-        }
-
-        @Test
-        void returns400_withErrorMsg_givenEmptyDtoFields() throws Exception {
-            //given
-            String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
-            String expectedErrorMsgForFirstNameEmpty = "First name cannot be empty.";
-            String expectedErrorMsgForLastNameEmpty = "Last name cannot be empty.";
-            String expectedErrorMsgForAge = "Student must be at lest 18 years old.";
-            String expectedErrorMsgForEmail = "Email cannot be empty.";
-            Student expected = new Student();
-            StudentDto dto = mapper.map(expected, StudentDto.class);
-            //when
-            MvcResult mvcResult = mockMvc.perform(put("/api/students")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(dto)))
-                    .andExpect(status().isBadRequest())
-                    .andDo(print())
-                    .andReturn();
-            //then
-            String actualResponseBody = mvcResult.getResponse().getContentAsString();
-            assertThat(actualResponseBody).as("Check error message")
-                    .contains(expectedHttpStatusCodeAsString,
-                            expectedErrorMsgForFirstNameEmpty,
-                            expectedErrorMsgForLastNameEmpty,
                             expectedErrorMsgForAge,
                             expectedErrorMsgForEmail);
         }
