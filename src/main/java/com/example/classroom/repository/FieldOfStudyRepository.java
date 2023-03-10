@@ -1,8 +1,8 @@
 package com.example.classroom.repository;
 
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.LevelOfEducation;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

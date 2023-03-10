@@ -1,9 +1,10 @@
 package com.example.classroom.service;
 
 import com.example.classroom.dto.DepartmentDto;
-import com.example.classroom.entity.Department;
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Teacher;
+import com.example.classroom.exception.DepartmentNotFoundException;
+import com.example.classroom.model.Department;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.DepartmentRepository;
 import com.example.classroom.repository.util.UnitTestsInitData;
 import org.junit.jupiter.api.Nested;
@@ -208,7 +209,7 @@ class DepartmentServiceTest {
         }
 
         @Test
-        void update_throwsIllegalArgumentException_givenWrongDepartmentDto() {
+        void update_throwsDepartmentNotFoundException_givenWrongDepartmentDto() {
             //given
             Department department = initData.createDepartmentOne(null, List.of());
             DepartmentDto dto = mapper.map(department, DepartmentDto.class);
@@ -217,7 +218,7 @@ class DepartmentServiceTest {
             Throwable thrown = catchThrowable(() -> service.update(dto));
             //then
             assertThat(thrown)
-                    .isExactlyInstanceOf(IllegalArgumentException.class)
+                    .isExactlyInstanceOf(DepartmentNotFoundException.class)
                     .hasMessage("Invalid Department '" + dto.getName() + "' with ID: " + dto.getId());
         }
     }
@@ -362,14 +363,14 @@ class DepartmentServiceTest {
         }
 
         @Test
-        void fetchById_throwsIllegalArgumentException_givenWrongId() {
+        void fetchById_throwsDepartmentNotFoundException_givenWrongId() {
             //given
             Long id = 10L;
             //when
             Throwable thrown = catchThrowable(() -> service.fetchById(id));
             //then
             assertThat(thrown)
-                    .isExactlyInstanceOf(IllegalArgumentException.class)
+                    .isExactlyInstanceOf(DepartmentNotFoundException.class)
                     .hasMessage("Invalid Department id: " + id);
         }
     }
@@ -390,14 +391,14 @@ class DepartmentServiceTest {
         }
 
         @Test
-        void remove_throwsIllegalArgumentException_givenWrongId() {
+        void remove_throwsDepartmentNotFoundException_givenWrongId() {
             //given
             Long id = 10L;
             //when
             Throwable thrown = catchThrowable(() -> service.remove(id));
             //then
             assertThat(thrown)
-                    .isExactlyInstanceOf(IllegalArgumentException.class)
+                    .isExactlyInstanceOf(DepartmentNotFoundException.class)
                     .hasMessage("Invalid Department id: " + id);
         }
 

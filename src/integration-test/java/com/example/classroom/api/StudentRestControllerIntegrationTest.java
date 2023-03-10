@@ -1,9 +1,9 @@
-package com.example.classroom.rest;
+package com.example.classroom.api;
 
 import com.example.classroom.dto.StudentDto;
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Student;
-import com.example.classroom.entity.Teacher;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Student;
+import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
@@ -32,7 +32,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@ActiveProfiles("test")
+@ActiveProfiles("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class StudentRestControllerIntegrationTest {
 

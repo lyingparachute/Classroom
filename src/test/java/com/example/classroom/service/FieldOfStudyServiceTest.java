@@ -2,11 +2,11 @@ package com.example.classroom.service;
 
 import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.dto.FieldOfStudyDto;
-import com.example.classroom.entity.*;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
+import com.example.classroom.model.*;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.util.UnitTestsInitData;
 import org.assertj.core.groups.Tuple;

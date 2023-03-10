@@ -1,6 +1,6 @@
 package com.example.classroom.controller;
 
-import com.example.classroom.entity.Subject;
+import com.example.classroom.model.Subject;
 import com.example.classroom.repository.SubjectRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ActiveProfiles("test")
+@ActiveProfiles("integration")
 @SpringBootTest
 class SubjectGetControllerIntegrationTest {
 

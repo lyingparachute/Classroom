@@ -1,9 +1,9 @@
 package com.example.classroom.controller;
 
 import com.example.classroom.dto.DepartmentDto;
-import com.example.classroom.entity.Department;
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Teacher;
+import com.example.classroom.model.Department;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.DepartmentRepository;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.TeacherRepository;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("test")
+@ActiveProfiles("integration")
 @SpringBootTest
 @Transactional
 class DepartmentControllerIntTest {

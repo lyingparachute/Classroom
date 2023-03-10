@@ -1,4 +1,4 @@
-package com.example.classroom.entity;
+package com.example.classroom.model;
 
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;

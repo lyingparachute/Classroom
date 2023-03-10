@@ -1,4 +1,4 @@
-package com.example.classroom.rest;
+package com.example.classroom.api;
 
 import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.service.DepartmentService;
@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class DepartmentRestController {
     }
 
     @PostMapping
-    public ResponseEntity<DepartmentDto> createDepartment(@RequestBody DepartmentDto departmentDto) {
+    public ResponseEntity<DepartmentDto> createDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
         DepartmentDto created = service.create(departmentDto);
         return created != null ?
                 ResponseEntity.status(HttpStatus.CREATED)
@@ -42,7 +43,7 @@ public class DepartmentRestController {
     }
 
     @PutMapping
-    public ResponseEntity<DepartmentDto> putDepartment(@RequestBody DepartmentDto departmentDto){
+    public ResponseEntity<DepartmentDto> updateDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
         DepartmentDto updated = service.update(departmentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :

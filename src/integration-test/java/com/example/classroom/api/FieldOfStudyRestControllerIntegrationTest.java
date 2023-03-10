@@ -1,13 +1,13 @@
-package com.example.classroom.rest;
+package com.example.classroom.api;
 
 import com.example.classroom.dto.FieldOfStudyDto;
-import com.example.classroom.entity.Department;
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Student;
-import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
+import com.example.classroom.model.Department;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Student;
+import com.example.classroom.model.Subject;
 import com.example.classroom.repository.DepartmentRepository;
 import com.example.classroom.repository.FieldOfStudyRepository;
 import com.example.classroom.repository.StudentRepository;
@@ -36,7 +36,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test")
+@ActiveProfiles("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class FieldOfStudyRestControllerIntegrationTest {
 

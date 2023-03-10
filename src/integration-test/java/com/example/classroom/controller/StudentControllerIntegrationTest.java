@@ -1,8 +1,8 @@
 package com.example.classroom.controller;
 
 import com.example.classroom.dto.StudentDto;
-import com.example.classroom.entity.Student;
-import com.example.classroom.entity.Teacher;
+import com.example.classroom.model.Student;
+import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,9 +26,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("test")
+@ActiveProfiles("integration")
 @SpringBootTest
-@Transactional
 class StudentControllerIntegrationTest {
 
     @Autowired

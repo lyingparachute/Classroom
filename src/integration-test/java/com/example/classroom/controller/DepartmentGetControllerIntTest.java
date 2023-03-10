@@ -1,8 +1,8 @@
 package com.example.classroom.controller;
 
-import com.example.classroom.entity.Department;
-import com.example.classroom.entity.FieldOfStudy;
-import com.example.classroom.entity.Teacher;
+import com.example.classroom.model.Department;
+import com.example.classroom.model.FieldOfStudy;
+import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,9 +22,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ActiveProfiles("test")
+@ActiveProfiles("integration")
 @SpringBootTest
-//@Transactional
 class DepartmentGetControllerIntTest {
 
     @Autowired

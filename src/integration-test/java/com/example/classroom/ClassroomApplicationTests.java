@@ -1,6 +1,6 @@
 package com.example.classroom;
 
-import com.example.classroom.entity.*;
+import com.example.classroom.model.*;
 import com.example.classroom.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@ActiveProfiles("test")
+@ActiveProfiles("integration")
 @SpringBootTest
 class ClassroomApplicationTests {
 

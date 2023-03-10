@@ -1,6 +1,6 @@
 package com.example.classroom.repository;
 
-import com.example.classroom.entity.Student;
+import com.example.classroom.model.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

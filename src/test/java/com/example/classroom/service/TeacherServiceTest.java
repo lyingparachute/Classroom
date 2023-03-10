@@ -1,7 +1,7 @@
 package com.example.classroom.service;
 
 import com.example.classroom.dto.TeacherDto;
-import com.example.classroom.entity.*;
+import com.example.classroom.model.*;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.UnitTestsInitData;
 import org.assertj.core.groups.Tuple;

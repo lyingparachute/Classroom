@@ -1,8 +1,8 @@
 package com.example.classroom.service;
 
 import com.example.classroom.dto.SubjectDto;
-import com.example.classroom.entity.Subject;
 import com.example.classroom.enums.Semester;
+import com.example.classroom.model.Subject;
 import com.example.classroom.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
