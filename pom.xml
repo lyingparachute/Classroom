@@ -8,9 +8,9 @@
         <version>2.6.13</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>systems.ultimate</groupId>
+    <groupId>com.example</groupId>
     <artifactId>Classroom</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>Classroom</name>
     <description>Classroom</description>
     <properties>

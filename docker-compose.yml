@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql
+    container_name: classroom_mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: classroom
+      MYSQL_USER: classroomuser
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - backend
+
+  app:
+    image: classroom
+    container_name: classroom_app
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/classroom?createDatabaseIfNotExist=true&serverTimezone=UTC&useLegacyDatetimeCode=false
+      SPRING_DATASOURCE_USERNAME: classroomuser
+      SPRING_DATASOURCE_PASSWORD: password
+    networks:
+      - backend
+
+volumes:
+  db_data:
+
+networks:
+  backend:

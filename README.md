@@ -1,38 +1,62 @@
 # Classroom
+
 ### Web application for classroom management. App provides frontend endpoints
 
-## HOW TO RUN APP:
+## HOW TO RUN APP LOCALLY:
 
-### 1. Create Docker image
+### 1. Clone the project
 
-* Make sure you don't have any existing images with: 
-```bash 
-docker ps
-```
-* If so, then run:
-* ```bash 
-  docker stop $(docker ps -aq)
-  ```
-* ```bash 
-  docker rm $(docker ps -aq)
-  ```
-* run command to create
-  image: 
 ```bash
-docker run -p 3307:3306 --name mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=classroom --rm -d mysql
+  git clone https://github.com/lyingparachute/Classroom.git
 ```
+
+Go to project directory
+
+```bash
+  cd classroom
+```
+
 ### 2. Build project and perform tests
 
 * Open terminal in project directory
 * Type:
   `mvn clean install`
 
-### 3. Start application
+### 3. Start application server with docker-compose
 
-* `mvn spring-boot:run`
+```bash
+docker-compose up --build
+```
+
+***note** - it might take a while to pull and build docker images*
+
 * go to endpoints and test app:
-  * `http://localhost:8080/`
-  * `http://localhost:8080/dashboard`
+  * <a href="http://localhost:8080/" target="_blank">Welcome page</a>
 
-* Press CTRL+C to finish running app
+    `http://localhost:8080`
+  * <a href="http://localhost:8080/dashboard" target="_blank">Dashboard</a>
+
+    `http://localhost:8080/dashboard`
+* Finish running app
+
+  ```
+  press CTRL+C
+  ``` 
+
+### 4. Run app - second time
+
+* START APP
+  ```bash
+  docker-compose start
+  ```
+* STOP APP
+   ```bash
+  docker-compose stop
+  ```
+* REMOVE NETWORK
+  ```bash
+  docker-compose down
+  ```
+
+
 
