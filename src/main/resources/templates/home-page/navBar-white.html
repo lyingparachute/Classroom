@@ -1,4 +1,4 @@
-<body>
+<body xmlns:sec="http://www.w3.org/1999/xhtml">
 <div th:fragment="nav-white">
     <link rel="stylesheet" th:href="@{/css/navBar.css}" type="text/css"/>
     <!-- ======= Header ======= -->
@@ -11,8 +11,10 @@
                     <li><a class="nav-link scrollto" href="#about" th:text="#{navbar.about}"></a></li>
                     <li><a class="nav-link scrollto" href="#services" th:text="#{navbar.services}"></a></li>
                     <li><a class="nav-link scrollto" href="#pricing" th:text="#{navbar.pricing}"></a></li>
-                    <li><a class="nav-link" th:href="@{/dashboard}" th:text="#{navbar.dashboard}"></a></li>
-                    <li><a class="getstarted scrollto" href="#about" th:text="#{navbar.get.started}"></a></li>
+                    <li><a class="getstarted" sec:authorize="isAuthenticated()" th:href="@{/dashboard}"
+                           th:text="#{navbar.dashboard}"></a></li>
+                    <li><a class="getstarted" sec:authorize="!isAuthenticated()" th:href="@{/register}"
+                           th:text="#{navbar.get.started}"></a></li>
                 </ul>
                 <i class="fas fa-bars mobile-nav-toggle"></i>
             </nav><!-- .navbar -->

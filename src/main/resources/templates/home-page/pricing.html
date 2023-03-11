@@ -1,4 +1,4 @@
-<section id="pricing" class="pricing">
+<section id="pricing" class="pricing" xmlns:sec="http://www.w3.org/1999/xhtml">
     <div class="container" data-aos="fade-up">
         <div class="section-title">
             <h2 th:text="#{home.pricing.header.h2}"></h2>
@@ -22,7 +22,8 @@
                         <li class="na"><i class="bx bx-x"></i><span th:text="#{home.pricing.card.box6}"></span></li>
                         <li class="na"><i class="bx bx-x"></i><span th:text="#{home.pricing.card.box7}"></span></li>
                     </ul>
-                    <a href="#" class="get-started-btn" th:text="#{home.pricing.get.started}"></a>
+                    <a sec:authorize="!isAuthenticated()" th:href="@{/register}" class="get-started-btn"
+                       th:text="#{home.pricing.get.started}"></a>
                 </div>
             </div>
 
@@ -41,7 +42,8 @@
                         <li class="na"><i class="bx bx-x"></i><span th:text="#{home.pricing.card.box6}"></span></li>
                         <li class="na"><i class="bx bx-x"></i><span th:text="#{home.pricing.card.box7}"></span></li>
                     </ul>
-                    <a href="#" class="get-started-btn" th:text="#{home.pricing.get.started}"></a>
+                    <a sec:authorize="!isAuthenticated()" th:href="@{/register}" class="get-started-btn"
+                       th:text="#{home.pricing.get.started}"></a>
                 </div>
             </div>
 
@@ -60,7 +62,8 @@
                         <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box6}"></span></li>
                         <li><i class="bx bx-check"></i><span th:text="#{home.pricing.card.box7}"></span></li>
                     </ul>
-                    <a href="#hero" class="get-started-btn" th:text="#{home.pricing.get.started}"></a>
+                    <a sec:authorize="!isAuthenticated()" th:href="@{/register}" class="get-started-btn"
+                       th:text="#{home.pricing.get.started}"></a>
                 </div>
             </div>
 
