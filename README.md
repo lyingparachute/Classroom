@@ -58,5 +58,13 @@ docker-compose up --build
   docker-compose down
   ```
 
+## Alternative way of running app locally
+
+Create docker image and run project with IntelliJ:
+
+```bash
+docker run -p 3307:3306 --name mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=classroom --rm -d mysql
+```
+
 
 
