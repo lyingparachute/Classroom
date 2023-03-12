@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <!--/* Custom CSS */-->
+    <link rel="stylesheet" th:href="@{/css/home-unauthorized.css}" type="text/css"/>
+</head>
+
+<body>
+
+<section class="h-100 gradient-form" style="background-color: #eee;">
+
+    <form class="form-signin" method="post" action="/api/sign-out">
+        <img class="mb-4" th:src="@{/assets/bootstrap-solid.svg}" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Are you sure you want to log out?</h1>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log Out</button>
+        <p class="mt-5 mb-3 text-muted">© 2021</p>
+    </form>
+</section>
+
+<!--/* JS Scripts */-->
+<div th:replace="fragments/scripts :: scripts"></div>
+</body>
+</html>
