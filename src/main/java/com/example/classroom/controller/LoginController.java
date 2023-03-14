@@ -5,9 +5,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class LoginController {
+    public static final String LOGIN_FOLDER = "login/";
 
-    @GetMapping("/login")
+    @GetMapping("/sign-in")
     public String signIn() {
-        return "login";
+        return LOGIN_FOLDER + "sign-in";
+    }
+
+    @GetMapping("/sign-out")
+    public String signOut() {
+        return LOGIN_FOLDER + "sign-out";
+    }
+
+    @GetMapping("/sign-up")
+    public String signUp() {
+        return LOGIN_FOLDER + "sign-up";
     }
 }

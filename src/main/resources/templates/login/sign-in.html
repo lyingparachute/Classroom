@@ -14,13 +14,13 @@
     <!-- ======= Header ======= -->
     <header id="header" class="fixed-top">
         <div class="container d-flex align-items-center justify-content-between">
-            <h1 class="logo"><a th:href="@{/}" th:text="#{navbar.app.name}"></a></h1>
+            <h1 class="logo"><a th:href="@{/static}" th:text="#{navbar.app.name}"></a></h1>
             <nav id="navbar" class="navbar">
                 <ul>
-                    <li><a class="nav-link scrollto" th:href="@{/#about}" th:text="#{navbar.about}"></a></li>
-                    <li><a class="nav-link scrollto" th:href="@{/#services}" th:text="#{navbar.services}"></a></li>
-                    <li><a class="nav-link scrollto" th:href="@{/#pricing}" th:text="#{navbar.pricing}"></a></li>
-                    <li><a class="getstarted" th:href="@{/}"
+                    <li><a class="nav-link scrollto" th:href="@{/static}" th:text="#{navbar.about}"></a></li>
+                    <li><a class="nav-link scrollto" th:href="@{/static}" th:text="#{navbar.services}"></a></li>
+                    <li><a class="nav-link scrollto" th:href="@{/static}" th:text="#{navbar.pricing}"></a></li>
+                    <li><a class="getstarted" th:href="@{/static}"
                            th:text="#{navbar.home}"></a></li>
                 </ul>
                 <i class="fas fa-bars mobile-nav-toggle"></i>
@@ -44,8 +44,12 @@
                                     <h4 class="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
                                 </div>
 
-                                <form>
+                                <form class="form-signin" th:action="@{/api/sign-in}" method="post">
                                     <p>Please login to your account</p>
+
+                                    <div th:if="${param.error}" class="alert alert-danger">Invalid Username or
+                                        Password
+                                    </div>
 
                                     <div class="form-outline mb-4">
                                         <input type="text" id="form2Example11" class="form-control" required/>
@@ -66,7 +70,7 @@
 
                                     <div class="d-flex align-items-center justify-content-center pb-4">
                                         <p class="mb-0 me-2">Don't have an account?</p>
-                                        <a type="button" class="btn btn-outline-danger" th:href="@{/register}">Create
+                                        <a type="button" class="btn btn-outline-danger" th:href="@{/sign-up}">Create
                                             new</a>
                                     </div>
 

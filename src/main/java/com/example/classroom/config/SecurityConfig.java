@@ -11,7 +11,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String HOME_PAGE = "/";
     private static final String DASHBOARD_PAGE = "/dashboard";
-    private static final String SIGN_IN_PAGE = "/login";
+    private static final String SIGN_IN_PAGE = "/sign-in";
     private static final String SIGN_IN_API = "/api/sign-in";
     private static final String SIGN_OUT_API = "/api/sign-out";
 
