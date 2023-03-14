@@ -7,13 +7,13 @@
     <!-- ======= Header ======= -->
     <header id="header" class="fixed-top">
         <div class="container d-flex align-items-center justify-content-between">
-            <h1 class="logo"><a th:href="@{/static}" th:text="#{navbar.app.name}"></a></h1>
+            <h1 class="logo"><a th:href="@{/}" th:text="#{navbar.app.name}"></a></h1>
             <nav id="navbar" class="navbar">
                 <ul>
-                    <li><a class="nav-link scrollto" th:href="@{/static}" th:text="#{navbar.about}"></a></li>
-                    <li><a class="nav-link scrollto" th:href="@{/static}" th:text="#{navbar.services}"></a></li>
-                    <li><a class="nav-link scrollto" th:href="@{/static}" th:text="#{navbar.pricing}"></a></li>
-                    <li><a class="getstarted" th:href="@{/static}"
+                    <li><a class="nav-link scrollto" th:href="@{/#about}" th:text="#{navbar.about}"></a></li>
+                    <li><a class="nav-link scrollto" th:href="@{/#services}" th:text="#{navbar.services}"></a></li>
+                    <li><a class="nav-link scrollto" th:href="@{/#pricing}" th:text="#{navbar.pricing}"></a></li>
+                    <li><a class="getstarted" th:href="@{/}"
                            th:text="#{navbar.home}"></a></li>
                 </ul>
                 <i class="fas fa-bars mobile-nav-toggle"></i>
