@@ -15,6 +15,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String HOME_PAGE = "/";
     private static final String DASHBOARD_PAGE = "/dashboard";
     private static final String SIGN_IN_PAGE = "/sign-in";
+    private static final String SIGN_UP_PAGE = "/sign-up";
     private static final String SIGN_IN_API = "/api/sign-in";
     private static final String SIGN_OUT_API = "/api/sign-out";
 
@@ -23,9 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
-                        HOME_PAGE,
-                        SIGN_IN_PAGE,
-                        SIGN_IN_API).permitAll()
+                        HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
