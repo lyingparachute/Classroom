@@ -21,4 +21,9 @@ public class LoginController {
     public String signUp() {
         return LOGIN_FOLDER + "sign-up";
     }
+
+    @GetMapping("password-reset")
+    public String passwordReset() {
+        return LOGIN_FOLDER + "password-reset";
+    }
 }
