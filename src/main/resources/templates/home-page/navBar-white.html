@@ -13,7 +13,7 @@
                     <li><a class="nav-link scrollto" href="#pricing" th:text="#{navbar.pricing}"></a></li>
                     <li><a class="getstarted" sec:authorize="isAuthenticated()" th:href="@{/dashboard}"
                            th:text="#{navbar.dashboard}"></a></li>
-                    <li><a class="getstarted" sec:authorize="!isAuthenticated()" th:href="@{/register}"
+                    <li><a class="getstarted" sec:authorize="!isAuthenticated()" th:href="@{/sign-up}"
                            th:text="#{navbar.get.started}"></a></li>
                 </ul>
                 <i class="fas fa-bars mobile-nav-toggle"></i>

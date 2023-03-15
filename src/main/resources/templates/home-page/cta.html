@@ -4,7 +4,7 @@
         <div class="text-center">
             <h3 th:text="#{home.cta.h3}"></h3>
             <p th:text="#{home.cta.desc}"></p>
-            <a class="cta-btn" sec:authorize="!isAuthenticated()" th:href="@{/register}"
+            <a class="cta-btn" sec:authorize="!isAuthenticated()" th:href="@{/sign-up}"
                th:text="#{home.cta.button}"></a>
         </div>
 
