@@ -205,7 +205,8 @@
                         <li><a class="dropdown-item" th:href="@{/dashboard/settings}"
                                th:text="#{dashboard.navigation.avatar.settings}"></a>
                         </li>
-                        <li><a class="dropdown-item" th:href="@{/logout}"
+                        <li><a class="dropdown-item"
+                               data-bs-toggle="modal" data-bs-target="#signOutModal"
                                th:text="#{dashboard.navigation.avatar.logout}"></a></li>
                     </ul>
                 </li>
@@ -213,4 +214,5 @@
         </div>
         <!-- Container wrapper -->
     </nav>
+    <div th:replace="login/elements :: sign-out-modal"></div>
 </header>

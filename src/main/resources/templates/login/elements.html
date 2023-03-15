@@ -23,5 +23,37 @@
     </header><!-- End Header -->
 </div>
 
+<!-- Sign out Modal -->
+<div th:fragment="sign-out-modal" class="modal fade" id="signOutModal" tabindex="-1"
+     aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="signOutModalLabel" th:text="#{logout.modal.header}">
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" th:aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="signOutModalBody">
+                <span id="confirmText" th:text="#{logout.modal.body}"></span>
+            </div>
+            <div class="modal-footer">
+                <div class="col-auto">
+                    <a class="btn btn-secondary" href="" data-bs-dismiss="modal">
+                        <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
+                </div>
+                <div class="col-auto">
+                    <form class="form-sign-out" method="post" th:action="@{/api/sign-out}">
+                        <button class="btn btn btn-danger btn-block" type="submit">
+                            <i class="fa fa-right-from-bracket mr-2"></i>
+                            <span th:text="#{button.logout}"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Sign out modal -->
+
 </body>
 </html>

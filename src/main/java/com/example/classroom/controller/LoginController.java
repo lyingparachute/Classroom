@@ -13,11 +13,6 @@ public class LoginController {
         return LOGIN_FOLDER + "sign-in";
     }
 
-    @GetMapping("/sign-out")
-    public String signOut() {
-        return LOGIN_FOLDER + "sign-out";
-    }
-
     @GetMapping("/sign-up")
     public String getSignUpPage() {
         return LOGIN_FOLDER + "sign-up";
