@@ -28,8 +28,26 @@
                                 <form class="form-sign-up" th:action="@{/api/sign-up}" method="post">
                                     <p>Create new account</p>
 
-                                    <div th:if="${param.error}" class="alert alert-danger">Invalid Username or
-                                        Password
+                                    <!-- First and Last name input -->
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <input type="text" id="form3Example1" class="form-control"/>
+                                                <label class="form-label" for="form3Example1">First name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <input type="text" id="form3Example2" class="form-control"/>
+                                                <label class="form-label" for="form3Example2">Last name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Email input -->
+                                    <div class="form-outline mb-4">
+                                        <input type="email" id="form3Example3" class="form-control"/>
+                                        <label class="form-label" for="form3Example3">Email address</label>
                                     </div>
 
                                     <div class="form-outline mb-4">
@@ -42,17 +60,29 @@
                                         <label class="form-label" for="form2Example22">Password</label>
                                     </div>
 
+                                    <div class="btn-group mb-4 align-content-center">
+                                        <input type="radio" class="btn-check" name="options" id="option1"
+                                               autocomplete="off" checked/>
+                                        <label class="btn btn-secondary" for="option1">Student</label>
+
+                                        <input type="radio" class="btn-check" name="options" id="option2"
+                                               autocomplete="off"/>
+                                        <label class="btn btn-secondary" for="option2">Teacher</label>
+
+                                        <input type="radio" class="btn-check" name="options" id="option3"
+                                               autocomplete="off"/>
+                                        <label class="btn btn-secondary" for="option3">Admin</label>
+                                    </div>
+
                                     <div class="text-center pt-1 mb-5 pb-1">
                                         <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
-                                                type="submit">Log in
+                                                type="submit">Register
                                         </button>
-                                        <a class="text-muted" th:href="@{/password-reset}">Forgot password?</a>
                                     </div>
 
                                     <div class="d-flex align-items-center justify-content-center pb-4">
-                                        <p class="mb-0 me-2">Don't have an account?</p>
-                                        <a type="button" class="btn btn-outline-danger" th:href="@{/sign-up}">Create
-                                            new</a>
+                                        <p class="mb-0 me-2">Already have an account?</p>
+                                        <a type="button" class="btn btn-outline-danger" th:href="@{/sign-in}">Log in</a>
                                     </div>
 
                                 </form>
