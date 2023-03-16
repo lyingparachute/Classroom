@@ -19,4 +19,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             select s from Student s
             where upper(s.firstName) like upper(concat('%', ?1, '%')) or upper(s.lastName) like upper(concat('%', ?1, '%'))""")
     Page<Student> findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String name, Pageable pageable);
+
+    Student findByEmail(String email);
 }
