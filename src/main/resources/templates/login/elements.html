@@ -28,6 +28,15 @@
     </header><!-- End Header -->
 </div>
 
+<!-- About company on sign in and sign up pages -->
+<div th:fragment="about-us" class="col-lg-6 d-flex align-items-center gradient-custom-2">
+    <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+        <h2 class="mb-4 text-center" th:text="#{sign.company.desc.h2}"></h2>
+        <h4 class="mb-4" th:text="#{sign.company.desc.h4}"></h4>
+        <p class="small mb-0" th:text="#{home.about.col2.desc}"></p>
+    </div>
+</div>
+
 <!-- Sign out Modal -->
 <div th:fragment="sign-out-modal" class="modal fade" id="signOutModal" tabindex="-1"
      aria-hidden="true">

@@ -23,52 +23,45 @@
                                 <div class="text-center">
                                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
                                          style="width: 185px;" alt="logo">
-                                    <h4 class="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
+                                    <h4 class="mt-1 mb-5 pb-1" th:text="#{signin.header}"></h4>
                                 </div>
 
                                 <form class="form-sign-in" th:action="@{/api/sign-in}" method="post">
-                                    <p>Please login to your account</p>
+                                    <p th:text="#{signin.login}"></p>
 
-                                    <div th:if="${param.error}" class="alert alert-danger">Invalid Username or
-                                        Password
+                                    <div th:if="${param.error}" th:text="#{signin.invalid.credentials}"
+                                         class="alert alert-danger">
                                     </div>
 
                                     <div class="form-outline mb-4">
                                         <input type="text" id="username" name="username" class="form-control" required/>
-                                        <label class="form-label" for="username">Username</label>
+                                        <label class="form-label" for="username" th:text="#{signin.username}"></label>
                                     </div>
 
                                     <div class="form-outline mb-4">
                                         <input type="password" id="password" name="password" class="form-control"
                                                required/>
-                                        <label class="form-label" for="password">Password</label>
+                                        <label class="form-label" for="password" th:text="#{signin.password}"></label>
                                     </div>
                                     <div class="text-center pt-1 mb-5 pb-1">
                                         <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
-                                                type="submit">Sign in
+                                                type="submit" th:text="#{signin.button}">
                                         </button>
-                                        <a class="text-muted" th:href="@{/password-reset}">Forgot password?</a>
+                                        <a class="text-muted" th:href="@{/password-reset}"
+                                           th:text="#{signin.forgot}"></a>
                                     </div>
                                 </form>
 
                                 <div class="d-flex align-items-center justify-content-center pb-4">
-                                    <p class="mb-0 me-2">Don't have an account?</p>
-                                    <a type="button" class="btn btn-outline-danger" th:href="@{/sign-up}">Create
-                                        new</a>
+                                    <p class="mb-0 me-2" th:text="#{signin.no.account}"></p>
+                                    <a type="button" class="btn btn-outline-danger" th:href="@{/sign-up}"
+                                       th:text="#{signin.create.account}"></a>
                                 </div>
 
                             </div>
                         </div>
-                        <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-                            <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                                <h4 class="mb-4">We are more than just a company</h4>
-                                <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                    eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                            </div>
-                        </div>
+                        <!--/* About Us */-->
+                        <div th:replace="login/elements :: about-us"></div>
                     </div>
                 </div>
             </div>
