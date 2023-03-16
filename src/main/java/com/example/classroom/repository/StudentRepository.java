@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
@@ -20,5 +21,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             where upper(s.firstName) like upper(concat('%', ?1, '%')) or upper(s.lastName) like upper(concat('%', ?1, '%'))""")
     Page<Student> findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String name, Pageable pageable);
 
-    Student findByEmail(String email);
+    Optional<Student> findByEmail(String email);
 }
