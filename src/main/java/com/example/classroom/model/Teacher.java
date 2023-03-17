@@ -23,6 +23,7 @@ public class Teacher {
     private String firstName;
     private String lastName;
     private int age;
+    @Column(unique = true)
     private String email;
 
     @JsonIgnore

@@ -23,6 +23,7 @@ public class Student {
     private String firstName;
     private String lastName;
     private int age;
+    @Column(unique = true)
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY,
