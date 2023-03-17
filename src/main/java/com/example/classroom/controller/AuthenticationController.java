@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class LoginController {
+public class AuthenticationController {
     public static final String LOGIN_FOLDER = "login/";
 
     @GetMapping("/sign-in")
