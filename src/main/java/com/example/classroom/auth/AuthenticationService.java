@@ -21,7 +21,14 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         //TODO - save user to database
-        var jwtToken = jwtService.generateToken(new Student());
+        Student userDetails = new Student();
+        userDetails.setFirstName(request.getFirstName());
+        userDetails.setLastName(request.getLastName());
+        userDetails.setEmail(request.getEmail());
+        userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
+        userDetails.setRole("USER");
+        var savedUser = repository.save(userDetails);
+        var jwtToken = jwtService.generateToken(savedUser);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
