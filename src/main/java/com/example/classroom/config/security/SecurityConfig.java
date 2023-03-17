@@ -18,13 +18,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String SIGN_UP_PAGE = "/sign-up";
     private static final String SIGN_IN_API = "/api/sign-in";
     private static final String SIGN_OUT_API = "/api/sign-out";
+    private static final String AUTH_ENDPOINTS = "/api/auth/**";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
-                        HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE).permitAll()
+                        HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, AUTH_ENDPOINTS).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
