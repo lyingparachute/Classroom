@@ -1,5 +1,6 @@
 package com.example.classroom.token;
 
+import com.example.classroom.model.UserLogin;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,9 +29,7 @@ public class Token {
 
     public boolean expired;
 
-    //TODO ADD USER CONNECTION
-
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    public User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    public UserLogin user;
 }
