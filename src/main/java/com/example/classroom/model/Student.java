@@ -67,11 +67,11 @@ public class Student {
     /**
      * Add new Teacher. The method keeps relationships consistency:
      * * this student is added to students
-     *   on the teacher side
+     * on the teacher side
      */
-    public void addTeacher(Teacher teacher){
+    public void addTeacher(Teacher teacher) {
         teacher.addStudent(this);
-        if (teachers.contains(teacher)){
+        if (teachers.contains(teacher)) {
             return;
         }
         teachers.add(teacher);
@@ -80,7 +80,7 @@ public class Student {
     /**
      * Removes the Teacher. The method keeps relationships consistency:
      * * this student is removed from students
-     *   on the teacher side
+     * on the teacher side
      */
     public void removeTeacher(Teacher teacher) {
         teacher.removeStudent(this);
