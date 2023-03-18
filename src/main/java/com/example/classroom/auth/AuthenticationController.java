@@ -19,18 +19,18 @@ public class AuthenticationController {
 
     private final UserService service;
 
-    private static final String LOGIN_FOLDER = "login/";
+    private static final String AUTH_FOLDER = "auth/";
 
     @GetMapping("/sign-in")
     public String signIn() {
-        return LOGIN_FOLDER + "sign-in";
+        return AUTH_FOLDER + "sign-in";
     }
 
     @GetMapping("/sign-up")
     public String getSignUpPage(Model model) {
         //TODO change to Register request
         model.addAttribute("user", new UserLogin());
-        return LOGIN_FOLDER + "sign-up";
+        return AUTH_FOLDER + "sign-up";
     }
 
     @PostMapping("/sign-up")
@@ -38,7 +38,7 @@ public class AuthenticationController {
                          BindingResult result,
                          RedirectAttributes redirectAttributes) {
         if (result.hasErrors())
-            return LOGIN_FOLDER + "sign-up";
+            return AUTH_FOLDER + "sign-up";
         UserLogin created = service.register(user);
         redirectAttributes.addFlashAttribute("createSuccess", created);
         return "redirect:/sign-in";
@@ -46,11 +46,11 @@ public class AuthenticationController {
 
     @GetMapping("/password/reset")
     public String getPasswordResetPage() {
-        return LOGIN_FOLDER + "password-reset";
+        return AUTH_FOLDER + "password-reset";
     }
 
     @PostMapping("/password/reset")
     public String resetPassword() {
-        return LOGIN_FOLDER + "sign-in";
+        return AUTH_FOLDER + "sign-in";
     }
 }
