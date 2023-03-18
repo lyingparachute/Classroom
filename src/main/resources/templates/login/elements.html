@@ -56,7 +56,7 @@
                         <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
                 </div>
                 <div class="col-auto">
-                    <form class="form-sign-out" method="post" th:action="@{/api/sign-out}">
+                    <form class="form-sign-out" method="post" th:action="@{/api/auth/sign-out}">
                         <button class="btn btn btn-danger btn-block" type="submit">
                             <i class="fa fa-right-from-bracket mr-2"></i>
                             <span th:text="#{button.logout}"></span>

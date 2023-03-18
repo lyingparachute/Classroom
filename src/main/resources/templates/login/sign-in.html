@@ -26,6 +26,20 @@
                                     <h4 class="mt-1 mb-5 pb-1" th:text="#{signin.header}"></h4>
                                 </div>
 
+                                <!--Alert Section -->
+                                <section th:if="${createSuccess}">
+                                    <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+                                        <i class="fas fa-check-circle"></i>
+                                        <strong class="mx-1" th:text="#{msg.success}"></strong>
+                                        <span th:text="#{fieldOfStudy.success.msg1}"></span>
+                                        <span th:text="#{alert.success.msg2}"></span>
+                                        <strong class="mx-1" th:text="${createSuccess}"></strong>
+                                        <span th:text="#{alert.success.msg3}"></span>
+                                        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+                                    </div>
+                                </section>
+                                <!--End Alert Section -->
+
                                 <form class="form-sign-in" th:action="@{/api/sign-in}" method="post">
                                     <p th:text="#{signin.login}"></p>
 
