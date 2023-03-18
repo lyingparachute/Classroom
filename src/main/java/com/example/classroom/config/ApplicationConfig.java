@@ -1,6 +1,6 @@
 package com.example.classroom.config;
 
-import com.example.classroom.repository.StudentRepository;
+import com.example.classroom.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final StudentRepository studentRepository;
+    private final UserRepository repository;
 
     @Bean
     public ModelMapper modelMapper() {
@@ -27,8 +27,8 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> studentRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Student not found"));
+        return username -> repository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + username + " does not exist in database."));
     }
 
     @Bean
