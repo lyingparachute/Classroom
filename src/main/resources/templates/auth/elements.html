@@ -57,6 +57,7 @@
                 </div>
                 <div class="col-auto">
                     <form class="form-sign-out" method="post" th:action="@{/api/sign-out}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <button class="btn btn btn-danger btn-block" type="submit">
                             <i class="fa fa-right-from-bracket mr-2"></i>
                             <span th:text="#{button.logout}"></span>
