@@ -1,12 +1,16 @@
 package com.example.classroom.config.security;
 
+import com.example.classroom.config.jwt.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                //TODO - delete csrf.disable method
+//                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
                         HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, AUTH_ENDPOINTS).permitAll()
@@ -40,8 +46,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl(DASHBOARD_PAGE, true)
                 .failureUrl(SIGN_IN_PAGE + "?error")
                 .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
                 .logoutUrl(SIGN_OUT_API)
+                .addLogoutHandler(logoutHandler)
+//                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl(HOME_PAGE);
