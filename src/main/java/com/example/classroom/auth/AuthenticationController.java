@@ -19,7 +19,7 @@ public class AuthenticationController {
 
     private final UserService service;
 
-    public static final String LOGIN_FOLDER = "login/";
+    private static final String LOGIN_FOLDER = "login/";
 
     @GetMapping("/sign-in")
     public String signIn() {
