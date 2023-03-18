@@ -10,7 +10,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+    private final LogoutHandler logoutHandler;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     private static final String HOME_PAGE = "/";
     private static final String DASHBOARD_PAGE = "/dashboard";
@@ -43,14 +49,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth.inMemoryAuthentication()
                 .withUser("admin")
-                .password(encoder.encode("admin"))
+                .password(passwordEncoder.encode("admin"))
                 .roles("ADMIN")
                 .and()
                 .withUser("user")
-                .password(encoder.encode("user"))
+                .password(passwordEncoder.encode("user"))
                 .roles();
     }
 }
