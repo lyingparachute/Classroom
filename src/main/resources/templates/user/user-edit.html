@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header py-4 title-bar">
+                    <div class="page-title"
+                         th:text="#{user.edit.header}">
+                    </div>
+                </div>
+                <div class="card-body text-center">
+                    <div
+                            th:text="#{user.edit.card.e1}">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="fragments/scripts :: scripts"></div>
+</body>
+</html>

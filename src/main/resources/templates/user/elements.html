@@ -1,0 +1,195 @@
+<!-- ======= Form for Teacher ======= -->
+<div th:fragment="teacher-form">
+    <div class="mb-4" th:classappend="${#fields.hasErrors('firstName')} ? mb-5">
+        <h4 th:text="#{teacher.firstName}"></h4>
+        <div class="form-outline">
+            <input class="form-control"
+                   data-mdb-showcounter="true"
+                   th:field="*{firstName}"
+                   maxlength="30" th:classappend="${#fields.hasErrors('firstName')} ? is-invalid"
+                   type="text"/>
+            <div class="form-helper"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('firstName')}" th:text="${error}"></span>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="mb-4" th:classappend="${#fields.hasErrors('lastName')} ? mb-5">
+        <h4 th:text="#{teacher.lastName}"></h4>
+        <div class="form-outline">
+            <input class="form-control"
+                   data-mdb-showcounter="true"
+                   th:field="*{lastName}"
+                   maxlength="30" th:classappend="${#fields.hasErrors('lastName')} ? is-invalid"
+                   type="text"/>
+            <div class="form-helper"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('lastName')}" th:text="${error}"></span>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="mb-4" th:classappend="${#fields.hasErrors('email')} ? mb-5">
+        <h4 th:text="#{teacher.email}"></h4>
+        <div class="form-outline">
+            <input class="form-control"
+                   th:field="*{email}"
+                   th:classappend="${#fields.hasErrors('email')} ? is-invalid"
+                   type="email"/>
+            <div class="form-helper" th:text="#{input.helper.email}"
+                 th:unless="${#fields.hasErrors('email')}"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('email')}" th:text="${error}"></span>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="mb-4" th:classappend="${#fields.hasErrors('age')} ? mb-5">
+        <h4 th:text="#{teacher.age}"></h4>
+        <div class="form-outline">
+            <input class="form-control"
+                   th:field="*{age}"
+                   th:classappend="${#fields.hasErrors('age')} ? is-invalid"
+                   type="number"/>
+            <div class="form-helper" th:text="#{input.helper.age}"
+                 th:unless="${#fields.hasErrors('age')}"></div>
+            <div class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('age')}" th:text="${error}"></span>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row mb-4">
+        <h4 th:text="#{teacher.subjects}"></h4>
+        <div class="col-sm text-left">
+
+            <table id="subjects_table" class="table table-hover dataTable" th:if="${totalItems != 0}">
+                <thead>
+                <tr>
+                    <th class="bs-checkbox"
+                        data-field="state"
+
+                        rowspan="2" style="text-align: center; vertical-align: middle; width: 36px;">
+                        <div class="form-check">
+                            <input aria-label="select all items" class="form-check-input th-inner"
+                                   onclick="checkAll(this)"
+                                   id="check_all"
+                                   name="btSelectAll"
+                                   type="checkbox"/>
+                        </div>
+                    </th>
+                    <th th:text="#{subject.table.name}"></th>
+                    <th th:text="#{subject.table.description}"></th>
+                    <th th:text="#{subject.table.semester}"></th>
+                    <th th:text="#{subject.table.fieldOfStudy}"></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="subject, iterStat : ${subjects}">
+                    <td>
+                        <input class="form-check-input"
+                               name="row-check"
+                               th:field="*{subjects}"
+                               th:value="${subject.id}"
+                               th:aria-label="${subject.name}"
+                               th:data-index="${subject}"
+                               type="checkbox"/>
+                    </td>
+                    <td th:text="${subject.name}"></td>
+                    <td th:text="${subject.description}"></td>
+                    <td th:text="${subject.semester.fullName}"></td>
+                    <td>
+                        <span th:text="${subject.fieldOfStudy}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <label class="col-form-label col-sm-4"
+           for="students_list">
+        <span th:text="#{teacher.studentList}"></span>
+    </label>
+    <div class="col-sm text-left">
+        <th:block th:each="fieldOpt : ${students}">
+            <div>
+                <input class="form-check-input m-2" id="students_list" th:field="*{students}" th:text="${fieldOpt}"
+                       th:value="${fieldOpt.id}"
+                       type="checkbox" value="">
+            </div>
+        </th:block>
+    </div>
+</div>
+
+
+<!-- ======= View Teacher card body ======= -->
+<div th:fragment="view-teacher">
+    <div class="mb-4">
+        <h4 th:text="#{teacher.firstName}"></h4>
+        <span th:text="${teacher.firstName}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{teacher.lastName}"></h4>
+        <span th:text="${teacher.lastName}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{teacher.email}"></h4>
+        <span th:text="${teacher.email}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{teacher.age}"></h4>
+        <span th:text="${teacher.age}"></span>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{teacher.department}"></h4>
+        <a class="text-body" th:unless="${teacher.department == null}"
+           th:href="@{/dashboard/departments/{id}(id=${teacher.department.id})}">
+            <span th:text="${teacher.department.name}"></span>
+            <i class="fas fa-regular fa-up-right-from-square"></i>
+        </a>
+        <div th:if="${teacher.department == null}">
+            <span th:text="#{teacher.department.isNull}"></span>
+        </div>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{teacher.subjects}"></h4>
+        <span th:if="${teacher.subjects.size() == 0}" th:text="#{teacher.no.subjects}"></span>
+        <th:block th:unless="${teacher.subjects.size() == 0}" th:each="fieldOpt, count : ${teacher.subjects}">
+            <div class="mb-2">
+                <span th:text="${count.index + 1} + '. '"></span>
+                <a class="text-body"
+                   th:href="@{/dashboard/subjects/{id}(id=${fieldOpt.id})}">
+                <span th:text="${fieldOpt.name}"
+                      th:value="${fieldOpt.id}"></span>
+                    <i class="fas fa-regular fa-up-right-from-square"></i>
+                </a>
+            </div>
+        </th:block>
+    </div>
+    <hr>
+    <div class="mb-4">
+        <h4 th:text="#{teacher.studentList}"></h4>
+        <span th:if="${teacher.students.size() == 0}" th:text="#{teacher.no.students}"></span>
+        <th:block th:unless="${teacher.students.size() == 0}" th:each="fieldOpt, count : ${teacher.students}">
+            <div class="mb-2">
+                <span th:text="${count.index + 1} + '. '"></span>
+                <a class="text-body"
+                   th:href="@{/dashboard/students/{id}(id=${fieldOpt.id})}">
+                <span th:text="${fieldOpt.firstName} + ' ' + ${fieldOpt.lastName}"
+                      th:value="${fieldOpt.id}"></span>
+                    <i class="fas fa-regular fa-up-right-from-square"></i>
+                </a>
+            </div>
+        </th:block>
+    </div>
+</div>
