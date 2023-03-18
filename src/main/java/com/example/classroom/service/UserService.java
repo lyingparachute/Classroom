@@ -1,5 +1,7 @@
 package com.example.classroom.service;
 
+import com.example.classroom.auth.RegisterRequest;
+import com.example.classroom.enums.RoleEnum;
 import com.example.classroom.model.UserLogin;
 import com.example.classroom.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +22,12 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
-    public UserLogin create(UserLogin user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return repository.save(user);
+    public UserLogin register(RegisterRequest request) {
+        UserLogin created = new UserLogin();
+        mapper.map(request, created);
+        created.setPassword(passwordEncoder.encode(request.getPassword()));
+        created.setRole(RoleEnum.USER); //TODO delete auto role assignment
+        return repository.save(created);
     }
 
     @Transactional
