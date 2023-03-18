@@ -38,7 +38,7 @@ public class AuthenticationController {
                          RedirectAttributes redirectAttributes) {
         if (result.hasErrors())
             return LOGIN_FOLDER + "sign-up";
-        UserLogin created = service.create(user);
+        UserLogin created = service.register(user);
         redirectAttributes.addFlashAttribute("createSuccess", created);
         return "redirect:/sign-in";
     }
