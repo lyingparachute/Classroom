@@ -201,7 +201,10 @@
                     </a>
                     <ul aria-labelledby="avatar" class="dropdown-menu dropdown-menu-end">
                         <li class="dropdown-item"><span th:text="#{dashboard.navigation.avatar.profile.name}"></span>
-                            <span class="fw-bold" th:text="${#authentication.getName()}"></span></li>
+                            <span class="fw-bold"
+                                  th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}">
+                            </span>
+                        </li>
                         <li>
                             <hr class="dropdown-divider"/>
                         </li>
