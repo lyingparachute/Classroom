@@ -1,14 +1,17 @@
-package com.example.classroom.controller;
+package com.example.classroom.auth;
 
 import com.example.classroom.model.UserLogin;
 import com.example.classroom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,13 +28,16 @@ public class AuthenticationController {
 
     @GetMapping("/sign-up")
     public String getSignUpPage(Model model) {
-        model.addAttribute("user", new UserLogin());
+        model.addAttribute("user", new UserLogin()); //TODO change to Register request
         return LOGIN_FOLDER + "sign-up";
     }
 
-    @PostMapping("/create-user")
-    public String signUp(@ModelAttribute("user") UserLogin user,
+    @PostMapping("/sign-up")
+    public String signUp(@Valid @ModelAttribute RegisterRequest user,
+                         BindingResult result,
                          RedirectAttributes redirectAttributes) {
+        if (result.hasErrors())
+            return LOGIN_FOLDER + "sign-up";
         UserLogin created = service.create(user);
         redirectAttributes.addFlashAttribute("createSuccess", created);
         return "redirect:/sign-in";
