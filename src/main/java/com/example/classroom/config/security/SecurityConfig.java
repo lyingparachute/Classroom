@@ -33,8 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                //TODO - delete csrf.disable method
-//                .csrf().disable()
+                //TODO - enable csrf
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
                         HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, AUTH_ENDPOINTS).permitAll()

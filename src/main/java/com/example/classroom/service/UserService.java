@@ -26,7 +26,8 @@ public class UserService implements UserDetailsService {
         UserLogin created = new UserLogin();
         mapper.map(request, created);
         created.setPassword(passwordEncoder.encode(request.getPassword()));
-        created.setRole(RoleEnum.USER); //TODO delete auto role assignment
+        //TODO delete auto role assignment
+        created.setRole(RoleEnum.USER);
         return repository.save(created);
     }
 

@@ -28,7 +28,8 @@ public class AuthenticationController {
 
     @GetMapping("/sign-up")
     public String getSignUpPage(Model model) {
-        model.addAttribute("user", new UserLogin()); //TODO change to Register request
+        //TODO change to Register request
+        model.addAttribute("user", new UserLogin());
         return LOGIN_FOLDER + "sign-up";
     }
 
