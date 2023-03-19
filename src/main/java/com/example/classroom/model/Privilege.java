@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @NoArgsConstructor
@@ -18,4 +19,6 @@ public class Privilege {
 
     private String name;
 
+    @ManyToMany(mappedBy = "privileges")
+    private Collection<Role> roles;
 }
