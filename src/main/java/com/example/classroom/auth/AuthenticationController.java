@@ -1,6 +1,6 @@
 package com.example.classroom.auth;
 
-import com.example.classroom.model.UserLogin;
+import com.example.classroom.model.User;
 import com.example.classroom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,7 +29,7 @@ public class AuthenticationController {
     @GetMapping("/sign-up")
     public String getSignUpPage(Model model) {
         //TODO change to Register request
-        model.addAttribute("user", new UserLogin());
+        model.addAttribute("user", new User());
         return AUTH_FOLDER + "sign-up";
     }
 
@@ -39,7 +39,7 @@ public class AuthenticationController {
                          RedirectAttributes redirectAttributes) {
         if (result.hasErrors())
             return AUTH_FOLDER + "sign-up";
-        UserLogin created = service.register(user);
+        User created = service.register(user);
         redirectAttributes.addFlashAttribute("createSuccess", created);
         return "redirect:/sign-in";
     }

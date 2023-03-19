@@ -2,7 +2,7 @@ package com.example.classroom.service;
 
 import com.example.classroom.auth.RegisterRequest;
 import com.example.classroom.enums.RoleEnum;
-import com.example.classroom.model.UserLogin;
+import com.example.classroom.model.User;
 import com.example.classroom.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -22,8 +22,8 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
-    public UserLogin register(RegisterRequest request) {
-        UserLogin created = new UserLogin();
+    public User register(RegisterRequest request) {
+        User created = new User();
         mapper.map(request, created);
         created.setPassword(passwordEncoder.encode(request.getPassword()));
         //TODO delete auto role assignment
@@ -32,14 +32,14 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public UserLogin update(UserLogin user) {
-        UserLogin userLogin = loadUserByUsername(user.getEmail());
+    public User update(User user) {
+        User userLogin = loadUserByUsername(user.getEmail());
         mapper.map(user, userLogin);
         return repository.save(userLogin);
     }
 
     @Override
-    public UserLogin loadUserByUsername(String email) throws UsernameNotFoundException {
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " does not exist in database."));
     }

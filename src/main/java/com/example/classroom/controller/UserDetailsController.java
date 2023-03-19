@@ -1,6 +1,6 @@
 package com.example.classroom.controller;
 
-import com.example.classroom.model.UserLogin;
+import com.example.classroom.model.User;
 import com.example.classroom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -40,13 +40,13 @@ public class UserDetailsController {
     }
 
     @PostMapping("/update")
-    public String updateUserDetails(@Valid @ModelAttribute UserLogin user,
+    public String updateUserDetails(@Valid @ModelAttribute User user,
                                     BindingResult result,
                                     RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return USER_EDIT_FORM;
         }
-        UserLogin updated = service.update(user);
+        User updated = service.update(user);
         redirectAttributes.addFlashAttribute("editSuccess", updated);
         return "redirect:/dashboard/profile";
     }

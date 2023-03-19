@@ -1,6 +1,6 @@
 package com.example.classroom.token;
 
-import com.example.classroom.model.UserLogin;
+import com.example.classroom.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,5 +31,5 @@ public class Token {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    public UserLogin user;
+    public User user;
 }

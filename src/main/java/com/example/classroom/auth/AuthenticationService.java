@@ -2,7 +2,7 @@ package com.example.classroom.auth;
 
 import com.example.classroom.config.jwt.JwtService;
 import com.example.classroom.enums.RoleEnum;
-import com.example.classroom.model.UserLogin;
+import com.example.classroom.model.User;
 import com.example.classroom.repository.UserRepository;
 import com.example.classroom.token.Token;
 import com.example.classroom.token.TokenRepository;
@@ -28,7 +28,7 @@ public class AuthenticationService {
 
     @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
-        UserLogin userDetails = new UserLogin();
+        User userDetails = new User();
         userDetails.setFirstName(request.getFirstName());
         userDetails.setLastName(request.getLastName());
         userDetails.setEmail(request.getEmail());
@@ -49,7 +49,7 @@ public class AuthenticationService {
                         request.getEmail(),
                         request.getPassword()
                 ));
-        UserLogin user = repository.findByEmail(request.getEmail())
+        User user = repository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + request.getEmail() + " does not exist in database."));
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
@@ -59,7 +59,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    private void saveUserToken(UserLogin user, String jwtToken) {
+    private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
                 .token(jwtToken)
@@ -70,7 +70,7 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(UserLogin user) {
+    private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;
