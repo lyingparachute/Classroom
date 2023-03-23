@@ -1,6 +1,7 @@
 package com.example.classroom.auth;
 
 import com.example.classroom.model.User;
+import com.example.classroom.repository.RoleRepository;
 import com.example.classroom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 public class AuthenticationController {
 
     private final UserService service;
+    private final RoleRepository roleRepository;
 
     private static final String AUTH_FOLDER = "auth/";
 
@@ -30,6 +32,7 @@ public class AuthenticationController {
     public String getSignUpPage(Model model) {
         //TODO change to Register request
         model.addAttribute("user", new User());
+        model.addAttribute("roles", roleRepository.findAll());
         return AUTH_FOLDER + "sign-up";
     }
 
