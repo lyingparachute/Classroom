@@ -1,5 +1,6 @@
 package com.example.classroom.auth;
 
+import com.example.classroom.enums.RoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +15,5 @@ public class RegisterRequest {
     private String lastName;
     private String email;
     private String password;
+    private RoleEnum role;
 }

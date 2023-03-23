@@ -1,7 +1,6 @@
 package com.example.classroom.service;
 
 import com.example.classroom.auth.RegisterRequest;
-import com.example.classroom.enums.RoleEnum;
 import com.example.classroom.model.User;
 import com.example.classroom.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +25,6 @@ public class UserService implements UserDetailsService {
         User created = new User();
         mapper.map(request, created);
         created.setPassword(passwordEncoder.encode(request.getPassword()));
-        //TODO delete auto role assignment
-        created.setRole(RoleEnum.USER);
         return repository.save(created);
     }
 
