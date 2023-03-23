@@ -64,19 +64,22 @@
 
                                     <div th:text="#{signup.authority}"></div>
                                     <div class="btn-group mb-4 align-content-center">
-                                        <input th:value="${T(com.example.classroom.enums.RoleEnum).USER}"
+                                        <input th:field="*{user.role}"
+                                               th:value="${T(com.example.classroom.enums.RoleEnum).USER}"
                                                type="radio" class="btn-check" name="options" id="option1"
                                                autocomplete="off" checked/>
                                         <label class="btn btn-secondary" for="option1"
                                                th:text="#{signup.authority.student}"></label>
 
-                                        <input th:value="${T(com.example.classroom.enums.RoleEnum).USER}"
+                                        <input th:field="*{user.role}"
+                                               th:value="${T(com.example.classroom.enums.RoleEnum).USER}"
                                                type="radio" class="btn-check" name="options" id="option2"
                                                autocomplete="off"/>
                                         <label class="btn btn-secondary" for="option2"
                                                th:text="#{signup.authority.teacher}"></label>
 
-                                        <input th:value="${T(com.example.classroom.enums.RoleEnum).ADMIN}"
+                                        <input th:field="*{user.role}"
+                                               th:value="${T(com.example.classroom.enums.RoleEnum).ADMIN}"
                                                type="radio" class="btn-check" name="options" id="option3"
                                                autocomplete="off"/>
                                         <label class="btn btn-secondary" for="option3"
