@@ -94,21 +94,21 @@
                                     </div>
 
                                     <!-- Role input -->
-                                    <!--                                    <div th:text="#{signup.authority}"></div>-->
+                                    <div th:text="#{signup.authority}"></div>
                                     <div class="btn-group mb-4 align-content-center">
                                         <th:block
-                                                th:each="roleOpt : ${T(com.example.classroom.enums.RoleEnum).values()}">
+                                                th:each="roleOpt, iterStat : ${T(com.example.classroom.enums.RoleEnum).values()}">
                                             <input th:field="*{role}"
                                                    th:value="${roleOpt}"
                                                    th:classappend="${#fields.hasErrors('role')} ? is-invalid"
-                                                   type="radio" class="btn-check" name="options" id="option1"
-                                                   autocomplete="off" checked/>
-                                            <label class="btn btn-secondary" for="option1"
+                                                   type="radio" class="btn-check" name="options"
+                                                   th:id="'option' + ${iterStat.count}"
+                                                   autocomplete="off"/>
+                                            <label class="btn btn-secondary" th:for="'option' + ${iterStat.count}"
                                                    th:text="${roleOpt}"></label>
                                         </th:block>
 
-
-                                        <div class="invalid-tooltip">
+                                        <div class="invalid-feedback">
                                             <span class="mr-1" th:each="error: ${#fields.errors('role')}"
                                                   th:text="${error}"></span>
                                         </div>
