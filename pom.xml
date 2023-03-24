@@ -103,6 +103,13 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
+        <!-- Password Validator -->
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!-- H2 Database for tests -->
         <dependency>
             <groupId>com.h2database</groupId>
