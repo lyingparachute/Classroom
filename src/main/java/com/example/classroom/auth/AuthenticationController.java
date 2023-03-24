@@ -31,17 +31,17 @@ public class AuthenticationController {
     @GetMapping("/sign-up")
     public String getSignUpPage(Model model) {
         //TODO change to Register request
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new RegisterRequest());
         model.addAttribute("roles", roleRepository.findAll());
-        return AUTH_FOLDER + "sign-up";
+        return "auth/sign-up";
     }
 
     @PostMapping("/sign-up")
-    public String signUp(@Valid @ModelAttribute RegisterRequest user,
+    public String signUp(@Valid @ModelAttribute("user") RegisterRequest user,
                          BindingResult result,
                          RedirectAttributes redirectAttributes) {
         if (result.hasErrors())
-            return AUTH_FOLDER + "sign-up";
+            return "auth/sign-up";
         User created = service.register(user);
         redirectAttributes.addFlashAttribute("createSuccess", created);
         return "redirect:/sign-in";
