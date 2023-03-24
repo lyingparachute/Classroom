@@ -33,7 +33,8 @@ public class AuthenticationService {
         userDetails.setLastName(request.getLastName());
         userDetails.setEmail(request.getEmail());
         userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
-        userDetails.setRole(RoleEnum.USER);
+        userDetails.setRole(RoleEnum.STUDENT);
+        //TODO delete auto-assign role
         var savedUser = repository.save(userDetails);
         var jwtToken = jwtService.generateToken(savedUser);
         saveUserToken(savedUser, jwtToken);
