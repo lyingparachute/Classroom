@@ -26,6 +26,10 @@ public class Student {
     @Column(unique = true)
     private String email;
 
+    @OneToOne(fetch = FetchType.LAZY)
+//    @MapsId
+    private User userDetails;
+
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.DETACH})

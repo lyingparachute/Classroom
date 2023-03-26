@@ -2,6 +2,7 @@ package com.example.classroom.dto;
 
 import com.example.classroom.model.FieldOfStudy;
 import com.example.classroom.model.Teacher;
+import com.example.classroom.model.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,9 @@ public class StudentDto {
     @NotEmpty(message = "{message.email.empty}")
     @Email(message = "{message.email.valid}")
     private String email;
+
+    private User userDetails;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private FieldOfStudy fieldOfStudy;

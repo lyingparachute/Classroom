@@ -26,6 +26,10 @@ public class Teacher {
     @Column(unique = true)
     private String email;
 
+    @OneToOne(fetch = FetchType.LAZY)
+//    @MapsId
+    private User userDetails;
+
     @JsonIgnore
     @OneToOne(mappedBy = "dean")
     private Department department;

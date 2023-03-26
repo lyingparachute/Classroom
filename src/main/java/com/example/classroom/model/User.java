@@ -2,10 +2,7 @@ package com.example.classroom.model;
 
 import com.example.classroom.enums.RoleEnum;
 import com.example.classroom.token.Token;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,6 +36,15 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens = new ArrayList<>();
+
+    @OneToOne(mappedBy = "userDetails")
+    @Setter(AccessLevel.NONE)
+    private Student student;
+
+    @OneToOne(mappedBy = "userDetails")
+    @Setter(AccessLevel.NONE)
+    private Teacher teacher;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -74,4 +80,25 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public boolean isStudent() {
+        return student != null;
+    }
+
+    public boolean isTeacher() {
+        return teacher != null;
+    }
+
+
+    public void setAttendee(Object attendee) {
+        if (role.equals(RoleEnum.STUDENT))
+            this.student = (Student) attendee;
+        if (role.equals(RoleEnum.TEACHER) || role.equals(RoleEnum.DEAN))
+            this.teacher = (Teacher) attendee;
+    }
+
+    public Object getAttendee() {
+        return isTeacher() ? teacher : student;
+    }
+
 }
