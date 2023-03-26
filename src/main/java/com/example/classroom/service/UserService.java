@@ -1,6 +1,9 @@
 package com.example.classroom.service;
 
 import com.example.classroom.auth.RegisterRequest;
+import com.example.classroom.dto.StudentDto;
+import com.example.classroom.dto.TeacherDto;
+import com.example.classroom.enums.RoleEnum;
 import com.example.classroom.model.User;
 import com.example.classroom.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +22,32 @@ public class UserService implements UserDetailsService {
     private final UserRepository repository;
     private final ModelMapper mapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final StudentService studentService;
+    private final TeacherService teacherService;
 
     @Transactional
     public User register(RegisterRequest request) {
-        User created = new User();
-        mapper.map(request, created);
-        created.setPassword(passwordEncoder.encode(request.getPassword()));
-        return repository.save(created);
+        User userDetails = new User();
+        mapper.map(request, userDetails);
+        userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
+        User saved = repository.save(userDetails);
+        createUniversityAttendeeAccount(request, saved);
+        saved.getAttendee();
+        return saved;
+    }
+
+    private void createUniversityAttendeeAccount(RegisterRequest request, User user) {
+        RoleEnum requestRole = request.getRole();
+        if (requestRole == RoleEnum.STUDENT) {
+            StudentDto studentDto = mapper.map(request, StudentDto.class);
+            studentDto.setUserDetails(user);
+            studentService.create(studentDto);
+        }
+        if (requestRole == RoleEnum.TEACHER || requestRole == RoleEnum.DEAN) {
+            TeacherDto teacherDto = mapper.map(request, TeacherDto.class);
+            teacherDto.setUserDetails(user);
+            teacherService.create(teacherDto);
+        }
     }
 
     @Transactional
@@ -45,4 +67,6 @@ public class UserService implements UserDetailsService {
     public void removeByUsername(String email) {
         repository.delete(loadUserByUsername(email));
     }
+
+
 }
