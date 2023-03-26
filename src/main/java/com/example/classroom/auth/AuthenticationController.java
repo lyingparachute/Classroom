@@ -1,7 +1,6 @@
 package com.example.classroom.auth;
 
 import com.example.classroom.model.User;
-import com.example.classroom.repository.RoleRepository;
 import com.example.classroom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,22 +17,18 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
+    public static final String SIGN_UP_TEMPLATE = "auth/sign-up";
     private final UserService service;
-    private final RoleRepository roleRepository;
-
-    private static final String AUTH_FOLDER = "auth/";
 
     @GetMapping("/sign-in")
     public String signIn() {
-        return AUTH_FOLDER + "sign-in";
+        return "auth/sign-in";
     }
 
     @GetMapping("/sign-up")
     public String getSignUpPage(Model model) {
-        //TODO change to Register request
         model.addAttribute("user", new RegisterRequest());
-        model.addAttribute("roles", roleRepository.findAll());
-        return "auth/sign-up";
+        return SIGN_UP_TEMPLATE;
     }
 
     @PostMapping("/sign-up")
@@ -41,7 +36,7 @@ public class AuthenticationController {
                          BindingResult result,
                          RedirectAttributes redirectAttributes) {
         if (result.hasErrors())
-            return "auth/sign-up";
+            return SIGN_UP_TEMPLATE;
         User created = service.register(user);
         redirectAttributes.addFlashAttribute("createSuccess", created);
         return "redirect:/sign-in";
@@ -49,11 +44,11 @@ public class AuthenticationController {
 
     @GetMapping("/password/reset")
     public String getPasswordResetPage() {
-        return AUTH_FOLDER + "password-reset";
+        return "auth/password-reset";
     }
 
     @PostMapping("/password/reset")
     public String resetPassword() {
-        return AUTH_FOLDER + "sign-in";
+        return "auth/sign-in";
     }
 }
