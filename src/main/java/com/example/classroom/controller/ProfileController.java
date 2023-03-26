@@ -13,21 +13,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.nio.file.Path;
 import java.security.Principal;
 
 @Controller
 @RequestMapping("/dashboard/profile")
 @RequiredArgsConstructor
-public class UserDetailsController {
+public class ProfileController {
 
     private final UserService service;
 
-    public static final String USER_EDIT_FORM = "user/user-edit";
+    public static final String USER_EDIT_TEMPLATE = "user/user-edit";
+    public static final String FIELDS_OF_STUDY_UPLOAD_DIR = "fields-of-study/";
 
     @GetMapping
     public String getUserDetailsPage(Model model,
                                      Principal principal) {
         addAttributeUserByUsername(model, principal);
+        model.addAttribute("imagesPath", Path.of("/img").resolve(FIELDS_OF_STUDY_UPLOAD_DIR));
         return "user/user-view";
     }
 
@@ -36,7 +39,7 @@ public class UserDetailsController {
     public String getEdituserDetailsPage(Model model,
                                          Principal principal) {
         addAttributeUserByUsername(model, principal);
-        return USER_EDIT_FORM;
+        return USER_EDIT_TEMPLATE;
     }
 
     @PostMapping("/update")
@@ -44,7 +47,7 @@ public class UserDetailsController {
                                     BindingResult result,
                                     RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            return USER_EDIT_FORM;
+            return USER_EDIT_TEMPLATE;
         }
         User updated = service.update(user);
         redirectAttributes.addFlashAttribute("editSuccess", updated);
