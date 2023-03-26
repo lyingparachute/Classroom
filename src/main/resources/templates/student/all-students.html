@@ -147,8 +147,13 @@
                                           th:text="#{status.active}"></span>
                                 </td>
                                 <td>
+                                    <div th:if="${student.fieldOfStudy == null}">
+                                        <span>Undefined</span>
+                                    </div>
+                                    <div th:unless="${student.fieldOfStudy == null}">
                                     <span th:unless="${student.fieldOfStudy.title == null}"
                                           th:text="${student.fieldOfStudy.title.fullTitle}"></span>
+                                    </div>
                                 </td>
 
                                 <td th:text="${student.teachers.size()}"/>

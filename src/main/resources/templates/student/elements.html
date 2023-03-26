@@ -102,11 +102,13 @@
     <hr>
     <div class="mb-4">
         <h4 th:text="#{student.fieldOfStudy}"></h4>
-        <a class="text-body"
+        <a th:unless="${student.fieldOfStudy == null}"
+           class="text-body"
            th:href="@{/dashboard/fields-of-study/{id}(id=${student.fieldOfStudy.id})}">
             <span th:text="${student.fieldOfStudy.name}"></span>
             <i class="fas fa-regular fa-up-right-from-square"></i>
         </a>
+        <span th:if="${student.fieldOfStudy == null}">Undefined</span>
     </div>
     <hr>
     <div class="mb-4">
@@ -125,7 +127,7 @@
         </th:block>
     </div>
     <hr>
-    <div class="mb-4">
+    <div class="mb-4" th:unless="${student.fieldOfStudy == null}">
         <h4 th:text="#{student.subjectList}"></h4>
         <span th:if="${student.fieldOfStudy.subjects.size() == 0}" th:text="#{student.no.subjects}"></span>
         <th:block th:unless="${student.fieldOfStudy.subjects.size() == 0}"
