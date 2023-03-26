@@ -108,7 +108,7 @@
             <span th:text="${student.fieldOfStudy.name}"></span>
             <i class="fas fa-regular fa-up-right-from-square"></i>
         </a>
-        <span th:if="${student.fieldOfStudy == null}">Undefined</span>
+        <span th:if="${student.fieldOfStudy == null}" th:text="#{input.undefined}"></span>
     </div>
     <hr>
     <div class="mb-4">
