@@ -32,22 +32,26 @@ public class DepartmentController {
     public String getAllDepartments(Model model, HttpServletRequest request) {
         model.addAttribute("departments", service.fetchAll());
         addAttributeImagesPath(model, "departments");
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        addAttributeBreadcrumbs(model, request);
         return "department/all-departments";
     }
 
     @GetMapping("{id}")
-    public String getDepartment(@PathVariable Long id, Model model) {
+    public String getDepartment(@PathVariable Long id,
+                                HttpServletRequest request,
+                                Model model) {
         addAttributeDepartmentFetchById(id, model);
         addAttributeImagesPath(model, "fields-of-study");
+        addAttributeBreadcrumbs(model, request);
         return "department/department-view";
     }
 
     @Secured("ROLE_ADMIN")
     @GetMapping("new")
-    public String getNewDepartmentForm(Model model) {
+    public String getNewDepartmentForm(Model model, HttpServletRequest request) {
         model.addAttribute("department", new DepartmentDto());
         addAttributesForCreateDepartment(model);
+        addAttributeBreadcrumbs(model, request);
         return "department/department-create-form";
     }
 
@@ -56,9 +60,11 @@ public class DepartmentController {
     public String createDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
                                    BindingResult result,
                                    RedirectAttributes redirectAttributes,
+                                   HttpServletRequest request,
                                    Model model) {
         if (result.hasErrors()) {
             addAttributesForCreateDepartment(model);
+            addAttributeBreadcrumbs(model, request);
             return "department/department-create-form";
         }
         DepartmentDto saved = service.create(dto);
@@ -69,9 +75,12 @@ public class DepartmentController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("edit/{id}")
-    public String getEditDepartmentForm(@PathVariable Long id, Model model) {
+    public String getEditDepartmentForm(@PathVariable Long id,
+                                        Model model,
+                                        HttpServletRequest request) {
         addAttributeDepartmentFetchById(id, model);
         addAttributesForUpdateDepartment(id, model);
+        addAttributeBreadcrumbs(model, request);
         return "department/department-edit-form";
     }
 
@@ -80,9 +89,11 @@ public class DepartmentController {
     public String editDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
                                  BindingResult result,
                                  RedirectAttributes redirectAttributes,
+                                 HttpServletRequest request,
                                  Model model) {
         if (result.hasErrors()) {
             addAttributesForUpdateDepartment(dto.getId(), model);
+            addAttributeBreadcrumbs(model, request);
             return "department/department-edit-form";
         }
         DepartmentDto updated = service.update(dto);
@@ -99,6 +110,10 @@ public class DepartmentController {
         addFlashAttributeSuccess(redirectAttributes, dto);
         redirectAttributes.addFlashAttribute("deleteSuccess", "deleted");
         return REDIRECT_DASHBOARD_DEPARTMENTS;
+    }
+
+    private void addAttributeBreadcrumbs(Model model, HttpServletRequest request) {
+        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
     }
 
     private void addAttributesForCreateDepartment(Model model) {
