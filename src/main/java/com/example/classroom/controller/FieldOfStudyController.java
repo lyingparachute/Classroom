@@ -36,24 +36,31 @@ public class FieldOfStudyController {
     public static final String REDIRECT_DASHBOARD_FIELDS_OF_STUDY = "redirect:/dashboard/fields-of-study";
 
     @GetMapping()
-    public String getAllFieldsOfStudy(Model model, HttpServletRequest request) {
+    public String getAllFieldsOfStudy(Model model,
+                                      HttpServletRequest request) {
         model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedByNameAndSortedByName());
         model.addAttribute("firstFieldsOfStudy", service.fetchAllByLevelOfEducationSortedByName(LevelOfEducation.FIRST));
         model.addAttribute("secondFieldsOfStudy", service.fetchAllByLevelOfEducationSortedByName(LevelOfEducation.SECOND));
         model.addAttribute("imagesPath", Path.of("/img").resolve(UPLOAD_DIR));
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        addAttributeBreadcrumb(model, request);
         return "field-of-study/all-fieldsOfStudy";
     }
 
     @GetMapping("{id}")
-    public String getFieldOfStudy(@PathVariable Long id, Model model) {
+    public String getFieldOfStudy(@PathVariable Long id,
+                                  HttpServletRequest request,
+                                  Model model) {
+        addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributes(id, model);
         return "field-of-study/fieldOfStudy-view";
     }
 
     @GetMapping("{id}/subjects")
-    public String getFieldOfStudySubjects(@PathVariable Long id, Model model) {
+    public String getFieldOfStudySubjects(@PathVariable Long id,
+                                          HttpServletRequest request,
+                                          Model model) {
+        addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributeNumberOfSemesters(id, model);
         addAttributeEctsPointsForEachSemester(id, model);
@@ -64,7 +71,9 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("new")
-    public String getCreateFieldOfStudyForm(Model model) {
+    public String getCreateFieldOfStudyForm(Model model,
+                                            HttpServletRequest request) {
+        addAttributeBreadcrumb(model, request);
         model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
         addAttributeDepartments(model);
         return "field-of-study/fieldOfStudy-create-form";
@@ -75,8 +84,10 @@ public class FieldOfStudyController {
                                      @RequestParam(value = "imageUpload") MultipartFile multipartFile,
                                      RedirectAttributes redirectAttributes,
                                      BindingResult result,
+                                     HttpServletRequest request,
                                      Model model) throws IOException {
         if (result.hasErrors()) {
+            addAttributeBreadcrumb(model, request);
             addAttributeDepartments(model);
             return "field-of-study/fieldOfStudy-create-form";
         }
@@ -90,7 +101,10 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("edit/{id}")
-    public String getEditFieldOfStudyForm(@PathVariable Long id, Model model) {
+    public String getEditFieldOfStudyForm(@PathVariable Long id,
+                                          HttpServletRequest request,
+                                          Model model) {
+        addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributeDepartments(model);
         return "field-of-study/fieldOfStudy-edit-form";
@@ -101,8 +115,10 @@ public class FieldOfStudyController {
                                    @RequestParam(value = "imageUpload") MultipartFile multipartFile,
                                    BindingResult result,
                                    RedirectAttributes redirectAttributes,
+                                   HttpServletRequest request,
                                    Model model) throws IOException {
         if (result.hasErrors()) {
+            addAttributeBreadcrumb(model, request);
             addAttributeDepartments(model);
             return "field-of-study/fieldOfStudy-edit-form";
         }
@@ -116,7 +132,10 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("edit/{id}/subjects")
-    public String getSubjectsForm(@PathVariable Long id, Model model) {
+    public String getSubjectsForm(@PathVariable Long id,
+                                  HttpServletRequest request,
+                                  Model model) {
+        addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributeAllSubjectsMapGroupedBySemesters(model);
         addAttributeNumberOfSemesters(id, model);
@@ -138,6 +157,10 @@ public class FieldOfStudyController {
         addFlashAttributeSuccess(redirectAttributes, dto);
         redirectAttributes.addFlashAttribute("deleteSuccess", "deleted");
         return REDIRECT_DASHBOARD_FIELDS_OF_STUDY;
+    }
+
+    private void addAttributeBreadcrumb(Model model, HttpServletRequest request) {
+        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
     }
 
     private void addAttributes(Long id, Model model) {

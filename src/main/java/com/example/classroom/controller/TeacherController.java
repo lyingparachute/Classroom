@@ -1,5 +1,6 @@
 package com.example.classroom.controller;
 
+import com.example.classroom.breadcrumb.BreadcrumbService;
 import com.example.classroom.dto.TeacherDto;
 import com.example.classroom.service.SubjectService;
 import com.example.classroom.service.TeacherService;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -21,6 +23,8 @@ public class TeacherController {
 
     private final TeacherService service;
     private final SubjectService subjectService;
+    private final BreadcrumbService crumb;
+
     public static final String REDIRECT_DASHBOARD_TEACHERS = "redirect:/dashboard/teachers";
 
     @GetMapping
@@ -29,7 +33,10 @@ public class TeacherController {
                                        @RequestParam(defaultValue = "6") int size,
                                        @RequestParam(defaultValue = "firstName") String sortField,
                                        @RequestParam(defaultValue = "asc") String sortDir,
+                                       HttpServletRequest request,
                                        Model model) {
+        addAttributeBreadcrumb(model, request);
+
         Page<TeacherDto> pageTeachers;
         if (name == null) {
             pageTeachers = service.fetchAllPaginated(page, size, sortField, sortDir);
@@ -66,13 +73,18 @@ public class TeacherController {
     }
 
     @GetMapping("{id}")
-    public String getTeacher(@PathVariable Long id, Model model) {
+    public String getTeacher(@PathVariable Long id,
+                             HttpServletRequest request,
+                             Model model) {
+        addAttributeBreadcrumb(model, request);
         addAttributeTeacherById(id, model);
         return "teacher/teacher-view";
     }
 
     @GetMapping("new")
-    public String getNewTeacherForm(Model model) {
+    public String getNewTeacherForm(HttpServletRequest request,
+                                    Model model) {
+        addAttributeBreadcrumb(model, request);
         model.addAttribute("teacher", new TeacherDto());
         addAttributesSubjects(model);
         return "teacher/teacher-create-form";
@@ -82,8 +94,10 @@ public class TeacherController {
     public String createTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
                                 BindingResult result,
                                 RedirectAttributes redirectAttributes,
+                                HttpServletRequest request,
                                 Model model) {
         if (result.hasErrors()) {
+            addAttributeBreadcrumb(model, request);
             addAttributesSubjects(model);
             return "teacher/teacher-create-form";
         }
@@ -94,7 +108,10 @@ public class TeacherController {
     }
 
     @GetMapping("edit/{id}")
-    public String editTeacher(@PathVariable Long id, Model model) {
+    public String editTeacher(@PathVariable Long id,
+                              HttpServletRequest request,
+                              Model model) {
+        addAttributeBreadcrumb(model, request);
         addAttributeTeacherById(id, model);
         addAttributesSubjects(model);
         return "teacher/teacher-edit-form";
@@ -104,8 +121,10 @@ public class TeacherController {
     public String editTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
                               BindingResult result,
                               RedirectAttributes redirectAttributes,
+                              HttpServletRequest request,
                               Model model) {
         if (result.hasErrors()) {
+            addAttributeBreadcrumb(model, request);
             addAttributesSubjects(model);
             return "teacher/teacher-edit-form";
         }
@@ -134,5 +153,9 @@ public class TeacherController {
 
     private void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, TeacherDto dto) {
         redirectAttributes.addFlashAttribute("success", dto);
+    }
+
+    private void addAttributeBreadcrumb(Model model, HttpServletRequest request) {
+        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
     }
 }

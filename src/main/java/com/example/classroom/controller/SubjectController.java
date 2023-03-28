@@ -1,6 +1,7 @@
 package com.example.classroom.controller;
 
 
+import com.example.classroom.breadcrumb.BreadcrumbService;
 import com.example.classroom.dto.SubjectDto;
 import com.example.classroom.service.FieldOfStudyService;
 import com.example.classroom.service.SubjectService;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -24,6 +26,8 @@ public class SubjectController {
     private final SubjectService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
+    private final BreadcrumbService crumb;
+
     public static final String REDIRECT_DASHBOARD_SUBJECTS = "redirect:/dashboard/subjects";
     public static final String SUBJECT_EDIT_FORM = "subject/subject-edit-form";
 
@@ -33,7 +37,10 @@ public class SubjectController {
                               @RequestParam(defaultValue = "6") int size,
                               @RequestParam(defaultValue = "id") String sortField,
                               @RequestParam(defaultValue = "asc") String sortDir,
+                              HttpServletRequest request,
                               Model model) {
+        addAttributeBreadcrumb(model, request);
+
         Page<SubjectDto> pageSubjects;
         if (name == null) {
             pageSubjects = service.fetchAllPaginated(page, size, sortField, sortDir);
@@ -70,13 +77,18 @@ public class SubjectController {
     }
 
     @GetMapping("{id}")
-    public String getSubject(@PathVariable Long id, Model model) {
+    public String getSubject(@PathVariable Long id,
+                             HttpServletRequest request,
+                             Model model) {
+        addAttributeBreadcrumb(model, request);
         addAttributeSubjectById(id, model);
         return "subject/subject-view";
     }
 
     @GetMapping("new")
-    public String getNewSubjectForm(Model model) {
+    public String getNewSubjectForm(HttpServletRequest request,
+                                    Model model) {
+        addAttributeBreadcrumb(model, request);
         model.addAttribute("subject", new SubjectDto());
         addAttributeTeachersAndFieldsOfStudy(model);
         return "subject/subject-create-form";
@@ -86,8 +98,10 @@ public class SubjectController {
     public String createSubject(@Valid @ModelAttribute("subject") SubjectDto dto,
                                 BindingResult result,
                                 RedirectAttributes redirectAttributes,
+                                HttpServletRequest request,
                                 Model model) {
         if (result.hasErrors()) {
+            addAttributeBreadcrumb(model, request);
             addAttributeTeachersAndFieldsOfStudy(model);
             return "subject/subject-create-form";
         }
@@ -98,7 +112,10 @@ public class SubjectController {
     }
 
     @GetMapping("edit/{id}")
-    public String editSubjectForm(@PathVariable Long id, Model model) {
+    public String editSubjectForm(@PathVariable Long id,
+                                  HttpServletRequest request,
+                                  Model model) {
+        addAttributeBreadcrumb(model, request);
         addAttributeSubjectById(id, model);
         addAttributeTeachersAndFieldsOfStudy(model);
         return SUBJECT_EDIT_FORM;
@@ -108,8 +125,10 @@ public class SubjectController {
     public String editSubject(@Valid @ModelAttribute("subject") SubjectDto dto,
                               BindingResult result,
                               RedirectAttributes redirectAttributes,
+                              HttpServletRequest request,
                               Model model) {
         if (result.hasErrors()) {
+            addAttributeBreadcrumb(model, request);
             addAttributeTeachersAndFieldsOfStudy(model);
             return SUBJECT_EDIT_FORM;
         }
@@ -120,7 +139,8 @@ public class SubjectController {
     }
 
     @GetMapping("delete/{id}")
-    public String deleteSubject(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String deleteSubject(@PathVariable Long id,
+                                RedirectAttributes redirectAttributes) {
         SubjectDto dto = service.fetchById(id);
         service.remove(id);
         addFlashAttributeSuccess(redirectAttributes, dto);
@@ -139,5 +159,9 @@ public class SubjectController {
 
     private void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, SubjectDto dto) {
         redirectAttributes.addFlashAttribute("success", dto);
+    }
+
+    private void addAttributeBreadcrumb(Model model, HttpServletRequest request) {
+        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
     }
 }
