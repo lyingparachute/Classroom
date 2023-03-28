@@ -24,36 +24,38 @@ public class BreadcrumbService {
             path.append(segments[i]).append(SEPARATOR);
             String label = formatEndpointSegment(segments[i]);
 
-            if (segments[i].isEmpty()) {
-                continue;
-            }
+            if (segments[i].isEmpty()) continue;
 
             if (isEditEndpoint(segments, i)) {
-                // Special case for edit endpoint with ID
-                String id = segments[i + 1];
-                Breadcrumb breadcrumb = new Breadcrumb("Edit / " + id, path + id);
-                breadcrumbs.add(breadcrumb);
+                addEditEndpointBreadcrumb(breadcrumbs, segments, path, i);
                 i++; // skip the ID segment
             } else {
-                // Normal case for other endpoints
-                Breadcrumb breadcrumb = new Breadcrumb(label, path.toString());
-                if (isLastSegment(segments, i)) {
-                    breadcrumb.setLast(true);
-                }
-                breadcrumbs.add(breadcrumb);
+                addBreadcrumb(breadcrumbs, segments, path, i, label);
             }
-
         }
 
         return breadcrumbs;
     }
 
-    private static boolean isEditEndpoint(String[] segments, int i) {
-        return i < segments.length - 1 && segments[i].equals(EDIT_SEGMENT);
+    private static void addBreadcrumb(List<Breadcrumb> breadcrumbs, String[] segments, StringBuilder path, int i, String label) {
+        Breadcrumb breadcrumb = new Breadcrumb(label, path.toString());
+        checkIfSegmentIsLast(segments, i, breadcrumb);
+        breadcrumbs.add(breadcrumb);
     }
 
-    private static boolean isLastSegment(String[] segments, int i) {
-        return i == segments.length - 1;
+    private static void checkIfSegmentIsLast(String[] segments, int i, Breadcrumb breadcrumb) {
+        if (i == segments.length - 1) breadcrumb.setLast(true);
+    }
+
+    private static void addEditEndpointBreadcrumb(List<Breadcrumb> breadcrumbs, String[] segments, StringBuilder path, int i) {
+        String id = segments[i + 1];
+        Breadcrumb breadcrumb = new Breadcrumb("Edit / " + id, path + id);
+        checkIfSegmentIsLast(segments, ++i, breadcrumb);
+        breadcrumbs.add(breadcrumb);
+    }
+
+    private static boolean isEditEndpoint(String[] segments, int i) {
+        return i < segments.length - 1 && segments[i].equals(EDIT_SEGMENT);
     }
 
     private String[] splitEndpoint(String endpoint) {
