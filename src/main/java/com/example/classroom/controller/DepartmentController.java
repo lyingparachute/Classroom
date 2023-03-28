@@ -5,6 +5,7 @@ import com.example.classroom.service.DepartmentService;
 import com.example.classroom.service.FieldOfStudyService;
 import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +39,7 @@ public class DepartmentController {
         return "department/department-view";
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("new")
     public String getNewDepartmentForm(Model model) {
         model.addAttribute("department", new DepartmentDto());
@@ -45,6 +47,7 @@ public class DepartmentController {
         return "department/department-create-form";
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("new")
     public String createDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
                                    BindingResult result,
@@ -60,6 +63,7 @@ public class DepartmentController {
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("edit/{id}")
     public String getEditDepartmentForm(@PathVariable Long id, Model model) {
         addAttributeDepartmentFetchById(id, model);
@@ -67,7 +71,7 @@ public class DepartmentController {
         return "department/department-edit-form";
     }
 
-
+    @Secured({"ROLE_ADMIN"})
     @PostMapping(value = "update")
     public String editDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
                                  BindingResult result,
@@ -83,6 +87,7 @@ public class DepartmentController {
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("delete/{id}")
     public String deleteDepartment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         DepartmentDto dto = service.fetchById(id);
