@@ -95,7 +95,7 @@
 
                                     <!-- Role input -->
                                     <div th:text="#{signup.authority}"></div>
-                                    <div class="btn-group mb-4 align-content-center">
+                                    <div class="btn-group mb-4">
                                         <th:block
                                                 th:each="roleOpt, iterStat : ${T(com.example.classroom.enums.UserRole).values()}">
                                             <input th:field="*{role}"
@@ -105,7 +105,7 @@
                                                    th:id="'option' + ${iterStat.count}"
                                                    autocomplete="off"/>
                                             <label class="btn btn-secondary" th:for="'option' + ${iterStat.count}"
-                                                   th:text="${roleOpt}"></label>
+                                                   th:text="${roleOpt.name}"></label>
                                         </th:block>
 
                                         <div class="invalid-feedback">
