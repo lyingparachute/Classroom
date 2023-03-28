@@ -8,15 +8,14 @@ import java.util.List;
 @Service
 public class BreadcrumbService {
 
-
-    public static final String EDIT_SEGMENT = "edit";
-    public static final String SEPARATOR = "/";
-    public static final String HOME_LABEL = "Classroom";
+    private static final String EDIT_SEGMENT = "edit";
+    private static final String SEPARATOR = "/";
+    private static final String HOME_LABEL = "Classroom";
 
 
     public List<Breadcrumb> getBreadcrumbs(String endpoint) {
         List<Breadcrumb> breadcrumbs = new ArrayList<>();
-        breadcrumbs.add(homeBreadcrumb());
+        breadcrumbs.add(createHomeBreadcrumb());
 
         String[] segments = splitEndpoint(endpoint);
         StringBuilder path = new StringBuilder();
@@ -25,9 +24,11 @@ public class BreadcrumbService {
             path.append(segments[i]).append(SEPARATOR);
             String label = formatEndpointSegment(segments[i]);
 
-            if (segments[i].isEmpty())
+            if (segments[i].isEmpty()) {
                 continue;
-            if (i < segments.length - 1 && segments[i].equals(EDIT_SEGMENT)) {
+            }
+
+            if (isEditEndpoint(segments, i)) {
                 // Special case for edit endpoint with ID
                 String id = segments[i + 1];
                 Breadcrumb breadcrumb = new Breadcrumb("Edit / " + id, path + id);
@@ -36,7 +37,7 @@ public class BreadcrumbService {
             } else {
                 // Normal case for other endpoints
                 Breadcrumb breadcrumb = new Breadcrumb(label, path.toString());
-                if (isSegmentLastOne(segments, i)) {
+                if (isLastSegment(segments, i)) {
                     breadcrumb.setLast(true);
                 }
                 breadcrumbs.add(breadcrumb);
@@ -47,7 +48,11 @@ public class BreadcrumbService {
         return breadcrumbs;
     }
 
-    private static boolean isSegmentLastOne(String[] segments, int i) {
+    private static boolean isEditEndpoint(String[] segments, int i) {
+        return i < segments.length - 1 && segments[i].equals(EDIT_SEGMENT);
+    }
+
+    private static boolean isLastSegment(String[] segments, int i) {
         return i == segments.length - 1;
     }
 
@@ -70,7 +75,7 @@ public class BreadcrumbService {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    private Breadcrumb homeBreadcrumb() {
+    private Breadcrumb createHomeBreadcrumb() {
         return new Breadcrumb(HOME_LABEL, SEPARATOR);
     }
 }
