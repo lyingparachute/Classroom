@@ -1,6 +1,6 @@
 package com.example.classroom.model;
 
-import com.example.classroom.enums.RoleEnum;
+import com.example.classroom.enums.UserRole;
 import com.example.classroom.token.Token;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private RoleEnum role;
+    private UserRole role;
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens = new ArrayList<>();
@@ -91,9 +91,9 @@ public class User implements UserDetails {
 
 
     public void setAttendee(Object attendee) {
-        if (role.equals(RoleEnum.STUDENT))
+        if (role.equals(UserRole.ROLE_STUDENT))
             this.student = (Student) attendee;
-        if (role.equals(RoleEnum.TEACHER) || role.equals(RoleEnum.DEAN))
+        if (role.equals(UserRole.ROLE_TEACHER) || role.equals(UserRole.ROLE_DEAN))
             this.teacher = (Teacher) attendee;
     }
 

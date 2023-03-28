@@ -1,3 +1,3 @@
-insert into users (id, first_name, last_name, email, password, role) values(1, 'Marcin', 'Jarząbek', 'm.jarząbek@gmail.com', '$2a$12$kdCiE9UfUiGEPt0mb9Sn6ueEAPc.w542QPpPSTF537BhkzEG9CKbO', 'STUDENT');
-insert into users (id, first_name, last_name, email, password, role) values(2, 'user', 'user', 'user', '$2a$12$hXHPAdKb6dWz1LNMaiXMpOdX9lwEQbs7IT57UjX1b4XEYFDvf2uN.', 'TEACHER');
-insert into users (id, first_name, last_name, email, password, role) values(3, 'admin', 'admin', 'admin', '$2a$12$H3e6O64M5rE5wDlraxjnoOowtYRhuHg7s8Qvw9tEc/GH2PKmuA7qu', 'ADMIN');
+insert into users (id, first_name, last_name, email, password, role) values(1, 'Marcin', 'Jarząbek', 'm.jarząbek@gmail.com', '$2a$12$kdCiE9UfUiGEPt0mb9Sn6ueEAPc.w542QPpPSTF537BhkzEG9CKbO', 'ROLE_STUDENT');
+insert into users (id, first_name, last_name, email, password, role) values(2, 'user', 'user', 'user', '$2a$12$hXHPAdKb6dWz1LNMaiXMpOdX9lwEQbs7IT57UjX1b4XEYFDvf2uN.', 'ROLE_TEACHER');
+insert into users (id, first_name, last_name, email, password, role) values(3, 'admin', 'admin', 'admin', '$2a$12$H3e6O64M5rE5wDlraxjnoOowtYRhuHg7s8Qvw9tEc/GH2PKmuA7qu', 'ROLE_ADMIN');

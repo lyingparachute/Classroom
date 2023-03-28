@@ -1,7 +1,6 @@
 package com.example.classroom.auth;
 
-import com.example.classroom.auth.validation.ValidPassword;
-import com.example.classroom.enums.RoleEnum;
+import com.example.classroom.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,9 +26,9 @@ public class RegisterRequest {
     @Email(message = "{message.email.valid}")
     private String email;
 
-    @ValidPassword
+    //    @ValidPassword
     private String password;
 
     @NotNull(message = "{role.not.null}")
-    private RoleEnum role;
+    private UserRole role;
 }

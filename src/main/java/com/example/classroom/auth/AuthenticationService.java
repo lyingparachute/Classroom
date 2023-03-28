@@ -1,7 +1,7 @@
 package com.example.classroom.auth;
 
 import com.example.classroom.config.jwt.JwtService;
-import com.example.classroom.enums.RoleEnum;
+import com.example.classroom.enums.UserRole;
 import com.example.classroom.model.User;
 import com.example.classroom.repository.UserRepository;
 import com.example.classroom.token.Token;
@@ -33,7 +33,7 @@ public class AuthenticationService {
         userDetails.setLastName(request.getLastName());
         userDetails.setEmail(request.getEmail());
         userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
-        userDetails.setRole(RoleEnum.STUDENT);
+        userDetails.setRole(UserRole.ROLE_STUDENT);
         //TODO delete auto-assign role
         var savedUser = repository.save(userDetails);
         var jwtToken = jwtService.generateToken(savedUser);
