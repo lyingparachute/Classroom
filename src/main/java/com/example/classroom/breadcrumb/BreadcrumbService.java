@@ -9,27 +9,41 @@ import java.util.List;
 public class BreadcrumbService {
 
     public List<Breadcrumb> getBreadcrumbs(String endpoint) {
-        List<Breadcrumb> crumbs = new ArrayList<>();
-        crumbs.add(new Breadcrumb("Classroom", "/"));
+        List<Breadcrumb> breadcrumbs = new ArrayList<>();
+        breadcrumbs.add(homeEndpoint());
 
         String[] segments = splitEndpoint(endpoint);
-        StringBuilder endpointBuilder = new StringBuilder("/");
+        StringBuilder pathBuilder = new StringBuilder("/");
 
-        for (String segment : segments) {
-            if (!segment.isEmpty()) {
-                endpointBuilder.append(segment).append("/");
-                crumbs.add(new Breadcrumb(capitalize(segment), endpointBuilder.toString()));
+        for (int i = 0; i < segments.length; i++) {
+            if (segments[i].isEmpty())
+                continue;
+            pathBuilder.append(segments[i]).append("/");
+            String label = formatEndpointSegment(segments[i]);
+            Breadcrumb breadcrumb = new Breadcrumb(label, pathBuilder.toString());
+            if (isLastSegment(segments, i)) {
+                breadcrumb.setLast(true);
             }
+            breadcrumbs.add(breadcrumb);
         }
-        if (!crumbs.isEmpty()) {
-            Breadcrumb last = crumbs.get(crumbs.size() - 1);
-            last.setLast(true);
-        }
-        return crumbs;
+
+        return breadcrumbs;
+    }
+
+    private static boolean isLastSegment(String[] segments, int i) {
+        return i == segments.length - 1;
     }
 
     private String[] splitEndpoint(String endpoint) {
         return endpoint.split("/");
+    }
+
+    private String formatEndpointSegment(String segment) {
+        String[] segmentSplit = segment.split("-");
+        for (int i = 0; i < segmentSplit.length; i++) {
+            segmentSplit[i] = capitalize(segmentSplit[i]);
+        }
+        return String.join(" ", segmentSplit);
     }
 
     private String capitalize(String str) {
@@ -37,5 +51,9 @@ public class BreadcrumbService {
             return str;
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+    }
+
+    private Breadcrumb homeEndpoint() {
+        return new Breadcrumb("Classroom", "/");
     }
 }
