@@ -3,7 +3,7 @@ package com.example.classroom.service;
 import com.example.classroom.auth.RegisterRequest;
 import com.example.classroom.dto.StudentDto;
 import com.example.classroom.dto.TeacherDto;
-import com.example.classroom.enums.RoleEnum;
+import com.example.classroom.enums.UserRole;
 import com.example.classroom.model.User;
 import com.example.classroom.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,13 +37,13 @@ public class UserService implements UserDetailsService {
     }
 
     private void createUniversityAttendeeAccount(RegisterRequest request, User user) {
-        RoleEnum requestRole = request.getRole();
-        if (requestRole == RoleEnum.STUDENT) {
+        UserRole requestRole = request.getRole();
+        if (requestRole == UserRole.ROLE_STUDENT) {
             StudentDto studentDto = mapper.map(request, StudentDto.class);
             studentDto.setUserDetails(user);
             studentService.create(studentDto);
         }
-        if (requestRole == RoleEnum.TEACHER || requestRole == RoleEnum.DEAN) {
+        if (requestRole == UserRole.ROLE_TEACHER || requestRole == UserRole.ROLE_DEAN) {
             TeacherDto teacherDto = mapper.map(request, TeacherDto.class);
             teacherDto.setUserDetails(user);
             teacherService.create(teacherDto);
