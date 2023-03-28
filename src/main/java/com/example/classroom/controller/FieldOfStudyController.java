@@ -1,6 +1,7 @@
 package com.example.classroom.controller;
 
 
+import com.example.classroom.breadcrumb.BreadcrumbService;
 import com.example.classroom.dto.FieldOfStudyDto;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.fileupload.FileUploadUtil;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -29,15 +31,17 @@ public class FieldOfStudyController {
     private final FieldOfStudyService service;
     private final DepartmentService departmentService;
     private final SubjectService subjectService;
+    private final BreadcrumbService crumb;
     public static final String UPLOAD_DIR = "fields-of-study/";
     public static final String REDIRECT_DASHBOARD_FIELDS_OF_STUDY = "redirect:/dashboard/fields-of-study";
 
     @GetMapping()
-    public String getAllFieldsOfStudy(Model model) {
+    public String getAllFieldsOfStudy(Model model, HttpServletRequest request) {
         model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedByNameAndSortedByName());
         model.addAttribute("firstFieldsOfStudy", service.fetchAllByLevelOfEducationSortedByName(LevelOfEducation.FIRST));
         model.addAttribute("secondFieldsOfStudy", service.fetchAllByLevelOfEducationSortedByName(LevelOfEducation.SECOND));
         model.addAttribute("imagesPath", Path.of("/img").resolve(UPLOAD_DIR));
+        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
         return "field-of-study/all-fieldsOfStudy";
     }
 
