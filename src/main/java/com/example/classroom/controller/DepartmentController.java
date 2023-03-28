@@ -1,5 +1,6 @@
 package com.example.classroom.controller;
 
+import com.example.classroom.breadcrumb.BreadcrumbService;
 import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.service.DepartmentService;
 import com.example.classroom.service.FieldOfStudyService;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.nio.file.Path;
 
@@ -24,11 +26,13 @@ public class DepartmentController {
     private final DepartmentService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
+    private final BreadcrumbService crumb;
 
     @GetMapping()
-    public String getAllDepartments(Model model) {
+    public String getAllDepartments(Model model, HttpServletRequest request) {
         model.addAttribute("departments", service.fetchAll());
         addAttributeImagesPath(model, "departments");
+        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
         return "department/all-departments";
     }
 
