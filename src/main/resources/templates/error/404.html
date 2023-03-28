@@ -3,7 +3,7 @@
 <head>
     <header th:replace="fragments/header :: header"></header>
 </head>
-<body>
+<body xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <section class="d-flex align-items-center min-vh-100 py-5">
     <div class="container py-5">
@@ -32,7 +32,10 @@
                     </div>
                 </div><!-- /lc-block -->
                 <div class="lc-block">
-                    <a class="btn btn-lg btn-primary" th:href="@{/}" role="button" th:text="#{error.homepage}"></a>
+                    <a sec:authorize="!isAuthenticated()" class="btn btn-lg btn-primary" th:href="@{/}" role="button"
+                       th:text="#{error.homepage}"></a>
+                    <a sec:authorize="isAuthenticated()" class="btn btn-lg btn-primary" th:href="@{/dashboard}"
+                       role="button" th:text="#{error.dashboard}"></a>
                 </div><!-- /lc-block -->
             </div><!-- /col -->
         </div>
