@@ -1,3 +1,5 @@
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <!-- ======= Cancel Submit Button for CREATE method ======= -->
 <div class="row my-2 justify-content-end" id="cancelSubmitBtn" th:fragment="CREATEcancelSubmitBtn">
     <div class="col-auto">
@@ -68,7 +70,8 @@
 </a>
 
 <!-- ======= Edit department Button ======= -->
-<a class="btn btn-outline-primary btn-rounded"
+<a sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
+   class="btn btn-outline-primary btn-rounded"
    th:fragment="btn-edit"
    th:href="@{/dashboard/departments/edit/{id}(id=${department.id})}">
     <i class="fas fa-pen mr-1"></i>
@@ -76,9 +79,11 @@
 </a>
 
 <!-- ======= Delete department Button ======= -->
-<a class="btn btn-outline-danger btn-rounded delBtn"
+<a sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
+   class="btn btn-outline-danger btn-rounded delBtn"
    th:fragment="btn-delete"
    th:href="@{/dashboard/departments/delete/{id}(id=${department.id})}">
     <i class="fa fa-trash-can fa-lg mr-1"></i>
     <span th:text="#{button.delete}"></span>
 </a>
+</html>
