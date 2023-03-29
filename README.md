@@ -66,5 +66,27 @@ Create docker image and run project with IntelliJ:
 docker run -p 3307:3306 --name mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=classroom --rm -d mysql
 ```
 
+## HOW TO USE APP:
 
+#### Create new account
+
+* Register using email and password
+* Sign In to the dashboard and use app
+
+  #### OR
+
+#### Use already existing accounts
+
+1) Student account:
+  * Login: student
+  * Password: student
+2) Teacher account:
+  * Login: teacher
+  * Password: teacher
+3) Dean account:
+  * Login: dean
+  * Password: dean
+4) Admin account:
+  * Login: admin
+  * Password: admin
 
