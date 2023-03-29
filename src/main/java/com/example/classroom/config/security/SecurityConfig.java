@@ -26,7 +26,7 @@ public class SecurityConfig {
     private static final String SIGN_UP_PAGE = "/sign-up";
     private static final String SIGN_IN_API = "/api/sign-in";
     private static final String SIGN_OUT_API = "/api/sign-out";
-    private static final String AUTH_ENDPOINTS = "/api/auth/**";
+    private static final String API_AUTH_ENDPOINTS = "/api/auth/**";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,7 +35,7 @@ public class SecurityConfig {
 //                .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
-                        HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, AUTH_ENDPOINTS).permitAll()
+                        HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, API_AUTH_ENDPOINTS).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
