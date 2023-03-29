@@ -7,13 +7,13 @@
                 <a th:if="${#ctx.springRequestContext.requestUri.toString().equals('http://localhost:8080/dashboard')}"
                    th:href="@{/dashboard}"
                    class="list-group-item list-group-item-action py-2 ripple active" aria-current="true">
-                    <i class="fas fa-tachometer-alt fa-fw me-3"></i><span
+                    <i class="fa-solid fa-gauge-high fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item1}"></span>
                 </a>
                 <a th:unless="${#ctx.springRequestContext.requestUri.toString().equals('http://localhost:8080/dashboard')}"
                    th:href="@{/dashboard}"
                    class="list-group-item list-group-item-action py-2 ripple">
-                    <i class="fas fa-tachometer-alt fa-fw me-3"></i><span
+                    <i class="fa-solid fa-gauge-high fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item1}"></span>
                 </a>
                 <!--* Students *-->
@@ -27,9 +27,9 @@
                 <a th:unless="${#ctx.springRequestContext.requestUri.toString().contains('students')}"
                    th:href="@{/dashboard/students}"
                    sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"
-                   class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-users fa-fw me-3"></i><span
-                        th:text="#{dashboard.navigation.sidebar.item2}"></span>
+                   class="list-group-item list-group-item-action py-2 ripple">
+                    <i class="fas fa-users fa-fw me-3"></i>
+                    <span th:text="#{dashboard.navigation.sidebar.item2}"></span>
                 </a>
                 <!--* Teachers *-->
                 <a th:if="${#ctx.springRequestContext.requestUri.toString().contains('teachers')}"
