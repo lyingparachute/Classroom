@@ -27,7 +27,7 @@
         <modelmapper.version>3.1.0</modelmapper.version>
         <bootstrap.version>5.2.3</bootstrap.version>
         <bootstrap-icons.version>1.10.3</bootstrap-icons.version>
-        <jquery.version>3.6.1</jquery.version>
+        <jquery.version>3.6.3</jquery.version>
         <popper.js.version>2.9.3</popper.js.version>
         <font-awesome.version>6.3.0</font-awesome.version>
         <bootstrap-table.version>1.16.0</bootstrap-table.version>
