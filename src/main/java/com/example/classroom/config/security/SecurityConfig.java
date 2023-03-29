@@ -2,18 +2,19 @@ package com.example.classroom.config.security;
 
 import com.example.classroom.config.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
@@ -27,13 +28,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String SIGN_OUT_API = "/api/sign-out";
     private static final String AUTH_ENDPOINTS = "/api/auth/**";
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 //TODO - enable csrf
 //                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
+                .authorizeHttpRequests()
+                .requestMatchers("/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
                         HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, AUTH_ENDPOINTS).permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -55,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl(HOME_PAGE);
+        return http.build();
     }
 }
 
