@@ -33,29 +33,31 @@ public class SecurityConfig {
         http
                 //TODO - enable csrf
 //                .csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
-                        HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, API_AUTH_ENDPOINTS).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage(SIGN_IN_PAGE)
-                .loginProcessingUrl(SIGN_IN_API)
-                .defaultSuccessUrl(DASHBOARD_PAGE, true)
-                .failureUrl(SIGN_IN_PAGE + "?error")
-                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
+                                HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, API_AUTH_ENDPOINTS).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(login -> login
+                        .loginPage(SIGN_IN_PAGE)
+                        .loginProcessingUrl(SIGN_IN_API)
+                        .defaultSuccessUrl(DASHBOARD_PAGE, true)
+                        .failureUrl(SIGN_IN_PAGE + "?error")
+                )
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout()
-                .logoutUrl(SIGN_OUT_API)
-                .addLogoutHandler(logoutHandler)
+                .logout(logout -> logout
+                                .logoutUrl(SIGN_OUT_API)
+                                .addLogoutHandler(logoutHandler)
 //                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl(HOME_PAGE);
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID")
+                                .logoutSuccessUrl(HOME_PAGE)
+                );
+
         return http.build();
     }
 }
