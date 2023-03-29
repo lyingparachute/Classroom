@@ -145,7 +145,7 @@ public class StudentController {
     }
 
     @GetMapping("delete/{id}")
-    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         StudentDto dto = service.fetchById(id);
         service.remove(id);

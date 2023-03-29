@@ -158,7 +158,7 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("delete/{id}")
-    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     public String deleteFieldOfStudy(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         FieldOfStudyDto dto = service.fetchById(id);
         service.remove(id);

@@ -144,7 +144,7 @@ public class SubjectController {
     }
 
     @GetMapping("delete/{id}")
-    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     public String deleteSubject(@PathVariable Long id,
                                 RedirectAttributes redirectAttributes) {
         SubjectDto dto = service.fetchById(id);

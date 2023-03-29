@@ -139,7 +139,7 @@ public class TeacherController {
         return REDIRECT_DASHBOARD_TEACHERS;
     }
 
-    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("delete/{id}")
     public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         TeacherDto dto = service.fetchById(id);

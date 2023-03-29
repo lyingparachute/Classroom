@@ -103,7 +103,7 @@ public class DepartmentController {
     }
 
     @GetMapping("delete/{id}")
-    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     public String deleteDepartment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         DepartmentDto dto = service.fetchById(id);
         service.remove(id);
