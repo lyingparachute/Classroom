@@ -1,4 +1,4 @@
-package com.example.classroom.auth;
+package com.example.classroom.auth.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.example.classroom.auth;
+package com.example.classroom.auth.model;
 
 import com.example.classroom.enums.UserRole;
 import lombok.AllArgsConstructor;

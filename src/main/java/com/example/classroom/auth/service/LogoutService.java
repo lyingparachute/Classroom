@@ -1,4 +1,4 @@
-package com.example.classroom.auth;
+package com.example.classroom.auth.service;
 
 import com.example.classroom.token.TokenRepository;
 import lombok.RequiredArgsConstructor;

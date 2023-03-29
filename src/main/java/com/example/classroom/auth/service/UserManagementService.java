@@ -1,5 +1,6 @@
-package com.example.classroom.auth;
+package com.example.classroom.auth.service;
 
+import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.dto.StudentDto;
 import com.example.classroom.dto.TeacherDto;
 import com.example.classroom.enums.UserRole;

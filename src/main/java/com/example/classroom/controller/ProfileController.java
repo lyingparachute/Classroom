@@ -1,6 +1,6 @@
 package com.example.classroom.controller;
 
-import com.example.classroom.auth.UserManagementService;
+import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
 import com.example.classroom.model.User;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,9 @@
-package com.example.classroom.auth;
+package com.example.classroom.auth.controller;
 
+import com.example.classroom.auth.model.AuthenticationRequest;
+import com.example.classroom.auth.model.AuthenticationResponse;
+import com.example.classroom.auth.model.RegisterRequest;
+import com.example.classroom.auth.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

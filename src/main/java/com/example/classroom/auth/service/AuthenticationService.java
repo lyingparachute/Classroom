@@ -1,5 +1,8 @@
-package com.example.classroom.auth;
+package com.example.classroom.auth.service;
 
+import com.example.classroom.auth.model.AuthenticationRequest;
+import com.example.classroom.auth.model.AuthenticationResponse;
+import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.config.jwt.JwtService;
 import com.example.classroom.enums.UserRole;
 import com.example.classroom.model.User;
