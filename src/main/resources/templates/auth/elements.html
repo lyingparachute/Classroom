@@ -15,10 +15,10 @@
                     <li><a class="nav-link scrollto" th:href="@{/#services}" th:text="#{navbar.services}"></a></li>
                     <li><a class="nav-link scrollto" th:href="@{/#pricing}" th:text="#{navbar.pricing}"></a></li>
                     <li><a class="getstarted" th:href="@{/sign-in}"
-                           th:if="${#httpServletRequest.requestURL.toString().contains('sign-up')}"
+                           th:if="${#ctx.springRequestContext.requestUri.toString().contains('sign-up')}"
                            th:text="#{navbar.login}"></a></li>
                     <li><a class="getstarted" th:href="@{/sign-up}"
-                           th:unless="${#httpServletRequest.requestURL.toString().contains('sign-up')}"
+                           th:unless="${#ctx.springRequestContext.requestUri.toString().contains('sign-up')}"
                            th:text="#{navbar.register}"></a></li>
                 </ul>
                 <i class="fas fa-bars mobile-nav-toggle"></i>

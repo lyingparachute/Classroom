@@ -4,60 +4,63 @@
         <div class="position-sticky">
             <div class="list-group list-group-flush mx-3 mt-4">
                 <!--* Main Dashboard *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().equals('http://localhost:8080/dashboard')}"
+                <a th:if="${#ctx.springRequestContext.requestUri.toString().equals('http://localhost:8080/dashboard')}"
                    th:href="@{/dashboard}"
                    class="list-group-item list-group-item-action py-2 ripple active" aria-current="true">
                     <i class="fas fa-tachometer-alt fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item1}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().equals('http://localhost:8080/dashboard')}"
+                <a th:unless="${#ctx.springRequestContext.requestUri.toString().equals('http://localhost:8080/dashboard')}"
                    th:href="@{/dashboard}"
-                   class="list-group-item list-group-item-action py-2 ripple" >
-                    <i class="fas fa-tachometer-alt fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item1}"></span>
+                   class="list-group-item list-group-item-action py-2 ripple">
+                    <i class="fas fa-tachometer-alt fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item1}"></span>
                 </a>
                 <!--* Students *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('students')}"
+                <a th:if="${#ctx.springRequestContext.requestUri.toString().contains('students')}"
                    th:href="@{/dashboard/students}"
                    sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"
                    class="list-group-item list-group-item-action py-2 ripple active" aria-current="true"><i
-                        class="fas fa-users fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item2}"></span>
+                        class="fas fa-users fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item2}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('students')}"
+                <a th:unless="${#ctx.springRequestContext.requestUri.toString().contains('students')}"
                    th:href="@{/dashboard/students}"
                    sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-users fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item2}"></span>
+                        class="fas fa-users fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item2}"></span>
                 </a>
                 <!--* Teachers *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('teachers')}"
+                <a th:if="${#ctx.springRequestContext.requestUri.toString().contains('teachers')}"
                    th:href="@{/dashboard/teachers}"
                    class="list-group-item list-group-item-action py-2 ripple active">
                     <i class="fas fa-user fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item3}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('teachers')}"
+                <a th:unless="${#ctx.springRequestContext.requestUri.toString().contains('teachers')}"
                    th:href="@{/dashboard/teachers}"
                    class="list-group-item list-group-item-action py-2 ripple">
                     <i class="fas fa-user fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item3}"></span>
                 </a>
                 <!--* Subjects *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('subjects') && !#httpServletRequest.requestURL.toString().contains('fields-of-study/')}"
+                <a th:if="${#ctx.springRequestContext.requestUri.toString().contains('subjects') && !#ctx.springRequestContext.requestUri.toString().contains('fields-of-study/')}"
                    th:href="@{/dashboard/subjects}" class="list-group-item list-group-item-action py-2 ripple active">
                     <i class="fas fa-microscope fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item6}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('subjects')&& !#httpServletRequest.requestURL.toString().contains('fields-of-study/')}"
+                <a th:unless="${#ctx.springRequestContext.requestUri.toString().contains('subjects')&& !#ctx.springRequestContext.requestUri.toString().contains('fields-of-study/')}"
                    th:href="@{/dashboard/subjects}" class="list-group-item list-group-item-action py-2 ripple">
                     <i class="fas fa-microscope fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item6}"></span>
                 </a>
                 <!--* Fields of Study *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}"
+                <a th:if="${#ctx.springRequestContext.requestUri.toString().contains('fields-of-study')}"
                    th:href="@{/dashboard/fields-of-study}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
                         class="fas fa-graduation-cap fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}"
+                <a th:unless="${#ctx.springRequestContext.requestUri.toString().contains('fields-of-study')}"
                    th:href="@{/dashboard/fields-of-study}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-graduation-cap  fa-fw me-3"></i><span
@@ -65,13 +68,13 @@
                 </a>
                 <!--* Facilities *-->
                 <a th:href="@{/dashboard/departments}"
-                   th:if="${#httpServletRequest.requestURL.toString().contains('departments')}"
+                   th:if="${#ctx.springRequestContext.requestUri.toString().contains('departments')}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
                         class="fas fa-school fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item9}"></span>
                 </a>
                 <a th:href="@{/dashboard/departments}"
-                   th:unless="${#httpServletRequest.requestURL.toString().contains('departments')}"
+                   th:unless="${#ctx.springRequestContext.requestUri.toString().contains('departments')}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-school fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item9}"></span>
@@ -79,55 +82,65 @@
                 <!--* Library *-->
                 <a class="list-group-item list-group-item-action py-2 ripple active"
                    th:href="@{/dashboard/library}"
-                   th:if="${#httpServletRequest.requestURL.toString().contains('library')}"><i
+                   th:if="${#ctx.springRequestContext.requestUri.toString().contains('library')}"><i
                         class="fas fa-book-open fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item8}"></span>
                 </a>
                 <a class="list-group-item list-group-item-action py-2 ripple"
                    th:href="@{/dashboard/library}"
-                   th:unless="${#httpServletRequest.requestURL.toString().contains('library')}"><i
+                   th:unless="${#ctx.springRequestContext.requestUri.toString().contains('library')}"><i
                         class="fas fa-book-open fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item8}"></span>
                 </a>
                 <!--* Calendar *-->
                 <a th:href="@{/dashboard/calendar}"
-                   th:if="${#httpServletRequest.requestURL.toString().contains('calendar')}"
+                   th:if="${#ctx.springRequestContext.requestUri.toString().contains('calendar')}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
                         class="fas fa-calendar fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item10}"></span>
                 </a>
                 <a th:href="@{/dashboard/calendar}"
-                   th:unless="${#httpServletRequest.requestURL.toString().contains('calendar')}"
+                   th:unless="${#ctx.springRequestContext.requestUri.toString().contains('calendar')}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-calendar fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item10}"></span>
                 </a>
                 <!--* Analytics *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('analytics')}" th:href="@{/dashboard/analytics}"
+                <a th:if="${#ctx.springRequestContext.requestUri.toString().contains('analytics')}"
+                   th:href="@{/dashboard/analytics}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-chart-line fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item5}"></span>
+                        class="fas fa-chart-line fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item5}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('analytics')}" th:href="@{/dashboard/analytics}"
+                <a th:unless="${#ctx.springRequestContext.requestUri.toString().contains('analytics')}"
+                   th:href="@{/dashboard/analytics}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-chart-line fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item5}"></span>
+                        class="fas fa-chart-line fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item5}"></span>
                 </a>
                 <!--* Settings *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('settings')}" th:href="@{/dashboard/settings}"
+                <a th:if="${#ctx.springRequestContext.requestUri.toString().contains('settings')}"
+                   th:href="@{/dashboard/settings}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
                         class="fas fa-cog fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item4}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('settings')}" th:href="@{/dashboard/settings}"
+                <a th:unless="${#ctx.springRequestContext.requestUri.toString().contains('settings')}"
+                   th:href="@{/dashboard/settings}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-cog fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item4}"></span>
                 </a>
                 <!--* Help *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('help')}" th:href="@{/dashboard/help}"
+                <a th:if="${#ctx.springRequestContext.requestUri.toString().contains('help')}"
+                   th:href="@{/dashboard/help}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-question-circle fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item12}"></span>
+                        class="fas fa-question-circle fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item12}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('help')}" th:href="@{/dashboard/help}"
+                <a th:unless="${#ctx.springRequestContext.requestUri.toString().contains('help')}"
+                   th:href="@{/dashboard/help}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-question-circle fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item12}"></span>
+                        class="fas fa-question-circle fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item12}"></span>
                 </a>
             </div>
         </div>
