@@ -6,6 +6,7 @@ import com.example.classroom.service.SubjectService;
 import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -81,6 +82,7 @@ public class TeacherController {
         return "teacher/teacher-view";
     }
 
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @GetMapping("new")
     public String getNewTeacherForm(HttpServletRequest request,
                                     Model model) {
@@ -90,6 +92,7 @@ public class TeacherController {
         return "teacher/teacher-create-form";
     }
 
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @PostMapping(value = "new")
     public String createTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
                                 BindingResult result,
@@ -107,6 +110,7 @@ public class TeacherController {
         return REDIRECT_DASHBOARD_TEACHERS;
     }
 
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @GetMapping("edit/{id}")
     public String editTeacher(@PathVariable Long id,
                               HttpServletRequest request,
@@ -117,6 +121,7 @@ public class TeacherController {
         return "teacher/teacher-edit-form";
     }
 
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @PostMapping(value = "update")
     public String editTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
                               BindingResult result,
@@ -134,6 +139,7 @@ public class TeacherController {
         return REDIRECT_DASHBOARD_TEACHERS;
     }
 
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @GetMapping("delete/{id}")
     public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         TeacherDto dto = service.fetchById(id);

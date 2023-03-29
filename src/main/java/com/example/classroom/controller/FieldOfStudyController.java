@@ -9,6 +9,7 @@ import com.example.classroom.service.DepartmentService;
 import com.example.classroom.service.FieldOfStudyService;
 import com.example.classroom.service.SubjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -71,6 +72,7 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("new")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String getCreateFieldOfStudyForm(Model model,
                                             HttpServletRequest request) {
         addAttributeBreadcrumb(model, request);
@@ -80,6 +82,7 @@ public class FieldOfStudyController {
     }
 
     @PostMapping(value = "new")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String createFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
                                      @RequestParam(value = "imageUpload") MultipartFile multipartFile,
                                      RedirectAttributes redirectAttributes,
@@ -101,6 +104,7 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("edit/{id}")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String getEditFieldOfStudyForm(@PathVariable Long id,
                                           HttpServletRequest request,
                                           Model model) {
@@ -111,6 +115,7 @@ public class FieldOfStudyController {
     }
 
     @PostMapping("update")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String editFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
                                    @RequestParam(value = "imageUpload") MultipartFile multipartFile,
                                    BindingResult result,
@@ -132,6 +137,7 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("edit/{id}/subjects")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String getSubjectsForm(@PathVariable Long id,
                                   HttpServletRequest request,
                                   Model model) {
@@ -143,6 +149,7 @@ public class FieldOfStudyController {
     }
 
     @PostMapping("subjects/update")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String editSubjects(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
                                RedirectAttributes redirectAttributes) {
         service.updateSubjects(dto);
@@ -151,6 +158,7 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("delete/{id}")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String deleteFieldOfStudy(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         FieldOfStudyDto dto = service.fetchById(id);
         service.remove(id);

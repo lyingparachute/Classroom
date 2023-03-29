@@ -7,6 +7,7 @@ import com.example.classroom.service.StudentService;
 import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -76,6 +77,7 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
+    @Secured({"ROLE_TEACHER", "ROLE_DEAN", "ROLE_ADMIN"})
     public String getStudent(@PathVariable Long id,
                              HttpServletRequest request,
                              Model model) {
@@ -85,6 +87,7 @@ public class StudentController {
     }
 
     @GetMapping("new")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String getNewStudentForm(HttpServletRequest request,
                                     Model model) {
         addAttributeBreadcrumb(model, request);
@@ -94,6 +97,7 @@ public class StudentController {
     }
 
     @PostMapping(value = "new")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String createStudent(@Valid @ModelAttribute("student") StudentDto dto,
                                 BindingResult result,
                                 RedirectAttributes redirectAttributes,
@@ -111,6 +115,7 @@ public class StudentController {
     }
 
     @GetMapping("edit/{id}")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String editStudentForm(@PathVariable Long id,
                                   HttpServletRequest request,
                                   Model model) {
@@ -121,6 +126,7 @@ public class StudentController {
     }
 
     @PostMapping(value = "update")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String editStudent(@Valid @ModelAttribute("student") StudentDto dto,
                               BindingResult result,
                               RedirectAttributes redirectAttributes,
@@ -138,6 +144,7 @@ public class StudentController {
     }
 
     @GetMapping("delete/{id}")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         StudentDto dto = service.fetchById(id);
         service.remove(id);

@@ -8,6 +8,7 @@ import com.example.classroom.service.SubjectService;
 import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -86,6 +87,7 @@ public class SubjectController {
     }
 
     @GetMapping("new")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String getNewSubjectForm(HttpServletRequest request,
                                     Model model) {
         addAttributeBreadcrumb(model, request);
@@ -95,6 +97,7 @@ public class SubjectController {
     }
 
     @PostMapping(value = "new")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String createSubject(@Valid @ModelAttribute("subject") SubjectDto dto,
                                 BindingResult result,
                                 RedirectAttributes redirectAttributes,
@@ -112,6 +115,7 @@ public class SubjectController {
     }
 
     @GetMapping("edit/{id}")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String editSubjectForm(@PathVariable Long id,
                                   HttpServletRequest request,
                                   Model model) {
@@ -122,6 +126,7 @@ public class SubjectController {
     }
 
     @PostMapping(value = "update")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String editSubject(@Valid @ModelAttribute("subject") SubjectDto dto,
                               BindingResult result,
                               RedirectAttributes redirectAttributes,
@@ -139,6 +144,7 @@ public class SubjectController {
     }
 
     @GetMapping("delete/{id}")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String deleteSubject(@PathVariable Long id,
                                 RedirectAttributes redirectAttributes) {
         SubjectDto dto = service.fetchById(id);
