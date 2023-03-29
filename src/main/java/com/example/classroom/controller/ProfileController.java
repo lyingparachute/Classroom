@@ -1,8 +1,8 @@
 package com.example.classroom.controller;
 
+import com.example.classroom.auth.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
 import com.example.classroom.model.User;
-import com.example.classroom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +23,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class ProfileController {
 
-    private final UserService service;
+    private final UserManagementService service;
     private final BreadcrumbService crumb;
 
     public static final String USER_EDIT_TEMPLATE = "user/user-edit";

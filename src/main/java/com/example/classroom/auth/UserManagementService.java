@@ -1,11 +1,12 @@
-package com.example.classroom.service;
+package com.example.classroom.auth;
 
-import com.example.classroom.auth.RegisterRequest;
 import com.example.classroom.dto.StudentDto;
 import com.example.classroom.dto.TeacherDto;
 import com.example.classroom.enums.UserRole;
 import com.example.classroom.model.User;
 import com.example.classroom.repository.UserRepository;
+import com.example.classroom.service.StudentService;
+import com.example.classroom.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +18,7 @@ import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserManagementService implements UserDetailsService {
 
     private final UserRepository repository;
     private final ModelMapper mapper;

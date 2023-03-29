@@ -1,7 +1,6 @@
 package com.example.classroom.auth;
 
 import com.example.classroom.model.User;
-import com.example.classroom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +17,7 @@ import javax.validation.Valid;
 public class AuthenticationController {
 
     public static final String SIGN_UP_TEMPLATE = "auth/sign-up";
-    private final UserService service;
+    private final UserManagementService service;
 
     @GetMapping("/sign-in")
     public String signIn() {
