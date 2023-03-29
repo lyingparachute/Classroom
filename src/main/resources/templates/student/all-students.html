@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <header th:replace="fragments/header :: header"></header>
     <link rel="stylesheet" th:href="@{/css/modals.css}" type="text/css"/>
@@ -52,7 +52,8 @@
                           method="get"
                           id="studentForm">
                         <div class="row justify-content-end mb-1 mt-3">
-                            <div class="col-auto">
+                            <div sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
+                                 class="col-auto">
                                 <a id="btnAddItem"
                                    class="btn btn-outline-primary btn-lg"
                                    th:href="@{/dashboard/students/new}"
@@ -98,7 +99,8 @@
                                 <th th:text="#{teacher.table.status}"></th>
                                 <th th:text="#{teacher.table.title}"></th>
                                 <th th:text="#{student.table.teachers}"></th>
-                                <th class="text-center" th:text="#{button.actions}"/>
+                                <th class="text-center" th:text="#{button.actions}"
+                                    sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"/>
                             </tr>
                             </thead>
 
@@ -158,7 +160,7 @@
                                 </td>
 
                                 <td th:text="${student.teachers.size()}"/>
-                                <td>
+                                <td sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')">
                                     <div class="container">
                                         <div class="row justify-content-center align-items-center">
                                             <a type="button"
@@ -170,6 +172,7 @@
                                             </a>
                                             <a type="button"
                                                id="btnEdit"
+                                               sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
                                                class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                data-mdb-ripple-color="dark"
                                                th:href="@{/dashboard/students/edit/{id}(id=${student.id})}"
@@ -178,6 +181,7 @@
                                         </div>
                                         <div class="row justify-content-center align-items-center">
                                             <a type="button" id="btnDelete"
+                                               sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
                                                class="delBtn col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                data-mdb-ripple-color="dark"
                                                th:text="#{button.delete}"

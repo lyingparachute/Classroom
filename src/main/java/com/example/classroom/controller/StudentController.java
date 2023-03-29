@@ -32,6 +32,7 @@ public class StudentController {
 
 
     @GetMapping
+    @Secured({"ROLE_TEACHER", "ROLE_DEAN", "ROLE_ADMIN"})
     public String getPaginatedStudents(@RequestParam(required = false) String name,
                                        @RequestParam(defaultValue = "1") int page,
                                        @RequestParam(defaultValue = "6") int size,
