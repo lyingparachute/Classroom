@@ -52,7 +52,7 @@
         <h4 th:text="#{department.dean}"></h4>
         <div th:if="${teachers.isEmpty()}">
             <span class="mr-1" th:text="#{department.new.noTeachers}"></span>
-            <div th:replace="teacher/buttons :: btn-add-new"></div>
+            <div th:replace="~{teacher/buttons :: btn-add-new}"></div>
         </div>
         <select class="form-select"
                 id="dean" th:field="*{dean}" th:unless="${teachers.isEmpty()}">
@@ -69,7 +69,7 @@
         <h4 class="mr-2" th:text="#{department.fieldsOfStudy}"></h4>
         <div th:if="${fieldsOfStudy.isEmpty()}">
             <span class="mr-1" th:text="#{department.new.noFieldOfStudies}"></span>
-            <div th:replace="field-of-study/buttons :: btn-add-new"></div>
+            <div th:replace="~{field-of-study/buttons :: btn-add-new}"></div>
         </div>
         <a aria-controls="collapseFieldsOfStudy"
            th:unless="${fieldsOfStudy.isEmpty()}"
@@ -147,7 +147,7 @@
         </a>
         <div th:unless="${department.dean != null}">
             <span th:text="#{department.dean.isNull}"></span>
-            <div th:replace="department/buttons :: btn-edit"></div>
+            <div th:replace="~{department/buttons :: btn-edit}"></div>
         </div>
     </div>
 
@@ -163,7 +163,7 @@
         </a>
         <div class="mb-3" th:if="${department.fieldsOfStudy.isEmpty()}">
             <span th:text="#{department.fieldsOfStudy.isEmpty}"></span>
-            <div th:replace="department/buttons :: btn-edit"></div>
+            <div th:replace="~{department/buttons :: btn-edit}"></div>
         </div>
     </div>
     <div class="collapse mt-3" id="collapseExample">

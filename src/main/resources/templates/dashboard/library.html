@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
 </head>
 
 <body>
 <!-- ======= Navigation ======= -->
-<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+<div th:replace="~{dashboard/fragments/navigation :: #navigation}"></div>
 
 <main>
     <div class="container pt-4">
@@ -31,6 +31,6 @@
 </main>
 
 <!-- JS Scripts -->
-<div th:replace="fragments/scripts :: scripts"></div>
+<div th:replace="~{fragments/scripts :: scripts}"></div>
 </body>
 </html>

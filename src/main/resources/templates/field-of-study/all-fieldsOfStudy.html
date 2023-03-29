@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
 </head>
 
 <body>
 <!-- ======= Navigation ======= -->
-<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+<div th:replace="~{dashboard/fragments/navigation :: #navigation}"></div>
 
 <main>
     <div class="container pt-4">
@@ -37,7 +37,7 @@
         <section class="mb-4">
             <div class="card">
                 <div class="card-header py-4 title-bar">
-                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
+                    <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
                     <div class="page-title"
                          th:text="#{fieldsOfStudy.header}">
                     </div>
@@ -47,7 +47,7 @@
                     <div sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
                          class="d-flex mb-4">
                         <div class="ms-auto">
-                            <div th:replace="field-of-study/buttons :: btn-add-new"></div>
+                            <div th:replace="~{field-of-study/buttons :: btn-add-new}"></div>
                         </div>
                     </div>
                     <!-- Tabs navs -->
@@ -78,19 +78,19 @@
                     <div class="tab-content" id="ex1-content">
                         <div aria-labelledby="ex1-tab-1" class="tab-pane fade show active" id="ex1-tabs-1"
                              role="tabpanel">
-                            <div th:replace="field-of-study/elements :: all-fields-of-study-card-body"></div>
+                            <div th:replace="~{field-of-study/elements :: all-fields-of-study-card-body}"></div>
                             <div class="text-muted mt-4"
                                  th:text="#{fieldsOfStudy.total} + ${fieldsOfStudyMap.size()}">
                             </div>
                         </div>
                         <div aria-labelledby="ex1-tab-2" class="tab-pane fade" id="ex1-tabs-2" role="tabpanel">
-                            <div th:replace="field-of-study/elements :: first-fields-of-study-card-body"></div>
+                            <div th:replace="~{field-of-study/elements :: first-fields-of-study-card-body}"></div>
                             <div class="text-muted mt-4"
                                  th:text="#{fieldsOfStudy.total} + ${firstFieldsOfStudy.size()}">
                             </div>
                         </div>
                         <div aria-labelledby="ex1-tab-3" class="tab-pane fade" id="ex1-tabs-3" role="tabpanel">
-                            <div th:replace="field-of-study/elements :: second-fields-of-study-card-body"></div>
+                            <div th:replace="~{field-of-study/elements :: second-fields-of-study-card-body}"></div>
                             <div class="text-muted mt-4"
                                  th:text="#{fieldsOfStudy.total} + ${secondFieldsOfStudy.size()}">
                             </div>
@@ -106,6 +106,6 @@
 
 
 <!-- JS Scripts -->
-<div th:replace="fragments/scripts :: scripts"></div>
+<div th:replace="~{fragments/scripts :: scripts}"></div>
 </body>
 </html>

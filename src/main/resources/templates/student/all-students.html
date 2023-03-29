@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
     <link rel="stylesheet" th:href="@{/css/modals.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css"/>
 </head>
 <body>
 <!-- ======= Navigation ======= -->
-<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+<div th:replace="~{dashboard/fragments/navigation :: #navigation}"></div>
 
 
 <main>
@@ -39,7 +39,7 @@
         <section class="mb-4">
             <div id="tableCard" class="card">
                 <div class="card-header py-4 title-bar">
-                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
+                    <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
                     <div class="page-title"
                          th:text="#{students.header}">
                     </div>
@@ -94,8 +94,8 @@
                         <table class="table border-primary align-middle" th:if="${totalItems != 0}">
                             <thead>
                             <tr>
-                                <th th:replace="fragments/sorting :: studentsSorting('firstName','Name')"></th>
-                                <th th:replace="fragments/sorting :: studentsSorting('fieldOfStudy','Field Of Study')"></th>
+                                <th th:replace="~{fragments/sorting :: studentsSorting('firstName','Name')}"></th>
+                                <th th:replace="~{fragments/sorting :: studentsSorting('fieldOfStudy','Field Of Study')}"></th>
                                 <th th:text="#{teacher.table.status}"></th>
                                 <th th:text="#{teacher.table.title}"></th>
                                 <th th:text="#{student.table.teachers}"></th>
@@ -205,11 +205,11 @@
                                                 <ul class="pagination justify-content-center">
                                                     <li class="page-item"
                                                         th:classappend="${currentPage == 1} ? 'disabled'">
-                                                        <a th:replace="fragments/paging :: studentsPaging(1, '<<', 'First Page')"></a>
+                                                        <a th:replace="~{fragments/paging :: studentsPaging(1, '<<', 'First Page')}"></a>
                                                     </li>
                                                     <li class="page-item font-weight-bold"
                                                         th:classappend="${currentPage == 1} ? 'disabled'">
-                                                        <a th:replace="fragments/paging :: studentsPaging(${currentPage - 1}, '<', 'Previous Page')"></a>
+                                                        <a th:replace="~{fragments/paging :: studentsPaging(${currentPage - 1}, '<', 'Previous Page')}"></a>
                                                     </li>
                                                     <li class="page-item disabled"
                                                         th:if="${currentPage - 2 > 1}">
@@ -218,7 +218,7 @@
                                                     <li class="page-item"
                                                         th:classappend="${page == currentPage} ? 'active'"
                                                         th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
-                                                        <a th:replace="fragments/paging :: studentsPaging(${page}, ${page}, 'Page ' + ${page})"></a>
+                                                        <a th:replace="~{fragments/paging :: studentsPaging(${page}, ${page}, 'Page ' + ${page})}"></a>
                                                     </li>
                                                     <li class="page-item disabled"
                                                         th:if="${currentPage + 2 < totalPages}">
@@ -226,11 +226,11 @@
                                                     </li>
                                                     <li class="page-item font-weight-bold"
                                                         th:classappend="${currentPage == totalPages} ? 'disabled'">
-                                                        <a th:replace="fragments/paging :: studentsPaging(${currentPage + 1},'>', 'Next Page')"></a>
+                                                        <a th:replace="~{fragments/paging :: studentsPaging(${currentPage + 1},'>', 'Next Page')}"></a>
                                                     </li>
                                                     <li class="page-item"
                                                         th:classappend="${currentPage == totalPages} ? 'disabled'">
-                                                        <a th:replace="fragments/paging :: studentsPaging(${totalPages}, '>>', 'Last Page')"></a>
+                                                        <a th:replace="~{fragments/paging :: studentsPaging(${totalPages}, '>>', 'Last Page')}"></a>
                                                     </li>
                                                 </ul>
                                             </nav>
@@ -265,9 +265,9 @@
 </main>
 
 <!-- Delete modal -->
-<div th:replace="fragments/modals :: deleteModal"></div>
+<div th:replace="~{fragments/modals :: deleteModal}"></div>
 <!-- JS Scripts -->
-<div th:replace="fragments/scripts :: scripts"></div>
+<div th:replace="~{fragments/scripts :: scripts}"></div>
 <!-- Custom script -->
 <script type="text/javascript" th:src="@{/js/students.js}"></script>
 </body>

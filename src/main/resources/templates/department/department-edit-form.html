@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
     <link rel="stylesheet" th:href="@{/css/department-form.css}" type="text/css"/>
 </head>
 <body>
 <!-- ======= Navigation ======= -->
-<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+<div th:replace="~{dashboard/fragments/navigation :: #navigation}"></div>
 
 <main>
     <div class="container pt-4">
         <section class="mb-4">
             <div class="card" id="itemCard">
                 <div class="card-header py-4 title-bar">
-                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
+                    <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
                     <div class="page-title"
                          th:text="#{department.edit}">
                     </div>
@@ -26,9 +26,9 @@
                           th:object="${department}">
                         <input hidden id="input_id" th:field="*{id}" type="text">
                         <!-- ======= Department Form ======= -->
-                        <div th:replace="department/elements :: item-form"></div>
+                        <div th:replace="~{department/elements :: item-form}"></div>
                         <!-- ======= Buttons ======= -->
-                        <div th:replace="department/buttons :: EDITcancelSubmitBtn"></div>
+                        <div th:replace="~{department/buttons :: EDITcancelSubmitBtn}"></div>
                     </form>
                 </div>
 
@@ -38,6 +38,6 @@
 </main>
 
 <!-- JS Scripts -->
-<div th:replace="fragments/scripts :: scripts"></div>
+<div th:replace="~{fragments/scripts :: scripts}"></div>
 </body>
 </html>

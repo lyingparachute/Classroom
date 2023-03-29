@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
     <link rel="stylesheet" th:href="@{/css/departments.css}" type="text/css"/>
 </head>
 
 <body>
 <!-- ======= Navigation ======= -->
-<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+<div th:replace="~{dashboard/fragments/navigation :: #navigation}"></div>
 
 <main>
     <div class="container pt-4">
         <section class="mb-4">
             <div class="card">
                 <div class="card-header py-4 title-bar">
-                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
+                    <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
                     <div class="page-title"
                          th:text="#{departments.all.card.header}">
                     </div>
@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <div class="d-flex mb-4" sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')">
                         <div class="p-1 ms-auto">
-                            <div th:replace="department/buttons :: btn-add-new"></div>
+                            <div th:replace="~{department/buttons :: btn-add-new}"></div>
                         </div>
                     </div>
 
@@ -88,6 +88,6 @@
 </main>
 
 <!-- JS Scripts -->
-<div th:replace="fragments/scripts :: scripts"></div>
+<div th:replace="~{fragments/scripts :: scripts}"></div>
 </body>
 </html>

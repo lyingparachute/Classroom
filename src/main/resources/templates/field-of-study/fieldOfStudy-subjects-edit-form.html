@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
 </head>
 <body>
 <!-- ======= Navigation ======= -->
-<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+<div th:replace="~{dashboard/fragments/navigation :: #navigation}"></div>
 
 <main>
     <div class="container pt-4">
         <section class="mb-4">
             <div class="card" id="itemCard">
                 <div class="card-header py-4 title-bar">
-                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
+                    <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
                     <div class="page-title"
                          th:text="#{fieldOfStudy.edit.card.header}">
                     </div>
@@ -33,7 +33,7 @@
                         <input hidden id="department" th:field="*{department}" th:value="${fieldOfStudy.department}"
                                type="text">
                         <!-- ======= Edit FieldOfStudy Subjects ======= -->
-                        <div th:replace="field-of-study/elements :: edit-subjects"></div>
+                        <div th:replace="~{field-of-study/elements :: edit-subjects}"></div>
 
                         <!-- ======= Buttons ======= -->
                         <div class="row my-2 justify-content-end" th:fragment="EDITcancelSubmitBtn">
@@ -54,6 +54,6 @@
     </div>
 </main>
 <!-- JS Scripts -->
-<div th:replace="fragments/scripts :: scripts"></div>
+<div th:replace="~{fragments/scripts :: scripts}"></div>
 </body>
 </html>
