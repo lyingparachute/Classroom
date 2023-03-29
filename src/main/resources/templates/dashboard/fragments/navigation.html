@@ -29,31 +29,39 @@
                         class="fas fa-users fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item2}"></span>
                 </a>
                 <!--* Teachers *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('teachers')}" th:href="@{/dashboard/teachers}"
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('teachers')}"
+                   th:href="@{/dashboard/teachers}"
                    class="list-group-item list-group-item-action py-2 ripple active">
                     <i class="fas fa-user fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item3}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('teachers')}" th:href="@{/dashboard/teachers}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('teachers')}"
+                   th:href="@{/dashboard/teachers}"
                    class="list-group-item list-group-item-action py-2 ripple">
                     <i class="fas fa-user fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item3}"></span>
                 </a>
                 <!--* Subjects *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('subjects')}" th:href="@{/dashboard/subjects}"
-                   class="list-group-item list-group-item-action py-2 ripple active">
-                    <i class="fas fa-microscope fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item6}"></span>
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('subjects') && !#httpServletRequest.requestURL.toString().contains('fields-of-study/')}"
+                   th:href="@{/dashboard/subjects}" class="list-group-item list-group-item-action py-2 ripple active">
+                    <i class="fas fa-microscope fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item6}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('subjects')}" th:href="@{/dashboard/subjects}"
-                   class="list-group-item list-group-item-action py-2 ripple">
-                    <i class="fas fa-microscope fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item6}"></span>
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('subjects')&& !#httpServletRequest.requestURL.toString().contains('fields-of-study/')}"
+                   th:href="@{/dashboard/subjects}" class="list-group-item list-group-item-action py-2 ripple">
+                    <i class="fas fa-microscope fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item6}"></span>
                 </a>
                 <!--* Fields of Study *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}" th:href="@{/dashboard/fields-of-study}"
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}"
+                   th:href="@{/dashboard/fields-of-study}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-graduation-cap fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
+                        class="fas fa-graduation-cap fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}" th:href="@{/dashboard/fields-of-study}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}"
+                   th:href="@{/dashboard/fields-of-study}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-graduation-cap  fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
+                        class="fas fa-graduation-cap  fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
                 <!--* Facilities *-->
                 <a th:href="@{/dashboard/departments}"
