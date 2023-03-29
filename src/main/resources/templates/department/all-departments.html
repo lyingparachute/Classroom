@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="d-flex mb-4" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <div class="d-flex mb-4" sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')">
                         <div class="p-1 ms-auto">
                             <div th:replace="department/buttons :: btn-add-new"></div>
                         </div>

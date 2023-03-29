@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <header th:replace="fragments/header :: header"></header>
     <link rel="stylesheet" th:href="@{/css/departments.css}" type="text/css"/>
@@ -25,7 +25,7 @@
                         <div class="p-1">
                             <div th:replace="department/buttons :: btn-go-back-to-departments"></div>
                         </div>
-                        <div class="p-1 ms-auto">
+                        <div sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')" class="p-1 ms-auto">
                             <div th:replace="department/buttons :: btn-edit"></div>
                             <div th:replace="department/buttons :: btn-delete"></div>
                         </div>
