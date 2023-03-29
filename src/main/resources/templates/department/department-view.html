@@ -27,7 +27,8 @@
                         </div>
                         <div sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')" class="p-1 ms-auto">
                             <div th:replace="department/buttons :: btn-edit"></div>
-                            <div th:replace="department/buttons :: btn-delete"></div>
+                            <div sec:authorize="hasRole('ROLE_ADMIN')"
+                                 th:replace="department/buttons :: btn-delete"></div>
                         </div>
                     </div>
 

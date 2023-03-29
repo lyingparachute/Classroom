@@ -181,7 +181,7 @@
                                         </div>
                                         <div class="row justify-content-center align-items-center">
                                             <a type="button" id="btnDelete"
-                                               sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
+                                               sec:authorize="hasRole('ROLE_ADMIN')"
                                                class="delBtn col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                data-mdb-ripple-color="dark"
                                                th:text="#{button.delete}"

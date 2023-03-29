@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <header th:replace="fragments/header :: header"></header>
     <link rel="stylesheet" th:href="@{/css/modals.css}" type="text/css"/>
@@ -130,6 +130,7 @@
                                                 </a>
                                                 <a type="button"
                                                    id="btnEdit"
+                                                   sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
                                                    class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                    data-mdb-ripple-color="dark"
                                                    th:href="@{/dashboard/subjects/edit/{id}(id=${subject.id})}"
@@ -138,6 +139,7 @@
                                             </div>
                                             <div class="row justify-content-center align-items-center">
                                                 <a type="button" id="btnDelete"
+                                                   sec:authorize="hasRole('ROLE_ADMIN')"
                                                    class="delBtn col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                    data-mdb-ripple-color="dark"
                                                    th:text="#{button.delete}"

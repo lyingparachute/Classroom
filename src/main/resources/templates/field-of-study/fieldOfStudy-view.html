@@ -27,7 +27,7 @@
                             <div th:replace="field-of-study/buttons :: btn-view-subjects"></div>
                             <div sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
                                  th:replace="field-of-study/buttons :: btn-edit-fieldOfStudy"></div>
-                            <div sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
+                            <div sec:authorize="hasRole('ROLE_ADMIN')"
                                  th:replace="field-of-study/buttons :: btn-delete-fieldOfStudy"></div>
                         </div>
                     </div>
