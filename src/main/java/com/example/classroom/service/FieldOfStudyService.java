@@ -9,12 +9,12 @@ import com.example.classroom.model.FieldOfStudy;
 import com.example.classroom.model.Student;
 import com.example.classroom.model.Subject;
 import com.example.classroom.repository.FieldOfStudyRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
