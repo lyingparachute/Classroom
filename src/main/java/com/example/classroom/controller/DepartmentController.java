@@ -46,8 +46,8 @@ public class DepartmentController {
         return "department/department-view";
     }
 
-    @Secured("ROLE_ADMIN")
     @GetMapping("new")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String getNewDepartmentForm(Model model, HttpServletRequest request) {
         model.addAttribute("department", new DepartmentDto());
         addAttributesForCreateDepartment(model);
@@ -55,8 +55,8 @@ public class DepartmentController {
         return "department/department-create-form";
     }
 
-    @Secured("ROLE_ADMIN")
     @PostMapping("new")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String createDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
                                    BindingResult result,
                                    RedirectAttributes redirectAttributes,
@@ -73,8 +73,8 @@ public class DepartmentController {
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
 
-    @Secured("ROLE_ADMIN")
     @GetMapping("edit/{id}")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String getEditDepartmentForm(@PathVariable Long id,
                                         Model model,
                                         HttpServletRequest request) {
@@ -84,8 +84,8 @@ public class DepartmentController {
         return "department/department-edit-form";
     }
 
-    @Secured({"ROLE_ADMIN"})
     @PostMapping(value = "update")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String editDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
                                  BindingResult result,
                                  RedirectAttributes redirectAttributes,
@@ -102,8 +102,8 @@ public class DepartmentController {
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
 
-    @Secured("ROLE_ADMIN")
     @GetMapping("delete/{id}")
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     public String deleteDepartment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         DepartmentDto dto = service.fetchById(id);
         service.remove(id);
