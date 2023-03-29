@@ -29,7 +29,7 @@
         <bootstrap-icons.version>1.10.3</bootstrap-icons.version>
         <jquery.version>3.6.3</jquery.version>
         <popper.js.version>2.9.3</popper.js.version>
-        <font-awesome.version>6.3.0</font-awesome.version>
+        <font-awesome.version>6.2.0</font-awesome.version>
         <bootstrap-table.version>1.16.0</bootstrap-table.version>
         <webjars-locator.version>0.46</webjars-locator.version>
     </properties>
