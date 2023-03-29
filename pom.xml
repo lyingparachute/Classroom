@@ -17,7 +17,7 @@
         <java.version>17</java.version>
         <spring-boot-starter.version>3.0.5</spring-boot-starter.version>
         <spring-security.version>6.0.2</spring-security.version>
-        <thymeleaf.extras.springsecurity5.version>3.1.1.RELEASE</thymeleaf.extras.springsecurity5.version>
+        <thymeleaf.version>3.1.1.RELEASE</thymeleaf.version>
         <jakarta.validation.version>2.0.2</jakarta.validation.version>
         <passay.version>1.0</passay.version>
         <jwt.version>0.11.5</jwt.version>
@@ -153,15 +153,16 @@
 
         <!-- Thymeleaf -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-            <version>${spring-boot-starter.version}</version>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring6</artifactId>
+            <version>${thymeleaf.version}</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
-            <version>${thymeleaf.extras.springsecurity5.version}</version>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+            <version>${thymeleaf.version}</version>
         </dependency>
 
         <!-- FRONTEND -->
