@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <header th:replace="fragments/header :: header"></header>
     <link rel="stylesheet" th:href="@{/css/modals.css}" type="text/css"/>
@@ -39,6 +39,7 @@
         <section class="mb-4">
             <div id="tableCard" class="card">
                 <div class="card-header py-4 title-bar">
+                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
                     <div class="page-title"
                          th:text="#{teachers.header}">
                     </div>
@@ -52,7 +53,8 @@
                           th:action="@{/dashboard/teachers}"
                           method="get">
                         <div class="row justify-content-end mb-1 mt-3">
-                            <div class="col-auto">
+                            <div sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
+                                 class="col-auto">
                                 <a id="btnAddItem"
                                    class="btn btn-outline-primary btn-lg"
                                    th:href="@{/dashboard/teachers/new}"
@@ -165,6 +167,7 @@
                                                th:text="#{button.view}">
                                             </a>
                                             <a type="button" id="btnEdit"
+                                               sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
                                                class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                data-mdb-ripple-color="dark"
                                                th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}"
@@ -173,6 +176,7 @@
                                         </div>
                                         <div class="row justify-content-center align-items-center">
                                             <a type="button" id="btnDelete"
+                                               sec:authorize="hasRole('ROLE_ADMIN')"
                                                class="delBtn col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                data-mdb-ripple-color="dark"
                                                th:text="#{button.delete}"
@@ -251,7 +255,7 @@
 <!-- Delete modal -->
 <div th:replace="fragments/modals :: deleteModal"></div>
 <!-- JS Scripts -->
-<div th:replace="fragments/imports/scripts :: scripts"></div>
+<div th:replace="fragments/scripts :: scripts"></div>
 <!-- Custom script -->
 <script type="text/javascript" th:src="@{/js/teachers.js}"></script>
 </body>

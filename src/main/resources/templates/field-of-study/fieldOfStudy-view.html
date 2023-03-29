@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <header th:replace="fragments/header :: header"></header>
 </head>
 <body>
-
 <!-- ======= Navigation ======= -->
 <div th:replace="dashboard/fragments/navigation :: #navigation"></div>
 
@@ -13,6 +12,7 @@
         <section class="mb-4">
             <div id="itemCard" class="card">
                 <div class="card-header py-4 title-bar">
+                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
                     <div class="page-title"
                          th:text="${fieldOfStudy.name}">
                     </div>
@@ -25,8 +25,10 @@
                         </div>
                         <div class="p-1 ms-auto">
                             <div th:replace="field-of-study/buttons :: btn-view-subjects"></div>
-                            <div th:replace="field-of-study/buttons :: btn-edit-fieldOfStudy"></div>
-                            <div th:replace="field-of-study/buttons :: btn-delete-fieldOfStudy"></div>
+                            <div sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
+                                 th:replace="field-of-study/buttons :: btn-edit-fieldOfStudy"></div>
+                            <div sec:authorize="hasRole('ROLE_ADMIN')"
+                                 th:replace="field-of-study/buttons :: btn-delete-fieldOfStudy"></div>
                         </div>
                     </div>
 
@@ -40,6 +42,6 @@
 </main>
 
 <!-- JS Scripts -->
-<div th:replace="fragments/imports/scripts :: scripts"></div>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>

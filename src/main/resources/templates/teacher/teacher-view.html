@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <header th:replace="fragments/header :: header"></header>
 </head>
@@ -12,6 +12,7 @@
         <section class="mb-4">
             <div id="itemCard" class="card">
                 <div class="card-header py-4 title-bar">
+                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
                     <div class="page-title"
                          th:text="#{teacher.view} + ' ' + ${teacher.id}">
                     </div>
@@ -22,9 +23,10 @@
                         <div class="p-1">
                             <div th:replace="teacher/buttons :: btn-go-back-to-teachers"></div>
                         </div>
-                        <div class="p-1 ms-auto">
+                        <div sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
+                             class="p-1 ms-auto">
                             <div th:replace="teacher/buttons :: btn-edit"></div>
-                            <div th:replace="teacher/buttons :: btn-delete"></div>
+                            <div sec:authorize="hasRole('ROLE_ADMIN')" th:replace="teacher/buttons :: btn-delete"></div>
                         </div>
                     </div>
                     <!-- ======= Teacher Details ======= -->
@@ -36,6 +38,6 @@
 </main>
 
 <!-- JS Scripts -->
-<div th:replace="fragments/imports/scripts :: scripts"></div>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>

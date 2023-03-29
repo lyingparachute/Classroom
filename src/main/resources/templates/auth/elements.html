@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="navBar">
+    <link rel="stylesheet" th:href="@{/css/navBar.css}" type="text/css"/>
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+        <div class="container d-flex align-items-center justify-content-between">
+            <h1 class="logo"><a th:href="@{/}" th:text="#{navbar.app.name}"></a></h1>
+            <nav id="navbar" class="navbar">
+                <ul>
+                    <li><a class="nav-link scrollto" th:href="@{/#home}" th:text="#{navbar.home}"></a></li>
+                    <li><a class="nav-link scrollto" th:href="@{/#about}" th:text="#{navbar.about}"></a></li>
+                    <li><a class="nav-link scrollto" th:href="@{/#services}" th:text="#{navbar.services}"></a></li>
+                    <li><a class="nav-link scrollto" th:href="@{/#pricing}" th:text="#{navbar.pricing}"></a></li>
+                    <li><a class="getstarted" th:href="@{/sign-in}"
+                           th:if="${#httpServletRequest.requestURL.toString().contains('sign-up')}"
+                           th:text="#{navbar.login}"></a></li>
+                    <li><a class="getstarted" th:href="@{/sign-up}"
+                           th:unless="${#httpServletRequest.requestURL.toString().contains('sign-up')}"
+                           th:text="#{navbar.register}"></a></li>
+                </ul>
+                <i class="fas fa-bars mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+
+        </div>
+    </header><!-- End Header -->
+</div>
+
+<!-- About company on sign in and sign up pages -->
+<div th:fragment="about-us" class="col-lg-6 d-flex align-items-center gradient-custom-2">
+    <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+        <h2 class="mb-4 text-center" th:text="#{sign.company.desc.h2}"></h2>
+        <h4 class="mb-4" th:text="#{sign.company.desc.h4}"></h4>
+        <p class="small mb-0" th:text="#{home.about.col2.desc}"></p>
+    </div>
+</div>
+
+<!-- Sign out Modal -->
+<div th:fragment="sign-out-modal" class="modal fade" id="signOutModal" tabindex="-1"
+     aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="signOutModalLabel" th:text="#{logout.modal.header}">
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" th:aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="signOutModalBody">
+                <span id="confirmText" th:text="#{logout.modal.body}"></span>
+            </div>
+            <div class="modal-footer">
+                <div class="col-auto">
+                    <a class="btn btn-secondary" href="" data-bs-dismiss="modal">
+                        <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
+                </div>
+                <div class="col-auto">
+                    <form class="form-sign-out" method="post" th:action="@{/api/sign-out}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button class="btn btn btn-danger btn-block" type="submit">
+                            <i class="fa fa-right-from-bracket mr-2"></i>
+                            <span th:text="#{button.logout}"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Sign out modal -->
+
+</body>
+</html>

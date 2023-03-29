@@ -1,0 +1,4 @@
+insert into users (id, first_name, last_name, email, password, role) values(1, 'Jan', 'Wawrzyniak', 'student', '$2a$12$MUBGZcHgO/muDPjFddyfpOBYEolrYFY83cOrCdPe8rDCpqrxsnVuy', 'ROLE_STUDENT');
+insert into users (id, first_name, last_name, email, password, role) values(2, 'Ludwik', 'Kostro', 'teacher', '$2a$12$Z6ND/NJ1tB8dqAX/RQA8YuqWqz9BqF8Vwfr11OQru/EZmYARW.IkO', 'ROLE_TEACHER');
+insert into users (id, first_name, last_name, email, password, role) values(3, 'Grzegorz', 'Wrzyszcz', 'dean', '$2a$12$DH1JiJx4e/CYiSF4A4RMoejmyWuy/gPDXo1/K.koYbdn9IY5BKJ8u', 'ROLE_DEAN');
+insert into users (id, first_name, last_name, email, password, role) values(4, 'admin', 'admin', 'admin', '$2a$12$H3e6O64M5rE5wDlraxjnoOowtYRhuHg7s8Qvw9tEc/GH2PKmuA7qu', 'ROLE_ADMIN');

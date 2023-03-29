@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <header th:replace="fragments/header :: header"></header>
     <link rel="stylesheet" th:href="@{/css/departments.css}" type="text/css"/>
@@ -14,25 +14,15 @@
         <section class="mb-4">
             <div class="card">
                 <div class="card-header py-4 title-bar">
-                    <!-- TODO Breadcrumb -->
-                    <nav class="d-flex">
-                        <h6 class="mb-0">
-                            <a class="text-reset" th:href="@{/}">Classroom</a>
-                            <span>/</span>
-                            <a class="text-reset" th:href="@{/dashboard}">Dashboard</a>
-                            <span>/</span>
-                            <a class="text-reset"><u th:text="${#httpServletRequest.requestURI}">Departments</u></a>
-                        </h6>
-                    </nav>
-
+                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
                     <div class="page-title"
                          th:text="#{departments.all.card.header}">
                     </div>
                 </div>
 
                 <div class="card-body">
-                    <div class="d-flex mb-4">
-                        <div class="p-1 ms-auto ">
+                    <div class="d-flex mb-4" sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')">
+                        <div class="p-1 ms-auto">
                             <div th:replace="department/buttons :: btn-add-new"></div>
                         </div>
                     </div>
@@ -98,6 +88,6 @@
 </main>
 
 <!-- JS Scripts -->
-<div th:replace="fragments/imports/scripts :: scripts"></div>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>

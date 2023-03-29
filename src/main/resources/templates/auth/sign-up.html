@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <!--/* Custom CSS */-->
+    <link rel="stylesheet" th:href="@{/css/login.css}" type="text/css"/>
+</head>
+<body>
+<div th:replace="auth/elements :: navBar"></div>
+
+<section class="h-100 gradient-form" style="background-color: #f6f9fd;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-5 mx-md-4">
+
+                                <div class="text-center">
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                                         style="width: 185px;" alt="logo">
+                                    <h4 class="mt-1 mb-5 pb-1" th:text="#{signin.header}"></h4>
+                                </div>
+
+                                <form class="form-sign-up" th:action="@{/sign-up}"
+                                      method="post" th:object="${user}"
+                                      novalidate>
+                                    <p th:text="#{signup.new.account}"></p>
+
+                                    <!-- First and Last name input -->
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4"
+                                             th:classappend="${#fields.hasErrors('firstName')} ? mb-5">
+                                            <div class="form-outline">
+                                                <input th:field="*{firstName}" type="text" id="form3Example1"
+                                                       class="form-control"
+                                                       th:classappend="${#fields.hasErrors('firstName')} ? is-invalid"/>
+                                                <label class="form-label" for="form3Example1"
+                                                       th:text="#{signup.first.name}"></label>
+                                                <div class="invalid-feedback">
+                                                    <span class="mr-1" th:each="error: ${#fields.errors('firstName')}"
+                                                          th:text="${error}"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4"
+                                             th:classappend="${#fields.hasErrors('lastName')} ? mb-5">
+                                            <div class="form-outline">
+                                                <input th:field="*{lastName}" type="text" id="form3Example2"
+                                                       class="form-control"
+                                                       th:classappend="${#fields.hasErrors('lastName')} ? is-invalid"/>
+                                                <label class="form-label" for="form3Example2"
+                                                       th:text="#{signup.last.name}"></label>
+                                                <div class="invalid-feedback">
+                                                    <span class="mr-1" th:each="error: ${#fields.errors('lastName')}"
+                                                          th:text="${error}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Email input -->
+                                    <div class="form-outline mb-4"
+                                         th:classappend="${#fields.hasErrors('email')} ? mb-5">
+                                        <input th:field="*{email}" type="email" id="form3Example3"
+                                               class="form-control"
+                                               th:classappend="${#fields.hasErrors('email')} ? is-invalid"/>
+                                        <label class="form-label" for="form3Example3" th:text="#{signup.email}"></label>
+                                        <div class="invalid-feedback">
+                                            <span class="mr-1" th:each="error: ${#fields.errors('email')}"
+                                                  th:text="${error}"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Password input -->
+                                    <div class="form-outline mb-4"
+                                         th:classappend="${#fields.hasErrors('password')} ? mb-10">
+                                        <input th:field="*{password}" type="password" id="form2Example22"
+                                               class="form-control" required
+                                               th:classappend="${#fields.hasErrors('password')} ? is-invalid"/>
+                                        <label class="form-label" for="form2Example22"
+                                               th:text="#{signup.password}"></label>
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}">
+                                            <ul>
+                                                <li th:text="#{input.helper.password1}"></li>
+                                                <li th:text="#{input.helper.password2}"></li>
+                                                <li th:text="#{input.helper.password3}"></li>
+                                                <li th:text="#{input.helper.password4}"></li>
+                                                <li th:text="#{input.helper.password5}"></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Role input -->
+                                    <div th:text="#{signup.authority}"></div>
+                                    <div class="btn-group mb-4">
+                                        <th:block
+                                                th:each="roleOpt, iterStat : ${T(com.example.classroom.enums.UserRole).values()}">
+                                            <input th:field="*{role}"
+                                                   th:value="${roleOpt}"
+                                                   th:classappend="${#fields.hasErrors('role')} ? is-invalid"
+                                                   type="radio" class="btn-check" name="options"
+                                                   th:id="'option' + ${iterStat.count}"
+                                                   autocomplete="off"/>
+                                            <label class="btn btn-secondary" th:for="'option' + ${iterStat.count}"
+                                                   th:text="${roleOpt.name}"></label>
+                                        </th:block>
+
+                                        <div class="invalid-feedback">
+                                            <span class="mr-1" th:each="error: ${#fields.errors('role')}"
+                                                  th:text="${error}"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center pt-1 mb-5 pb-1">
+                                        <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
+                                                type="submit" th:text="#{signup.button}">
+                                        </button>
+                                    </div>
+                                </form>
+                                <div class="d-flex align-items-center justify-content-center pb-4">
+                                    <p class="mb-0 me-2" th:text="#{signup.have.account}"></p>
+                                    <a type="button" class="btn btn-outline-danger" th:href="@{/sign-in}"
+                                       th:text="#{signin.button}"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/* About Us */-->
+                        <div th:replace="auth/elements :: about-us"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!--/* JS Scripts */-->
+<div th:replace="fragments/scripts :: scripts"></div>
+
+<!--/* Custom Script */-->
+<script type="text/javascript" th:src="@{/js/home-unauthorized.js}"></script>
+</body>
+</html>

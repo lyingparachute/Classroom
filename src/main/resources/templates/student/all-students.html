@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <header th:replace="fragments/header :: header"></header>
     <link rel="stylesheet" th:href="@{/css/modals.css}" type="text/css"/>
@@ -39,6 +39,7 @@
         <section class="mb-4">
             <div id="tableCard" class="card">
                 <div class="card-header py-4 title-bar">
+                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
                     <div class="page-title"
                          th:text="#{students.header}">
                     </div>
@@ -51,7 +52,8 @@
                           method="get"
                           id="studentForm">
                         <div class="row justify-content-end mb-1 mt-3">
-                            <div class="col-auto">
+                            <div sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
+                                 class="col-auto">
                                 <a id="btnAddItem"
                                    class="btn btn-outline-primary btn-lg"
                                    th:href="@{/dashboard/students/new}"
@@ -97,7 +99,8 @@
                                 <th th:text="#{teacher.table.status}"></th>
                                 <th th:text="#{teacher.table.title}"></th>
                                 <th th:text="#{student.table.teachers}"></th>
-                                <th class="text-center" th:text="#{button.actions}"/>
+                                <th class="text-center" th:text="#{button.actions}"
+                                    sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"/>
                             </tr>
                             </thead>
 
@@ -147,12 +150,17 @@
                                           th:text="#{status.active}"></span>
                                 </td>
                                 <td>
+                                    <div th:if="${student.fieldOfStudy == null}">
+                                        <span>Undefined</span>
+                                    </div>
+                                    <div th:unless="${student.fieldOfStudy == null}">
                                     <span th:unless="${student.fieldOfStudy.title == null}"
                                           th:text="${student.fieldOfStudy.title.fullTitle}"></span>
+                                    </div>
                                 </td>
 
                                 <td th:text="${student.teachers.size()}"/>
-                                <td>
+                                <td sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')">
                                     <div class="container">
                                         <div class="row justify-content-center align-items-center">
                                             <a type="button"
@@ -164,6 +172,7 @@
                                             </a>
                                             <a type="button"
                                                id="btnEdit"
+                                               sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
                                                class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                data-mdb-ripple-color="dark"
                                                th:href="@{/dashboard/students/edit/{id}(id=${student.id})}"
@@ -172,6 +181,7 @@
                                         </div>
                                         <div class="row justify-content-center align-items-center">
                                             <a type="button" id="btnDelete"
+                                               sec:authorize="hasRole('ROLE_ADMIN')"
                                                class="delBtn col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                data-mdb-ripple-color="dark"
                                                th:text="#{button.delete}"
@@ -257,7 +267,7 @@
 <!-- Delete modal -->
 <div th:replace="fragments/modals :: deleteModal"></div>
 <!-- JS Scripts -->
-<div th:replace="fragments/imports/scripts :: scripts"></div>
+<div th:replace="fragments/scripts :: scripts"></div>
 <!-- Custom script -->
 <script type="text/javascript" th:src="@{/js/students.js}"></script>
 </body>

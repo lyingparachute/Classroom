@@ -3,6 +3,7 @@ package com.example.classroom.dto;
 import com.example.classroom.model.Department;
 import com.example.classroom.model.Student;
 import com.example.classroom.model.Subject;
+import com.example.classroom.model.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,7 @@ public class TeacherDto {
     @NotEmpty(message = "{message.email.empty}")
     @Email(message = "{message.email.valid}")
     private String email;
+    private User userDetails;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Department department;

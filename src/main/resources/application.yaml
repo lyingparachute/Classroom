@@ -14,7 +14,7 @@ spring:
     properties:
       hibernate:
         hbm2ddl:
-          import_files: import/students.sql, import/teachers.sql, import/departments.sql, import/fieldsOfStudy.sql, import/subjects.sql, import/relations.sql
+          import_files: import/roles_and_privileges.sql, import/users.sql, import/students.sql, import/teachers.sql, import/departments.sql, import/fieldsOfStudy.sql, import/subjects.sql, import/relations.sql
     open-in-view: true
   jackson:
     serialization:

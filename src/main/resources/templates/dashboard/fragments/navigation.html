@@ -1,52 +1,67 @@
-<header id="navigation">
+<header id="navigation" xmlns:sec="http://www.w3.org/1999/xhtml">
     <!-- ======= Sidebar ======= -->
     <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
         <div class="position-sticky">
             <div class="list-group list-group-flush mx-3 mt-4">
                 <!--* Main Dashboard *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().equals('http://localhost:8080/dashboard')}" th:href="@{/dashboard}"
+                <a th:if="${#httpServletRequest.requestURL.toString().equals('http://localhost:8080/dashboard')}"
+                   th:href="@{/dashboard}"
                    class="list-group-item list-group-item-action py-2 ripple active" aria-current="true">
-                    <i class="fas fa-tachometer-alt fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item1}"></span>
+                    <i class="fas fa-tachometer-alt fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item1}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().equals('http://localhost:8080/dashboard')}" th:href="@{/dashboard}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().equals('http://localhost:8080/dashboard')}"
+                   th:href="@{/dashboard}"
                    class="list-group-item list-group-item-action py-2 ripple" >
                     <i class="fas fa-tachometer-alt fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item1}"></span>
                 </a>
                 <!--* Students *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('students')}" th:href="@{/dashboard/students}"
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('students')}"
+                   th:href="@{/dashboard/students}"
+                   sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"
                    class="list-group-item list-group-item-action py-2 ripple active" aria-current="true"><i
                         class="fas fa-users fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item2}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('students')}" th:href="@{/dashboard/students}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('students')}"
+                   th:href="@{/dashboard/students}"
+                   sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"
                    class="list-group-item list-group-item-action py-2 ripple"><i
                         class="fas fa-users fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item2}"></span>
                 </a>
                 <!--* Teachers *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('teachers')}" th:href="@{/dashboard/teachers}"
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('teachers')}"
+                   th:href="@{/dashboard/teachers}"
                    class="list-group-item list-group-item-action py-2 ripple active">
                     <i class="fas fa-user fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item3}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('teachers')}" th:href="@{/dashboard/teachers}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('teachers')}"
+                   th:href="@{/dashboard/teachers}"
                    class="list-group-item list-group-item-action py-2 ripple">
                     <i class="fas fa-user fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item3}"></span>
                 </a>
                 <!--* Subjects *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('subjects')}" th:href="@{/dashboard/subjects}"
-                   class="list-group-item list-group-item-action py-2 ripple active">
-                    <i class="fas fa-microscope fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item6}"></span>
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('subjects') && !#httpServletRequest.requestURL.toString().contains('fields-of-study/')}"
+                   th:href="@{/dashboard/subjects}" class="list-group-item list-group-item-action py-2 ripple active">
+                    <i class="fas fa-microscope fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item6}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('subjects')}" th:href="@{/dashboard/subjects}"
-                   class="list-group-item list-group-item-action py-2 ripple">
-                    <i class="fas fa-microscope fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item6}"></span>
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('subjects')&& !#httpServletRequest.requestURL.toString().contains('fields-of-study/')}"
+                   th:href="@{/dashboard/subjects}" class="list-group-item list-group-item-action py-2 ripple">
+                    <i class="fas fa-microscope fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item6}"></span>
                 </a>
                 <!--* Fields of Study *-->
-                <a th:if="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}" th:href="@{/dashboard/fields-of-study}"
+                <a th:if="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}"
+                   th:href="@{/dashboard/fields-of-study}"
                    class="list-group-item list-group-item-action py-2 ripple active"><i
-                        class="fas fa-graduation-cap fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
+                        class="fas fa-graduation-cap fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
-                <a th:unless="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}" th:href="@{/dashboard/fields-of-study}"
+                <a th:unless="${#httpServletRequest.requestURL.toString().contains('fields-of-study')}"
+                   th:href="@{/dashboard/fields-of-study}"
                    class="list-group-item list-group-item-action py-2 ripple"><i
-                        class="fas fa-graduation-cap  fa-fw me-3"></i><span th:text="#{dashboard.navigation.sidebar.item7}"></span>
+                        class="fas fa-graduation-cap  fa-fw me-3"></i><span
+                        th:text="#{dashboard.navigation.sidebar.item7}"></span>
                 </a>
                 <!--* Facilities *-->
                 <a th:href="@{/dashboard/departments}"
@@ -129,7 +144,7 @@
             </button>
 
             <!-- Brand -->
-            <a class="navbar-brand" th:href="@{/dashboard}">
+            <a class="navbar-brand" th:href="@{/}">
                 <span th:text="#{website.title}"></span>
             </a>
             <!-- Search form -->
@@ -200,12 +215,21 @@
                              alt="" loading="lazy"/>
                     </a>
                     <ul aria-labelledby="avatar" class="dropdown-menu dropdown-menu-end">
+                        <li class="dropdown-item"><span th:text="#{dashboard.navigation.avatar.profile.name}"></span>
+                            <span class="fw-bold"
+                                  th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}">
+                            </span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider"/>
+                        </li>
                         <li><a class="dropdown-item" th:href="@{/dashboard/profile}"
                                th:text="#{dashboard.navigation.avatar.profile}"></a></li>
                         <li><a class="dropdown-item" th:href="@{/dashboard/settings}"
                                th:text="#{dashboard.navigation.avatar.settings}"></a>
                         </li>
-                        <li><a class="dropdown-item" th:href="@{/logout}"
+                        <li><a class="dropdown-item"
+                               data-bs-toggle="modal" data-bs-target="#signOutModal"
                                th:text="#{dashboard.navigation.avatar.logout}"></a></li>
                     </ul>
                 </li>
@@ -213,4 +237,5 @@
         </div>
         <!-- Container wrapper -->
     </nav>
+    <div th:replace="auth/elements :: sign-out-modal"></div>
 </header>

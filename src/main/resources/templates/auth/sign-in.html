@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <header th:replace="fragments/header :: header"></header>
+    <!--/* Custom CSS */-->
+    <link rel="stylesheet" th:href="@{/css/login.css}" type="text/css"/>
+    <!--/* Custom CSS */-->
+    <link rel="stylesheet" th:href="@{/css/home-unauthorized.css}" type="text/css"/>
+</head>
+<body>
+
+<div th:replace="auth/elements :: navBar"></div>
+
+<section class="h-100 gradient-form" style="background-color: #f6f9fd;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-5 mx-md-4">
+
+                                <div class="text-center">
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                                         style="width: 185px;" alt="logo">
+                                    <h4 class="mt-1 mb-5 pb-1" th:text="#{signin.header}"></h4>
+                                </div>
+
+                                <!--Alert Section -->
+                                <section th:if="${createSuccess}">
+                                    <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+                                        <i class="fas fa-check-circle"></i>
+                                        <strong class="mx-1" th:text="#{msg.success}"></strong>
+                                        <span th:text="#{fieldOfStudy.success.msg1}"></span>
+                                        <span th:text="#{alert.success.msg2}"></span>
+                                        <strong class="mx-1" th:text="${createSuccess}"></strong>
+                                        <span th:text="#{alert.success.msg3}"></span>
+                                        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+                                    </div>
+                                </section>
+                                <!--End Alert Section -->
+
+                                <form class="form-sign-in" th:action="@{/api/sign-in}" method="post">
+                                    <p th:text="#{signin.login}"></p>
+
+                                    <div th:if="${param.error}" th:text="#{signin.invalid.credentials}"
+                                         class="alert alert-danger">
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="text" id="username" name="username" class="form-control" required/>
+                                        <label class="form-label" for="username" th:text="#{signin.username}"></label>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="password" id="password" name="password" class="form-control"
+                                               required/>
+                                        <label class="form-label" for="password" th:text="#{signin.password}"></label>
+                                    </div>
+                                    <div class="text-center pt-1 mb-5 pb-1">
+                                        <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
+                                                type="submit" th:text="#{signin.button}">
+                                        </button>
+                                        <a class="text-muted" th:href="@{/password-reset}"
+                                           th:text="#{signin.forgot}"></a>
+                                    </div>
+                                </form>
+
+                                <div class="d-flex align-items-center justify-content-center pb-4">
+                                    <p class="mb-0 me-2" th:text="#{signin.no.account}"></p>
+                                    <a type="button" class="btn btn-outline-danger" th:href="@{/sign-up}"
+                                       th:text="#{signin.create.account}"></a>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--/* About Us */-->
+                        <div th:replace="auth/elements :: about-us"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!--/* JS Scripts */-->
+<div th:replace="fragments/scripts :: scripts"></div>
+
+<!--/* Custom Script */-->
+<script type="text/javascript" th:src="@{/js/home-unauthorized.js}"></script>
+</body>
+</html>

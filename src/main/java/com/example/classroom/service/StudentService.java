@@ -107,6 +107,8 @@ public class StudentService {
     }
 
     private void assignTeachers(final Student student) {
+        if (student.getFieldOfStudy() == null)
+            return;
         student.getFieldOfStudy().getSubjects().stream()
                 .map(Subject::getTeachers)
                 .flatMap(Set::stream)

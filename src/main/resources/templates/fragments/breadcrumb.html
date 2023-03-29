@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<nav class="d-flex" th:fragment="breadcrumb">
+    <h6 class="mb-0">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li th:each="crumb : ${crumbs}" class="breadcrumb-item" th:classappend="${crumb.last ? 'active' : ''}">
+                    <a class="text-reset" th:if="${!crumb.last}" th:href="${crumb.url}" th:text="${crumb.label}"></a>
+                    <span th:if="${crumb.last}"> <u th:text="${crumb.label}"></u></span>
+                </li>
+            </ol>
+        </nav>
+    </h6>
+</nav>
+
+</body>
+</html>

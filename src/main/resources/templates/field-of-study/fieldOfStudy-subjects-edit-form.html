@@ -12,6 +12,7 @@
         <section class="mb-4">
             <div class="card" id="itemCard">
                 <div class="card-header py-4 title-bar">
+                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
                     <div class="page-title"
                          th:text="#{fieldOfStudy.edit.card.header}">
                     </div>
@@ -52,6 +53,7 @@
         </section>
     </div>
 </main>
-
+<!-- JS Scripts -->
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>
