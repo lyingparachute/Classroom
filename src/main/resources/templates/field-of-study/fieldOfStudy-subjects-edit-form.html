@@ -36,17 +36,7 @@
                         <div th:replace="~{field-of-study/elements :: edit-subjects}"></div>
 
                         <!-- ======= Buttons ======= -->
-                        <div class="row my-2 justify-content-end" th:fragment="EDITcancelSubmitBtn">
-                            <div class="col-auto">
-                                <a class="btn btn-secondary"
-                                   th:href="@{/dashboard/fields-of-study/{id}/subjects(id=${fieldOfStudy.id})}">
-                                    <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
-                            </div>
-                            <div class="col-auto">
-                                <button class="btn btn-primary" name="add" type="submit">
-                                    <i class="fas fa-check mr-2"></i><span th:text="#{button.submit}"></span></button>
-                            </div>
-                        </div>
+                        <div th:replace="~{field-of-study/buttons :: SubjectsEDITcancelSubmitBtn}"></div>
                     </form>
                 </div>
             </div>
