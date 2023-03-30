@@ -50,12 +50,11 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
-                                .logoutUrl(SIGN_OUT_API)
-                                .addLogoutHandler(logoutHandler)
-//                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-                                .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID")
-                                .logoutSuccessUrl(HOME_PAGE)
+                        .logoutUrl(SIGN_OUT_API)
+                        .addLogoutHandler(logoutHandler)
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessUrl(HOME_PAGE)
                 );
 
         return http.build();
