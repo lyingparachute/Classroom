@@ -5,6 +5,7 @@ import com.example.classroom.exception.DepartmentNotFoundException;
 import com.example.classroom.model.Department;
 import com.example.classroom.model.FieldOfStudy;
 import com.example.classroom.repository.DepartmentRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -13,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;

@@ -5,6 +5,8 @@ import com.example.classroom.dto.StudentDto;
 import com.example.classroom.service.FieldOfStudyService;
 import com.example.classroom.service.StudentService;
 import com.example.classroom.service.TeacherService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
@@ -14,8 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller

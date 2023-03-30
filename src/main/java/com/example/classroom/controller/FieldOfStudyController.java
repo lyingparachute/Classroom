@@ -8,6 +8,8 @@ import com.example.classroom.fileupload.FileUploadUtil;
 import com.example.classroom.service.DepartmentService;
 import com.example.classroom.service.FieldOfStudyService;
 import com.example.classroom.service.SubjectService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -18,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;

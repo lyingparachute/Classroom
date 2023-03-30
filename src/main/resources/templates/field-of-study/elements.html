@@ -236,7 +236,7 @@
     <th:block th:each="fieldOpt, iterStat2 : ${firstFieldsOfStudy}">
         <div class="col">
             <!-- ======= Item Card ======= -->
-            <div th:replace="field-of-study/elements :: field-of-study-item-card"></div>
+            <div th:replace="~{field-of-study/elements :: field-of-study-item-card}"></div>
 
         </div>
     </th:block>
@@ -248,7 +248,7 @@
     <th:block th:each="fieldOpt, iterStat2 : ${secondFieldsOfStudy}">
         <div class="col">
             <!-- ======= Item Card ======= -->
-            <div th:replace="field-of-study/elements :: field-of-study-item-card"></div>
+            <div th:replace="~{field-of-study/elements :: field-of-study-item-card}"></div>
         </div>
     </th:block>
 </div>

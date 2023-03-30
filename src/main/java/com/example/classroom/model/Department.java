@@ -1,11 +1,11 @@
 package com.example.classroom.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -69,7 +69,7 @@ public class Department {
     /**
      * Add new Field Of Study. The method keeps relationships consistency:
      * * this Department is added to departments
-     *   on the Field Of Study side
+     * on the Field Of Study side
      */
     public void addFieldOfStudy(FieldOfStudy fieldOfStudy) {
         //prevent endless loop
@@ -82,7 +82,7 @@ public class Department {
     /**
      * Remove Teacher. The method keeps relationships consistency:
      * * this Department is removed from departments
-     *   on the Field Of Study side
+     * on the Field Of Study side
      */
     public void removeFieldOfStudy(FieldOfStudy fieldOfStudy) {
         //prevent endless loop

@@ -26,6 +26,19 @@
     </div>
 </div>
 
+<!-- ======= Cancel Submit Button for EDIT Subjects method ======= -->
+<div class="row my-2 justify-content-end" th:fragment="SubjectsEDITcancelSubmitBtn">
+    <div class="col-auto">
+        <a class="btn btn-secondary btn-rounded"
+           th:href="@{/dashboard/fields-of-study/{id}/subjects(id=${fieldOfStudy.id})}">
+            <i class="fa fa-times-circle mr-1"></i><span th:text="#{button.cancel}"></span></a>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary btn-rounded" name="add" type="submit">
+            <i class="fas fa-check mr-1"></i><span th:text="#{button.submit}"></span></button>
+    </div>
+</div>
+
 
 <!-- ======= Go Back Button ======= -->
 <div class="row my-2 justify-content-center" id="goBackButton" th:fragment="btn-go-home">

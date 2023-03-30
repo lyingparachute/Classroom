@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
     <!--/* Custom CSS */-->
     <link rel="stylesheet" th:href="@{/css/login.css}" type="text/css"/>
 </head>
 <body>
-<div th:replace="auth/elements :: navBar"></div>
+<div th:replace="~{auth/elements :: navBar}"></div>
 
 <section class="h-100 gradient-form" style="background-color: #f6f9fd;">
     <div class="container py-5 h-100">
@@ -128,7 +128,7 @@
                             </div>
                         </div>
                         <!--/* About Us */-->
-                        <div th:replace="auth/elements :: about-us"></div>
+                        <div th:replace="~{auth/elements :: about-us}"></div>
                     </div>
                 </div>
             </div>
@@ -138,7 +138,7 @@
 
 
 <!--/* JS Scripts */-->
-<div th:replace="fragments/scripts :: scripts"></div>
+<div th:replace="~{fragments/scripts :: scripts}"></div>
 
 <!--/* Custom Script */-->
 <script type="text/javascript" th:src="@{/js/home-unauthorized.js}"></script>

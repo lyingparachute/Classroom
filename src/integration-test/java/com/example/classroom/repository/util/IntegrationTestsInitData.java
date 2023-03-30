@@ -6,10 +6,10 @@ import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
 import com.example.classroom.model.*;
 import com.example.classroom.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

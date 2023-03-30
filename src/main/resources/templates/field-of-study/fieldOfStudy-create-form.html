@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
 </head>
 <body>
 <!-- ======= Navigation ======= -->
-<div th:replace="dashboard/fragments/navigation :: #navigation"></div>
+<div th:replace="~{dashboard/fragments/navigation :: #navigation}"></div>
 
 <main>
     <div class="container pt-4">
         <section class="mb-4">
             <div id="itemCard" class="card">
                 <div class="card-header py-4 title-bar">
-                    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
+                    <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
                     <div class="page-title"
                          th:text="#{fieldOfStudy.new}">
                     </div>
@@ -24,10 +24,10 @@
                           enctype="multipart/form-data"
                           th:method="post">
                         <!-- ======= FieldOfStudy Form ======= -->
-                        <div th:replace="field-of-study/elements :: item-form"></div>
+                        <div th:replace="~{field-of-study/elements :: item-form}"></div>
 
                         <!-- ======= Buttons ======= -->
-                        <div th:replace="field-of-study/buttons :: CREATEcancelSubmitBtn"></div>
+                        <div th:replace="~{field-of-study/buttons :: CREATEcancelSubmitBtn}"></div>
                     </form>
                 </div>
 
@@ -37,6 +37,6 @@
 </main>
 
 <!-- JS Scripts -->
-<div th:replace="fragments/scripts :: scripts"></div>
+<div th:replace="~{fragments/scripts :: scripts}"></div>
 </body>
 </html>

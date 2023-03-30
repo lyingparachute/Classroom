@@ -3,6 +3,7 @@ package com.example.classroom.controller;
 import com.example.classroom.model.Student;
 import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,7 +69,7 @@ class StudentGetControllerIntegrationTest {
         assertThat(contentAsString)
                 .contains("                <div class=\"card-header py-3 bg-secondary bg-gradient bg-opacity-25\">\n" +
                         "                    <h3 class=\"mb-0 text-center\">\n" +
-                        "                        <strong>Viewing Student with ID: "  +  student.getId() + "</strong>");
+                        "                        <strong>Viewing Student with ID: " + student.getId() + "</strong>");
         assertThat(contentAsString)
                 .contains("                        <li class=\"list-group-item\">ID number: " + student.getId() + "</li>\n" +
                         "                        <li class=\"list-group-item\">First Name: " + student.getFirstName() + "</li>\n" +
@@ -114,13 +114,13 @@ class StudentGetControllerIntegrationTest {
         //then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
-                .contains("                             <td>" + student1.getFirstName()+ "</td>\n" +
+                .contains("                             <td>" + student1.getFirstName() + "</td>\n" +
                         "                                <td>" + student1.getLastName() + "</td>\n" +
                         "                                <td>" + student1.getAge() + "</td>\n" +
                         "                                <td>" + student1.getEmail() + "</td>\n" +
                         "                                <td>" + student1.getTeachers().size() + "</td>\n");
         assertThat(contentAsString)
-                .contains("                             <td>" + student2.getFirstName()+ "</td>\n" +
+                .contains("                             <td>" + student2.getFirstName() + "</td>\n" +
                         "                                <td>" + student2.getLastName() + "</td>\n" +
                         "                                <td>" + student2.getAge() + "</td>\n" +
                         "                                <td>" + student2.getEmail() + "</td>\n" +
@@ -146,19 +146,19 @@ class StudentGetControllerIntegrationTest {
         String contentAsString = mvcResult.getResponse().getContentAsString();
         // used sorting dir by lastName ascending, so student2 will be last - Weronika
         assertThat(contentAsString)
-                .doesNotContain("                             <td>" + student1.getFirstName()+ "</td>\n" +
+                .doesNotContain("                             <td>" + student1.getFirstName() + "</td>\n" +
                         "                                <td>" + student1.getLastName() + "</td>\n" +
                         "                                <td>" + student1.getAge() + "</td>\n" +
                         "                                <td>" + student1.getEmail() + "</td>\n" +
                         "                                <td>" + student1.getTeachers().size() + "</td>\n");
         assertThat(contentAsString)
-                .contains("                             <td>" + student2.getFirstName()+ "</td>\n" +
+                .contains("                             <td>" + student2.getFirstName() + "</td>\n" +
                         "                                <td>" + student2.getLastName() + "</td>\n" +
                         "                                <td>" + student2.getAge() + "</td>\n" +
                         "                                <td>" + student2.getEmail() + "</td>\n" +
                         "                                <td>" + student2.getTeachers().size() + "</td>\n");
         assertThat(contentAsString)
-                .doesNotContain("                             <td>" + student3.getFirstName()+ "</td>\n" +
+                .doesNotContain("                             <td>" + student3.getFirstName() + "</td>\n" +
                         "                                <td>" + student3.getLastName() + "</td>\n" +
                         "                                <td>" + student3.getAge() + "</td>\n" +
                         "                                <td>" + student3.getEmail() + "</td>\n" +
@@ -195,19 +195,19 @@ class StudentGetControllerIntegrationTest {
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
                 .doesNotContainIgnoringCase(
-                        "                                <td>" + student1.getFirstName()+ "</td>\n" +
-                        "                                <td>" + student1.getLastName() + "</td>\n" +
-                        "                                <td>" + student1.getAge() + "</td>\n" +
-                        "                                <td>" + student1.getEmail() + "</td>\n" +
-                        "                                <td>" + student1.getTeachers().size() + "</td>\n");
+                        "                                <td>" + student1.getFirstName() + "</td>\n" +
+                                "                                <td>" + student1.getLastName() + "</td>\n" +
+                                "                                <td>" + student1.getAge() + "</td>\n" +
+                                "                                <td>" + student1.getEmail() + "</td>\n" +
+                                "                                <td>" + student1.getTeachers().size() + "</td>\n");
         assertThat(contentAsString)
-                .contains("                                <td>" + student2.getFirstName()+ "</td>\n" +
+                .contains("                                <td>" + student2.getFirstName() + "</td>\n" +
                         "                                <td>" + student2.getLastName() + "</td>\n" +
                         "                                <td>" + student2.getAge() + "</td>\n" +
                         "                                <td>" + student2.getEmail() + "</td>\n" +
                         "                                <td>" + student2.getTeachers().size() + "</td>\n");
         assertThat(contentAsString)
-                .contains("                                <td>" + student3.getFirstName()+ "</td>\n" +
+                .contains("                                <td>" + student3.getFirstName() + "</td>\n" +
                         "                                <td>" + student3.getLastName() + "</td>\n" +
                         "                                <td>" + student3.getAge() + "</td>\n" +
                         "                                <td>" + student3.getEmail() + "</td>\n" +

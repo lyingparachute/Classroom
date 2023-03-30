@@ -21,10 +21,12 @@ public class BreadcrumbService {
         StringBuilder path = new StringBuilder();
 
         for (int i = 0; i < segments.length; i++) {
-            path.append(segments[i]).append(SEPARATOR);
-            String label = formatEndpointSegment(segments[i]);
-
             if (segments[i].isEmpty()) continue;
+
+            if (i > 0) path.append(SEPARATOR);
+            path.append(segments[i]);
+
+            String label = formatEndpointSegment(segments[i]);
 
             if (isEditEndpoint(segments, i)) {
                 addEditEndpointBreadcrumb(breadcrumbs, segments, path, i);
@@ -49,7 +51,7 @@ public class BreadcrumbService {
 
     private static void addEditEndpointBreadcrumb(List<Breadcrumb> breadcrumbs, String[] segments, StringBuilder path, int i) {
         String id = segments[i + 1];
-        Breadcrumb breadcrumb = new Breadcrumb("Edit / " + id, path + id);
+        Breadcrumb breadcrumb = new Breadcrumb("Edit  /  " + id, path + SEPARATOR + id);
         checkIfSegmentIsLast(segments, ++i, breadcrumb);
         breadcrumbs.add(breadcrumb);
     }
