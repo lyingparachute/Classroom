@@ -3,13 +3,13 @@ package com.example.classroom.dto;
 import com.example.classroom.model.FieldOfStudy;
 import com.example.classroom.model.Teacher;
 import com.example.classroom.model.User;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 

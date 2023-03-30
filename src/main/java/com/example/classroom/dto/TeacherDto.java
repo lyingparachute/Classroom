@@ -4,13 +4,13 @@ import com.example.classroom.model.Department;
 import com.example.classroom.model.Student;
 import com.example.classroom.model.Subject;
 import com.example.classroom.model.User;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 

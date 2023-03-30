@@ -2,12 +2,12 @@ package com.example.classroom.api;
 
 import com.example.classroom.dto.DepartmentDto;
 import com.example.classroom.service.DepartmentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController

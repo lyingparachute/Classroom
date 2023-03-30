@@ -18,7 +18,7 @@
         <spring-boot-starter.version>3.0.5</spring-boot-starter.version>
         <spring-security.version>6.0.2</spring-security.version>
         <thymeleaf.version>3.1.1.RELEASE</thymeleaf.version>
-        <jakarta.validation.version>2.0.2</jakarta.validation.version>
+        <jakarta.validation.version>3.0.2</jakarta.validation.version>
         <passay.version>1.0</passay.version>
         <jwt.version>0.11.5</jwt.version>
         <mysql-connector.version>8.0.32</mysql-connector.version>

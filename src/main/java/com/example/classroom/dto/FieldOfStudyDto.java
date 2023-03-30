@@ -6,14 +6,14 @@ import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.model.Department;
 import com.example.classroom.model.Student;
 import com.example.classroom.model.Subject;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
