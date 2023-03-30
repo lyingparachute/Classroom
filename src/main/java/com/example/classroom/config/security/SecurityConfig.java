@@ -4,6 +4,7 @@ import com.example.classroom.config.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,10 +34,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 //TODO - enable csrf
-//                .csrf().disable()
+                .csrf().disable()
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
-                                HOME_PAGE, SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, API_AUTH_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.POST, API_AUTH_ENDPOINTS).permitAll()
+                        .requestMatchers(HOME_PAGE, "/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
+                                SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
