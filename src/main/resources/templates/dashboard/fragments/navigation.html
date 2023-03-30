@@ -4,13 +4,13 @@
         <div class="position-sticky">
             <div class="list-group list-group-flush mx-3 mt-4">
                 <!--* Main Dashboard *-->
-                <a th:if="${#ctx.springRequestContext.requestUri.toString().equals('http://localhost:8080/dashboard')}"
+                <a th:if="${#ctx.springRequestContext.requestUri.toString().equals('/dashboard')}"
                    th:href="@{/dashboard}"
                    class="list-group-item list-group-item-action py-2 ripple active" aria-current="true">
                     <i class="fa-solid fa-gauge-high fa-fw me-3"></i><span
                         th:text="#{dashboard.navigation.sidebar.item1}"></span>
                 </a>
-                <a th:unless="${#ctx.springRequestContext.requestUri.toString().equals('http://localhost:8080/dashboard')}"
+                <a th:unless="${#ctx.springRequestContext.requestUri.toString().equals('/dashboard')}"
                    th:href="@{/dashboard}"
                    class="list-group-item list-group-item-action py-2 ripple">
                     <i class="fa-solid fa-gauge-high fa-fw me-3"></i><span
