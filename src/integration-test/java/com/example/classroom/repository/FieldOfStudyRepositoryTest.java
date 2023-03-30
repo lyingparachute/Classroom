@@ -6,6 +6,7 @@ import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
 import com.example.classroom.model.FieldOfStudy;
 import com.example.classroom.model.Subject;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;

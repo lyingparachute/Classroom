@@ -6,6 +6,7 @@ import com.example.classroom.model.Teacher;
 import com.example.classroom.repository.StudentRepository;
 import com.example.classroom.repository.TeacherRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
+import jakarta.transaction.Transactional;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
