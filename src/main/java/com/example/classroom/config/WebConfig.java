@@ -11,4 +11,5 @@ public class WebConfig implements WebMvcConfigurer {
     public void configurePathMatch(PathMatchConfigurer configurer) {
         configurer.setUseTrailingSlashMatch(true);
     }
+    // TODO - configure explicit redirects/rewrites through a proxy or Servlet/web filter
 }
