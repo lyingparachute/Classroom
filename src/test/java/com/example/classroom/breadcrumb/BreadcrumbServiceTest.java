@@ -32,13 +32,14 @@ class BreadcrumbServiceTest {
             // Then
             assertThat(actualBreadcrumbs).extracting(
                     Breadcrumb::getLabel,
-                    Breadcrumb::getUrl
+                    Breadcrumb::getUrl,
+                    Breadcrumb::isLast
             ).contains(
-                    tuple("Classroom", "/"),
-                    tuple("Dashboard", "dashboard"),
-                    tuple("Students", "dashboard/students"),
-                    tuple("12", "dashboard/students/12"),
-                    tuple("Subjects", "dashboard/students/12/subjects")
+                    tuple("Classroom", "/", false),
+                    tuple("Dashboard", "dashboard", false),
+                    tuple("Students", "dashboard/students", false),
+                    tuple("12", "dashboard/students/12", false),
+                    tuple("Subjects", "dashboard/students/12/subjects", true)
             );
         }
 
@@ -53,12 +54,13 @@ class BreadcrumbServiceTest {
             // Then
             assertThat(actualBreadcrumbs).extracting(
                     Breadcrumb::getLabel,
-                    Breadcrumb::getUrl
+                    Breadcrumb::getUrl,
+                    Breadcrumb::isLast
             ).contains(
-                    tuple("Classroom", "/"),
-                    tuple("Dashboard", "dashboard"),
-                    tuple("Students", "dashboard/students"),
-                    tuple("Edit  /  12", "dashboard/students/edit/12")
+                    tuple("Classroom", "/", false),
+                    tuple("Dashboard", "dashboard", false),
+                    tuple("Students", "dashboard/students", false),
+                    tuple("Edit  /  12", "dashboard/students/edit/12", true)
             );
         }
 
