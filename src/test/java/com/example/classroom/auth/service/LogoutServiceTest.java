@@ -4,6 +4,7 @@ import com.example.classroom.token.Token;
 import com.example.classroom.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,17 +28,26 @@ class LogoutServiceTest {
     @Mock
     TokenRepository tokenRepository;
 
+    @Mock
+    HttpServletRequest request = mock(HttpServletRequest.class);
+
+    @Mock
+    HttpServletResponse response = mock(HttpServletResponse.class);
+
+    @Mock
+    Authentication authentication = mock(Authentication.class);
+
+    @BeforeEach
+    void setUp() {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
     @Nested
     class Logout {
 
         @Test
         void makesTokenInvalid_givenProperRequest() {
             // Given
-            HttpServletRequest request = mock(HttpServletRequest.class);
-            HttpServletResponse response = mock(HttpServletResponse.class);
-
-            Authentication authentication = mock(Authentication.class);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = "jwt-token";
             Token storedToken = Token.builder()
                     .token(jwt)
@@ -59,13 +69,6 @@ class LogoutServiceTest {
 
         @Test
         void doesNothing_whenRequestHeader_isNull() {
-            // Given
-            HttpServletRequest request = mock(HttpServletRequest.class);
-            HttpServletResponse response = mock(HttpServletResponse.class);
-
-            Authentication authentication = mock(Authentication.class);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
             // When
             when(request.getHeader("Authorization")).thenReturn(null);
             service.logout(request, response, authentication);
@@ -79,11 +82,6 @@ class LogoutServiceTest {
         @Test
         void doesNothing_whenRequestHeader_doesNotStartWithBearer() {
             // Given
-            HttpServletRequest request = mock(HttpServletRequest.class);
-            HttpServletResponse response = mock(HttpServletResponse.class);
-
-            Authentication authentication = mock(Authentication.class);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = "jwt-token";
 
             // When
@@ -99,17 +97,7 @@ class LogoutServiceTest {
         @Test
         void doesNothing_whenToken_isNull() {
             // Given
-            HttpServletRequest request = mock(HttpServletRequest.class);
-            HttpServletResponse response = mock(HttpServletResponse.class);
-
-            Authentication authentication = mock(Authentication.class);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = "jwt-token";
-            Token storedToken = Token.builder()
-                    .token(jwt)
-                    .expired(false)
-                    .revoked(false)
-                    .build();
 
             // When
             when(request.getHeader("Authorization")).thenReturn("Bearer " + jwt);
