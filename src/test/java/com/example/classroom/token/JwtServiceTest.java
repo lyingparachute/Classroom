@@ -1,4 +1,4 @@
-package com.example.classroom.config.jwt;
+package com.example.classroom.token;
 
 import com.example.classroom.user.User;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -17,8 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
 
-import static com.example.classroom.config.jwt.JwtService.SECRET_KEY;
-import static com.example.classroom.config.jwt.JwtService.TOKEN_EXPIRATION_TIME;
+import static com.example.classroom.token.JwtService.SECRET_KEY;
+import static com.example.classroom.token.JwtService.TOKEN_EXPIRATION_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
@@ -41,7 +41,7 @@ class JwtServiceTest {
     }
 
     @Nested
-    class extractUsername {
+    class ExtractUsername {
         @Test
         void returnsUsername_givenValidToken() {
             // Given

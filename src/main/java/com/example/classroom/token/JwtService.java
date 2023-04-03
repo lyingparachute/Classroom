@@ -1,4 +1,4 @@
-package com.example.classroom.config.jwt;
+package com.example.classroom.token;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -45,7 +45,7 @@ public class JwtService {
                 .compact();
     }
 
-    boolean isTokenValid(String token, UserDetails userDetails) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
