@@ -41,7 +41,7 @@ public class DepartmentService {
         return mapper.map(department, DepartmentDto.class);
     }
 
-    List<DepartmentDto> fetchAll() {
+    public List<DepartmentDto> fetchAll() {
         List<Department> departments = repository.findAll();
         return departments.stream().map(
                 department -> mapper.map(department, DepartmentDto.class)).toList();
