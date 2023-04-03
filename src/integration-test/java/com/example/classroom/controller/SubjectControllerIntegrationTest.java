@@ -1,7 +1,7 @@
 package com.example.classroom.controller;
 
-import com.example.classroom.repository.SubjectRepository;
-import com.example.classroom.repository.TeacherRepository;
+import com.example.classroom.subject.SubjectRepository;
+import com.example.classroom.teacher.TeacherRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;

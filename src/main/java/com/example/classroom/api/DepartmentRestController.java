@@ -1,7 +1,7 @@
 package com.example.classroom.api;
 
-import com.example.classroom.dto.DepartmentDto;
-import com.example.classroom.service.DepartmentService;
+import com.example.classroom.department.DepartmentDto;
+import com.example.classroom.department.DepartmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

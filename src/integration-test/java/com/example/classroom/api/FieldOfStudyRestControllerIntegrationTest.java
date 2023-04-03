@@ -1,17 +1,17 @@
 package com.example.classroom.api;
 
-import com.example.classroom.dto.FieldOfStudyDto;
+import com.example.classroom.fieldOfStudy.FieldOfStudyDto;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
-import com.example.classroom.model.Department;
-import com.example.classroom.model.FieldOfStudy;
-import com.example.classroom.model.Student;
-import com.example.classroom.model.Subject;
-import com.example.classroom.repository.DepartmentRepository;
-import com.example.classroom.repository.FieldOfStudyRepository;
-import com.example.classroom.repository.StudentRepository;
-import com.example.classroom.repository.SubjectRepository;
+import com.example.classroom.department.Department;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.student.Student;
+import com.example.classroom.subject.Subject;
+import com.example.classroom.department.DepartmentRepository;
+import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
+import com.example.classroom.student.StudentRepository;
+import com.example.classroom.subject.SubjectRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
 import jakarta.transaction.Transactional;
 import org.assertj.core.groups.Tuple;

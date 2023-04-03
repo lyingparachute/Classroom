@@ -1,10 +1,10 @@
 package com.example.classroom.controller;
 
-import com.example.classroom.dto.TeacherDto;
-import com.example.classroom.model.Student;
-import com.example.classroom.model.Teacher;
-import com.example.classroom.repository.StudentRepository;
-import com.example.classroom.repository.TeacherRepository;
+import com.example.classroom.teacher.TeacherDto;
+import com.example.classroom.student.Student;
+import com.example.classroom.teacher.Teacher;
+import com.example.classroom.student.StudentRepository;
+import com.example.classroom.teacher.TeacherRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
 import jakarta.transaction.Transactional;
 import org.assertj.core.groups.Tuple;

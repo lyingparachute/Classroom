@@ -1,6 +1,7 @@
 package com.example.classroom.repository;
 
-import com.example.classroom.model.Department;
+import com.example.classroom.department.DepartmentRepository;
+import com.example.classroom.department.Department;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

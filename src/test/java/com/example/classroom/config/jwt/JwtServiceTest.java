@@ -1,6 +1,6 @@
 package com.example.classroom.config.jwt;
 
-import com.example.classroom.model.User;
+import com.example.classroom.user.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

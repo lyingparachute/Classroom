@@ -1,8 +1,8 @@
 package com.example.classroom.controller;
 
-import com.example.classroom.model.Department;
-import com.example.classroom.model.FieldOfStudy;
-import com.example.classroom.model.Teacher;
+import com.example.classroom.department.Department;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.teacher.Teacher;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

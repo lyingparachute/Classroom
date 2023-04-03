@@ -1,12 +1,12 @@
 package com.example.classroom.api;
 
-import com.example.classroom.dto.StudentDto;
-import com.example.classroom.model.FieldOfStudy;
-import com.example.classroom.model.Student;
-import com.example.classroom.model.Teacher;
-import com.example.classroom.repository.FieldOfStudyRepository;
-import com.example.classroom.repository.StudentRepository;
-import com.example.classroom.repository.TeacherRepository;
+import com.example.classroom.student.StudentDto;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.student.Student;
+import com.example.classroom.teacher.Teacher;
+import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
+import com.example.classroom.student.StudentRepository;
+import com.example.classroom.teacher.TeacherRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;

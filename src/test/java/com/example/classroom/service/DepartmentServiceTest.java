@@ -1,11 +1,12 @@
 package com.example.classroom.service;
 
-import com.example.classroom.dto.DepartmentDto;
+import com.example.classroom.department.DepartmentDto;
+import com.example.classroom.department.DepartmentService;
 import com.example.classroom.exception.DepartmentNotFoundException;
-import com.example.classroom.model.Department;
-import com.example.classroom.model.FieldOfStudy;
-import com.example.classroom.model.Teacher;
-import com.example.classroom.repository.DepartmentRepository;
+import com.example.classroom.department.Department;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.teacher.Teacher;
+import com.example.classroom.department.DepartmentRepository;
 import com.example.classroom.repository.util.UnitTestsInitData;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

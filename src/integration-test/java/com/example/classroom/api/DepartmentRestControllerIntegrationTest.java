@@ -1,12 +1,12 @@
 package com.example.classroom.api;
 
-import com.example.classroom.dto.DepartmentDto;
-import com.example.classroom.model.Department;
-import com.example.classroom.model.FieldOfStudy;
-import com.example.classroom.model.Teacher;
-import com.example.classroom.repository.DepartmentRepository;
-import com.example.classroom.repository.FieldOfStudyRepository;
-import com.example.classroom.repository.TeacherRepository;
+import com.example.classroom.department.DepartmentDto;
+import com.example.classroom.department.Department;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.teacher.Teacher;
+import com.example.classroom.department.DepartmentRepository;
+import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
+import com.example.classroom.teacher.TeacherRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

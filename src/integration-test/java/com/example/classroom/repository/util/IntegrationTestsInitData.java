@@ -1,11 +1,19 @@
 package com.example.classroom.repository.util;
 
+import com.example.classroom.department.Department;
+import com.example.classroom.department.DepartmentRepository;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
-import com.example.classroom.model.*;
-import com.example.classroom.repository.*;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
+import com.example.classroom.student.Student;
+import com.example.classroom.student.StudentRepository;
+import com.example.classroom.subject.Subject;
+import com.example.classroom.subject.SubjectRepository;
+import com.example.classroom.teacher.Teacher;
+import com.example.classroom.teacher.TeacherRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -88,7 +96,7 @@ public class IntegrationTestsInitData {
 
     // *** Create Teachers *** //
     @Transactional
-    public Teacher createTeacherOne(Department department,List<Subject> subjects, List<Student> students) {
+    public Teacher createTeacherOne(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jarosław");
         teacher.setLastName("Adamczuk");

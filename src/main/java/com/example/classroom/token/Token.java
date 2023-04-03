@@ -1,6 +1,6 @@
 package com.example.classroom.token;
 
-import com.example.classroom.model.User;
+import com.example.classroom.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

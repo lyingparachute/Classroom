@@ -1,6 +1,7 @@
 package com.example.classroom.repository;
 
-import com.example.classroom.model.Teacher;
+import com.example.classroom.teacher.Teacher;
+import com.example.classroom.teacher.TeacherRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;

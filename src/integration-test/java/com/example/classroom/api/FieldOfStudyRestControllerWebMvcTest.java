@@ -1,9 +1,14 @@
 package com.example.classroom.api;
 
-import com.example.classroom.dto.FieldOfStudyDto;
-import com.example.classroom.model.*;
+import com.example.classroom.department.Department;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldOfStudy.FieldOfStudyDto;
+import com.example.classroom.fieldOfStudy.FieldOfStudyRestController;
 import com.example.classroom.repository.util.UnitTestsInitData;
-import com.example.classroom.service.FieldOfStudyService;
+import com.example.classroom.fieldOfStudy.FieldOfStudyService;
+import com.example.classroom.student.Student;
+import com.example.classroom.subject.Subject;
+import com.example.classroom.teacher.Teacher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,7 @@ package com.example.classroom.auth.controller;
 
 import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.auth.service.UserManagementService;
-import com.example.classroom.model.User;
+import com.example.classroom.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

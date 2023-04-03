@@ -1,14 +1,19 @@
 package com.example.classroom.service;
 
-import com.example.classroom.dto.DepartmentDto;
-import com.example.classroom.dto.FieldOfStudyDto;
+import com.example.classroom.department.Department;
+import com.example.classroom.department.DepartmentDto;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldOfStudy.FieldOfStudyDto;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
-import com.example.classroom.model.*;
-import com.example.classroom.repository.FieldOfStudyRepository;
+import com.example.classroom.fieldOfStudy.FieldOfStudyService;
+import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
 import com.example.classroom.repository.util.UnitTestsInitData;
+import com.example.classroom.student.Student;
+import com.example.classroom.subject.Subject;
+import com.example.classroom.teacher.Teacher;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

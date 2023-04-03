@@ -1,10 +1,14 @@
 package com.example.classroom.repository.util;
 
+import com.example.classroom.department.Department;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
-import com.example.classroom.model.*;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.student.Student;
+import com.example.classroom.subject.Subject;
+import com.example.classroom.teacher.Teacher;
 
 import java.util.List;
 

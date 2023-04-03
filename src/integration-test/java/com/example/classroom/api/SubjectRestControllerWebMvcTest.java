@@ -1,11 +1,12 @@
 package com.example.classroom.api;
 
-import com.example.classroom.dto.SubjectDto;
-import com.example.classroom.model.FieldOfStudy;
-import com.example.classroom.model.Subject;
-import com.example.classroom.model.Teacher;
+import com.example.classroom.subject.SubjectDto;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.subject.Subject;
+import com.example.classroom.subject.SubjectRestController;
+import com.example.classroom.teacher.Teacher;
 import com.example.classroom.repository.util.UnitTestsInitData;
-import com.example.classroom.service.SubjectService;
+import com.example.classroom.subject.SubjectService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

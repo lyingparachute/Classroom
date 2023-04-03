@@ -2,7 +2,7 @@ package com.example.classroom.controller;
 
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
-import com.example.classroom.model.User;
+import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
