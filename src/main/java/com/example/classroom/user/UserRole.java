@@ -1,4 +1,4 @@
-package com.example.classroom.enums;
+package com.example.classroom.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -2,12 +2,12 @@ package com.example.classroom.auth.service;
 
 import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.student.StudentDto;
+import com.example.classroom.student.StudentService;
 import com.example.classroom.teacher.TeacherDto;
-import com.example.classroom.enums.UserRole;
+import com.example.classroom.teacher.TeacherService;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
-import com.example.classroom.student.StudentService;
-import com.example.classroom.teacher.TeacherService;
+import com.example.classroom.user.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

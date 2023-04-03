@@ -1,6 +1,5 @@
 package com.example.classroom.user;
 
-import com.example.classroom.enums.UserRole;
 import com.example.classroom.student.Student;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.token.Token;
