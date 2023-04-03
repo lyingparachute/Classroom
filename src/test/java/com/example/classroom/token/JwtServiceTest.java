@@ -1,11 +1,9 @@
 package com.example.classroom.token;
 
 import com.example.classroom.user.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -16,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
+import java.util.Map;
 
-import static com.example.classroom.token.JwtService.SECRET_KEY;
 import static com.example.classroom.token.JwtService.TOKEN_EXPIRATION_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -70,22 +68,41 @@ class JwtServiceTest {
     }
 
     @Nested
-    class ExtractClaim {
-        @Test
-        void extractClaim() {
-
-        }
-    }
-
-    @Nested
     class GenerateToken {
         @Test
-        void generateToken() {
+        void returnsToken_givenUserDetails() {
+            // When
+            String token = service.generateToken(userDetails);
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(service.getSignInKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
 
+            // Then
+            assertThat(token).isNotNull().isNotEmpty();
+            assertThat(claims.getSubject()).isEqualTo(userDetails.getUsername());
         }
 
         @Test
-        void testGenerateToken() {
+        void returnsToken_withExtraClaims_givenUserDetails_andExtraClaims() {
+            // Given
+            Map.Entry<String, String> claim1 = Map.entry("extraClaim1Key", "extraClaim1Value");
+            Map.Entry<String, String> claim2 = Map.entry("extraClaim2Key", "extraClaim2Value");
+            Map<String, Object> extraClaims = Map.ofEntries(claim1, claim2);
+
+            // When
+            String token = service.generateToken(extraClaims, userDetails);
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(service.getSignInKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            // Then
+            assertThat(token).isNotNull().isNotEmpty();
+            assertThat(claims.getSubject()).isEqualTo(userDetails.getUsername());
+            assertThat(claims).containsAllEntriesOf(extraClaims);
         }
     }
 
@@ -108,7 +125,7 @@ class JwtServiceTest {
                     .setSubject(userDetails.getUsername())
                     .setIssuedAt(new Date())
                     .setExpiration(pastDate)
-                    .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY)), SignatureAlgorithm.HS256)
+                    .signWith(service.getSignInKey())
                     .compact();
             // When
             Throwable thrown = catchThrowable(() -> service.isTokenValid(futureToken, userDetails));
