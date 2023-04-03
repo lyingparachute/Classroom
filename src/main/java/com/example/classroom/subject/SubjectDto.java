@@ -23,7 +23,7 @@ import java.util.Set;
  */
 @Data
 @NoArgsConstructor
-public class SubjectDto {
+class SubjectDto {
     private Long id;
     @NotEmpty(message = "{message.name.empty}")
     @Length(min = 2, max = 30, message = "{message.name.length}")

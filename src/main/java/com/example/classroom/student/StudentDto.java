@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @Data
 @NoArgsConstructor
-public class StudentDto {
+class StudentDto {
     private Long id;
     @NotNull
     @NotEmpty(message = "{message.firstName.empty}")

@@ -11,12 +11,12 @@ import java.util.List;
 @RestController
 @RequestMapping("api/students")
 @RequiredArgsConstructor
-public class StudentRestController {
+class StudentRestController {
 
     private final StudentService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<StudentDto> getStudent(@PathVariable Long id) {
+    ResponseEntity<StudentDto> getStudent(@PathVariable Long id) {
         StudentDto dto = service.fetchById(id);
         return dto != null ?
                 ResponseEntity.ok(dto) :
@@ -24,7 +24,7 @@ public class StudentRestController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<StudentDto>> getStudents() {
+    ResponseEntity<List<StudentDto>> getStudents() {
         List<StudentDto> students = service.fetchAll();
         return students.isEmpty() ?
                 ResponseEntity.notFound().build() :
@@ -32,7 +32,7 @@ public class StudentRestController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentDto> createStudent(@Valid @RequestBody StudentDto studentDto) {
+    ResponseEntity<StudentDto> createStudent(@Valid @RequestBody StudentDto studentDto) {
         StudentDto created = service.create(studentDto);
         return created != null ?
                 ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +41,7 @@ public class StudentRestController {
     }
 
     @PutMapping
-    public ResponseEntity<StudentDto> updateStudent(@Valid @RequestBody StudentDto studentDto) {
+    ResponseEntity<StudentDto> updateStudent(@Valid @RequestBody StudentDto studentDto) {
         StudentDto updated = service.update(studentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
@@ -49,13 +49,13 @@ public class StudentRestController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+    ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         service.remove(id);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllStudents() {
+    ResponseEntity<Void> deleteAllStudents() {
         service.removeAll();
         return ResponseEntity.accepted().build();
     }

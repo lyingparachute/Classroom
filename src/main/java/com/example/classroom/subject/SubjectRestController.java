@@ -16,7 +16,7 @@ public class SubjectRestController {
     private final SubjectService subjectService;
 
     @GetMapping("{id}")
-    public ResponseEntity<SubjectDto> getSubject(@PathVariable Long id) {
+    ResponseEntity<SubjectDto> getSubject(@PathVariable Long id) {
         SubjectDto dto = subjectService.fetchById(id);
         return dto != null ?
                 ResponseEntity.ok(dto) :
@@ -24,7 +24,7 @@ public class SubjectRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SubjectDto>> getAllSubjects() {
+    ResponseEntity<List<SubjectDto>> getAllSubjects() {
         List<SubjectDto> subjects = subjectService.fetchAll();
         return subjects.isEmpty() ?
                 ResponseEntity.notFound().build() :
@@ -32,7 +32,7 @@ public class SubjectRestController {
     }
 
     @PostMapping
-    public ResponseEntity<SubjectDto> createSubject(@Valid @RequestBody SubjectDto subjectDto) {
+    ResponseEntity<SubjectDto> createSubject(@Valid @RequestBody SubjectDto subjectDto) {
         SubjectDto created = subjectService.create(subjectDto);
         return created != null ?
                 ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +41,7 @@ public class SubjectRestController {
     }
 
     @PutMapping
-    public ResponseEntity<SubjectDto> updateSubject(@Valid @RequestBody SubjectDto studentDto) {
+    ResponseEntity<SubjectDto> updateSubject(@Valid @RequestBody SubjectDto studentDto) {
         SubjectDto updated = subjectService.update(studentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
@@ -49,13 +49,13 @@ public class SubjectRestController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteSubject(@PathVariable Long id) {
+    ResponseEntity<Void> deleteSubject(@PathVariable Long id) {
         subjectService.remove(id);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllSubjects() {
+    ResponseEntity<Void> deleteAllSubjects() {
         subjectService.removeAll();
         return ResponseEntity.accepted().build();
     }

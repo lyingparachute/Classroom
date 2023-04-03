@@ -20,24 +20,24 @@ import java.util.List;
 @Controller
 @RequestMapping("dashboard/subjects")
 @RequiredArgsConstructor
-public class SubjectController {
+class SubjectController {
 
     private final SubjectService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
     private final BreadcrumbService crumb;
 
-    public static final String REDIRECT_DASHBOARD_SUBJECTS = "redirect:/dashboard/subjects";
-    public static final String SUBJECT_EDIT_FORM = "subject/subject-edit-form";
+    static final String REDIRECT_DASHBOARD_SUBJECTS = "redirect:/dashboard/subjects";
+    static final String SUBJECT_EDIT_FORM = "subject/subject-edit-form";
 
     @GetMapping
-    public String getSubjects(@RequestParam(required = false) String name,
-                              @RequestParam(defaultValue = "1") int page,
-                              @RequestParam(defaultValue = "6") int size,
-                              @RequestParam(defaultValue = "id") String sortField,
-                              @RequestParam(defaultValue = "asc") String sortDir,
-                              HttpServletRequest request,
-                              Model model) {
+    String getSubjects(@RequestParam(required = false) String name,
+                       @RequestParam(defaultValue = "1") int page,
+                       @RequestParam(defaultValue = "6") int size,
+                       @RequestParam(defaultValue = "id") String sortField,
+                       @RequestParam(defaultValue = "asc") String sortDir,
+                       HttpServletRequest request,
+                       Model model) {
         addAttributeBreadcrumb(model, request);
 
         Page<SubjectDto> pageSubjects;
@@ -76,9 +76,9 @@ public class SubjectController {
     }
 
     @GetMapping("{id}")
-    public String getSubject(@PathVariable Long id,
-                             HttpServletRequest request,
-                             Model model) {
+    String getSubject(@PathVariable Long id,
+                      HttpServletRequest request,
+                      Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeSubjectById(id, model);
         return "subject/subject-view";
@@ -86,8 +86,8 @@ public class SubjectController {
 
     @GetMapping("new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String getNewSubjectForm(HttpServletRequest request,
-                                    Model model) {
+    String getNewSubjectForm(HttpServletRequest request,
+                             Model model) {
         addAttributeBreadcrumb(model, request);
         model.addAttribute("subject", new SubjectDto());
         addAttributeTeachersAndFieldsOfStudy(model);
@@ -96,11 +96,11 @@ public class SubjectController {
 
     @PostMapping(value = "new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String createSubject(@Valid @ModelAttribute("subject") SubjectDto dto,
-                                BindingResult result,
-                                RedirectAttributes redirectAttributes,
-                                HttpServletRequest request,
-                                Model model) {
+    String createSubject(@Valid @ModelAttribute("subject") SubjectDto dto,
+                         BindingResult result,
+                         RedirectAttributes redirectAttributes,
+                         HttpServletRequest request,
+                         Model model) {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributeTeachersAndFieldsOfStudy(model);
@@ -114,9 +114,9 @@ public class SubjectController {
 
     @GetMapping("edit/{id}")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String editSubjectForm(@PathVariable Long id,
-                                  HttpServletRequest request,
-                                  Model model) {
+    String editSubjectForm(@PathVariable Long id,
+                           HttpServletRequest request,
+                           Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeSubjectById(id, model);
         addAttributeTeachersAndFieldsOfStudy(model);
@@ -125,11 +125,11 @@ public class SubjectController {
 
     @PostMapping(value = "update")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String editSubject(@Valid @ModelAttribute("subject") SubjectDto dto,
-                              BindingResult result,
-                              RedirectAttributes redirectAttributes,
-                              HttpServletRequest request,
-                              Model model) {
+    String editSubject(@Valid @ModelAttribute("subject") SubjectDto dto,
+                       BindingResult result,
+                       RedirectAttributes redirectAttributes,
+                       HttpServletRequest request,
+                       Model model) {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributeTeachersAndFieldsOfStudy(model);
@@ -143,8 +143,8 @@ public class SubjectController {
 
     @GetMapping("delete/{id}")
     @Secured({"ROLE_ADMIN"})
-    public String deleteSubject(@PathVariable Long id,
-                                RedirectAttributes redirectAttributes) {
+    String deleteSubject(@PathVariable Long id,
+                         RedirectAttributes redirectAttributes) {
         SubjectDto dto = service.fetchById(id);
         service.remove(id);
         addFlashAttributeSuccess(redirectAttributes, dto);

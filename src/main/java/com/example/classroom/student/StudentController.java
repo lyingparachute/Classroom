@@ -19,25 +19,25 @@ import java.util.List;
 @Controller
 @RequestMapping("dashboard/students")
 @RequiredArgsConstructor
-public class StudentController {
+class StudentController {
 
     private final StudentService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
     private final BreadcrumbService crumb;
 
-    public static final String REDIRECT_DASHBOARD_STUDENTS = "redirect:/dashboard/students";
+    static final String REDIRECT_DASHBOARD_STUDENTS = "redirect:/dashboard/students";
 
 
     @GetMapping
     @Secured({"ROLE_TEACHER", "ROLE_DEAN", "ROLE_ADMIN"})
-    public String getPaginatedStudents(@RequestParam(required = false) String name,
-                                       @RequestParam(defaultValue = "1") int page,
-                                       @RequestParam(defaultValue = "6") int size,
-                                       @RequestParam(defaultValue = "firstName") String sortField,
-                                       @RequestParam(defaultValue = "asc") String sortDir,
-                                       HttpServletRequest request,
-                                       Model model) {
+    String getPaginatedStudents(@RequestParam(required = false) String name,
+                                @RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "6") int size,
+                                @RequestParam(defaultValue = "firstName") String sortField,
+                                @RequestParam(defaultValue = "asc") String sortDir,
+                                HttpServletRequest request,
+                                Model model) {
         addAttributeBreadcrumb(model, request);
 
         Page<StudentDto> pageStudents;
@@ -77,9 +77,9 @@ public class StudentController {
 
     @GetMapping("{id}")
     @Secured({"ROLE_TEACHER", "ROLE_DEAN", "ROLE_ADMIN"})
-    public String getStudent(@PathVariable Long id,
-                             HttpServletRequest request,
-                             Model model) {
+    String getStudent(@PathVariable Long id,
+                      HttpServletRequest request,
+                      Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeStudentById(id, model);
         return "student/student-view";
@@ -87,8 +87,8 @@ public class StudentController {
 
     @GetMapping("new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String getNewStudentForm(HttpServletRequest request,
-                                    Model model) {
+    String getNewStudentForm(HttpServletRequest request,
+                             Model model) {
         addAttributeBreadcrumb(model, request);
         model.addAttribute("student", new StudentDto());
         addAttributesTeachersAndFieldsOfStudy(model);
@@ -97,11 +97,11 @@ public class StudentController {
 
     @PostMapping(value = "new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String createStudent(@Valid @ModelAttribute("student") StudentDto dto,
-                                BindingResult result,
-                                RedirectAttributes redirectAttributes,
-                                HttpServletRequest request,
-                                Model model) {
+    String createStudent(@Valid @ModelAttribute("student") StudentDto dto,
+                         BindingResult result,
+                         RedirectAttributes redirectAttributes,
+                         HttpServletRequest request,
+                         Model model) {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributesTeachersAndFieldsOfStudy(model);
@@ -115,9 +115,9 @@ public class StudentController {
 
     @GetMapping("edit/{id}")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String editStudentForm(@PathVariable Long id,
-                                  HttpServletRequest request,
-                                  Model model) {
+    String editStudentForm(@PathVariable Long id,
+                           HttpServletRequest request,
+                           Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeStudentById(id, model);
         addAttributesTeachersAndFieldsOfStudy(model);
@@ -126,11 +126,11 @@ public class StudentController {
 
     @PostMapping(value = "update")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String editStudent(@Valid @ModelAttribute("student") StudentDto dto,
-                              BindingResult result,
-                              RedirectAttributes redirectAttributes,
-                              HttpServletRequest request,
-                              Model model) {
+    String editStudent(@Valid @ModelAttribute("student") StudentDto dto,
+                       BindingResult result,
+                       RedirectAttributes redirectAttributes,
+                       HttpServletRequest request,
+                       Model model) {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributesTeachersAndFieldsOfStudy(model);
@@ -144,7 +144,7 @@ public class StudentController {
 
     @GetMapping("delete/{id}")
     @Secured({"ROLE_ADMIN"})
-    public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         StudentDto dto = service.fetchById(id);
         service.remove(id);
         addFlashAttributeSuccess(redirectAttributes, dto);

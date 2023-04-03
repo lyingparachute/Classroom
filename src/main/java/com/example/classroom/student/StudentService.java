@@ -23,7 +23,7 @@ public class StudentService {
     private final ModelMapper mapper;
 
     @Transactional
-    public StudentDto create(StudentDto dto) {
+    StudentDto create(StudentDto dto) {
         Student student = mapper.map(dto, Student.class);
         addReferencingObjects(student);
         Student saved = repository.save(student);
@@ -36,29 +36,29 @@ public class StudentService {
                 Sort.by(sortField).descending();
     }
 
-    public List<StudentDto> fetchAll() {
+    List<StudentDto> fetchAll() {
         List<Student> all = repository.findAll();
         return all.stream().map(student -> mapper.map(student, StudentDto.class)).toList();
     }
 
-    public Page<StudentDto> fetchAllPaginated(int pageNo,
-                                              int pageSize,
-                                              String sortField,
-                                              String sortDirection) {
+    Page<StudentDto> fetchAllPaginated(int pageNo,
+                                       int pageSize,
+                                       String sortField,
+                                       String sortDirection) {
         Sort sort = getSortOrder(sortField, sortDirection);
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Student> all = repository.findAll(pageable);
         return all.map(student -> mapper.map(student, StudentDto.class));
     }
 
-    public StudentDto fetchById(Long id) {
+    StudentDto fetchById(Long id) {
         Optional<Student> byId = repository.findById(id);
         return byId.map(student -> mapper.map(student, StudentDto.class))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
     }
 
     @Transactional
-    public StudentDto update(StudentDto dto) {
+    StudentDto update(StudentDto dto) {
         Student student = repository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Invalid Student '" + dto.getFirstName() + " " + dto.getLastName() + "' with ID: " + dto.getId()));
@@ -69,21 +69,21 @@ public class StudentService {
     }
 
     @Transactional
-    public void removeAll() {
+    void removeAll() {
         repository.findAll().forEach(this::removeReferencingObjects);
         repository.deleteAll();
     }
 
-    public List<StudentDto> findByFirstOrLastName(String searched) {
+    List<StudentDto> findByFirstOrLastName(String searched) {
         List<Student> found = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).toList();
     }
 
-    public Page<StudentDto> findByFirstOrLastNamePaginated(int pageNo,
-                                                           int pageSize,
-                                                           String sortField,
-                                                           String sortDirection,
-                                                           String searched) {
+    Page<StudentDto> findByFirstOrLastNamePaginated(int pageNo,
+                                                    int pageSize,
+                                                    String sortField,
+                                                    String sortDirection,
+                                                    String searched) {
         Sort sort = getSortOrder(sortField, sortDirection);
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Student> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
@@ -91,7 +91,7 @@ public class StudentService {
     }
 
     @Transactional
-    public void remove(Long id) {
+    void remove(Long id) {
         Student student = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
         removeReferencingObjects(student);
