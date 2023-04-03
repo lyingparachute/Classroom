@@ -12,6 +12,7 @@ import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final UserRepository repository;
+    private final ModelMapper mapper;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -31,12 +33,10 @@ public class AuthenticationService {
     @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
         User userDetails = new User();
-        userDetails.setFirstName(request.getFirstName());
-        userDetails.setLastName(request.getLastName());
-        userDetails.setEmail(request.getEmail());
+        mapper.map(request, userDetails);
         userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
-        userDetails.setRole(UserRole.ROLE_STUDENT);
         //TODO delete auto-assign role
+        userDetails.setRole(UserRole.ROLE_STUDENT);
         var savedUser = repository.save(userDetails);
         var jwtToken = jwtService.generateToken(savedUser);
         saveUserToken(savedUser, jwtToken);
