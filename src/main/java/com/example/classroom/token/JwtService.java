@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    static final String SECRET_KEY = "635266556A586E327234753778214125442A472D4B6150645367566B59703373";
+    private static final String SECRET_KEY = "635266556A586E327234753778214125442A472D4B6150645367566B59703373";
     public static final int TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24h
 
     public String extractUsername(String token) {
@@ -67,7 +67,7 @@ public class JwtService {
                 .getBody();
     }
 
-    private Key getSignInKey() {
+    Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
