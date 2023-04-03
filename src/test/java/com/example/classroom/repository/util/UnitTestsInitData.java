@@ -1,5 +1,7 @@
 package com.example.classroom.repository.util;
 
+import com.example.classroom.auth.model.AuthenticationRequest;
+import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.department.Department;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
@@ -9,6 +11,7 @@ import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.teacher.Teacher;
+import com.example.classroom.user.User;
 
 import java.util.List;
 
@@ -242,6 +245,32 @@ public class UnitTestsInitData {
     private void addReferencingObjectsToDepartment(Teacher dean, List<FieldOfStudy> fieldsOfStudy, Department department) {
         department.setDean(dean);
         fieldsOfStudy.forEach(department::addFieldOfStudy);
+    }
+
+    public User createUser() {
+        return User.builder()
+                .id(1L)
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .email("encodedPassword")
+                .password("andrzej.nowak@gmail.com")
+                .build();
+    }
+
+    public RegisterRequest createRegisterRequest() {
+        return RegisterRequest.builder()
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .email("andrzej.nowak@gmail.com")
+                .password("123")
+                .build();
+    }
+
+    public AuthenticationRequest createAuthenticationRequest() {
+        return AuthenticationRequest.builder()
+                .email("andrzej.nowak@gmail.com")
+                .password("encodedPassword")
+                .build();
     }
 }
 
