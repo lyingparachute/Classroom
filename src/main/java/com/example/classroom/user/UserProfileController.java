@@ -20,7 +20,7 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/dashboard/profile")
 @RequiredArgsConstructor
-class ProfileController {
+class UserProfileController {
 
     private final UserManagementService service;
     private final BreadcrumbService crumb;
