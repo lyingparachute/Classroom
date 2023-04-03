@@ -23,7 +23,7 @@ public class StudentService {
     private final ModelMapper mapper;
 
     @Transactional
-    StudentDto create(StudentDto dto) {
+    public StudentDto create(StudentDto dto) {
         Student student = mapper.map(dto, Student.class);
         addReferencingObjects(student);
         Student saved = repository.save(student);

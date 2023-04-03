@@ -1,11 +1,7 @@
-package com.example.classroom.student.api;
+package com.example.classroom.student;
 
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.repository.util.UnitTestsInitData;
-import com.example.classroom.student.Student;
-import com.example.classroom.student.StudentDto;
-import com.example.classroom.student.StudentRestController;
-import com.example.classroom.student.StudentService;
 import com.example.classroom.teacher.Teacher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Nested;

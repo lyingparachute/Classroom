@@ -18,16 +18,16 @@ import java.nio.file.Path;
 @Controller
 @RequestMapping("dashboard/departments")
 @RequiredArgsConstructor
-public class DepartmentController {
+class DepartmentController {
 
-    public static final String REDIRECT_DASHBOARD_DEPARTMENTS = "redirect:/dashboard/departments";
+    static final String REDIRECT_DASHBOARD_DEPARTMENTS = "redirect:/dashboard/departments";
     private final DepartmentService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
     private final BreadcrumbService crumb;
 
     @GetMapping()
-    public String getAllDepartments(Model model, HttpServletRequest request) {
+    String getAllDepartments(Model model, HttpServletRequest request) {
         model.addAttribute("departments", service.fetchAll());
         addAttributeImagesPath(model, "departments");
         addAttributeBreadcrumbs(model, request);
@@ -35,9 +35,9 @@ public class DepartmentController {
     }
 
     @GetMapping("{id}")
-    public String getDepartment(@PathVariable Long id,
-                                HttpServletRequest request,
-                                Model model) {
+    String getDepartment(@PathVariable Long id,
+                         HttpServletRequest request,
+                         Model model) {
         addAttributeDepartmentFetchById(id, model);
         addAttributeImagesPath(model, "fields-of-study");
         addAttributeBreadcrumbs(model, request);
@@ -46,7 +46,7 @@ public class DepartmentController {
 
     @GetMapping("new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String getNewDepartmentForm(Model model, HttpServletRequest request) {
+    String getNewDepartmentForm(Model model, HttpServletRequest request) {
         model.addAttribute("department", new DepartmentDto());
         addAttributesForCreateDepartment(model);
         addAttributeBreadcrumbs(model, request);
@@ -55,11 +55,11 @@ public class DepartmentController {
 
     @PostMapping("new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String createDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
-                                   BindingResult result,
-                                   RedirectAttributes redirectAttributes,
-                                   HttpServletRequest request,
-                                   Model model) {
+    String createDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
+                            BindingResult result,
+                            RedirectAttributes redirectAttributes,
+                            HttpServletRequest request,
+                            Model model) {
         if (result.hasErrors()) {
             addAttributesForCreateDepartment(model);
             addAttributeBreadcrumbs(model, request);
@@ -73,9 +73,9 @@ public class DepartmentController {
 
     @GetMapping("edit/{id}")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String getEditDepartmentForm(@PathVariable Long id,
-                                        Model model,
-                                        HttpServletRequest request) {
+    String getEditDepartmentForm(@PathVariable Long id,
+                                 Model model,
+                                 HttpServletRequest request) {
         addAttributeDepartmentFetchById(id, model);
         addAttributesForUpdateDepartment(id, model);
         addAttributeBreadcrumbs(model, request);
@@ -84,11 +84,11 @@ public class DepartmentController {
 
     @PostMapping(value = "update")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String editDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
-                                 BindingResult result,
-                                 RedirectAttributes redirectAttributes,
-                                 HttpServletRequest request,
-                                 Model model) {
+    String editDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
+                          BindingResult result,
+                          RedirectAttributes redirectAttributes,
+                          HttpServletRequest request,
+                          Model model) {
         if (result.hasErrors()) {
             addAttributesForUpdateDepartment(dto.getId(), model);
             addAttributeBreadcrumbs(model, request);
@@ -102,7 +102,7 @@ public class DepartmentController {
 
     @GetMapping("delete/{id}")
     @Secured({"ROLE_ADMIN"})
-    public String deleteDepartment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    String deleteDepartment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         DepartmentDto dto = service.fetchById(id);
         service.remove(id);
         addFlashAttributeSuccess(redirectAttributes, dto);

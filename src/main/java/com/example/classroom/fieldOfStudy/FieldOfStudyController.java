@@ -2,9 +2,9 @@ package com.example.classroom.fieldOfStudy;
 
 
 import com.example.classroom.breadcrumb.BreadcrumbService;
+import com.example.classroom.department.DepartmentService;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.fileupload.FileUploadUtil;
-import com.example.classroom.department.DepartmentService;
 import com.example.classroom.subject.SubjectService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -25,18 +25,18 @@ import java.util.Objects;
 @Controller
 @RequestMapping("dashboard/fields-of-study")
 @RequiredArgsConstructor
-public class FieldOfStudyController {
+class FieldOfStudyController {
 
     private final FieldOfStudyService service;
     private final DepartmentService departmentService;
     private final SubjectService subjectService;
     private final BreadcrumbService crumb;
-    public static final String UPLOAD_DIR = "fields-of-study/";
-    public static final String REDIRECT_DASHBOARD_FIELDS_OF_STUDY = "redirect:/dashboard/fields-of-study";
+    static final String UPLOAD_DIR = "fields-of-study/";
+    static final String REDIRECT_DASHBOARD_FIELDS_OF_STUDY = "redirect:/dashboard/fields-of-study";
 
     @GetMapping()
-    public String getAllFieldsOfStudy(Model model,
-                                      HttpServletRequest request) {
+    String getAllFieldsOfStudy(Model model,
+                               HttpServletRequest request) {
         model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedByNameAndSortedByName());
         model.addAttribute("firstFieldsOfStudy", service.fetchAllByLevelOfEducationSortedByName(LevelOfEducation.FIRST));
         model.addAttribute("secondFieldsOfStudy", service.fetchAllByLevelOfEducationSortedByName(LevelOfEducation.SECOND));
@@ -46,9 +46,9 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("{id}")
-    public String getFieldOfStudy(@PathVariable Long id,
-                                  HttpServletRequest request,
-                                  Model model) {
+    String getFieldOfStudy(@PathVariable Long id,
+                           HttpServletRequest request,
+                           Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributes(id, model);
@@ -56,9 +56,9 @@ public class FieldOfStudyController {
     }
 
     @GetMapping("{id}/subjects")
-    public String getFieldOfStudySubjects(@PathVariable Long id,
-                                          HttpServletRequest request,
-                                          Model model) {
+    String getFieldOfStudySubjects(@PathVariable Long id,
+                                   HttpServletRequest request,
+                                   Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributeNumberOfSemesters(id, model);
@@ -71,8 +71,8 @@ public class FieldOfStudyController {
 
     @GetMapping("new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String getCreateFieldOfStudyForm(Model model,
-                                            HttpServletRequest request) {
+    String getCreateFieldOfStudyForm(Model model,
+                                     HttpServletRequest request) {
         addAttributeBreadcrumb(model, request);
         model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
         addAttributeDepartments(model);
@@ -81,12 +81,12 @@ public class FieldOfStudyController {
 
     @PostMapping(value = "new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String createFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
-                                     @RequestParam(value = "imageUpload") MultipartFile multipartFile,
-                                     RedirectAttributes redirectAttributes,
-                                     BindingResult result,
-                                     HttpServletRequest request,
-                                     Model model) throws IOException {
+    String createFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
+                              @RequestParam(value = "imageUpload") MultipartFile multipartFile,
+                              RedirectAttributes redirectAttributes,
+                              BindingResult result,
+                              HttpServletRequest request,
+                              Model model) throws IOException {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributeDepartments(model);
@@ -103,9 +103,9 @@ public class FieldOfStudyController {
 
     @GetMapping("edit/{id}")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String getEditFieldOfStudyForm(@PathVariable Long id,
-                                          HttpServletRequest request,
-                                          Model model) {
+    String getEditFieldOfStudyForm(@PathVariable Long id,
+                                   HttpServletRequest request,
+                                   Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributeDepartments(model);
@@ -114,12 +114,12 @@ public class FieldOfStudyController {
 
     @PostMapping("update")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String editFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
-                                   @RequestParam(value = "imageUpload") MultipartFile multipartFile,
-                                   BindingResult result,
-                                   RedirectAttributes redirectAttributes,
-                                   HttpServletRequest request,
-                                   Model model) throws IOException {
+    String editFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
+                            @RequestParam(value = "imageUpload") MultipartFile multipartFile,
+                            BindingResult result,
+                            RedirectAttributes redirectAttributes,
+                            HttpServletRequest request,
+                            Model model) throws IOException {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributeDepartments(model);
@@ -136,9 +136,9 @@ public class FieldOfStudyController {
 
     @GetMapping("edit/{id}/subjects")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String getSubjectsForm(@PathVariable Long id,
-                                  HttpServletRequest request,
-                                  Model model) {
+    String getSubjectsForm(@PathVariable Long id,
+                           HttpServletRequest request,
+                           Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributeAllSubjectsMapGroupedBySemesters(model);
@@ -148,8 +148,8 @@ public class FieldOfStudyController {
 
     @PostMapping("subjects/update")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    public String editSubjects(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
-                               RedirectAttributes redirectAttributes) {
+    String editSubjects(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
+                        RedirectAttributes redirectAttributes) {
         service.updateSubjects(dto);
         redirectAttributes.addFlashAttribute("updateSuccess", "update success");
         return "redirect:/dashboard/fields-of-study/" + dto.getId() + "/subjects";
@@ -157,7 +157,7 @@ public class FieldOfStudyController {
 
     @GetMapping("delete/{id}")
     @Secured({"ROLE_ADMIN"})
-    public String deleteFieldOfStudy(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    String deleteFieldOfStudy(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         FieldOfStudyDto dto = service.fetchById(id);
         service.remove(id);
         addFlashAttributeSuccess(redirectAttributes, dto);

@@ -18,22 +18,22 @@ import java.util.List;
 @Controller
 @RequestMapping("dashboard/teachers")
 @RequiredArgsConstructor
-public class TeacherController {
+class TeacherController {
 
     private final TeacherService service;
     private final SubjectService subjectService;
     private final BreadcrumbService crumb;
 
-    public static final String REDIRECT_DASHBOARD_TEACHERS = "redirect:/dashboard/teachers";
+    static final String REDIRECT_DASHBOARD_TEACHERS = "redirect:/dashboard/teachers";
 
     @GetMapping
-    public String getPaginatedTeachers(@RequestParam(required = false) String name,
-                                       @RequestParam(defaultValue = "1") int page,
-                                       @RequestParam(defaultValue = "6") int size,
-                                       @RequestParam(defaultValue = "firstName") String sortField,
-                                       @RequestParam(defaultValue = "asc") String sortDir,
-                                       HttpServletRequest request,
-                                       Model model) {
+    String getPaginatedTeachers(@RequestParam(required = false) String name,
+                                @RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "6") int size,
+                                @RequestParam(defaultValue = "firstName") String sortField,
+                                @RequestParam(defaultValue = "asc") String sortDir,
+                                HttpServletRequest request,
+                                Model model) {
         addAttributeBreadcrumb(model, request);
 
         Page<TeacherDto> pageTeachers;
@@ -72,9 +72,9 @@ public class TeacherController {
     }
 
     @GetMapping("{id}")
-    public String getTeacher(@PathVariable Long id,
-                             HttpServletRequest request,
-                             Model model) {
+    String getTeacher(@PathVariable Long id,
+                      HttpServletRequest request,
+                      Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeTeacherById(id, model);
         return "teacher/teacher-view";
@@ -82,8 +82,8 @@ public class TeacherController {
 
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @GetMapping("new")
-    public String getNewTeacherForm(HttpServletRequest request,
-                                    Model model) {
+    String getNewTeacherForm(HttpServletRequest request,
+                             Model model) {
         addAttributeBreadcrumb(model, request);
         model.addAttribute("teacher", new TeacherDto());
         addAttributesSubjects(model);
@@ -92,11 +92,11 @@ public class TeacherController {
 
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @PostMapping(value = "new")
-    public String createTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
-                                BindingResult result,
-                                RedirectAttributes redirectAttributes,
-                                HttpServletRequest request,
-                                Model model) {
+    String createTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
+                         BindingResult result,
+                         RedirectAttributes redirectAttributes,
+                         HttpServletRequest request,
+                         Model model) {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributesSubjects(model);
@@ -110,9 +110,9 @@ public class TeacherController {
 
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @GetMapping("edit/{id}")
-    public String editTeacher(@PathVariable Long id,
-                              HttpServletRequest request,
-                              Model model) {
+    String editTeacher(@PathVariable Long id,
+                       HttpServletRequest request,
+                       Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeTeacherById(id, model);
         addAttributesSubjects(model);
@@ -121,11 +121,11 @@ public class TeacherController {
 
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @PostMapping(value = "update")
-    public String editTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
-                              BindingResult result,
-                              RedirectAttributes redirectAttributes,
-                              HttpServletRequest request,
-                              Model model) {
+    String editTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
+                       BindingResult result,
+                       RedirectAttributes redirectAttributes,
+                       HttpServletRequest request,
+                       Model model) {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributesSubjects(model);
@@ -139,7 +139,7 @@ public class TeacherController {
 
     @Secured({"ROLE_ADMIN"})
     @GetMapping("delete/{id}")
-    public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         TeacherDto dto = service.fetchById(id);
         service.remove(id);
         addFlashAttributeSuccess(redirectAttributes, dto);

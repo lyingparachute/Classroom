@@ -11,12 +11,12 @@ import java.util.List;
 @RestController
 @RequestMapping("api/fields-of-study")
 @RequiredArgsConstructor
-public class FieldOfStudyRestController {
+class FieldOfStudyRestController {
 
     private final FieldOfStudyService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<FieldOfStudyDto> getFieldOfStudy(@PathVariable Long id) {
+    ResponseEntity<FieldOfStudyDto> getFieldOfStudy(@PathVariable Long id) {
         FieldOfStudyDto dto = service.fetchById(id);
         return dto != null ?
                 ResponseEntity.ok(dto) :
@@ -24,7 +24,7 @@ public class FieldOfStudyRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FieldOfStudyDto>> getFieldsOfStudy() {
+    ResponseEntity<List<FieldOfStudyDto>> getFieldsOfStudy() {
         List<FieldOfStudyDto> fieldsOfStudy = service.fetchAll();
         return fieldsOfStudy.isEmpty() ?
                 ResponseEntity.notFound().build() :
@@ -32,7 +32,7 @@ public class FieldOfStudyRestController {
     }
 
     @PostMapping
-    public ResponseEntity<FieldOfStudyDto> createFieldOfStudy(@Valid @RequestBody FieldOfStudyDto fieldOfStudyDto) {
+    ResponseEntity<FieldOfStudyDto> createFieldOfStudy(@Valid @RequestBody FieldOfStudyDto fieldOfStudyDto) {
         FieldOfStudyDto created = service.create(fieldOfStudyDto);
         return created != null ?
                 ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +41,7 @@ public class FieldOfStudyRestController {
     }
 
     @PutMapping
-    public ResponseEntity<FieldOfStudyDto> updateFieldOfStudy(@Valid @RequestBody FieldOfStudyDto fieldOfStudyDto) {
+    ResponseEntity<FieldOfStudyDto> updateFieldOfStudy(@Valid @RequestBody FieldOfStudyDto fieldOfStudyDto) {
         FieldOfStudyDto updated = service.update(fieldOfStudyDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
@@ -49,13 +49,13 @@ public class FieldOfStudyRestController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteFieldOfStudy(@PathVariable Long id) {
+    ResponseEntity<Void> deleteFieldOfStudy(@PathVariable Long id) {
         service.remove(id);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllFieldsOfStudy() {
+    ResponseEntity<Void> deleteAllFieldsOfStudy() {
         service.removeAll();
         return ResponseEntity.accepted().build();
     }

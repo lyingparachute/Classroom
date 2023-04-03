@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/departments")
 @RequiredArgsConstructor
-public class DepartmentRestController {
+class DepartmentRestController {
 
     private final DepartmentService service;
 

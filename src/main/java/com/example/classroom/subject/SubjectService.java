@@ -42,7 +42,7 @@ public class SubjectService {
 
     }
 
-    List<SubjectDto> fetchAll() {
+    public List<SubjectDto> fetchAll() {
         List<Subject> subjects = repository.findAll();
         return subjects.stream().map(subject -> mapper.map(subject, SubjectDto.class)).toList();
     }
@@ -57,7 +57,7 @@ public class SubjectService {
         return all.map(subject -> mapper.map(subject, SubjectDto.class));
     }
 
-    Map<Semester, List<Subject>> fetchAllGroupedBySemesters() {
+    public Map<Semester, List<Subject>> fetchAllGroupedBySemesters() {
         return Map.ofEntries(
                 entry(Semester.FIRST, repository.findAllBySemester(Semester.FIRST)),
                 entry(Semester.SECOND, repository.findAllBySemester(Semester.SECOND)),

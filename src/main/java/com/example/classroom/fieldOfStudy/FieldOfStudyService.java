@@ -25,7 +25,7 @@ public class FieldOfStudyService {
     private final ModelMapper mapper;
 
     @Transactional
-    public FieldOfStudyDto create(FieldOfStudyDto dto) {
+    FieldOfStudyDto create(FieldOfStudyDto dto) {
         FieldOfStudy fieldOfStudy = mapper.map(dto, FieldOfStudy.class);
         addReferencingObjects(fieldOfStudy);
         FieldOfStudy saved = repository.save(fieldOfStudy);
@@ -33,7 +33,7 @@ public class FieldOfStudyService {
     }
 
     @Transactional
-    public FieldOfStudyDto update(FieldOfStudyDto dto) {
+    FieldOfStudyDto update(FieldOfStudyDto dto) {
         FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
         removeDepartment(fieldOfStudy);
@@ -43,7 +43,7 @@ public class FieldOfStudyService {
     }
 
     @Transactional
-    public FieldOfStudyDto updateSubjects(FieldOfStudyDto dto) {
+    FieldOfStudyDto updateSubjects(FieldOfStudyDto dto) {
         FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
         removeSubjects(fieldOfStudy);
@@ -58,14 +58,14 @@ public class FieldOfStudyService {
         return all.stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).toList();
     }
 
-    public FieldOfStudyDto fetchById(Long id) {
+    FieldOfStudyDto fetchById(Long id) {
         Optional<FieldOfStudy> byId = repository.findById(id);
         return byId.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study ID: " + id));
     }
 
     @Transactional
-    public void remove(Long id) {
+    void remove(Long id) {
         FieldOfStudy fieldOfStudy = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study ID: " + id));
         removeReferencingObjects(fieldOfStudy);
@@ -73,12 +73,12 @@ public class FieldOfStudyService {
     }
 
     @Transactional
-    public void removeAll() {
+    void removeAll() {
         repository.findAll().forEach(this::removeReferencingObjects);
         repository.deleteAll();
     }
 
-    public Map<Semester, List<Subject>> fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(Long fieldOfStudyId) {
+    Map<Semester, List<Subject>> fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(Long fieldOfStudyId) {
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
         return Arrays.stream(Semester.values()).collect(Collectors.toMap(
                 Function.identity(),
@@ -86,7 +86,7 @@ public class FieldOfStudyService {
         ));
     }
 
-    public Map<Semester, Integer> calculateHoursInEachSemesterFromFieldOfStudy(Long fieldOfStudyId) {
+    Map<Semester, Integer> calculateHoursInEachSemesterFromFieldOfStudy(Long fieldOfStudyId) {
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
         return Arrays.stream(Semester.values()).collect(Collectors.toMap(
                 Function.identity(),
@@ -98,7 +98,7 @@ public class FieldOfStudyService {
         return subjects.stream().filter(s -> s.getSemester().equals(semester));
     }
 
-    public List<String> splitDescription(Long id) {
+    List<String> splitDescription(Long id) {
         String description = fetchById(id).getDescription();
         if (description != null) {
             return Stream.of(description.split(";"))
@@ -108,7 +108,7 @@ public class FieldOfStudyService {
         return List.of();
     }
 
-    public Map<Semester, Integer> calculateEctsPointsForEachSemester(Long id) {
+    Map<Semester, Integer> calculateEctsPointsForEachSemester(Long id) {
         List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(id);
         return Arrays.stream(Semester.values()).collect(Collectors.toMap(
                 Function.identity(),
@@ -122,13 +122,13 @@ public class FieldOfStudyService {
                 .sum();
     }
 
-    public Integer getSumOfEctsPointsFromAllSemesters(Long id) {
+    Integer getSumOfEctsPointsFromAllSemesters(Long id) {
         return calculateEctsPointsForEachSemester(id).values()
                 .stream().mapToInt(Integer::intValue)
                 .sum();
     }
 
-    public int getNumberOfSemesters(Long id) {
+    int getNumberOfSemesters(Long id) {
         AcademicTitle title = fetchById(id).getTitle();
         switch (title) {
             case BACH -> {
@@ -143,18 +143,18 @@ public class FieldOfStudyService {
         }
     }
 
-    public String getImagePath(Long id) {
+    String getImagePath(Long id) {
         String imageName = fetchById(id).getImage();
         Path imagePath = Path.of("/img").resolve("fields-of-study");
         return imagePath.resolve(Objects.requireNonNullElse(imageName, "default.jpg")).toString();
     }
 
-    public List<FieldOfStudyDto> fetchAllByLevelOfEducationSortedByName(LevelOfEducation levelOfEducation) {
+    List<FieldOfStudyDto> fetchAllByLevelOfEducationSortedByName(LevelOfEducation levelOfEducation) {
         return repository.findAllByLevelOfEducation(levelOfEducation, Sort.by(Sort.Direction.ASC, "name"))
                 .stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).toList();
     }
 
-    public Map<String, List<FieldOfStudyDto>> fetchAllGroupedByNameAndSortedByName() {
+    Map<String, List<FieldOfStudyDto>> fetchAllGroupedByNameAndSortedByName() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name"))
                 .stream().map(FieldOfStudy::getName).distinct()
                 .collect(Collectors.toMap(

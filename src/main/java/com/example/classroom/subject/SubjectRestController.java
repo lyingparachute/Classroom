@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/subjects")
 @RequiredArgsConstructor
-public class SubjectRestController {
+class SubjectRestController {
 
     private final SubjectService subjectService;
 
