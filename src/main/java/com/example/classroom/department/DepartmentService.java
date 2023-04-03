@@ -23,7 +23,7 @@ public class DepartmentService {
     private final ModelMapper mapper;
 
     @Transactional
-    public DepartmentDto create(DepartmentDto dto) {
+    DepartmentDto create(DepartmentDto dto) {
         Department department = mapper.map(dto, Department.class);
         addReferencingObjects(department);
         Department saved = repository.save(department);
@@ -31,7 +31,7 @@ public class DepartmentService {
     }
 
     @Transactional
-    public DepartmentDto update(DepartmentDto dto) {
+    DepartmentDto update(DepartmentDto dto) {
         Department department = repository.findById(dto.getId())
                 .orElseThrow(() -> new DepartmentNotFoundException(
                         "Invalid Department '" + dto.getName() + "' with ID: " + dto.getId()));
@@ -41,23 +41,23 @@ public class DepartmentService {
         return mapper.map(department, DepartmentDto.class);
     }
 
-    public List<DepartmentDto> fetchAll() {
+    List<DepartmentDto> fetchAll() {
         List<Department> departments = repository.findAll();
         return departments.stream().map(
                 department -> mapper.map(department, DepartmentDto.class)).toList();
     }
 
-    public Page<DepartmentDto> fetchAllPaginated(int pageNo,
-                                                 int pageSize,
-                                                 String sortField,
-                                                 String sortDirection) {
+    Page<DepartmentDto> fetchAllPaginated(int pageNo,
+                                          int pageSize,
+                                          String sortField,
+                                          String sortDirection) {
         Sort sort = getSortOrder(sortField, sortDirection);
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Department> all = repository.findAll(pageable);
         return all.map(department -> mapper.map(department, DepartmentDto.class));
     }
 
-    public DepartmentDto fetchById(Long id) {
+    DepartmentDto fetchById(Long id) {
         Optional<Department> byId = repository.findById(id);
         return byId.map(department -> mapper.map(department, DepartmentDto.class))
                 .orElseThrow(() -> new DepartmentNotFoundException(
@@ -65,7 +65,7 @@ public class DepartmentService {
     }
 
     @Transactional
-    public void remove(Long id) {
+    void remove(Long id) {
         Department department = repository.findById(id)
                 .orElseThrow(() -> new DepartmentNotFoundException(
                         "Invalid Department id: " + id));
@@ -74,21 +74,21 @@ public class DepartmentService {
     }
 
     @Transactional
-    public void removeAll() {
+    void removeAll() {
         repository.findAll().forEach(this::removeReferencingObjects);
         repository.deleteAll();
     }
 
-    public List<DepartmentDto> findByName(String searched) {
+    List<DepartmentDto> findByName(String searched) {
         List<Department> found = repository.findAllByNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, DepartmentDto.class)).toList();
     }
 
-    public Page<DepartmentDto> findByNamePaginated(int pageNo,
-                                                   int pageSize,
-                                                   String sortField,
-                                                   String sortDirection,
-                                                   String searched) {
+    Page<DepartmentDto> findByNamePaginated(int pageNo,
+                                            int pageSize,
+                                            String sortField,
+                                            String sortDirection,
+                                            String searched) {
         Sort sort = getSortOrder(sortField, sortDirection);
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Department> all = repository.findAllByNameContainingIgnoreCase(searched, pageable);

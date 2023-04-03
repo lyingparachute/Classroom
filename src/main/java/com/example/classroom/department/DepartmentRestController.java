@@ -1,7 +1,5 @@
-package com.example.classroom.api;
+package com.example.classroom.department;
 
-import com.example.classroom.department.DepartmentDto;
-import com.example.classroom.department.DepartmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,7 @@ public class DepartmentRestController {
     private final DepartmentService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<DepartmentDto> getDepartment(@PathVariable Long id) {
+    ResponseEntity<DepartmentDto> getDepartment(@PathVariable Long id) {
         DepartmentDto dto = service.fetchById(id);
         return dto != null ?
                 ResponseEntity.ok(dto) :
@@ -26,7 +24,7 @@ public class DepartmentRestController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<DepartmentDto>> getDepartments() {
+    ResponseEntity<List<DepartmentDto>> getDepartments() {
         List<DepartmentDto> departments = service.fetchAll();
         return departments.isEmpty() ?
                 ResponseEntity.notFound().build() :
@@ -34,7 +32,7 @@ public class DepartmentRestController {
     }
 
     @PostMapping
-    public ResponseEntity<DepartmentDto> createDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
+    ResponseEntity<DepartmentDto> createDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
         DepartmentDto created = service.create(departmentDto);
         return created != null ?
                 ResponseEntity.status(HttpStatus.CREATED)
@@ -43,7 +41,7 @@ public class DepartmentRestController {
     }
 
     @PutMapping
-    public ResponseEntity<DepartmentDto> updateDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
+    ResponseEntity<DepartmentDto> updateDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
         DepartmentDto updated = service.update(departmentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
@@ -51,13 +49,13 @@ public class DepartmentRestController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
+    ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
         service.remove(id);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllDepartments() {
+    ResponseEntity<Void> deleteAllDepartments() {
         service.removeAll();
         return ResponseEntity.accepted().build();
     }
