@@ -4,6 +4,7 @@ import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.repository.util.UnitTestsInitData;
 import com.example.classroom.student.StudentDto;
 import com.example.classroom.student.StudentService;
+import com.example.classroom.teacher.TeacherDto;
 import com.example.classroom.teacher.TeacherService;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
@@ -52,7 +53,7 @@ class UserManagementServiceTest {
     @Nested
     class Register {
         @Test
-        void returnsUser_withAssociatedStudent_givenRegisterRequest_withStudentRole() {
+        void createsUser_withAssociatedStudent_givenRegisterRequest_withStudentRole() {
             // Given
             UserRole role = UserRole.ROLE_STUDENT;
             RegisterRequest request = initData.createRegisterRequest();
@@ -68,6 +69,111 @@ class UserManagementServiceTest {
             verify(passwordEncoder).encode(request.getPassword());
             verify(repository).save(any(User.class));
             verify(studentService).create(any(StudentDto.class));
+            verifyNoInteractions(teacherService);
+            assertThat(actualUser).isNotNull();
+            assertAll("Check User's properties",
+                    () -> assertThat(actualUser.getId()).as("Check user's ID")
+                            .isEqualTo(expectedUser.getId()),
+                    () -> assertThat(actualUser.getFirstName()).as("Check user's First Name")
+                            .isEqualTo(expectedUser.getFirstName()),
+                    () -> assertThat(actualUser.getLastName()).as("Check user's Last Name")
+                            .isEqualTo(expectedUser.getLastName()),
+                    () -> assertThat(actualUser.getEmail()).as("Check user's Email")
+                            .isEqualTo(expectedUser.getEmail()),
+                    () -> assertThat(actualUser.getPassword()).as("Check user's Password")
+                            .isEqualTo(expectedUser.getPassword()),
+                    () -> assertThat(actualUser.getRole()).as("Check user's Role")
+                            .isEqualTo(expectedUser.getRole())
+            );
+        }
+
+        @Test
+        void createsUser_withAssociatedTeacher_givenRegisterRequest_withTeacherRole() {
+            // Given
+            UserRole role = UserRole.ROLE_TEACHER;
+            RegisterRequest request = initData.createRegisterRequest();
+            request.setRole(role);
+            User expectedUser = initData.createUser();
+            expectedUser.setRole(role);
+            // When
+            when(passwordEncoder.encode(anyString())).thenReturn(expectedUser.getPassword());
+            when(repository.save(any(User.class))).thenReturn(expectedUser);
+
+            User actualUser = service.register(request);
+            // Then
+            verify(passwordEncoder).encode(request.getPassword());
+            verify(repository).save(any(User.class));
+            verifyNoInteractions(studentService);
+            verify(teacherService).create(any(TeacherDto.class));
+            assertThat(actualUser).isNotNull();
+            assertAll("Check User's properties",
+                    () -> assertThat(actualUser.getId()).as("Check user's ID")
+                            .isEqualTo(expectedUser.getId()),
+                    () -> assertThat(actualUser.getFirstName()).as("Check user's First Name")
+                            .isEqualTo(expectedUser.getFirstName()),
+                    () -> assertThat(actualUser.getLastName()).as("Check user's Last Name")
+                            .isEqualTo(expectedUser.getLastName()),
+                    () -> assertThat(actualUser.getEmail()).as("Check user's Email")
+                            .isEqualTo(expectedUser.getEmail()),
+                    () -> assertThat(actualUser.getPassword()).as("Check user's Password")
+                            .isEqualTo(expectedUser.getPassword()),
+                    () -> assertThat(actualUser.getRole()).as("Check user's Role")
+                            .isEqualTo(expectedUser.getRole())
+            );
+        }
+
+        @Test
+        void createsUser_withAssociatedTeacher_givenRegisterRequest_withDeanRole() {
+            // Given
+            UserRole role = UserRole.ROLE_DEAN;
+            RegisterRequest request = initData.createRegisterRequest();
+            request.setRole(role);
+            User expectedUser = initData.createUser();
+            expectedUser.setRole(role);
+            // When
+            when(passwordEncoder.encode(anyString())).thenReturn(expectedUser.getPassword());
+            when(repository.save(any(User.class))).thenReturn(expectedUser);
+
+            User actualUser = service.register(request);
+            // Then
+            verify(passwordEncoder).encode(request.getPassword());
+            verify(repository).save(any(User.class));
+            verifyNoInteractions(studentService);
+            verify(teacherService).create(any(TeacherDto.class));
+            assertThat(actualUser).isNotNull();
+            assertAll("Check User's properties",
+                    () -> assertThat(actualUser.getId()).as("Check user's ID")
+                            .isEqualTo(expectedUser.getId()),
+                    () -> assertThat(actualUser.getFirstName()).as("Check user's First Name")
+                            .isEqualTo(expectedUser.getFirstName()),
+                    () -> assertThat(actualUser.getLastName()).as("Check user's Last Name")
+                            .isEqualTo(expectedUser.getLastName()),
+                    () -> assertThat(actualUser.getEmail()).as("Check user's Email")
+                            .isEqualTo(expectedUser.getEmail()),
+                    () -> assertThat(actualUser.getPassword()).as("Check user's Password")
+                            .isEqualTo(expectedUser.getPassword()),
+                    () -> assertThat(actualUser.getRole()).as("Check user's Role")
+                            .isEqualTo(expectedUser.getRole())
+            );
+        }
+
+        @Test
+        void createsUser_withoutAssociatedEntity_givenRegisterRequest_withAdminRole() {
+            // Given
+            UserRole role = UserRole.ROLE_ADMIN;
+            RegisterRequest request = initData.createRegisterRequest();
+            request.setRole(role);
+            User expectedUser = initData.createUser();
+            expectedUser.setRole(role);
+            // When
+            when(passwordEncoder.encode(anyString())).thenReturn(expectedUser.getPassword());
+            when(repository.save(any(User.class))).thenReturn(expectedUser);
+
+            User actualUser = service.register(request);
+            // Then
+            verify(passwordEncoder).encode(request.getPassword());
+            verify(repository).save(any(User.class));
+            verifyNoInteractions(studentService);
             verifyNoInteractions(teacherService);
             assertThat(actualUser).isNotNull();
             assertAll("Check User's properties",
