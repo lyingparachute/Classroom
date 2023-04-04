@@ -1,6 +1,7 @@
 package com.example.classroom.auth.service;
 
 import com.example.classroom.auth.model.RegisterRequest;
+import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.repository.util.UnitTestsInitData;
 import com.example.classroom.student.StudentDto;
 import com.example.classroom.student.StudentService;
@@ -17,9 +18,13 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -196,24 +201,74 @@ class UserManagementServiceTest {
     @Nested
     class Update {
         @Test
-        void update() {
+        void updatesUser_givenExistingUsername() {
             // Given
+            User user = initData.createUser();
+
+            UpdateRequest updateRequest = initData.createUpadateRequest();
+            String email = user.getEmail();
+            User expected = User.builder()
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .firstName(updateRequest.getFirstName())
+                    .lastName(updateRequest.getLastName())
+                    .password(updateRequest.getPassword())
+                    .build();
 
             // When
+            when(repository.findByEmail(email)).thenReturn(Optional.of(user));
+            when(repository.save(any(User.class))).thenReturn(expected);
+            User updated = service.update(updateRequest);
 
             // Then
+            verify(repository).findByEmail(email);
+            verify(repository).save(any(User.class));
+            assertThat(updated).isNotNull();
+            assertAll("Check User's properties",
+                    () -> assertThat(updated.getFirstName()).as("Check user's First Name")
+                            .isEqualTo(updateRequest.getFirstName()),
+                    () -> assertThat(updated.getLastName()).as("Check user's Last Name")
+                            .isEqualTo(updateRequest.getLastName()),
+                    () -> assertThat(updated.getEmail()).as("Check user's Email")
+                            .isEqualTo(updateRequest.getEmail()),
+                    () -> assertThat(updated.getPassword()).as("Check user's Password")
+                            .isEqualTo(updateRequest.getPassword())
+            );
+
         }
     }
 
     @Nested
     class LoadUserByUsername {
         @Test
-        void loadUserByUsername() {
+        void returnsUser_whenUserExists_inDatabase() {
             // Given
+            User expectedUser = initData.createUser();
+            String email = expectedUser.getEmail();
 
             // When
+            when(repository.findByEmail(email)).thenReturn(Optional.of(expectedUser));
+            User actualUser = service.loadUserByUsername(email);
 
             // Then
+            verify(repository).findByEmail(email);
+            assertThat(actualUser).isNotNull().isEqualTo(expectedUser);
+        }
+
+        @Test
+        void throwsUsernameNotFoundException_whenUserDoesNotExist_inDatabase() {
+            // Given
+            String email = initData.createUser().getEmail();
+
+            // When
+            when(repository.findByEmail(email)).thenReturn(Optional.empty());
+            Throwable thrown = catchThrowable(() -> service.loadUserByUsername(email));
+
+            // Then
+            verify(repository).findByEmail(email);
+            assertThat(thrown)
+                    .isExactlyInstanceOf(UsernameNotFoundException.class)
+                    .hasMessage("User with email " + email + " does not exist in database.");
         }
     }
 
@@ -221,12 +276,18 @@ class UserManagementServiceTest {
     class RemoveByUsername {
 
         @Test
-        void removeByUsername() {
+        void removesUser_givenExistingUsername() {
             // Given
+            User user = initData.createUser();
+            String email = user.getEmail();
 
             // When
+            when(repository.findByEmail(email)).thenReturn(Optional.of(user));
+            service.removeByUsername(email);
 
             // Then
+            verify(repository).findByEmail(email);
+            verify(repository).delete(user);
         }
     }
 }
