@@ -35,8 +35,9 @@ public class AuthenticationService {
         User userDetails = new User();
         mapper.map(request, userDetails);
         userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
-        //TODO delete auto-assign role
-        userDetails.setRole(UserRole.ROLE_STUDENT);
+        if (userDetails.getRole() == null) {
+            userDetails.setRole(UserRole.ROLE_STUDENT);
+        }
         var savedUser = repository.save(userDetails);
         var jwtToken = jwtService.generateToken(savedUser);
         saveUserToken(savedUser, jwtToken);
