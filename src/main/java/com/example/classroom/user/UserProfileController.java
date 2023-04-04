@@ -1,5 +1,6 @@
 package com.example.classroom.user;
 
+import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,7 +50,7 @@ class UserProfileController {
     }
 
     @PostMapping("/update")
-    String updateUserDetails(@Valid @ModelAttribute User user,
+    String updateUserDetails(@Valid @ModelAttribute UpdateRequest userRequest,
                              BindingResult result,
                              HttpServletRequest request,
                              RedirectAttributes redirectAttributes,
@@ -58,7 +59,7 @@ class UserProfileController {
             addAttributeBreadcrumb(model, request);
             return USER_EDIT_TEMPLATE;
         }
-        User updated = service.update(user);
+        User updated = service.update(userRequest);
         redirectAttributes.addFlashAttribute("editSuccess", updated);
         return "redirect:/dashboard/profile";
     }
