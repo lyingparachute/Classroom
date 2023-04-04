@@ -274,7 +274,7 @@ public class UnitTestsInitData {
                 .build();
     }
 
-    public UpdateRequest createUpadateRequest() {
+    public UpdateRequest createUpdateRequest() {
         return UpdateRequest.builder()
                 .firstName("Joanna")
                 .lastName("Kowalczyk")

@@ -205,7 +205,7 @@ class UserManagementServiceTest {
             // Given
             User user = initData.createUser();
 
-            UpdateRequest updateRequest = initData.createUpadateRequest();
+            UpdateRequest updateRequest = initData.createUpdateRequest();
             String email = user.getEmail();
             User expected = User.builder()
                     .id(user.getId())
