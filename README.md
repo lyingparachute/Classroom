@@ -20,7 +20,7 @@ Go to project directory
 
 * Open terminal in project directory
 * Type:
-  `mvn clean install`
+  `mvn clean install -DskipTests`
 
 ### 3. Start application server with docker-compose
 
