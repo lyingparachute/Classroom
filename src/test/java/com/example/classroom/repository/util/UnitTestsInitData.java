@@ -2,6 +2,7 @@ package com.example.classroom.repository.util;
 
 import com.example.classroom.auth.model.AuthenticationRequest;
 import com.example.classroom.auth.model.RegisterRequest;
+import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.department.Department;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
@@ -252,8 +253,8 @@ public class UnitTestsInitData {
                 .id(1L)
                 .firstName("Andrzej")
                 .lastName("Nowak")
-                .email("encodedPassword")
-                .password("andrzej.nowak@gmail.com")
+                .password("encodedPassword")
+                .email("andrzej.nowak@gmail.com")
                 .build();
     }
 
@@ -270,6 +271,15 @@ public class UnitTestsInitData {
         return AuthenticationRequest.builder()
                 .email("andrzej.nowak@gmail.com")
                 .password("encodedPassword")
+                .build();
+    }
+
+    public UpdateRequest createUpadateRequest() {
+        return UpdateRequest.builder()
+                .firstName("Joanna")
+                .lastName("Kowalczyk")
+                .email("andrzej.nowak@gmail.com")
+                .password("newEncodedpassword")
                 .build();
     }
 }
