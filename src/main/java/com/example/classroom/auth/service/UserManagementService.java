@@ -1,6 +1,7 @@
 package com.example.classroom.auth.service;
 
 import com.example.classroom.auth.model.RegisterRequest;
+import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.student.StudentDto;
 import com.example.classroom.student.StudentService;
 import com.example.classroom.teacher.TeacherDto;
@@ -52,9 +53,9 @@ public class UserManagementService implements UserDetailsService {
     }
 
     @Transactional
-    public User update(User user) {
-        User userLogin = loadUserByUsername(user.getEmail());
-        mapper.map(user, userLogin);
+    public User update(UpdateRequest request) {
+        User userLogin = loadUserByUsername(request.getEmail());
+        mapper.map(request, userLogin);
         return repository.save(userLogin);
     }
 
