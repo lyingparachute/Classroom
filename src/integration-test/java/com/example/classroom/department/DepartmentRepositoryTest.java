@@ -42,39 +42,39 @@ class DepartmentRepositoryTest {
     class FindAllByNameContainingIgnoreCase {
         @Test
         void returnsEmptyList_givenNonExistingName() {
-            //given
+            // Given
             String name = "ARCH";
             createDepartmentMechatroniczny();
             createDepartmentMechaniczny();
-            //when
+            // When
             List<Department> actual = repository.findAllByNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfDepartments_givenName() {
-            //given
+            // Given
             String name = "MECH";
             Department expected1 = createDepartmentMechatroniczny();
             Department expected2 = createDepartmentMechaniczny();
-            //when
+            // When
             List<Department> actual = repository.findAllByNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(2)
                     .containsExactlyInAnyOrder(expected1, expected2);
         }
 
         @Test
         void returnsListOfDepartmentsOnGivenPage_givenNameAndPageable() {
-            //given
+            // Given
             String name = "MECH";
             Pageable pageable = PageRequest.ofSize(1);
             Department expected1 = createDepartmentMechatroniczny();
             Department expected2 = createDepartmentMechaniczny();
-            //when
+            // When
             Page<Department> actual = repository.findAllByNameContainingIgnoreCase(name, pageable);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(1)
                     .contains(expected1)
                     .doesNotContain(expected2);

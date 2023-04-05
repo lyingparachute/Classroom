@@ -50,14 +50,14 @@ class FieldOfStudyRepositoryTest {
     class FindAll {
         @Test
         void returnsSortedList_givenSortOrder() {
-            //given
+            // Given
             Sort sort = Sort.by(Sort.Direction.DESC, "name");
             FieldOfStudy fieldOfStudy1 = createFieldOfStudy1();
             FieldOfStudy fieldOfStudy2 = createFieldOfStudy2();
             FieldOfStudy fieldOfStudy3 = createFieldOfStudy3();
-            //when
+            // When
             List<FieldOfStudy> actual = repository.findAll(sort);
-            //then
+            // Then
             assertThat(actual).isNotNull()
                     .containsExactly(fieldOfStudy2, fieldOfStudy1, fieldOfStudy3);
         }
@@ -68,26 +68,26 @@ class FieldOfStudyRepositoryTest {
 
         @Test
         void returnsEmptyList_givenNonExistingName() {
-            //given
+            // Given
             String name = "chemia";
             createFieldOfStudy1();
             createFieldOfStudy2();
-            //when
+            // When
             List<FieldOfStudy> actual = repository.findAllByNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfFieldsOfStudies_givenName() {
-            //given
+            // Given
             String name = "mech";
             FieldOfStudy expected1 = createFieldOfStudy1();
             FieldOfStudy expected2 = createFieldOfStudy2();
             FieldOfStudy expected3 = createFieldOfStudy3();
-            //when
+            // When
             List<FieldOfStudy> actual = repository.findAllByNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(2)
                     .containsExactlyInAnyOrder(expected1, expected2)
                     .doesNotContain(expected3);
@@ -95,15 +95,15 @@ class FieldOfStudyRepositoryTest {
 
         @Test
         void returnsListOfFieldsOfStudiesOnGivenPage_givenNameAndPageable() {
-            //given
+            // Given
             String name = "mech";
             Pageable pageable = PageRequest.ofSize(1);
             FieldOfStudy expected1 = createFieldOfStudy1();
             FieldOfStudy expected2 = createFieldOfStudy2();
             FieldOfStudy expected3 = createFieldOfStudy3();
-            //when
+            // When
             Page<FieldOfStudy> actual = repository.findAllByNameContainingIgnoreCase(name, pageable);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(1)
                     .contains(expected1)
                     .doesNotContain(expected2, expected3);
@@ -115,26 +115,26 @@ class FieldOfStudyRepositoryTest {
 
         @Test
         void returnsEmptyList_givenId_fieldOfStudyWithoutSubjects() {
-            //given
+            // Given
             FieldOfStudy fieldOfStudy = createFieldOfStudy1();
-            //when
+            // When
             List<Subject> actual = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudy.getId());
-            //then
+            // Then
             assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfSubjects_givenId() {
-            //given
+            // Given
             Subject subject1 = createSubject1();
             Subject subject2 = createSubject2();
             Subject subject3 = createSubject3();
             FieldOfStudy fieldOfStudy = createFieldOfStudy1();
             fieldOfStudy.addSubject(subject1);
             fieldOfStudy.addSubject(subject2);
-            //when
+            // When
             List<Subject> actual = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudy.getId());
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(2)
                     .contains(subject1, subject2)
                     .doesNotContain(subject3);
@@ -146,28 +146,28 @@ class FieldOfStudyRepositoryTest {
 
         @Test
         void returnsEmptyList_givenLevelOfEducationAndSortOrder() {
-            //given
+            // Given
             LevelOfEducation levelOfEducation = LevelOfEducation.SECOND;
             Sort sort = Sort.by("name");
             createFieldOfStudy2();
             createFieldOfStudy3();
-            //when
+            // When
             List<FieldOfStudy> actual = repository.findAllByLevelOfEducation(levelOfEducation, sort);
-            //then
+            // Then
             assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfFieldsOfStudies_givenFirstLevelOfEducationAndSortOrder() {
-            //given
+            // Given
             LevelOfEducation levelOfEducation = LevelOfEducation.FIRST;
             Sort sort = Sort.by("name");
             FieldOfStudy expected1 = createFieldOfStudy1();
             FieldOfStudy expected2 = createFieldOfStudy2();
             FieldOfStudy expected3 = createFieldOfStudy3();
-            //when
+            // When
             List<FieldOfStudy> actual = repository.findAllByLevelOfEducation(levelOfEducation, sort);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(2)
                     .containsExactly(expected3, expected2)
                     .doesNotContain(expected1);
@@ -175,15 +175,15 @@ class FieldOfStudyRepositoryTest {
 
         @Test
         void returnsListOfFieldsOfStudies_givenSecondLevelOfEducationAndSortOrder() {
-            //given
+            // Given
             LevelOfEducation levelOfEducation = LevelOfEducation.SECOND;
             Sort sort = Sort.by("name");
             FieldOfStudy expected1 = createFieldOfStudy1();
             FieldOfStudy expected2 = createFieldOfStudy2();
             FieldOfStudy expected3 = createFieldOfStudy3();
-            //when
+            // When
             List<FieldOfStudy> actual = repository.findAllByLevelOfEducation(levelOfEducation, sort);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(1)
                     .contains(expected1)
                     .doesNotContain(expected2, expected3);

@@ -43,21 +43,21 @@ class StudentRepositoryTest {
     class FindAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase {
         @Test
         void returnsEmptyList_givenNonExistingName() {
-            //given
+            // Given
             String name = "ARCH";
-            //when
+            // When
             List<Student> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfStudents_givenName() {
-            //given
+            // Given
             String name = "ang";
-            //when
+            // When
             List<Student> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(1)
                     .containsExactlyInAnyOrder(expected2)
                     .doesNotContain(expected1, expected3);
@@ -65,11 +65,11 @@ class StudentRepositoryTest {
 
         @Test
         void returnsListOfStudents_givenLastName() {
-            //given
+            // Given
             String name = "ko";
-            //when
+            // When
             List<Student> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(2)
                     .containsExactlyInAnyOrder(expected1, expected3)
                     .doesNotContain(expected2);
@@ -77,12 +77,12 @@ class StudentRepositoryTest {
 
         @Test
         void returnsListOfStudents_givenNameAndPageable() {
-            //given
+            // Given
             String name = "ko";
             Pageable pageable = PageRequest.ofSize(1);
-            //when
+            // When
             Page<Student> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, pageable);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(1)
                     .containsExactlyInAnyOrder(expected1)
                     .doesNotContain(expected3, expected2);

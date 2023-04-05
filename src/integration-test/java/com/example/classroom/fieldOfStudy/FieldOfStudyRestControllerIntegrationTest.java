@@ -67,7 +67,7 @@ class FieldOfStudyRestControllerIntegrationTest {
 
     @Test
     void shouldGetAllFieldsOfStudy() throws URISyntaxException {
-        //given
+        // Given
         Student student1 = initData.createStudentOne(null, List.of());
         Student student2 = initData.createStudentTwo(null, List.of());
 
@@ -79,10 +79,10 @@ class FieldOfStudyRestControllerIntegrationTest {
 
         FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
         FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(department2, List.of(subject2), List.of(student2));
-        //when
+        // When
         URI url = createURL("/api/fields-of-study");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
-        //then
+        // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Set actual = response.getBody();
         assertThat(actual).isNotNull().isNotEmpty().hasSize(2);
@@ -91,7 +91,7 @@ class FieldOfStudyRestControllerIntegrationTest {
     @Test
     @Transactional
     void shouldCreateFieldOfStudy() throws URISyntaxException {
-        //given
+        // Given
         Student student1 = initData.createStudentOne(null, List.of());
         Student student2 = initData.createStudentTwo(null, List.of());
 
@@ -103,10 +103,10 @@ class FieldOfStudyRestControllerIntegrationTest {
 
         FieldOfStudyDto expected = createFieldOfStudyDto(department1, List.of(subject1), List.of(student1));
 
-        //when
+        // When
         URI url = createURL("/api/fields-of-study");
         ResponseEntity<FieldOfStudyDto> response = restTemplate.postForEntity(url, expected, FieldOfStudyDto.class);
-        //then
+        // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         FieldOfStudyDto actual = response.getBody();
         assertThat(actual).isNotNull();
@@ -158,7 +158,7 @@ class FieldOfStudyRestControllerIntegrationTest {
 
     @Test
     void shouldGetFieldOfStudy() throws URISyntaxException {
-        //given
+        // Given
         Student student1 = initData.createStudentOne(null, List.of());
         Student student2 = initData.createStudentTwo(null, List.of());
 
@@ -167,12 +167,12 @@ class FieldOfStudyRestControllerIntegrationTest {
         Department department = initData.createDepartmentOne(null, List.of());
 
         FieldOfStudy expected = initData.createFieldOfStudyOne(department, List.of(subject1, subject2), List.of(student1, student2));
-        //when
+        // When
         URI url = createURL("/api/fields-of-study/" + expected.getId());
         ResponseEntity<FieldOfStudyDto> response = restTemplate.getForEntity(url, FieldOfStudyDto.class);
         Optional<FieldOfStudy> byId = fieldOfStudyRepository.findById(expected.getId());
         assertThat(byId).isPresent();
-        //then
+        // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         FieldOfStudyDto actual = response.getBody();
         assertThat(actual).isNotNull();
@@ -214,7 +214,7 @@ class FieldOfStudyRestControllerIntegrationTest {
 
     @Test
     void shouldUpdateFieldOfStudy() throws URISyntaxException {
-        //given
+        // Given
         Student student1 = initData.createStudentOne(null, List.of());
         Student student2 = initData.createStudentTwo(null, List.of());
 
@@ -227,12 +227,12 @@ class FieldOfStudyRestControllerIntegrationTest {
         FieldOfStudyDto expected = createFieldOfStudyDto(department, List.of(subject1, subject2), List.of(student1, student2));
         expected.setId(entity.getId());
 
-        //when
+        // When
         URI url = createURL("/api/fields-of-study/");
         final HttpEntity<FieldOfStudyDto> request = new HttpEntity<>(expected);
         ResponseEntity<FieldOfStudyDto> response = restTemplate.exchange(url, HttpMethod.PUT, request, FieldOfStudyDto.class);
 
-        //then
+        // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         FieldOfStudyDto actual = response.getBody();
         assertThat(actual).isNotNull();
@@ -287,7 +287,7 @@ class FieldOfStudyRestControllerIntegrationTest {
 
     @Test
     void shouldDeleteFieldOfStudy() throws URISyntaxException {
-        //given
+        // Given
         Student student1 = initData.createStudentOne(null, List.of());
         Student student2 = initData.createStudentTwo(null, List.of());
 
@@ -297,10 +297,10 @@ class FieldOfStudyRestControllerIntegrationTest {
         Department department = initData.createDepartmentOne(null, List.of());
 
         FieldOfStudy expected = initData.createFieldOfStudyOne(department, List.of(subject1, subject2), List.of(student1, student2));
-        //when
+        // When
         URI url = createURL("/api/fields-of-study/" + expected.getId());
         restTemplate.delete(url);
-        //then
+        // Then
         Optional<FieldOfStudy> byId = fieldOfStudyRepository.findById(expected.getId());
         assertThat(byId).isNotPresent();
         departmentRepository.findById(department.getId()).orElseThrow(() -> new IllegalStateException(
@@ -315,7 +315,7 @@ class FieldOfStudyRestControllerIntegrationTest {
 
     @Test
     void shouldDeleteAllFieldsOfStudy() throws URISyntaxException {
-        //given
+        // Given
         Student student1 = initData.createStudentOne(null, List.of());
         Student student2 = initData.createStudentTwo(null, List.of());
 
@@ -327,10 +327,10 @@ class FieldOfStudyRestControllerIntegrationTest {
 
         FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(department1, List.of(subject1), List.of(student1));
         FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyOne(department2, List.of(subject2), List.of(student2));
-        //when
+        // When
         URI url = createURL("/api/fields-of-study");
         restTemplate.delete(url);
-        //then
+        // Then
         Optional<FieldOfStudy> byId1 = fieldOfStudyRepository.findById(fieldOfStudy1.getId());
         assertThat(byId1).isNotPresent();
         departmentRepository.findById(department2.getId()).orElseThrow(() -> new IllegalStateException(

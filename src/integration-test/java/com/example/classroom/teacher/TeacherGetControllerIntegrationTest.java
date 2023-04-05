@@ -54,17 +54,17 @@ class TeacherGetControllerIntegrationTest {
 
     @Test
     void shouldGetParticularTeacher() throws Exception {
-        //given
+        // Given
         Student student1 = integrationTestsInitData.createStudentOne(null, List.of());
         Student student2 = integrationTestsInitData.createStudentTwo(null, List.of());
         Teacher teacher = integrationTestsInitData.createTeacherOne(null, List.of(), List.of(student1, student2));
 
-        //when
+        // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers/" + teacher.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
-        //then
+        // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
                 .contains("                <div class=\"card-header py-3 bg-secondary bg-gradient bg-opacity-25\">\n" +
@@ -99,19 +99,19 @@ class TeacherGetControllerIntegrationTest {
 
     @Test
     void shouldGetTeachersAndContainParticularTeacher() throws Exception {
-        //given
+        // Given
         Student student1 = integrationTestsInitData.createStudentOne(null, List.of());
         Student student2 = integrationTestsInitData.createStudentTwo(null, List.of());
         Student student3 = integrationTestsInitData.createStudentThree(null, List.of());
         Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of(student1, student2));
         Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of(student3));
 
-        //when
+        // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
-        //then
+        // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
                 .contains("                             <td>" + teacher1.getFirstName() + "</td>\n" +
@@ -129,20 +129,20 @@ class TeacherGetControllerIntegrationTest {
 
     @Test
     void shouldGetTeachersSecondPageSortedByFirstName() throws Exception {
-        //given
+        // Given
         Student student1 = integrationTestsInitData.createStudentOne(null, List.of());
         Student student2 = integrationTestsInitData.createStudentTwo(null, List.of());
         Student student3 = integrationTestsInitData.createStudentThree(null, List.of());
         Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of(student1, student2));
         Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of(student3));
         Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of(student1, student2, student3));
-        //when
+        // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers?page=2&size=2&sortField=firstName&sortDir=asc"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
-        //then
+        // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         // used sorting dir by lastName ascending, so student1 will be last - Jarosław
         assertThat(contentAsString)
@@ -176,20 +176,20 @@ class TeacherGetControllerIntegrationTest {
 
     @Test
     void shouldGetResultOfSearchTeachersByFirstOrLastName() throws Exception {
-        //given
+        // Given
         Student student1 = integrationTestsInitData.createStudentOne(null, List.of());
         Student student2 = integrationTestsInitData.createStudentTwo(null, List.of());
         Student student3 = integrationTestsInitData.createStudentThree(null, List.of());
         Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of(student1, student2));
         Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of(student3));
         Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of(student1, student2, student3));
-        //when
+        // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers?name=ja"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
-        //then
+        // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
                 .contains("                                <td>" + teacher1.getFirstName() + "</td>\n" +

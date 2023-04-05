@@ -54,19 +54,19 @@ class StudentRestControllerWebMvcTest {
     class GetStudent {
         @Test
         void returns200_withDtoInBody_givenExistingId() throws Exception {
-            //given
+            // Given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Student expected = initData.createStudentOne(fieldOfStudy, List.of(teacher1, teacher2));
             StudentDto dto = mapper.map(expected, StudentDto.class);
             given(service.fetchById(expected.getId())).willReturn(dto);
-            //when
+            // When
             MvcResult mvcResult = mockMvc.perform(get("/api/students/{id}", expected.getId()))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             StudentDto actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StudentDto.class);
             then(service).should().fetchById(anyLong());
             assertAll("Student properties",
@@ -90,32 +90,32 @@ class StudentRestControllerWebMvcTest {
 
         @Test
         void returns404_givenNonExistingId() throws Exception {
-            //given
+            // Given
             Long id = 100L;
             given(service.fetchById(id)).willThrow(new IllegalArgumentException(
                     "Invalid Student ID: " + id));
-            //when
+            // When
             mockMvc.perform(get("/api/students/{id}", id))
                     .andExpect(status().isNotFound())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             then(service).should().fetchById(id);
         }
 
         @Test
         void returns404_givenNull() throws Exception {
-            //given
+            // Given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Student expected = initData.createStudentOne(fieldOfStudy, List.of(teacher1, teacher2));
             given(service.fetchById(expected.getId())).willReturn(null);
-            //when
+            // When
             mockMvc.perform(get("/api/students/{id}", expected.getId()))
                     .andExpect(status().isNotFound())
                     .andDo(print());
-            //then
+            // Then
             then(service).should().fetchById(expected.getId());
         }
     }
@@ -124,7 +124,7 @@ class StudentRestControllerWebMvcTest {
     class GetStudents {
         @Test
         void returns200_withListOfStudentsInBody() throws Exception {
-            //given
+            // Given
             FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
@@ -135,12 +135,12 @@ class StudentRestControllerWebMvcTest {
             StudentDto dto1 = mapper.map(expected1, StudentDto.class);
             StudentDto dto2 = mapper.map(expected2, StudentDto.class);
             given(service.fetchAll()).willReturn(List.of(dto1, dto2));
-            //when
+            // When
             MvcResult mvcResult = mockMvc.perform(get("/api/students"))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             List<LinkedHashMap> actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), List.class);
             then(service).should().fetchAll();
             assertThat(actual).isNotNull().hasSize(2);
@@ -180,14 +180,14 @@ class StudentRestControllerWebMvcTest {
 
         @Test
         void returns404_whenNoStudentsInDatabase() throws Exception {
-            //given
+            // Given
             given(service.fetchAll()).willReturn(List.of());
-            //when
+            // When
             mockMvc.perform(get("/api/students"))
                     .andExpect(status().isNotFound())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             then(service).should().fetchAll();
         }
     }
@@ -196,21 +196,21 @@ class StudentRestControllerWebMvcTest {
     class CreateStudent {
         @Test
         void returns201_withDtoInBody_givenCorrectDto() throws Exception {
-            //given
+            // Given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Student expected = initData.createStudentOne(fieldOfStudy, List.of(teacher1, teacher2));
             StudentDto dto = mapper.map(expected, StudentDto.class);
             given(service.create(any(StudentDto.class))).willReturn(dto);
-            //when
+            // When
             MvcResult mvcResult = mockMvc.perform(post("/api/students")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isCreated())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             then(service).should().create(any(StudentDto.class));
             StudentDto actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StudentDto.class);
             assertAll("Student properties",
@@ -234,27 +234,27 @@ class StudentRestControllerWebMvcTest {
 
         @Test
         void returns400_givenNullFromService() throws Exception {
-            //given
+            // Given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Student expected = initData.createStudentOne(fieldOfStudy, List.of(teacher1, teacher2));
             StudentDto dto = mapper.map(expected, StudentDto.class);
             given(service.create(any(StudentDto.class))).willReturn(null);
-            //when
+            // When
             mockMvc.perform(post("/api/students")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             then(service).should().create(any(StudentDto.class));
         }
 
         @Test
         void returns400_withErrorMsg_givenEmptyDtoFields() throws Exception {
-            //given
+            // Given
             String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
             String expectedErrorMsgForFirstNameEmpty = "First name cannot be empty.";
             String expectedErrorMsgForLastNameEmpty = "Last name cannot be empty.";
@@ -262,14 +262,14 @@ class StudentRestControllerWebMvcTest {
             String expectedErrorMsgForEmail = "Email cannot be empty.";
             Student expected = new Student();
             StudentDto dto = mapper.map(expected, StudentDto.class);
-            //when
+            // When
             MvcResult mvcResult = mockMvc.perform(post("/api/students")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             String actualResponseBody = mvcResult.getResponse().getContentAsString();
             assertThat(actualResponseBody).as("Check error message")
                     .contains(expectedHttpStatusCodeAsString,
@@ -281,7 +281,7 @@ class StudentRestControllerWebMvcTest {
 
         @Test
         void returns400_withErrorMsg_givenInvalidDtoFields() throws Exception {
-            //given
+            // Given
             String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
             String expectedErrorMsgForFirstNameLength = "First name must be between 2 and 30 characters long.";
             String expectedErrorMsgForLastNameLength = "Last name must be between 2 and 30 characters long.";
@@ -293,14 +293,14 @@ class StudentRestControllerWebMvcTest {
             expected.setAge(51);
             expected.setEmail("student");
             StudentDto dto = mapper.map(expected, StudentDto.class);
-            //when
+            // When
             MvcResult mvcResult = mockMvc.perform(post("/api/students")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             String actualResponseBody = mvcResult.getResponse().getContentAsString();
             assertThat(actualResponseBody).as("Check error message")
                     .contains(expectedHttpStatusCodeAsString,
@@ -315,21 +315,21 @@ class StudentRestControllerWebMvcTest {
     class UpdateStudent {
         @Test
         void returns200_withDtoInBody_givenCorrectDto() throws Exception {
-            //given
+            // Given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Student expected = initData.createStudentOne(fieldOfStudy, List.of(teacher1, teacher2));
             StudentDto dto = mapper.map(expected, StudentDto.class);
             given(service.update(any(StudentDto.class))).willReturn(dto);
-            //when
+            // When
             MvcResult mvcResult = mockMvc.perform(put("/api/students")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             then(service).should().update(any(StudentDto.class));
             StudentDto actual = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StudentDto.class);
             assertAll("Student properties",
@@ -353,27 +353,27 @@ class StudentRestControllerWebMvcTest {
 
         @Test
         void returns400_givenNullFromService() throws Exception {
-            //given
+            // Given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Student expected = initData.createStudentOne(fieldOfStudy, List.of(teacher1, teacher2));
             StudentDto dto = mapper.map(expected, StudentDto.class);
             given(service.update(any(StudentDto.class))).willReturn(null);
-            //when
+            // When
             mockMvc.perform(put("/api/students")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             then(service).should().update(dto);
         }
 
         @Test
         void returns400_withErrorMsg_givenEmptyDtoFields() throws Exception {
-            //given
+            // Given
             String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
             String expectedErrorMsgForFirstNameEmpty = "First name cannot be empty.";
             String expectedErrorMsgForLastNameEmpty = "Last name cannot be empty.";
@@ -381,14 +381,14 @@ class StudentRestControllerWebMvcTest {
             String expectedErrorMsgForEmail = "Email cannot be empty.";
             Student expected = new Student();
             StudentDto dto = mapper.map(expected, StudentDto.class);
-            //when
+            // When
             MvcResult mvcResult = mockMvc.perform(put("/api/students")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             String actualResponseBody = mvcResult.getResponse().getContentAsString();
             assertThat(actualResponseBody).as("Check error message")
                     .contains(expectedHttpStatusCodeAsString,
@@ -400,7 +400,7 @@ class StudentRestControllerWebMvcTest {
 
         @Test
         void returns400_withErrorMsg_givenInvalidDtoFields() throws Exception {
-            //given
+            // Given
             String expectedHttpStatusCodeAsString = String.valueOf(HttpStatus.BAD_REQUEST.value());
             String expectedErrorMsgForFirstNameLength = "First name must be between 2 and 30 characters long.";
             String expectedErrorMsgForLastNameLength = "Last name must be between 2 and 30 characters long.";
@@ -412,14 +412,14 @@ class StudentRestControllerWebMvcTest {
             expected.setAge(51);
             expected.setEmail("student");
             StudentDto dto = mapper.map(expected, StudentDto.class);
-            //when
+            // When
             MvcResult mvcResult = mockMvc.perform(put("/api/students")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
                     .andDo(print())
                     .andReturn();
-            //then
+            // Then
             String actualResponseBody = mvcResult.getResponse().getContentAsString();
             assertThat(actualResponseBody).as("Check error message")
                     .contains(expectedHttpStatusCodeAsString,
@@ -434,16 +434,16 @@ class StudentRestControllerWebMvcTest {
     class DeleteStudent {
         @Test
         void returns202_givenCorrectId() throws Exception {
-            //given
+            // Given
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Student expected = initData.createStudentOne(fieldOfStudy, List.of(teacher1, teacher2));
-            //when
+            // When
             mockMvc.perform(delete("/api/students/{id}", expected.getId()))
                     .andExpect(status().isAccepted())
                     .andDo(print());
-            //then
+            // Then
             then(service).should().remove(expected.getId());
         }
     }
@@ -455,7 +455,7 @@ class StudentRestControllerWebMvcTest {
             mockMvc.perform(delete("/api/students"))
                     .andExpect(status().isAccepted())
                     .andDo(print());
-            //then
+            // Then
             then(service).should().removeAll();
         }
     }

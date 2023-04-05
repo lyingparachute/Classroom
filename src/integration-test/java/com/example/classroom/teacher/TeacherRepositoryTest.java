@@ -26,6 +26,10 @@ class TeacherRepositoryTest {
     @Autowired
     EntityManager entityManager;
 
+    Teacher expected1;
+    Teacher expected2;
+    Teacher expected3;
+
     @BeforeEach
     void setUp() {
         repository.findAll().forEach(teacher -> teacher.getStudents()
@@ -34,39 +38,31 @@ class TeacherRepositoryTest {
                 .forEach(teacher::removeSubject));
         repository.findAll().forEach(teacher -> teacher.setDepartment(null));
         repository.deleteAll();
-    }
-
-    @Test
-    void injectedComponentsAreNotNull() {
-        assertThat(entityManager).isNotNull();
-        assertThat(repository).isNotNull();
+        expected1 = createTeacher1();
+        expected2 = createTeacher2();
+        expected3 = createTeacher3();
     }
 
     @Nested
     class FindAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase {
         @Test
         void returnsEmptyList_givenNonExistingName() {
-            //given
+            // Given
             String name = "ARCH";
-            createTeacher1();
-            createTeacher2();
-            createTeacher3();
-            //when
+            // When
             List<Teacher> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfTeachers_givenName() {
-            //given
+            // Given
             String name = "ja";
-            Teacher expected1 = createTeacher1();
-            Teacher expected2 = createTeacher2();
-            Teacher expected3 = createTeacher3();
-            //when
+
+            // When
             List<Teacher> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(2)
                     .containsExactlyInAnyOrder(expected1, expected2)
                     .doesNotContain(expected3);
@@ -74,14 +70,12 @@ class TeacherRepositoryTest {
 
         @Test
         void returnsListOfTeachers_givenLastName() {
-            //given
+            // Given
             String name = "adam";
-            Teacher expected1 = createTeacher1();
-            Teacher expected2 = createTeacher2();
-            Teacher expected3 = createTeacher3();
-            //when
+
+            // When
             List<Teacher> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(2)
                     .containsExactlyInAnyOrder(expected1, expected3)
                     .doesNotContain(expected2);
@@ -89,15 +83,13 @@ class TeacherRepositoryTest {
 
         @Test
         void returnsListOfTeachers_givenNameAndPageable() {
-            //given
+            // Given
             String name = "adam";
             Pageable pageable = PageRequest.ofSize(1);
-            Teacher expected1 = createTeacher1();
-            Teacher expected2 = createTeacher2();
-            Teacher expected3 = createTeacher3();
-            //when
+
+            // When
             Page<Teacher> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, pageable);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(1)
                     .containsExactlyInAnyOrder(expected1)
                     .doesNotContain(expected3, expected2);

@@ -68,7 +68,7 @@ class TeacherRestControllerIntegrationTest {
 
     @Test
     void shouldGetTeacher() throws URISyntaxException {
-        //given
+        // Given
         Subject subject1 = initData.createSubjectOne(null, List.of());
         Subject subject2 = initData.createSubjectTwo(null, List.of());
         Department department = initData.createDepartmentOne(null, List.of());
@@ -76,10 +76,10 @@ class TeacherRestControllerIntegrationTest {
         Student student2 = initData.createStudentTwo(null, List.of());
 
         Teacher expected = initData.createTeacherOne(department, List.of(subject1, subject2), List.of(student1, student2));
-        //when
+        // When
         URI url = createURL("/api/teachers/" + expected.getId());
         ResponseEntity<TeacherDto> response = restTemplate.getForEntity(url, TeacherDto.class);
-        //then
+        // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         TeacherDto actual = response.getBody();
         assertThat(actual).isNotNull();
@@ -112,7 +112,7 @@ class TeacherRestControllerIntegrationTest {
 
     @Test
     void shouldGetAllTeachers() throws URISyntaxException {
-        //given
+        // Given
         Subject subject1 = initData.createSubjectOne(null, List.of());
         Subject subject2 = initData.createSubjectTwo(null, List.of());
         Department department1 = initData.createDepartmentOne(null, List.of());
@@ -122,10 +122,10 @@ class TeacherRestControllerIntegrationTest {
 
         Teacher expectedTeacher1 = initData.createTeacherOne(department1, List.of(subject1, subject2), List.of(student1, student2));
         Teacher expectedTeacher2 = initData.createTeacherTwo(department2, List.of(subject2), List.of(student2));
-        //when
+        // When
         URI url = createURL("/api/teachers");
         ResponseEntity<Set> response = restTemplate.getForEntity(url, Set.class);
-        //then
+        // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Set<TeacherDto> actual = response.getBody();
         assertThat(actual).isNotNull().isNotEmpty().hasSize(2);
@@ -133,7 +133,7 @@ class TeacherRestControllerIntegrationTest {
 
     @Test
     void shouldCreateTeacher() throws URISyntaxException {
-        //given
+        // Given
         Subject subject1 = initData.createSubjectOne(null, List.of());
         Subject subject2 = initData.createSubjectTwo(null, List.of());
         Department department = initData.createDepartmentOne(null, List.of());
@@ -143,10 +143,10 @@ class TeacherRestControllerIntegrationTest {
         TeacherDto expected = createTeacherDto(department, List.of(subject1, subject2), List.of(student1, student2));
         Teacher expectedEntity = mapper.map(expected, Teacher.class);
 
-        //when
+        // When
         URI url = createURL("/api/teachers");
         ResponseEntity<TeacherDto> response = restTemplate.postForEntity(url, expected, TeacherDto.class);
-        //then
+        // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         TeacherDto actual = response.getBody();
         assertThat(actual).as("Check if %s is not null", "Teacher").isNotNull();
@@ -216,7 +216,7 @@ class TeacherRestControllerIntegrationTest {
 
     @Test
     void shouldUpdateTeacher() throws URISyntaxException {
-        //given
+        // Given
         Subject subject1 = initData.createSubjectOne(null, List.of());
         Subject subject2 = initData.createSubjectTwo(null, List.of());
         Department department = initData.createDepartmentOne(null, List.of());
@@ -226,11 +226,11 @@ class TeacherRestControllerIntegrationTest {
         Teacher teacherEntity = initData.createTeacherOne(null, List.of(), List.of());
         TeacherDto expected = createTeacherDto(department, List.of(subject1, subject2), List.of(student1, student2));
         expected.setId(teacherEntity.getId());
-        //when
+        // When
         URI url = createURL("/api/teachers/");
         final HttpEntity<TeacherDto> requestUpdate = new HttpEntity<>(expected);
         ResponseEntity<TeacherDto> response = restTemplate.exchange(url, HttpMethod.PUT, requestUpdate, TeacherDto.class);
-        //then
+        // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         TeacherDto actual = response.getBody();
         assertThat(actual).isNotNull();
@@ -305,7 +305,7 @@ class TeacherRestControllerIntegrationTest {
 
     @Test
     void shouldDeleteTeacher() throws URISyntaxException {
-        //given
+        // Given
         Subject subject1 = initData.createSubjectOne(null, List.of());
         Subject subject2 = initData.createSubjectTwo(null, List.of());
         Department department = initData.createDepartmentOne(null, List.of());
@@ -313,10 +313,11 @@ class TeacherRestControllerIntegrationTest {
         Student student2 = initData.createStudentTwo(null, List.of());
 
         Teacher expected = initData.createTeacherOne(department, List.of(subject1, subject2), List.of(student1, student2));
-        //when
+        // When
         URI url = createURL("/api/teachers/" + expected.getId());
         restTemplate.delete(url);
-        //then
+
+        // Then
         Optional<Teacher> byId = teacherRepository.findById(expected.getId());
         assertThat(byId).isNotPresent();
         departmentRepository.findById(department.getId()).orElseThrow(() -> new IllegalStateException(
@@ -334,7 +335,7 @@ class TeacherRestControllerIntegrationTest {
 
     @Test
     void shouldDeleteAllTeachers() throws URISyntaxException {
-        //given
+        // Given
         Subject subject1 = initData.createSubjectOne(null, List.of());
         Subject subject2 = initData.createSubjectTwo(null, List.of());
         Department department1 = initData.createDepartmentOne(null, List.of());
@@ -344,10 +345,11 @@ class TeacherRestControllerIntegrationTest {
 
         Teacher expected1 = initData.createTeacherOne(department1, List.of(subject1, subject2), List.of(student1, student2));
         Teacher expected2 = initData.createTeacherTwo(department2, List.of(subject2), List.of(student2));
-        //when
+        // When
         URI url = createURL("/api/teachers");
         restTemplate.delete(url);
-        //then
+
+        // Then
         Optional<Teacher> byId1 = teacherRepository.findById(expected1.getId());
         assertThat(byId1).isNotPresent();
         departmentRepository.findById(department1.getId()).orElseThrow(() -> new IllegalStateException(

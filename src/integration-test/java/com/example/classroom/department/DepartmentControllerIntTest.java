@@ -64,7 +64,7 @@ class DepartmentControllerIntTest {
         FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
         DepartmentDto expected = createDepartmentDto(dean, List.of(fieldOfStudy1, fieldOfStudy2));
-        //when
+        // When
         this.mockMvc.perform(post("/dashboard/departments/new")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                         .content("name=" + expected.getName() +
@@ -79,7 +79,7 @@ class DepartmentControllerIntTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
 
-        //then
+        // Then
         Optional<Department> byId = departmentRepository.findAll().stream().findFirst();
         assertThat(byId).isPresent();
         Department actual = byId.get();
@@ -153,7 +153,7 @@ class DepartmentControllerIntTest {
         expected.setName("Wydział Najlepszy");
         expected.setAddress("ul. Kasztanowa 68, 22-098 Kasztanowo");
         expected.setTelNumber("321321321");
-        //when
+        // When
         this.mockMvc.perform(post("/dashboard/departments/update")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                         .content("id=" + department.getId() +
@@ -168,7 +168,7 @@ class DepartmentControllerIntTest {
                                 "&add="))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
-        //then
+        // Then
         Optional<Department> byId = departmentRepository.findById(department.getId());
         assertThat(byId).isPresent();
         Department actual = byId.get();
@@ -232,18 +232,18 @@ class DepartmentControllerIntTest {
 
     @Test
     void shouldDeleteDepartment() throws Exception {
-        //given
+        // Given
         Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
 
         Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
 
-        //when
+        // When
         this.mockMvc.perform(get("/dashboard/departments/delete/" + expected.getId()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
-        //then
+        // Then
         Optional<Department> byId = departmentRepository.findById(expected.getId());
         assertThat(byId).isNotPresent();
         teacherRepository.findById(dean.getId()).orElseThrow(() -> new IllegalStateException(

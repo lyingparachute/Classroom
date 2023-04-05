@@ -52,7 +52,7 @@ class DepartmentGetControllerIntTest {
 
     @Test
     void shouldGetAllDepartments_givenData() throws Exception {
-        //given
+        // Given
         Teacher dean1 = initData.createTeacherOne(null, List.of(), List.of());
         Teacher dean2 = initData.createTeacherThree(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
@@ -60,13 +60,13 @@ class DepartmentGetControllerIntTest {
 
         Department expected1 = initData.createDepartmentOne(dean1, List.of(fieldOfStudy1));
         Department expected2 = initData.createDepartmentTwo(dean2, List.of(fieldOfStudy2));
-        //when
+        // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/departments"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
         String content = mvcResult.getResponse().getContentAsString();
-        //then
+        // Then
         assertThat(content).as("Page contains %s details", "department1")
                 .contains("                                            <div class=\"card-body\">\n" +
                         "                                                <a class=\"card-title h5\"\n" +
@@ -91,19 +91,19 @@ class DepartmentGetControllerIntTest {
 
     @Test
     void shouldGetDepartment_givenCorrectData() throws Exception {
-        //given
+        // Given
         Teacher dean = initData.createTeacherOne(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
         FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
 
         Department expected = initData.createDepartmentOne(dean, List.of(fieldOfStudy1, fieldOfStudy2));
-        //when
+        // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/departments/" + expected.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
         String content = mvcResult.getResponse().getContentAsString();
-        //then
+        // Then
         assertThat(content).as("Page contains %s details", "department")
                 .contains(
                         "        <h4>Department name:</h4>\n" +
@@ -169,15 +169,15 @@ class DepartmentGetControllerIntTest {
 
     @Test
     void shouldGetDepartment_givenDepartmentWithNoDeanAndFieldsOfStudies() throws Exception {
-        //given
+        // Given
         Department expected = initData.createDepartmentTwo(null, List.of());
-        //when
+        // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/departments/" + expected.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
         String content = mvcResult.getResponse().getContentAsString();
-        //then
+        // Then
         assertThat(content).as("Page contains %s details", "department")
                 .contains(
                         "        <h4>Department name:</h4>\n" +

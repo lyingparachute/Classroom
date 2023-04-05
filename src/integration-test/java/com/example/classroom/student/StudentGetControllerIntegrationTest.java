@@ -54,17 +54,17 @@ class StudentGetControllerIntegrationTest {
 
     @Test
     void shouldGetParticularStudent() throws Exception {
-        //given
+        // Given
         Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
         Student student = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
 
-        //when
+        // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students/" + student.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
-        //then
+        // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
                 .contains("<div class=\"page-title\">Viewing Student with ID: " + student.getId() + "</div>")
@@ -108,20 +108,20 @@ class StudentGetControllerIntegrationTest {
 
     @Test
     void shouldGetStudentsAndContainParticularStudents() throws Exception {
-        //given
+        // Given
         Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
         Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
         Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher1));
 
-        //when
+        // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
-        //then
+        // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
                 .contains("                                                <a class=\"text-body\"\n" +
@@ -144,20 +144,20 @@ class StudentGetControllerIntegrationTest {
 
     @Test
     void shouldGetStudentsSecondPageSortedByFirstName() throws Exception {
-        //given
+        // Given
         Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
         Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
         Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher1));
         Student student3 = integrationTestsInitData.createStudentThree(null, List.of(teacher1, teacher2));
-        //when
+        // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students?page=2&size=2&sortField=firstName&sortDir=asc"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
-        //then
+        // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         // used sorting dir by lastName ascending, so student2 will be last - Weronika
         assertThat(contentAsString)
@@ -199,21 +199,21 @@ class StudentGetControllerIntegrationTest {
 
     @Test
     void shouldGetResultOfSearchStudentsByFirstOrLastName() throws Exception {
-        //given
+        // Given
         Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of());
         Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
 
         Student student1 = integrationTestsInitData.createStudentOne(null, List.of(teacher1, teacher2));
         Student student2 = integrationTestsInitData.createStudentTwo(null, List.of(teacher1));
         Student student3 = integrationTestsInitData.createStudentThree(null, List.of(teacher1, teacher2));
-        //when
+        // When
         // Searching for letter 'w' in first name or last name
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/students?name=w"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
-        //then
+        // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
                 .doesNotContainIgnoringCase("                                                <a class=\"text-body\"\n" +

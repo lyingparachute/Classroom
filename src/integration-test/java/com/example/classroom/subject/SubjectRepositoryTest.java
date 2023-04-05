@@ -44,27 +44,27 @@ class SubjectRepositoryTest {
 
         @Test
         void returnsEmptyList_givenNonExistingName() {
-            //given
+            // Given
             String name = "ARCH";
             createSubject1();
             createSubject2();
             createSubject3();
-            //when
+            // When
             List<Subject> actual = repository.findAllByNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfSubjects_givenName() {
-            //given
+            // Given
             String name = "s";
             Subject expected1 = createSubject1();
             Subject expected2 = createSubject2();
             Subject expected3 = createSubject3();
-            //when
+            // When
             List<Subject> actual = repository.findAllByNameContainingIgnoreCase(name);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(2)
                     .containsExactlyInAnyOrder(expected1, expected3)
                     .doesNotContain(expected2);
@@ -72,15 +72,15 @@ class SubjectRepositoryTest {
 
         @Test
         void returnsListOfSubjects_givenNameAndPageable() {
-            //given
+            // Given
             String name = "s";
             Pageable pageable = PageRequest.ofSize(1);
             Subject expected1 = createSubject1();
             Subject expected2 = createSubject2();
             Subject expected3 = createSubject3();
-            //when
+            // When
             Page<Subject> actual = repository.findAllByNameContainingIgnoreCase(name, pageable);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(1)
                     .contains(expected1)
                     .doesNotContain(expected2, expected3);
@@ -94,29 +94,29 @@ class SubjectRepositoryTest {
 
         @Test
         void returnsEmptyList_givenNonExistingSemester() {
-            //given
+            // Given
             Semester semester = Semester.THIRD;
             Subject expected1 = createSubject1();
             Subject expected2 = createSubject2();
             Subject expected3 = createSubject3();
-            //when
+            // When
             List<Subject> actual = repository.findAllBySemester(semester);
-            //then
+            // Then
             assertThat(actual).isNotNull().isEmpty();
         }
 
         @Test
         void returnsListOfSubjects_givenSemester() {
-            //given
+            // Given
             Semester semester = Semester.FIRST;
             Subject expected1 = createSubject1();
             expected1.setSemester(semester);
             entityManager.persist(expected1);
             Subject expected2 = createSubject2();
             Subject expected3 = createSubject3();
-            //when
+            // When
             List<Subject> actual = repository.findAllBySemester(semester);
-            //then
+            // Then
             assertThat(actual).isNotNull().hasSize(2)
                     .containsExactlyInAnyOrder(expected1, expected3)
                     .doesNotContain(expected2);

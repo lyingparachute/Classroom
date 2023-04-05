@@ -53,7 +53,7 @@ class TeacherControllerIntegrationTest {
 
     @Test
     void shouldCreateTeacher() throws Exception {
-        //given
+        // Given
         Student student1 = integrationTestsInitData.createStudentOne(null, List.of());
         Student student2 = integrationTestsInitData.createStudentTwo(null, List.of());
         TeacherDto teacherDto = new TeacherDto();
@@ -61,7 +61,7 @@ class TeacherControllerIntegrationTest {
         teacherDto.setLastName("Mostowiak");
         teacherDto.setEmail("m.mostowiak@gmail.com");
         teacherDto.setAge(42);
-        //when
+        // When
         this.mockMvc.perform(post("/dashboard/teachers/new")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                         .content("firstName=" + teacherDto.getFirstName() +
@@ -74,8 +74,8 @@ class TeacherControllerIntegrationTest {
                                 "&_studentsList=on" +
                                 "&add="))
                 .andDo(print())
-                .andExpect(status().isOk());
-        //then
+                .andExpect(status().is3xxRedirection());
+        // Then
         Optional<Teacher> first = teacherRepository.findAll().stream().findFirst();
         assertThat(first).isPresent();
         Teacher actual = first.get();
@@ -98,16 +98,16 @@ class TeacherControllerIntegrationTest {
     }
 
     @Test
-    void shouldDeleteStudent() throws Exception {
-        //given
+    void shouldDeleteTeacher() throws Exception {
+        // Given
         Student student1 = integrationTestsInitData.createStudentOne(null, List.of());
         Student student2 = integrationTestsInitData.createStudentTwo(null, List.of());
         Teacher teacher = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of(student1, student2));
-        //when
+        // When
         this.mockMvc.perform(get("/dashboard/teachers/delete/" + teacher.getId()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
-        //then
+        // Then
         Optional<Teacher> byId = teacherRepository.findById(teacher.getId());
         assertThat(byId).isNotPresent();
         teacher.getStudents().forEach(i -> {
@@ -118,7 +118,7 @@ class TeacherControllerIntegrationTest {
 
     @Test
     void shouldEditTeacher() throws Exception {
-        //given
+        // Given
         Student student1 = integrationTestsInitData.createStudentOne(null, List.of());
         Student student2 = integrationTestsInitData.createStudentTwo(null, List.of());
         Teacher teacherEntity = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of());
@@ -128,7 +128,7 @@ class TeacherControllerIntegrationTest {
         teacherDto.setLastName("Mostowiak");
         teacherDto.setEmail("m.mostowiak@gmail.com");
         teacherDto.setAge(42);
-        //when
+        // When
         this.mockMvc.perform(post("/dashboard/teachers/update")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                         .content("id=" + teacherEntity.getId() +
@@ -142,8 +142,8 @@ class TeacherControllerIntegrationTest {
                                 "&_studentsList=on" +
                                 "&add="))
                 .andDo(print())
-                .andExpect(status().isOk());
-        //then
+                .andExpect(status().is3xxRedirection());
+        // Then
         Optional<Teacher> byId = teacherRepository.findById(teacherEntity.getId());
         assertThat(byId).isPresent();
         Teacher actual = byId.get();
