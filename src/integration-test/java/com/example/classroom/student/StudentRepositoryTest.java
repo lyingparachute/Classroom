@@ -1,5 +1,6 @@
 package com.example.classroom.student;
 
+import com.example.classroom.security.WithMockCustomUser;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@WithMockCustomUser
 class StudentRepositoryTest {
 
     @Autowired
@@ -23,17 +25,18 @@ class StudentRepositoryTest {
     @Autowired
     EntityManager entityManager;
 
+    Student expected1;
+    Student expected2;
+    Student expected3;
+
     @BeforeEach
     void setUp() {
         repository.findAll().forEach(student -> student.getTeachers()
                 .forEach(student::removeTeacher));
         repository.deleteAll();
-    }
-
-    @Test
-    void injectedComponentsAreNotNull() {
-        assertThat(entityManager).isNotNull();
-        assertThat(repository).isNotNull();
+        expected1 = createStudent1();
+        expected2 = createStudent2();
+        expected3 = createStudent3();
     }
 
     @Nested
@@ -42,9 +45,6 @@ class StudentRepositoryTest {
         void returnsEmptyList_givenNonExistingName() {
             //given
             String name = "ARCH";
-            createStudent1();
-            createStudent2();
-            createStudent3();
             //when
             List<Student> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name);
             //then
@@ -55,9 +55,6 @@ class StudentRepositoryTest {
         void returnsListOfStudents_givenName() {
             //given
             String name = "wer";
-            Student expected1 = createStudent1();
-            Student expected2 = createStudent2();
-            Student expected3 = createStudent3();
             //when
             List<Student> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name);
             //then
@@ -70,9 +67,6 @@ class StudentRepositoryTest {
         void returnsListOfStudents_givenLastName() {
             //given
             String name = "ko";
-            Student expected1 = createStudent1();
-            Student expected2 = createStudent2();
-            Student expected3 = createStudent3();
             //when
             List<Student> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name);
             //then
@@ -86,9 +80,6 @@ class StudentRepositoryTest {
             //given
             String name = "ko";
             Pageable pageable = PageRequest.ofSize(1);
-            Student expected1 = createStudent1();
-            Student expected2 = createStudent2();
-            Student expected3 = createStudent3();
             //when
             Page<Student> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, pageable);
             //then
@@ -100,9 +91,9 @@ class StudentRepositoryTest {
 
     public Student createStudent1() {
         Student student = new Student();
-        student.setFirstName("Maciej");
-        student.setLastName("Komaranczuk");
-        student.setEmail("m.komaranczuk@gmail.com");
+        student.setFirstName("Brodacz");
+        student.setLastName("Brodaczowy");
+        student.setEmail("b.brodaczowy@gmail.com");
         student.setAge(25);
         entityManager.persist(student);
         return student;
@@ -110,9 +101,9 @@ class StudentRepositoryTest {
 
     public Student createStudent2() {
         Student student = new Student();
-        student.setFirstName("Weronika");
+        student.setFirstName("Angela");
         student.setLastName("Romanski");
-        student.setEmail("w.romanski@gmail.com");
+        student.setEmail("angela.romanski@gmail.com");
         student.setAge(21);
         entityManager.persist(student);
         return student;
@@ -122,7 +113,7 @@ class StudentRepositoryTest {
         Student student = new Student();
         student.setFirstName("Kornelia");
         student.setLastName("Sernatowicz");
-        student.setEmail("a.sernatowicz@gmail.com");
+        student.setEmail("kornelia.sernatowicz@gmail.com");
         student.setAge(18);
         entityManager.persist(student);
         return student;
