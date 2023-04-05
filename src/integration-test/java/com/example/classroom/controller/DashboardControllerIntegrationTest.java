@@ -1,5 +1,6 @@
 package com.example.classroom.controller;
 
+import com.example.classroom.security.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ActiveProfiles("integration")
 @SpringBootTest
+@WithMockCustomUser
 class DashboardControllerIntegrationTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
