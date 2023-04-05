@@ -1,6 +1,7 @@
 package com.example.classroom.subject;
 
 import com.example.classroom.enums.Semester;
+import com.example.classroom.security.WithMockCustomUser;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@WithMockCustomUser
 class SubjectRepositoryTest {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.example.classroom.teacher;
 
+import com.example.classroom.security.WithMockCustomUser;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@WithMockCustomUser
 class TeacherRepositoryTest {
 
     @Autowired

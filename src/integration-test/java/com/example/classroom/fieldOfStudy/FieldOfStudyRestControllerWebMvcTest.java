@@ -2,6 +2,7 @@ package com.example.classroom.fieldOfStudy;
 
 import com.example.classroom.department.Department;
 import com.example.classroom.repository.util.UnitTestsInitData;
+import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.teacher.Teacher;
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(FieldOfStudyRestController.class)
+@WithMockCustomUser
 class FieldOfStudyRestControllerWebMvcTest {
 
     @MockBean

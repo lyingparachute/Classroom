@@ -1,6 +1,7 @@
 package com.example.classroom.subject;
 
 import com.example.classroom.repository.util.IntegrationTestsInitData;
+import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.teacher.TeacherRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @ActiveProfiles("integration")
 @SpringBootTest
+@WithMockCustomUser
 class SubjectControllerIntegrationTest {
 
     @Autowired

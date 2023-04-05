@@ -3,6 +3,7 @@ package com.example.classroom.teacher;
 import com.example.classroom.department.Department;
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.repository.util.UnitTestsInitData;
+import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TeacherRestController.class)
+@WithMockCustomUser
 class TeacherRestControllerWebMvcTest {
 
     @MockBean

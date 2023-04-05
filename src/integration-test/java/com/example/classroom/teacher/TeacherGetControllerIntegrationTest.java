@@ -1,6 +1,7 @@
 package com.example.classroom.teacher;
 
 import com.example.classroom.repository.util.IntegrationTestsInitData;
+import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.student.Student;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("integration")
 @SpringBootTest
 @Transactional
+@WithMockCustomUser
 class TeacherGetControllerIntegrationTest {
 
     @Autowired

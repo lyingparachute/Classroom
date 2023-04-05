@@ -6,6 +6,7 @@ import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
+import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.student.Student;
 import com.example.classroom.student.StudentRepository;
 import com.example.classroom.subject.Subject;
@@ -35,6 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WithMockCustomUser
 class FieldOfStudyRestControllerIntegrationTest {
 
     @Autowired

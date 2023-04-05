@@ -54,7 +54,7 @@ class StudentRepositoryTest {
         @Test
         void returnsListOfStudents_givenName() {
             //given
-            String name = "wer";
+            String name = "ang";
             //when
             List<Student> actual = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name);
             //then
@@ -91,7 +91,7 @@ class StudentRepositoryTest {
 
     public Student createStudent1() {
         Student student = new Student();
-        student.setFirstName("Brodacz");
+        student.setFirstName("Kowal");
         student.setLastName("Brodaczowy");
         student.setEmail("b.brodaczowy@gmail.com");
         student.setAge(25);

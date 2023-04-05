@@ -1,11 +1,9 @@
-package com.example.classroom.student.api;
+package com.example.classroom.student;
 
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
-import com.example.classroom.student.Student;
-import com.example.classroom.student.StudentDto;
-import com.example.classroom.student.StudentRepository;
+import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.teacher.TeacherRepository;
 import org.assertj.core.groups.Tuple;
@@ -34,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ActiveProfiles("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WithMockCustomUser
 class StudentRestControllerIntegrationTest {
 
     @Autowired

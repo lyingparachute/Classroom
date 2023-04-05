@@ -3,6 +3,7 @@ package com.example.classroom.department;
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
+import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.teacher.TeacherRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("integration")
 @SpringBootTest
 @Transactional
+@WithMockCustomUser
 class DepartmentControllerIntTest {
 
     @Autowired

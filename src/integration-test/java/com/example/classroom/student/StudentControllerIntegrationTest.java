@@ -1,8 +1,10 @@
 package com.example.classroom.student;
 
 import com.example.classroom.repository.util.IntegrationTestsInitData;
+import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.teacher.TeacherRepository;
+import jakarta.transaction.Transactional;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ActiveProfiles("integration")
 @SpringBootTest
+@Transactional
+@WithMockCustomUser
 class StudentControllerIntegrationTest {
 
     @Autowired
@@ -61,17 +65,17 @@ class StudentControllerIntegrationTest {
         //when
         this.mockMvc.perform(post("/dashboard/students/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("firstName=" + studentDto.getFirstName() +
-                        "&lastName=" + studentDto.getLastName() +
-                        "&email=" + studentDto.getEmail() +
-                        "&age=" + studentDto.getAge() +
-                        "&teachers=" + teacher1.getId() +
-                        "&_teachersList=on" +
-                        "&teachers=" + teacher2.getId() +
-                        "&_teachersList=on" +
-                        "&add="))
+                        .content("firstName=" + studentDto.getFirstName() +
+                                "&lastName=" + studentDto.getLastName() +
+                                "&email=" + studentDto.getEmail() +
+                                "&age=" + studentDto.getAge() +
+                                "&teachers=" + teacher1.getId() +
+                                "&_teachersList=on" +
+                                "&teachers=" + teacher2.getId() +
+                                "&_teachersList=on" +
+                                "&add="))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
         //then
         Optional<Student> byId = studentRepository.findAll().stream().findFirst();
         assertThat(byId).isPresent();
@@ -141,7 +145,7 @@ class StudentControllerIntegrationTest {
                                 "&_teachersList=on" +
                                 "&add="))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
         //then
         Optional<Student> byId = studentRepository.findById(studentEntity.getId());
         assertThat(byId).isPresent();

@@ -23,7 +23,7 @@ public class StudentRestController {
                 ResponseEntity.notFound().build();
     }
 
-    @GetMapping()
+    @GetMapping
     ResponseEntity<List<StudentDto>> getStudents() {
         List<StudentDto> students = service.fetchAll();
         return students.isEmpty() ?

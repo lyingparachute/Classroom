@@ -4,6 +4,7 @@ import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
+import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.subject.Subject;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@WithMockCustomUser
 class FieldOfStudyRepositoryTest {
 
     @Autowired

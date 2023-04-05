@@ -3,6 +3,7 @@ package com.example.classroom.teacher;
 import com.example.classroom.department.Department;
 import com.example.classroom.department.DepartmentRepository;
 import com.example.classroom.repository.util.IntegrationTestsInitData;
+import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.student.Student;
 import com.example.classroom.student.StudentRepository;
 import com.example.classroom.subject.Subject;
@@ -33,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ActiveProfiles("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WithMockCustomUser
 class TeacherRestControllerIntegrationTest {
 
     @LocalServerPort
