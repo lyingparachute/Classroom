@@ -97,7 +97,7 @@
                                     <div th:text="#{signup.authority}"></div>
                                     <div class="btn-group mb-4">
                                         <th:block
-                                                th:each="roleOpt, iterStat : ${T(com.example.classroom.enums.UserRole).values()}">
+                                                th:each="roleOpt, iterStat : ${T(com.example.classroom.user.UserRole).values()}">
                                             <input th:field="*{role}"
                                                    th:value="${roleOpt}"
                                                    th:classappend="${#fields.hasErrors('role')} ? is-invalid"
