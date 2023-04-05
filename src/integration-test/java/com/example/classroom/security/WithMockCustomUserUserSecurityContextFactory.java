@@ -1,7 +1,6 @@
 package com.example.classroom.security;
 
 import com.example.classroom.user.User;
-import com.example.classroom.user.UserRole;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,7 +19,7 @@ public class WithMockCustomUserUserSecurityContextFactory implements WithSecurit
                 .lastName("Nowak")
                 .password(password)
                 .email("andrzej.nowak@gmail.com")
-                .role(UserRole.ROLE_STUDENT)
+                .role(annotation.role())
                 .build();
         Authentication auth = new UsernamePasswordAuthenticationToken(principal, password, principal.getAuthorities());
         context.setAuthentication(auth);

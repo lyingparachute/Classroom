@@ -1,5 +1,6 @@
 package com.example.classroom.security;
 
+import com.example.classroom.user.UserRole;
 import org.springframework.security.test.context.support.WithSecurityContext;
 
 import java.lang.annotation.Retention;
@@ -16,5 +17,5 @@ public @interface WithMockCustomUser {
 
     String lastName() default "Lastname";
 
-    String[] roles() default {"STUDENT"};
+    UserRole role() default UserRole.ROLE_ADMIN;
 }
