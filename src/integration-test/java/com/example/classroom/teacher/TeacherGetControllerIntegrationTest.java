@@ -60,31 +60,47 @@ class TeacherGetControllerIntegrationTest {
         Teacher teacher = integrationTestsInitData.createTeacherOne(null, List.of(), List.of(student1, student2));
 
         // When
-        MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers/" + teacher.getId()))
+        MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers/{id}", teacher.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
+
         // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
-                .contains("                <div class=\"card-header py-3 bg-secondary bg-gradient bg-opacity-25\">\n" +
-                        "                    <h3 class=\"mb-0 text-center\">\n" +
-                        "                        <strong>Viewing teacher with ID: " + teacher.getId() + "</strong>");
-        assertThat(contentAsString)
-                .contains("                        <li class=\"list-group-item\">ID number: " + teacher.getId() + "</li>\n" +
-                        "                        <li class=\"list-group-item\">First Name: " + teacher.getFirstName() + "</li>\n" +
-                        "                        <li class=\"list-group-item\">Last Name: " + teacher.getLastName() + "</li>\n" +
-                        "                        <li class=\"list-group-item\">Email: " + teacher.getEmail() + "</li>\n" +
-                        "                        <li class=\"list-group-item\">Age: " + teacher.getAge() + "</li>\n" +
-                        "                        <li class=\"list-group-item\">List of assigned students:\n" +
-                        "                            <ul class=\"list-group\">"
+                .contains(
+                        "<div class=\"page-title\">Viewing teacher with ID: " + teacher.getId() + "</div>"
+                )
+                .contains(
+                        "        <h4>First Name:</h4>\n" +
+                                "        <span>" + teacher.getFirstName() + "</span>\n" +
+                                "    </div>\n" +
+                                "    <hr>\n" +
+                                "    <div class=\"mb-4\">\n" +
+                                "        <h4>Last Name:</h4>\n" +
+                                "        <span>" + teacher.getLastName() + "</span>\n" +
+                                "    </div>\n" +
+                                "    <hr>\n" +
+                                "    <div class=\"mb-4\">\n" +
+                                "        <h4>Email:</h4>\n" +
+                                "        <span>" + teacher.getEmail() + "</span>\n" +
+                                "    </div>\n" +
+                                "    <hr>\n" +
+                                "    <div class=\"mb-4\">\n" +
+                                "        <h4>Age:</h4>\n" +
+                                "        <span>" + teacher.getAge() + "</span>\n" +
+                                "    </div>"
+                )
+                .contains(
+                        "                <a class=\"text-body\"\n" +
+                                "                   href=\"/dashboard/students/" + student1.getId() + "\">\n" +
+                                "                <span value=\"" + student1.getId() + "\">" + student1.getFirstName() + " " + student1.getLastName() + "</span>\n"
+                )
+                .contains(
+                        "                <a class=\"text-body\"\n" +
+                                "                   href=\"/dashboard/students/" + student2.getId() + "\">\n" +
+                                "                <span value=\"" + student2.getId() + "\">" + student2.getFirstName() + " " + student2.getLastName() + "</span>\n"
                 );
-        assertThat(contentAsString)
-                .containsIgnoringWhitespaces("                                       href=\"/students/" + student1.getId() + "\"\n" +
-                        "                                       value=\"" + student1.getId() + "\">" + student1.getFirstName() + " " + student1.getLastName());
-        assertThat(contentAsString)
-                .containsIgnoringWhitespaces("                                       href=\"/students/" + student2.getId() + "\"\n" +
-                        "                                       value=\"" + student2.getId() + "\">" + student2.getFirstName() + " " + student2.getLastName());
 
     }
 
@@ -111,20 +127,30 @@ class TeacherGetControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
+
         // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
-                .contains("                             <td>" + teacher1.getFirstName() + "</td>\n" +
-                        "                                <td>" + teacher1.getLastName() + "</td>\n" +
-                        "                                <td>" + teacher1.getAge() + "</td>\n" +
-                        "                                <td>" + teacher1.getEmail() + "</td>\n" +
-                        "                                <td>" + teacher1.getStudents().size() + "</td>\n");
-        assertThat(contentAsString)
-                .contains("                             <td>" + teacher2.getFirstName() + "</td>\n" +
-                        "                                <td>" + teacher2.getLastName() + "</td>\n" +
-                        "                                <td>" + teacher2.getAge() + "</td>\n" +
-                        "                                <td>" + teacher2.getEmail() + "</td>\n" +
-                        "                                <td>" + teacher2.getStudents().size() + "</td>\n");
+                .contains(
+                        "                                                <a class=\"text-body\"\n" +
+                                "                                                   href=\"/dashboard/teachers/" + teacher1.getId() + "\">"
+                                + teacher1.getFirstName() + " " + teacher1.getLastName() + "</a>\n" +
+                                "                                            </p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">" + teacher1.getEmail() + "</p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">\n" +
+                                "                                                <span>Age:</span>\n" +
+                                "                                                <span>" + teacher1.getAge() + "</span>\n"
+                )
+                .contains(
+                        "                                                <a class=\"text-body\"\n" +
+                                "                                                   href=\"/dashboard/teachers/" + teacher2.getId() + "\">"
+                                + teacher2.getFirstName() + " " + teacher2.getLastName() + "</a>\n" +
+                                "                                            </p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">" + teacher2.getEmail() + "</p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">\n" +
+                                "                                                <span>Age:</span>\n" +
+                                "                                                <span>" + teacher2.getAge() + "</span>\n"
+                );
     }
 
     @Test
@@ -136,6 +162,7 @@ class TeacherGetControllerIntegrationTest {
         Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of(student1, student2));
         Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of(student3));
         Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of(student1, student2, student3));
+
         // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers?page=2&size=2&sortField=firstName&sortDir=asc"))
                 .andDo(print())
@@ -146,23 +173,36 @@ class TeacherGetControllerIntegrationTest {
         String contentAsString = mvcResult.getResponse().getContentAsString();
         // used sorting dir by lastName ascending, so student1 will be last - Jarosław
         assertThat(contentAsString)
-                .contains("                             <td>" + teacher1.getFirstName() + "</td>\n" +
-                        "                                <td>" + teacher1.getLastName() + "</td>\n" +
-                        "                                <td>" + teacher1.getAge() + "</td>\n" +
-                        "                                <td>" + teacher1.getEmail() + "</td>\n" +
-                        "                                <td>" + teacher1.getStudents().size() + "</td>\n");
-        assertThat(contentAsString)
-                .doesNotContain("                             <td>" + teacher2.getFirstName() + "</td>\n" +
-                        "                                <td>" + teacher2.getLastName() + "</td>\n" +
-                        "                                <td>" + teacher2.getAge() + "</td>\n" +
-                        "                                <td>" + teacher2.getEmail() + "</td>\n" +
-                        "                                <td>" + teacher2.getStudents().size() + "</td>\n");
-        assertThat(contentAsString)
-                .doesNotContain("                             <td>" + student3.getFirstName() + "</td>\n" +
-                        "                                <td>" + teacher3.getLastName() + "</td>\n" +
-                        "                                <td>" + teacher3.getAge() + "</td>\n" +
-                        "                                <td>" + teacher3.getEmail() + "</td>\n" +
-                        "                                <td>" + teacher3.getStudents().size() + "</td>\n");
+                .contains(
+                        "                                                <a class=\"text-body\"\n" +
+                                "                                                   href=\"/dashboard/teachers/" + teacher1.getId() + "\">"
+                                + teacher1.getFirstName() + " " + teacher1.getLastName() + "</a>\n" +
+                                "                                            </p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">" + teacher1.getEmail() + "</p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">\n" +
+                                "                                                <span>Age:</span>\n" +
+                                "                                                <span>" + teacher1.getAge() + "</span>\n"
+                )
+                .doesNotContain(
+                        "                                                <a class=\"text-body\"\n" +
+                                "                                                   href=\"/dashboard/teachers/" + teacher2.getId() + "\">"
+                                + teacher2.getFirstName() + " " + teacher2.getLastName() + "</a>\n" +
+                                "                                            </p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">" + teacher2.getEmail() + "</p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">\n" +
+                                "                                                <span>Age:</span>\n" +
+                                "                                                <span>" + teacher2.getAge() + "</span>\n"
+                )
+                .doesNotContain(
+                        "                                                <a class=\"text-body\"\n" +
+                                "                                                   href=\"/dashboard/teachers/" + teacher3.getId() + "\">"
+                                + teacher3.getFirstName() + " " + teacher3.getLastName() + "</a>\n" +
+                                "                                            </p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">" + teacher3.getEmail() + "</p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">\n" +
+                                "                                                <span>Age:</span>\n" +
+                                "                                                <span>" + teacher3.getAge() + "</span>\n"
+                );
     }
 
     @Test
@@ -183,6 +223,7 @@ class TeacherGetControllerIntegrationTest {
         Teacher teacher1 = integrationTestsInitData.createTeacherOne(null, List.of(), List.of(student1, student2));
         Teacher teacher2 = integrationTestsInitData.createTeacherTwo(null, List.of(), List.of(student3));
         Teacher teacher3 = integrationTestsInitData.createTeacherThree(null, List.of(), List.of(student1, student2, student3));
+
         // When
         MvcResult mvcResult = this.mockMvc.perform(get("/dashboard/teachers?name=ja"))
                 .andDo(print())
@@ -192,23 +233,35 @@ class TeacherGetControllerIntegrationTest {
         // Then
         String contentAsString = mvcResult.getResponse().getContentAsString();
         assertThat(contentAsString)
-                .contains("                                <td>" + teacher1.getFirstName() + "</td>\n" +
-                        "                                <td>" + teacher1.getLastName() + "</td>\n" +
-                        "                                <td>" + teacher1.getAge() + "</td>\n" +
-                        "                                <td>" + teacher1.getEmail() + "</td>\n" +
-                        "                                <td>" + teacher1.getStudents().size() + "</td>\n");
-        assertThat(contentAsString)
-                .contains("                                <td>" + teacher2.getFirstName() + "</td>\n" +
-                        "                                <td>" + teacher2.getLastName() + "</td>\n" +
-                        "                                <td>" + teacher2.getAge() + "</td>\n" +
-                        "                                <td>" + teacher2.getEmail() + "</td>\n" +
-                        "                                <td>" + teacher2.getStudents().size() + "</td>\n");
-        assertThat(contentAsString)
-                .doesNotContain("                                <td>" + student3.getFirstName() + "</td>\n" +
-                        "                                <td>" + teacher3.getLastName() + "</td>\n" +
-                        "                                <td>" + teacher3.getAge() + "</td>\n" +
-                        "                                <td>" + teacher3.getEmail() + "</td>\n" +
-                        "                                <td>" + teacher3.getStudents().size() + "</td>\n");
+                .contains(
+                        "                                                <a class=\"text-body\"\n" +
+                                "                                                   href=\"/dashboard/teachers/" + teacher1.getId() + "\">"
+                                + teacher1.getFirstName() + " " + teacher1.getLastName() + "</a>\n" +
+                                "                                            </p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">" + teacher1.getEmail() + "</p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">\n" +
+                                "                                                <span>Age:</span>\n" +
+                                "                                                <span>" + teacher1.getAge() + "</span>\n"
+                )
+                .contains(
+                        "                                                <a class=\"text-body\"\n" +
+                                "                                                   href=\"/dashboard/teachers/" + teacher2.getId() + "\">"
+                                + teacher2.getFirstName() + " " + teacher2.getLastName() + "</a>\n" +
+                                "                                            </p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">" + teacher2.getEmail() + "</p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">\n" +
+                                "                                                <span>Age:</span>\n" +
+                                "                                                <span>" + teacher2.getAge() + "</span>\n"
+                )
+                .doesNotContain(
+                        "                                                <a class=\"text-body\"\n" +
+                                "                                                   href=\"/dashboard/teachers/" + teacher3.getId() + "\">"
+                                + teacher3.getFirstName() + " " + teacher3.getLastName() + "</a>\n" +
+                                "                                            </p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">" + teacher3.getEmail() + "</p>\n" +
+                                "                                            <p class=\"text-muted mb-0\">\n" +
+                                "                                                <span>Age:</span>\n" +
+                                "                                                <span>" + teacher3.getAge() + "</span>\n"
+                );
     }
-
 }
