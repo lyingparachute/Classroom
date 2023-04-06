@@ -1,12 +1,17 @@
 package com.example.classroom.teacher;
 
+import com.example.classroom.config.jwt.JwtAuthenticationFilter;
 import com.example.classroom.department.Department;
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
-import com.example.classroom.repository.util.UnitTestsInitData;
-import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
+import com.example.classroom.test.util.UnitTestsInitData;
+import com.example.classroom.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -14,11 +19,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.security.Key;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,22 +43,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TeacherRestController.class)
-@WithMockCustomUser
+//@WithMockCustomUser
 class TeacherRestControllerWebMvcTest {
 
     @MockBean
-    private TeacherService service;
+    TeacherService service;
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    ObjectMapper objectMapper;
+
+    @MockBean
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Spy
     ModelMapper mapper;
 
     UnitTestsInitData initData = new UnitTestsInitData();
+
+    String jwt;
+    User user;
+
+    @BeforeEach
+    void setUp() {
+        byte[] keyBytes = Decoders.BASE64.decode("635266556A586E327234753778214125442A472D4B6150645367566B59703373");
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+        user = initData.createUser();
+        jwt = "Bearer" + Jwts.builder()
+                .setSubject(user.getEmail())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1_000))
+                .signWith(key)
+                .compact();
+    }
 
     @Nested
     class GetTeacher {
@@ -66,7 +93,10 @@ class TeacherRestControllerWebMvcTest {
             TeacherDto dto = mapper.map(expected, TeacherDto.class);
             given(service.fetchById(expected.getId())).willReturn(dto);
             // When
-            MvcResult mvcResult = mockMvc.perform(get("/api/teachers/{id}", expected.getId()))
+            MvcResult mvcResult = mockMvc.perform(get("/api/teachers/{id}", expected.getId())
+                                    .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+//                            .with(jwt())
+                    )
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andReturn();
@@ -222,6 +252,8 @@ class TeacherRestControllerWebMvcTest {
             given(service.create(any(TeacherDto.class))).willReturn(dto);
             // When
             MvcResult mvcResult = mockMvc.perform(post("/api/teachers")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+//                            .with(jwt())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isCreated())

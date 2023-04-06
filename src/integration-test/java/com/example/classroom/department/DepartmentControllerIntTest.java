@@ -2,10 +2,10 @@ package com.example.classroom.department;
 
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
-import com.example.classroom.repository.util.IntegrationTestsInitData;
 import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.teacher.TeacherRepository;
+import com.example.classroom.test.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
 package com.example.classroom.teacher;
 
-import com.example.classroom.repository.util.IntegrationTestsInitData;
 import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.student.Student;
 import com.example.classroom.student.StudentRepository;
+import com.example.classroom.test.util.IntegrationTestsInitData;
 import jakarta.transaction.Transactional;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;

@@ -2,9 +2,9 @@ package com.example.classroom.teacher;
 
 import com.example.classroom.department.Department;
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
-import com.example.classroom.repository.util.UnitTestsInitData;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
+import com.example.classroom.test.util.UnitTestsInitData;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

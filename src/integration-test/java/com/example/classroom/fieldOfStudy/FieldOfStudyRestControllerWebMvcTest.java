@@ -1,11 +1,11 @@
 package com.example.classroom.fieldOfStudy;
 
 import com.example.classroom.department.Department;
-import com.example.classroom.repository.util.UnitTestsInitData;
 import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.teacher.Teacher;
+import com.example.classroom.test.util.UnitTestsInitData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

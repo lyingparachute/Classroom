@@ -3,7 +3,7 @@ package com.example.classroom.auth.service;
 import com.example.classroom.auth.model.AuthenticationRequest;
 import com.example.classroom.auth.model.AuthenticationResponse;
 import com.example.classroom.auth.model.RegisterRequest;
-import com.example.classroom.repository.util.UnitTestsInitData;
+import com.example.classroom.test.util.UnitTestsInitData;
 import com.example.classroom.token.JwtService;
 import com.example.classroom.token.Token;
 import com.example.classroom.token.TokenRepository;
