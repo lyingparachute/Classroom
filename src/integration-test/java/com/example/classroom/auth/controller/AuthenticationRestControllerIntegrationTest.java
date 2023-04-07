@@ -8,6 +8,7 @@ import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ class AuthenticationRestControllerIntegrationTest {
     class Register {
 
         @Test
-        void returnsToken_givenValidRegisterRequest() throws Exception {
+        void returnsStatusCode200_withToken_givenValidRegisterRequest() throws Exception {
             // Given
             RegisterRequest request = initData.createRegisterRequest();
 
@@ -60,11 +61,40 @@ class AuthenticationRestControllerIntegrationTest {
                     .postForEntity(createURL("/api/auth/register"), request, AuthenticationResponse.class);
 
             // Then
-            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.OK);
+            assertThat(userRepository.findByEmail(request.getEmail())).isPresent();
             AuthenticationResponse actual = response.getBody();
             assertThat(actual).isNotNull();
             assertThat(actual.getToken()).isNotNull().isNotEmpty();
-            assertThat(userRepository.findByEmail(request.getEmail())).isPresent();
+        }
+
+        @Test
+        void returnsStatusCode400_givenInvalidEmailFormat() throws Exception {
+            // Given
+            RegisterRequest request = initData.createRegisterRequest();
+            request.setEmail("invalid email");
+            // When
+            ResponseEntity<AuthenticationResponse> response = restTemplate
+                    .postForEntity(createURL("/api/auth/register"), request, AuthenticationResponse.class);
+
+            // Then
+            assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.BAD_REQUEST);
+            assertThat(userRepository.findByEmail(request.getEmail())).isNotPresent();
+        }
+
+        @Disabled("Disabled because @ValidPassword annotation is commented out for demonstration purposes")
+        @Test
+        void returnsStatusCode400_givenInvalidPasswordFormat() throws Exception {
+            // Given
+            RegisterRequest request = initData.createRegisterRequest();
+            request.setPassword("invalid password");
+            // When
+            ResponseEntity<AuthenticationResponse> response = restTemplate
+                    .postForEntity(createURL("/api/auth/register"), request, AuthenticationResponse.class);
+
+            // Then
+            assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.BAD_REQUEST);
+            assertThat(userRepository.findByEmail(request.getEmail())).isNotPresent();
         }
     }
 
@@ -72,7 +102,7 @@ class AuthenticationRestControllerIntegrationTest {
     class Authenticate {
 
         @Test
-        void returnsStatusCode2xxSuccessful_withToken_givenAuthRequest_withCorrectCredentials() throws Exception {
+        void returnsStatusCode200_withToken_givenAuthRequest_withCorrectCredentials() throws Exception {
             // Given
             AuthenticationRequest request = initData.createAuthenticationRequest();
             User user = initData.createUser();
@@ -84,14 +114,14 @@ class AuthenticationRestControllerIntegrationTest {
 
             // Then
             assertThat(userRepository.findByEmail(user.getEmail())).isPresent();
-            assertThat(response.getStatusCode().is2xxSuccessful()).as("Check response status code").isTrue();
+            assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.OK);
             AuthenticationResponse actual = response.getBody();
             assertThat(actual).isNotNull();
             assertThat(actual.getToken()).isNotNull().isNotEmpty();
         }
 
         @Test
-        void returnsStatusCode3xxRedirection_givenAuthRequest_whenUserDoesNotExist() throws Exception {
+        void returnsStatusCode302_givenAuthRequest_whenUserDoesNotExist() throws Exception {
             // Given
             AuthenticationRequest request = initData.createAuthenticationRequest();
 
@@ -101,11 +131,11 @@ class AuthenticationRestControllerIntegrationTest {
 
             // Then
             assertThat(userRepository.findByEmail(request.getEmail())).isNotPresent();
-            assertThat(response.getStatusCode().is3xxRedirection()).as("Check response status code").isTrue();
+            assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.FOUND);
         }
 
         @Test
-        void returnsStatusCode3xxRedirection_givenAuthRequest_withWrongEmail() throws Exception {
+        void returnsStatusCode302_givenAuthRequest_withWrongEmail() throws Exception {
             // Given
             AuthenticationRequest request = initData.createAuthenticationRequest();
             User user = initData.createUser();
@@ -117,11 +147,11 @@ class AuthenticationRestControllerIntegrationTest {
 
             // Then
             assertThat(userRepository.findByEmail(user.getEmail())).isPresent();
-            assertThat(response.getStatusCode().is3xxRedirection()).as("Check response status code").isTrue();
+            assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.FOUND);
         }
 
         @Test
-        void returnsStatusCode3xxRedirection_givenAuthRequest_withWrongPassword() throws Exception {
+        void returnsStatusCode302_givenAuthRequest_withWrongPassword() throws Exception {
             // Given
             AuthenticationRequest request = initData.createAuthenticationRequest();
             User user = initData.createUser();
@@ -134,7 +164,7 @@ class AuthenticationRestControllerIntegrationTest {
 
             // Then
             assertThat(userRepository.findByEmail(user.getEmail())).isPresent();
-            assertThat(response.getStatusCode().is3xxRedirection()).as("Check response status code").isTrue();
+            assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.FOUND);
         }
     }
 
