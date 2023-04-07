@@ -10,6 +10,7 @@ import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -232,10 +234,106 @@ class AuthenticationControllerIntegrationTest {
             assertThat(user.getStudent()).isNull();
             assertThat(user.getTeacher()).isNull();
         }
+
+        @Test
+        void returnsErrors_givenInvalid_firstName_lastName_email_andNoRole() throws Exception {
+            // Given
+            String expectedErrorMsgForFirstName = "First name must be between 2 and 30 characters long.";
+            String expectedErrorMsgForLastName = "Last name must be between 2 and 30 characters long.";
+            String expectedErrorMsgForEmail = "Enter valid email address.";
+            String expectedErrorMsgForRole = "Role must be chosen when creating new account.";
+
+
+            RegisterRequest request = RegisterRequest.builder()
+                    .firstName("s")
+                    .lastName("a")
+                    .email("a")
+                    .password("123")
+                    .build();
+
+            // When
+            MvcResult mvcResult = mockMvc.perform(post("/sign-up")
+                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                            .content("firstName=" + request.getFirstName() +
+                                    "&lastName=" + request.getLastName() +
+                                    "&email=" + request.getEmail() +
+                                    "&password=" + request.getPassword()
+                            )
+                    )
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            // Then
+            String actualResponseBody = mvcResult.getResponse().getContentAsString();
+            assertThat(actualResponseBody).as("Check error message")
+                    .contains(expectedErrorMsgForFirstName,
+                            expectedErrorMsgForLastName,
+                            expectedErrorMsgForEmail,
+                            expectedErrorMsgForRole);
+        }
+
+        @Test
+        void returnsErrors_givenEmptyEmail_roleNull() throws Exception {
+            // Given
+            String expectedErrorMsgForEmail = "Email cannot be empty.";
+
+            RegisterRequest request = initData.createRegisterRequest();
+            request.setEmail("");
+
+            // When
+            MvcResult mvcResult = mockMvc.perform(post("/sign-up")
+                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                            .content("firstName=" + request.getFirstName() +
+                                    "&lastName=" + request.getLastName() +
+                                    "&email=" + request.getEmail() +
+                                    "&password=" + request.getPassword() +
+                                    "&role=" + request.getRole()
+                            )
+                    )
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            // Then
+            String actualResponseBody = mvcResult.getResponse().getContentAsString();
+            assertThat(actualResponseBody).as("Check error message")
+                    .contains(expectedErrorMsgForEmail);
+        }
+
+        @Disabled("Disabled due to commented password validation for testing purposes.")
+        @Test
+        void returnsErrors_givenInvalidPassword() throws Exception {
+            // Given
+            String expectedErrorMsgForPassword = "Invalid Password";
+
+            RegisterRequest request = initData.createRegisterRequest();
+            request.setPassword("s");
+
+            // When
+            MvcResult mvcResult = mockMvc.perform(post("/sign-up")
+                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                            .content("firstName=" + request.getFirstName() +
+                                    "&lastName=" + request.getLastName() +
+                                    "&email=" + request.getEmail() +
+                                    "&password=" + request.getPassword() +
+                                    "&role=" + request.getRole()
+                            )
+                    )
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            // Then
+            String actualResponseBody = mvcResult.getResponse().getContentAsString();
+            assertThat(actualResponseBody).as("Check error message")
+                    .contains(expectedErrorMsgForPassword);
+        }
     }
 
     @Nested
     class ResetPassword {
+        @Disabled("Waiting for the implementation.")
         @Test
         void resetPassword() {
 
