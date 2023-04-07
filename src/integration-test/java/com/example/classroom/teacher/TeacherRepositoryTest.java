@@ -96,6 +96,14 @@ class TeacherRepositoryTest {
         }
     }
 
+    @Nested
+    class FindByEmail {
+        //TODO - create test for custom repository method
+        @Test
+        void findByEmail() {
+        }
+    }
+
     @Transactional
     public Teacher createTeacher1() {
         Teacher teacher = new Teacher();
