@@ -1,5 +1,8 @@
 package com.example.classroom.test.util;
 
+import com.example.classroom.auth.model.AuthenticationRequest;
+import com.example.classroom.auth.model.RegisterRequest;
+import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.department.Department;
 import com.example.classroom.department.DepartmentRepository;
 import com.example.classroom.enums.AcademicTitle;
@@ -14,6 +17,9 @@ import com.example.classroom.subject.Subject;
 import com.example.classroom.subject.SubjectRepository;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.teacher.TeacherRepository;
+import com.example.classroom.user.User;
+import com.example.classroom.user.UserRepository;
+import com.example.classroom.user.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -31,6 +37,7 @@ public class IntegrationTestsInitData {
     private final SubjectRepository subjectRepository;
     private final DepartmentRepository departmentRepository;
     private final FieldOfStudyRepository fieldOfStudyRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void cleanUp() {
@@ -44,6 +51,7 @@ public class IntegrationTestsInitData {
         fieldOfStudyRepository.deleteAll();
         subjectRepository.findAll().forEach(this::removeReferencingObjectsFromSubject);
         subjectRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     // *** Create Students *** //
@@ -107,7 +115,7 @@ public class IntegrationTestsInitData {
     }
 
     @Transactional
-    public Teacher createTeacherTwo(Department department,List<Subject> subjects, List<Student> students) {
+    public Teacher createTeacherTwo(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Jagoda");
         teacher.setLastName("Kowalska");
@@ -118,7 +126,7 @@ public class IntegrationTestsInitData {
     }
 
     @Transactional
-    public Teacher createTeacherThree(Department department,List<Subject> subjects, List<Student> students) {
+    public Teacher createTeacherThree(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setFirstName("Grzegorz");
         teacher.setLastName("Bartosiewicz");
@@ -134,7 +142,7 @@ public class IntegrationTestsInitData {
         subjects.forEach(teacher::addSubject);
     }
 
-    private void removeReferencingObjectsFromTeacher(final Teacher teacher){
+    private void removeReferencingObjectsFromTeacher(final Teacher teacher) {
         Set<Student> students = new HashSet<>(teacher.getStudents());
         Set<Subject> subjects = new HashSet<>(teacher.getSubjects());
         teacher.setDepartment(null);
@@ -296,5 +304,40 @@ public class IntegrationTestsInitData {
         Set<FieldOfStudy> fieldsOfStudy = new HashSet<>(department.getFieldsOfStudy());
         department.setDean(null);
         fieldsOfStudy.forEach(department::removeFieldOfStudy);
+    }
+
+    public User createUser() {
+        return userRepository.save(User.builder()
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .password("$2a$10$XYfYrJJffuaU2IZGm6Wp.uy4A3V.8vKXFghrBruUU9XcRYV1f3eb.")
+                .email("andrzej.nowak@gmail.com")
+                .role(UserRole.ROLE_STUDENT)
+                .build());
+    }
+
+    public RegisterRequest createRegisterRequest() {
+        return RegisterRequest.builder()
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .email("andrzej.nowak@gmail.com")
+                .password("123")
+                .build();
+    }
+
+    public AuthenticationRequest createAuthenticationRequest() {
+        return AuthenticationRequest.builder()
+                .email("andrzej.nowak@gmail.com")
+                .password("encodedPassword")
+                .build();
+    }
+
+    public UpdateRequest createUpdateRequest() {
+        return UpdateRequest.builder()
+                .firstName("Joanna")
+                .lastName("Kowalczyk")
+                .email("andrzej.nowak@gmail.com")
+                .password("newEncodedpassword")
+                .build();
     }
 }
