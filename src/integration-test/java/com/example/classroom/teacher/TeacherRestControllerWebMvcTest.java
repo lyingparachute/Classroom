@@ -1,5 +1,7 @@
 package com.example.classroom.teacher;
 
+import com.example.classroom.auth.model.AuthenticationResponse;
+import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.config.jwt.JwtAuthenticationFilter;
 import com.example.classroom.department.Department;
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
@@ -93,6 +95,19 @@ class TeacherRestControllerWebMvcTest {
             TeacherDto dto = mapper.map(expected, TeacherDto.class);
             given(service.fetchById(expected.getId())).willReturn(dto);
             // When
+            RegisterRequest request = initData.createRegisterRequest();
+            final byte[] content = mockMvc.perform(post("/api/auth/register")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{ \"firstName\": \"" + request.getFirstName() + "\",  " +
+                                    "\"lastName\": \"" + request.getLastName() + "\"," +
+                                    "\"email\": \"" + request.getEmail() + "\", " +
+                                    "\"password\": \"" + request.getPassword() +
+                                    "\"}"))
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsByteArray();
+            AuthenticationResponse authResponse = objectMapper.readValue(content, AuthenticationResponse.class);
+            String token = authResponse.getToken();
             MvcResult mvcResult = mockMvc.perform(get("/api/teachers/{id}", expected.getId())
                                     .header(HttpHeaders.AUTHORIZATION, "Bearer token")
 //                            .with(jwt())
