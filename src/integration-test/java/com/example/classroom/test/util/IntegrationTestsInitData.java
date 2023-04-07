@@ -325,6 +325,7 @@ public class IntegrationTestsInitData {
                 .lastName("Nowak")
                 .email("andrzej.nowak@gmail.com")
                 .password("123")
+                .role(UserRole.ROLE_STUDENT)
                 .build();
     }
 
