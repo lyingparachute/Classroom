@@ -72,21 +72,69 @@ class AuthenticationRestControllerIntegrationTest {
     class Authenticate {
 
         @Test
-        void returnsToken_givenValidAuthenticationRequest() throws Exception {
+        void returnsStatusCode2xxSuccessful_withToken_givenAuthRequest_withCorrectCredentials() throws Exception {
             // Given
             AuthenticationRequest request = initData.createAuthenticationRequest();
             User user = initData.createUser();
             request.setEmail(user.getEmail());
+
             // When
             ResponseEntity<AuthenticationResponse> response = restTemplate
                     .postForEntity(createURL("/api/auth/authenticate"), request, AuthenticationResponse.class);
 
             // Then
             assertThat(userRepository.findByEmail(user.getEmail())).isPresent();
-            assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.OK);
+            assertThat(response.getStatusCode().is2xxSuccessful()).as("Check response status code").isTrue();
             AuthenticationResponse actual = response.getBody();
             assertThat(actual).isNotNull();
             assertThat(actual.getToken()).isNotNull().isNotEmpty();
+        }
+
+        @Test
+        void returnsStatusCode3xxRedirection_givenAuthRequest_whenUserDoesNotExist() throws Exception {
+            // Given
+            AuthenticationRequest request = initData.createAuthenticationRequest();
+
+            // When
+            ResponseEntity<AuthenticationResponse> response = restTemplate
+                    .postForEntity(createURL("/api/auth/authenticate"), request, AuthenticationResponse.class);
+
+            // Then
+            assertThat(userRepository.findByEmail(request.getEmail())).isNotPresent();
+            assertThat(response.getStatusCode().is3xxRedirection()).as("Check response status code").isTrue();
+        }
+
+        @Test
+        void returnsStatusCode3xxRedirection_givenAuthRequest_withWrongEmail() throws Exception {
+            // Given
+            AuthenticationRequest request = initData.createAuthenticationRequest();
+            User user = initData.createUser();
+            request.setEmail("wrong.email@gmail.com");
+
+            // When
+            ResponseEntity<AuthenticationResponse> response = restTemplate
+                    .postForEntity(createURL("/api/auth/authenticate"), request, AuthenticationResponse.class);
+
+            // Then
+            assertThat(userRepository.findByEmail(user.getEmail())).isPresent();
+            assertThat(response.getStatusCode().is3xxRedirection()).as("Check response status code").isTrue();
+        }
+
+        @Test
+        void returnsStatusCode3xxRedirection_givenAuthRequest_withWrongPassword() throws Exception {
+            // Given
+            AuthenticationRequest request = initData.createAuthenticationRequest();
+            User user = initData.createUser();
+            request.setEmail(user.getEmail());
+            request.setPassword("wrongPassword");
+
+            // When
+            ResponseEntity<AuthenticationResponse> response = restTemplate
+                    .postForEntity(createURL("/api/auth/authenticate"), request, AuthenticationResponse.class);
+
+            // Then
+            assertThat(userRepository.findByEmail(user.getEmail())).isPresent();
+            assertThat(response.getStatusCode().is3xxRedirection()).as("Check response status code").isTrue();
         }
     }
 
