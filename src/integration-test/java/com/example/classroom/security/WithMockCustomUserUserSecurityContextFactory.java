@@ -12,13 +12,13 @@ public class WithMockCustomUserUserSecurityContextFactory implements WithSecurit
     @Override
     public SecurityContext createSecurityContext(WithMockCustomUser annotation) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        String password = "{noop}password";
+        String password = "{noop}" + annotation.password();
         User principal = User.builder()
                 .id(1L)
-                .firstName("Andrzej")
-                .lastName("Nowak")
+                .firstName(annotation.firstName())
+                .lastName(annotation.lastName())
                 .password(password)
-                .email("andrzej.nowak@gmail.com")
+                .email(annotation.username())
                 .role(annotation.role())
                 .build();
         Authentication auth = new UsernamePasswordAuthenticationToken(principal, password, principal.getAuthorities());
