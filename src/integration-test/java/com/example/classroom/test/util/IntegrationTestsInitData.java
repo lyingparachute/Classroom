@@ -17,6 +17,7 @@ import com.example.classroom.subject.Subject;
 import com.example.classroom.subject.SubjectRepository;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.teacher.TeacherRepository;
+import com.example.classroom.token.TokenRepository;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
@@ -38,6 +39,7 @@ public class IntegrationTestsInitData {
     private final DepartmentRepository departmentRepository;
     private final FieldOfStudyRepository fieldOfStudyRepository;
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
 
     @Transactional
     public void cleanUp() {
@@ -51,6 +53,7 @@ public class IntegrationTestsInitData {
         fieldOfStudyRepository.deleteAll();
         subjectRepository.findAll().forEach(this::removeReferencingObjectsFromSubject);
         subjectRepository.deleteAll();
+        tokenRepository.deleteAll();
         userRepository.deleteAll();
     }
 
