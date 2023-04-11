@@ -79,12 +79,12 @@ class FieldOfStudyController {
         return "field-of-study/fieldOfStudy-create-form";
     }
 
-    @PostMapping(value = "new")
+    @PostMapping("new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     String createFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
+                              BindingResult result,
                               @RequestParam(value = "imageUpload") MultipartFile multipartFile,
                               RedirectAttributes redirectAttributes,
-                              BindingResult result,
                               HttpServletRequest request,
                               Model model) throws IOException {
         if (result.hasErrors()) {
