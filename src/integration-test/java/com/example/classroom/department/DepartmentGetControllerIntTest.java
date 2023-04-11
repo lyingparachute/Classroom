@@ -4,6 +4,7 @@ import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.test.util.IntegrationTestsInitData;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ActiveProfiles("integration")
 @SpringBootTest
+@Transactional
 @WithMockCustomUser
 class DepartmentGetControllerIntTest {
 
@@ -126,45 +128,49 @@ class DepartmentGetControllerIntTest {
                         "        </a>"
                 );
         assertThat(content).as("Page contains %s details", "department's fieldOfStudy1")
-                .contains(
-                        "                    <!-- ======= FieldOfStudy Details ======= -->\n" +
-                                "                    <div class=\"card h-100\">\n" +
-                                "                        <div class=\"bg-image hover-overlay ripple\" data-mdb-ripple-color=\"light\">\n" +
-                                "                            <img class=\"field-of-study-img\" alt=\"" + fieldOfStudy1.getName() + "\" src=\"/img/fields-of-study/ " + fieldOfStudy1.getImage() + "\">\n" +
-                                "                            \n" +
-                                "                            <a href=\"/dashboard/fields-of-study/" + fieldOfStudy1.getId() + "\">\n" +
-                                "                                <div class=\"mask\" style=\"background-color: rgba(251, 251, 251, 0.15);\"></div>\n" +
-                                "                            </a>\n" +
-                                "                        </div>\n" +
-                                "                        <div class=\"card-body\">\n" +
-                                "                            <h5 class=\"card-title\">" + fieldOfStudy1.getName() + "</h5>\n" +
-                                "                            <span class=\"text-muted\">" +
-                                fieldOfStudy1.getLevelOfEducation().getValue() + ", " + fieldOfStudy1.getMode().getValue().toLowerCase() + "</span>\n" +
-                                "                            <p class=\"card-text\"></p>\n" +
-                                "                        </div>\n" +
-                                "                        <div class=\"card-footer text-center\">\n" +
-                                "                            <a class=\"btn btn-primary\" href=\"/dashboard/fields-of-study/" + fieldOfStudy1.getId()
-                );
+                .contains("                    <!-- ======= FieldOfStudy Details ======= -->\n" +
+                        "                    <div class=\"card h-100\">\n" +
+                        "                        <div class=\"bg-image hover-overlay ripple\" data-mdb-ripple-color=\"light\">\n" +
+                        "                            \n" +
+                        "                            <img class=\"field-of-study-img\"\n" +
+                        "                                 alt=\"" + fieldOfStudy1.getName() + "\"\n" +
+                        "                                 src=\"/img/fields-of-study/default.jpg\"/>\n" +
+                        "                            <a href=\"/dashboard/fields-of-study/" + fieldOfStudy1.getId() + "\">\n" +
+                        "                                <div class=\"mask\"\n" +
+                        "                                     style=\"background-color: rgba(251, 251, 251, 0.15);\"></div>\n" +
+                        "                            </a>\n" +
+                        "                        </div>\n" +
+                        "                        <div class=\"card-body\">\n" +
+                        "                            <h5 class=\"card-title\">" + fieldOfStudy1.getName() + "</h5>\n" +
+                        "                            <span class=\"text-muted\">" +
+                        fieldOfStudy1.getLevelOfEducation().getValue() + ", " + fieldOfStudy1.getMode().getValue().toLowerCase() + "</span>\n" +
+                        "                            <p class=\"card-text\"></p>\n" +
+                        "                        </div>\n" +
+                        "                        <div class=\"card-footer text-center\">\n" +
+                        "                            <a class=\"btn btn-primary\"\n" +
+                        "                               href=\"/dashboard/fields-of-study/" + fieldOfStudy1.getId() + "\">");
         assertThat(content).as("Page contains %s details", "department's fieldOfStudy2")
-                .contains(
-                        "                    <!-- ======= FieldOfStudy Details ======= -->\n" +
-                                "                    <div class=\"card h-100\">\n" +
-                                "                        <div class=\"bg-image hover-overlay ripple\" data-mdb-ripple-color=\"light\">\n" +
-                                "                            <img class=\"field-of-study-img\" alt=\"" + fieldOfStudy1.getName() + "\" src=\"/img/fields-of-study/ " + fieldOfStudy1.getImage() + "\">\n" +
-                                "                            \n" +
-                                "                            <a href=\"/dashboard/fields-of-study/" + fieldOfStudy1.getId() + "\">\n" +
-                                "                                <div class=\"mask\" style=\"background-color: rgba(251, 251, 251, 0.15);\"></div>\n" +
-                                "                            </a>\n" +
-                                "                        </div>\n" +
-                                "                        <div class=\"card-body\">\n" +
-                                "                            <h5 class=\"card-title\">" + fieldOfStudy1.getName() + "</h5>\n" +
-                                "                            <span class=\"text-muted\">" +
-                                fieldOfStudy1.getLevelOfEducation().getValue() + ", " + fieldOfStudy1.getMode().getValue().toLowerCase() + "</span>\n" +
-                                "                            <p class=\"card-text\"></p>\n" +
-                                "                        </div>\n" +
-                                "                        <div class=\"card-footer text-center\">\n" +
-                                "                            <a class=\"btn btn-primary\" href=\"/dashboard/fields-of-study/" + fieldOfStudy1.getId()
-                );
+                .contains("                    <!-- ======= FieldOfStudy Details ======= -->\n" +
+                        "                    <div class=\"card h-100\">\n" +
+                        "                        <div class=\"bg-image hover-overlay ripple\" data-mdb-ripple-color=\"light\">\n" +
+                        "                            \n" +
+                        "                            <img class=\"field-of-study-img\"\n" +
+                        "                                 alt=\"" + fieldOfStudy2.getName() + "\"\n" +
+                        "                                 src=\"/img/fields-of-study/default.jpg\"/>\n" +
+                        "                            <a href=\"/dashboard/fields-of-study/" + fieldOfStudy2.getId() + "\">\n" +
+                        "                                <div class=\"mask\"\n" +
+                        "                                     style=\"background-color: rgba(251, 251, 251, 0.15);\"></div>\n" +
+                        "                            </a>\n" +
+                        "                        </div>\n" +
+                        "                        <div class=\"card-body\">\n" +
+                        "                            <h5 class=\"card-title\">" + fieldOfStudy2.getName() + "</h5>\n" +
+                        "                            <span class=\"text-muted\">" +
+                        fieldOfStudy2.getLevelOfEducation().getValue() + ", " + fieldOfStudy2.getMode().getValue().toLowerCase() + "</span>\n" +
+                        "                            <p class=\"card-text\"></p>\n" +
+                        "                        </div>\n" +
+                        "                        <div class=\"card-footer text-center\">\n" +
+                        "                            <a class=\"btn btn-primary\"\n" +
+                        "                               href=\"/dashboard/fields-of-study/" + fieldOfStudy2.getId() + "\">");
     }
 
     @Test
