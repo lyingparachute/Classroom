@@ -274,8 +274,9 @@ public class IntegrationTestsInitData {
         department.setName("Wydział Elektroniki, Telekomunikacji i Informatyki");
         department.setAddress("ul. Gabriela Narutowicza 11/12 80-233 Gdańsk");
         department.setTelNumber("123456789");
-        addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
-        return departmentRepository.save(department);
+        Department saved = departmentRepository.save(department);
+        addReferencingObjectsToDepartment(dean, fieldsOfStudy, saved);
+        return departmentRepository.save(saved);
     }
 
     @Transactional
@@ -284,8 +285,9 @@ public class IntegrationTestsInitData {
         department.setName("Wydział Chemiczny");
         department.setAddress("ul. Broniewicza 115, 00-245 Kęty");
         department.setTelNumber("987654321");
-        addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
-        return departmentRepository.save(department);
+        Department saved = departmentRepository.save(department);
+        addReferencingObjectsToDepartment(dean, fieldsOfStudy, saved);
+        return departmentRepository.save(saved);
     }
 
     @Transactional
@@ -294,8 +296,9 @@ public class IntegrationTestsInitData {
         department.setName("Wydział Architektury");
         department.setAddress("ul. Jabłoniowa 34, 11-112 Stalowa Wola");
         department.setTelNumber("321321321");
-        addReferencingObjectsToDepartment(dean, fieldsOfStudy, department);
-        return departmentRepository.save(department);
+        Department saved = departmentRepository.save(department);
+        addReferencingObjectsToDepartment(dean, fieldsOfStudy, saved);
+        return departmentRepository.save(saved);
     }
 
     private void addReferencingObjectsToDepartment(Teacher dean, List<FieldOfStudy> fieldsOfStudy, Department department) {
