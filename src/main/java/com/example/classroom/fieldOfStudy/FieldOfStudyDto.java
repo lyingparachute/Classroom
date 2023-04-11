@@ -1,9 +1,9 @@
 package com.example.classroom.fieldOfStudy;
 
+import com.example.classroom.department.Department;
 import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
-import com.example.classroom.department.Department;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,7 +25,7 @@ import java.util.Set;
 public class FieldOfStudyDto {
     private Long id;
     @NotEmpty(message = "{message.name.empty}")
-    @Size(min = 10, max = 50, message = "{message.name.length.50}")
+    @Size(min = 2, max = 50, message = "{message.name.length.50}")
     private String name;
     @Length(max = 500, message = "{message.description.length}")
     private String description;
