@@ -74,10 +74,10 @@ public class Department {
      * on the Field Of Study side
      */
     public void addFieldOfStudy(FieldOfStudy fieldOfStudy) {
+        fieldOfStudy.setDepartment(this);
         if (fieldsOfStudy.contains(fieldOfStudy))
             return;
         fieldsOfStudy.add(fieldOfStudy);
-        fieldOfStudy.setDepartment(this);
     }
 
     /**
