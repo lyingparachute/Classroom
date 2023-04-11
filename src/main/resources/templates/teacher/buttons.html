@@ -30,6 +30,14 @@
     <span th:text="#{button.edit}"></span>
 </a>
 
+<!-- ======= Edit teacher Button ======= -->
+<a class="btn btn-outline-primary btn-rounded"
+   th:fragment="btn-add-new"
+   th:href="@{/dashboard/teachers/new}">
+    <i class="fa-solid fa-user-plus mr-1"></i>
+    <span th:text="#{teachers.new}"></span>
+</a>
+
 <!-- ======= Delete teacher Button ======= -->
 <a class="btn btn-outline-danger btn-rounded delBtn"
    th:fragment="btn-delete"
