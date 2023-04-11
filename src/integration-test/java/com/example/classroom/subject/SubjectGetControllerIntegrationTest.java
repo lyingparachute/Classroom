@@ -1,15 +1,19 @@
 package com.example.classroom.subject;
 
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.security.WithMockCustomUser;
+import com.example.classroom.teacher.Teacher;
 import com.example.classroom.teacher.TeacherRepository;
 import com.example.classroom.test.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -34,41 +38,85 @@ class SubjectGetControllerIntegrationTest {
     private TeacherRepository teacherRepository;
 
     @Autowired
-    private IntegrationTestsInitData integrationTestsInitData;
+    private IntegrationTestsInitData initData;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     public void setup() {
-        integrationTestsInitData.cleanUp();
+        initData.cleanUp();
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
-    @Test
-    void shouldGetSubjectView() throws Exception {
-        Subject subject = integrationTestsInitData.createSubjectFour(null, List.of());
-        this.mockMvc.perform(get("/dashboard/subjects/" + subject.getId()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                .andExpect(view().name("subject/subject"));
+    @Nested
+    class GetSubject {
+        @Test
+        void returns200_withSubjectView() throws Exception {
+            // Given
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+
+            Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
+
+            // When
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/subjects/{id}", subject.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/subject-view"))
+                    .andReturn();
+
+            // Then
+            String contentAsString = mvcResult.getResponse().getContentAsString();
+        }
     }
 
-
-    @Test
-    void shouldGetSubjectsView() throws Exception {
-        this.mockMvc.perform(get("/dashboard/subjects"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                .andExpect(view().name("subject/subjects"));
+    @Nested
+    class GetSubjects {
+        @Test
+        void returns200_withAllSubjectsView() throws Exception {
+            mockMvc.perform(get("/dashboard/subjects"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/all-subjects"));
+        }
     }
 
-    @Test
-    void getSubjects() {
+    @Nested
+    class CreateSubject {
+        @Test
+        void returns200_withAddNewSubjectView() throws Exception {
+            mockMvc.perform(get("/dashboard/subjects/new"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/subject-create-form"));
+        }
     }
 
-    @Test
-    void getSubject() {
+    @Nested
+    class EditSubject {
+        @Test
+        void returns200_withEditSubjectView() throws Exception {
+            // Given
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+
+            Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
+
+            // When
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/subjects/edit/{id}", subject.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/subject-edit-form"))
+                    .andReturn();
+
+            // Then
+            String contentAsString = mvcResult.getResponse().getContentAsString();
+        }
     }
 }

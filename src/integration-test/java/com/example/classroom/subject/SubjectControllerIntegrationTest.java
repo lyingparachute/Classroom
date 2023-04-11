@@ -4,6 +4,7 @@ import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.teacher.TeacherRepository;
 import com.example.classroom.test.util.IntegrationTestsInitData;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -26,14 +27,29 @@ class SubjectControllerIntegrationTest {
     private TeacherRepository teacherRepository;
 
     @Autowired
-    private IntegrationTestsInitData integrationTestsInitData;
+    private IntegrationTestsInitData initData;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     public void setup() {
-        integrationTestsInitData.cleanUp();
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+        initData.cleanUp();
+        mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+    }
+
+    @Nested
+    class CreateSubject {
+
+    }
+
+    @Nested
+    class EditSubject {
+
+    }
+
+    @Nested
+    class DeleteSubject {
+
     }
 
 }
