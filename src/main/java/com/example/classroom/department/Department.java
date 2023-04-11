@@ -74,7 +74,6 @@ public class Department {
      * on the Field Of Study side
      */
     public void addFieldOfStudy(FieldOfStudy fieldOfStudy) {
-        //prevent endless loop
         if (fieldsOfStudy.contains(fieldOfStudy))
             return;
         fieldsOfStudy.add(fieldOfStudy);
@@ -87,7 +86,6 @@ public class Department {
      * on the Field Of Study side
      */
     public void removeFieldOfStudy(FieldOfStudy fieldOfStudy) {
-        //prevent endless loop
         if (!fieldsOfStudy.contains(fieldOfStudy))
             return;
         fieldsOfStudy.remove(fieldOfStudy);
