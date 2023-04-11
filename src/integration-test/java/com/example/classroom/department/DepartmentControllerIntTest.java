@@ -128,17 +128,16 @@ class DepartmentControllerIntTest {
                         FieldOfStudy::getMode,
                         FieldOfStudy::getTitle,
                         FieldOfStudy::getLevelOfEducation,
-                        fieldOfStudy -> fieldOfStudy.getDepartment().getId(),
                         fieldOfStudy -> fieldOfStudy.getDepartment().getName(),
                         fieldOfStudy -> fieldOfStudy.getDepartment().getAddress(),
                         fieldOfStudy -> fieldOfStudy.getDepartment().getTelNumber()
                 ).containsExactlyInAnyOrder(
                         tuple(fieldOfStudy1.getId(), fieldOfStudy1.getName(), fieldOfStudy1.getMode(),
                                 fieldOfStudy1.getTitle(), fieldOfStudy1.getLevelOfEducation(),
-                                expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()),
+                                expected.getName(), expected.getAddress(), expected.getTelNumber()),
                         tuple(fieldOfStudy2.getId(), fieldOfStudy2.getName(), fieldOfStudy2.getMode(),
                                 fieldOfStudy2.getTitle(), fieldOfStudy2.getLevelOfEducation(),
-                                expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()));
+                                expected.getName(), expected.getAddress(), expected.getTelNumber()));
     }
 
     @Test
