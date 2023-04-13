@@ -19,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -51,7 +52,7 @@ class SubjectGetControllerIntegrationTest {
     @Nested
     class GetSubject {
         @Test
-        void returns200_withSubjectView() throws Exception {
+        void returns200_withSubjectView_andContent() throws Exception {
             // Given
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
@@ -69,6 +70,40 @@ class SubjectGetControllerIntegrationTest {
 
             // Then
             String contentAsString = mvcResult.getResponse().getContentAsString();
+
+            assertThat(contentAsString)
+                    .contains(
+                            "<div class=\"page-title\">Viewing Subject with ID: " + subject.getId() + "</div>"
+                    )
+                    .contains(
+                            "    <div class=\"mb-4\">\n" +
+                                    "        <h4>Subject name:</h4>\n" +
+                                    "        <span>" + subject.getName() + "</span>\n" +
+                                    "    </div>\n" +
+                                    "    <hr>\n" +
+                                    "    <div class=\"mb-4\">\n" +
+                                    "        <h4>Description:</h4>\n" +
+                                    "        <span>" + subject.getDescription() + "</span>\n" +
+                                    "    </div>\n" +
+                                    "    <hr>\n" +
+                                    "    <div class=\"mb-4\">\n" +
+                                    "        <h4>Hours in semester:</h4>\n" +
+                                    "        <span>" + subject.getHoursInSemester() + "</span>\n" +
+                                    "    </div>\n" +
+                                    "    <hr>\n" +
+                                    "    <div class=\"mb-4\">\n" +
+                                    "        <h4>ECTS points:</h4>\n" +
+                                    "        <span>" + subject.getEctsPoints() + "</span>\n" +
+                                    "    </div>"
+                    )
+                    .contains(
+                            "        <h4>Field of study:</h4>\n" +
+                                    "        <a class=\"text-body\"\n" +
+                                    "           href=\"/dashboard/fields-of-study/" + fieldOfStudy.getId() + "\">\n" +
+                                    "            <span>" + fieldOfStudy.getName() + "</span>\n" +
+                                    "            <i class=\"fas fa-regular fa-up-right-from-square\"></i>\n" +
+                                    "        </a>"
+                    );
         }
     }
 
