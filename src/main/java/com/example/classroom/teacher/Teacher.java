@@ -136,8 +136,7 @@ public class Teacher {
 
     @Override
     public String toString() {
-        return firstName + " " + lastName +
-                ", subjects=" + subjects.size();
+        return firstName + " " + lastName;
     }
 
     @Override
