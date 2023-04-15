@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ class FieldOfStudyRestController {
     }
 
     @PostMapping
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     ResponseEntity<FieldOfStudyDto> createFieldOfStudy(@Valid @RequestBody FieldOfStudyDto fieldOfStudyDto) {
         FieldOfStudyDto created = service.create(fieldOfStudyDto);
         return created != null ?
@@ -41,6 +43,7 @@ class FieldOfStudyRestController {
     }
 
     @PutMapping
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     ResponseEntity<FieldOfStudyDto> updateFieldOfStudy(@Valid @RequestBody FieldOfStudyDto fieldOfStudyDto) {
         FieldOfStudyDto updated = service.update(fieldOfStudyDto);
         return updated != null ?
@@ -49,12 +52,14 @@ class FieldOfStudyRestController {
     }
 
     @DeleteMapping("{id}")
+    @Secured({"ROLE_ADMIN"})
     ResponseEntity<Void> deleteFieldOfStudy(@PathVariable Long id) {
         service.remove(id);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping
+    @Secured({"ROLE_ADMIN"})
     ResponseEntity<Void> deleteAllFieldsOfStudy() {
         service.removeAll();
         return ResponseEntity.accepted().build();

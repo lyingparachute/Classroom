@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ class TeacherRestController {
     }
 
     @PostMapping
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     ResponseEntity<TeacherDto> createTeacher(@Valid @RequestBody TeacherDto teacherDto) {
         TeacherDto created = teacherService.create(teacherDto);
         return created != null ?
@@ -41,6 +43,7 @@ class TeacherRestController {
     }
 
     @PutMapping
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     ResponseEntity<TeacherDto> updateTeacher(@Valid @RequestBody TeacherDto teacherDto) {
         TeacherDto updated = teacherService.update(teacherDto);
         return updated != null ?
@@ -50,12 +53,14 @@ class TeacherRestController {
     }
 
     @DeleteMapping("{id}")
+    @Secured({"ROLE_ADMIN"})
     ResponseEntity<Void> deleteTeacher(@PathVariable Long id) {
         teacherService.remove(id);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping
+    @Secured({"ROLE_ADMIN"})
     ResponseEntity<Void> deleteAllStudents() {
         teacherService.removeAll();
         return ResponseEntity.accepted().build();

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class StudentRestController {
     private final StudentService service;
 
     @GetMapping("{id}")
+    @Secured({"ROLE_TEACHER", "ROLE_DEAN", "ROLE_ADMIN"})
     ResponseEntity<StudentDto> getStudent(@PathVariable Long id) {
         StudentDto dto = service.fetchById(id);
         return dto != null ?
@@ -24,6 +26,7 @@ public class StudentRestController {
     }
 
     @GetMapping
+    @Secured({"ROLE_TEACHER", "ROLE_DEAN", "ROLE_ADMIN"})
     ResponseEntity<List<StudentDto>> getStudents() {
         List<StudentDto> students = service.fetchAll();
         return students.isEmpty() ?
@@ -32,6 +35,7 @@ public class StudentRestController {
     }
 
     @PostMapping
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     ResponseEntity<StudentDto> createStudent(@Valid @RequestBody StudentDto studentDto) {
         StudentDto created = service.create(studentDto);
         return created != null ?
@@ -41,6 +45,7 @@ public class StudentRestController {
     }
 
     @PutMapping
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     ResponseEntity<StudentDto> updateStudent(@Valid @RequestBody StudentDto studentDto) {
         StudentDto updated = service.update(studentDto);
         return updated != null ?
@@ -49,6 +54,7 @@ public class StudentRestController {
     }
 
     @DeleteMapping("{id}")
+    @Secured({"ROLE_ADMIN"})
     ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         service.remove(id);
         return ResponseEntity.accepted().build();

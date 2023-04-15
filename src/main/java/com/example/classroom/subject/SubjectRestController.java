@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ class SubjectRestController {
     }
 
     @PostMapping
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     ResponseEntity<SubjectDto> createSubject(@Valid @RequestBody SubjectDto subjectDto) {
         SubjectDto created = subjectService.create(subjectDto);
         return created != null ?
@@ -41,6 +43,7 @@ class SubjectRestController {
     }
 
     @PutMapping
+    @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     ResponseEntity<SubjectDto> updateSubject(@Valid @RequestBody SubjectDto studentDto) {
         SubjectDto updated = subjectService.update(studentDto);
         return updated != null ?
@@ -49,12 +52,14 @@ class SubjectRestController {
     }
 
     @DeleteMapping("{id}")
+    @Secured({"ROLE_ADMIN"})
     ResponseEntity<Void> deleteSubject(@PathVariable Long id) {
         subjectService.remove(id);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping
+    @Secured({"ROLE_ADMIN"})
     ResponseEntity<Void> deleteAllSubjects() {
         subjectService.removeAll();
         return ResponseEntity.accepted().build();
