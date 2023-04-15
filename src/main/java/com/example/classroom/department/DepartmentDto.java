@@ -3,7 +3,6 @@ package com.example.classroom.department;
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.teacher.Teacher;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -21,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class DepartmentDto {
     private Long id;
-    @NotNull
+    @NotEmpty(message = "{message.name.null}")
     @Size(min = 10, max = 50, message = "{department.name.size}")
     private String name;
 
