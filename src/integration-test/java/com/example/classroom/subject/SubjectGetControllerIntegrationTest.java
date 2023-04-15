@@ -4,6 +4,8 @@ import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.test.util.IntegrationTestsInitData;
+import com.example.classroom.user.UserRole;
+import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -156,7 +159,7 @@ class SubjectGetControllerIntegrationTest {
     @Nested
     class CreateSubject {
         @Test
-        void returns200_withAddNewSubjectView_andContent() throws Exception {
+        void returns200_withAddNewSubjectView_andContent_givenAdminRole() throws Exception {
             MvcResult mvcResult = mockMvc.perform(get("/dashboard/subjects/new"))
                     .andDo(print())
                     .andExpect(status().isOk())
@@ -205,6 +208,24 @@ class SubjectGetControllerIntegrationTest {
                                     "            <select class=\"form-select\" id=\"field_of_study\" name=\"fieldOfStudy\">"
                     );
 
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
+        void returns403ForbiddenStatus_withException_givenStudentRole() {
+            assertThatThrownBy(() ->
+                    mockMvc.perform(get("/dashboard/subjects/new"))
+            ).isExactlyInstanceOf(ServletException.class)
+                    .message().contains("Access Denied");
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
+        void returns403ForbiddenStatus_withException_givenTeacherRole() {
+            assertThatThrownBy(() ->
+                    mockMvc.perform(get("/dashboard/subjects/new"))
+            ).isExactlyInstanceOf(ServletException.class)
+                    .message().contains("Access Denied");
         }
     }
 
@@ -287,6 +308,40 @@ class SubjectGetControllerIntegrationTest {
                             "<input class=\"form-check-input m-2\" type=\"checkbox\" value=\"" + teacher2.getId() + "\" id=\"teachers_list\" " +
                                     "name=\"teachers\"><input type=\"hidden\" name=\"_teachers\" value=\"on\"/>" + teacher2 + "</input>"
                     );
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
+        void returns403ForbiddenStatus_withException_givenStudentRole() {
+            // Given
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+
+            Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
+
+            // When
+            assertThatThrownBy(() ->
+                    mockMvc.perform(get("/dashboard/subjects/edit/{id}", subject.getId()))
+            ).isExactlyInstanceOf(ServletException.class)
+                    .message().contains("Access Denied");
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
+        void returns403ForbiddenStatus_withException_givenTeacherRole() {
+            // Given
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+
+            Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
+
+            // When
+            assertThatThrownBy(() ->
+                    mockMvc.perform(get("/dashboard/subjects/edit/{id}", subject.getId()))
+            ).isExactlyInstanceOf(ServletException.class)
+                    .message().contains("Access Denied");
         }
     }
 }
