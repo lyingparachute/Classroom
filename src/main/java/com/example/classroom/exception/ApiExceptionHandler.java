@@ -62,7 +62,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException exception) {
         log.warn(LOG_ERROR_EXCEPTION_OCCURRED_MSG, exception.getMessage());
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage());
     }
 }
