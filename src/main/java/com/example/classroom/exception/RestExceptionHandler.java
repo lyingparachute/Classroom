@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -21,7 +22,7 @@ import java.util.Map;
 
 @Log4j2
 @ControllerAdvice
-public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     public static final String LOG_ERROR_EXCEPTION_OCCURRED_MSG = "An exception occurred, which will cause a '{}' response";
 
@@ -33,12 +34,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", status.value());
+        body.put("message", ((HttpStatus) status).getReasonPhrase());
 
         List<String> errors = ex.getBindingResult().getFieldErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
         body.put("errors", errors);
+        body.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
+        body.put("method", ((ServletWebRequest) request).getRequest().getMethod());
         return new ResponseEntity<>(body, headers, status);
     }
 
