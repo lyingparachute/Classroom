@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,10 +25,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     public static final String LOG_ERROR_EXCEPTION_OCCURRED_MSG = "An exception occurred, which will cause a '{}' response";
 
-
+    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
-                                                                  HttpStatus status,
+                                                                  HttpStatusCode status,
                                                                   WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
@@ -41,11 +42,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, headers, status);
     }
 
-
+    @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex,
                                                              @Nullable Object body,
                                                              HttpHeaders headers,
-                                                             HttpStatus statusCode,
+                                                             HttpStatusCode statusCode,
                                                              WebRequest request) {
         if (statusCode.is5xxServerError()) {
             log.error(LOG_ERROR_EXCEPTION_OCCURRED_MSG, statusCode, ex);
