@@ -20,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class DepartmentDto {
     private Long id;
-    @NotEmpty(message = "{message.name.null}")
+    @NotEmpty(message = "{message.name.empty}")
     @Size(min = 10, max = 50, message = "{department.name.size}")
     private String name;
 
