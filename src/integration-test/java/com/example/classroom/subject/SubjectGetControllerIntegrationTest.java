@@ -48,7 +48,7 @@ class SubjectGetControllerIntegrationTest {
     @Nested
     class GetSubject {
         @Test
-        void returns200_withSubjectView_andContent() throws Exception {
+        void returns200_withSubjectView_andContent_givenAdminRole() throws Exception {
             // Given
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
@@ -101,12 +101,66 @@ class SubjectGetControllerIntegrationTest {
                                     "        </a>"
                     );
         }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
+        void returns200_OKStatus_givenStudentRole() throws Exception {
+            // Given
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+
+            Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
+
+            // When
+            mockMvc.perform(get("/dashboard/subjects/{id}", subject.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/subject-view"));
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
+        void returns200_OKStatus_givenTeacherRole() throws Exception {
+            // Given
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+
+            Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
+
+            // When
+            mockMvc.perform(get("/dashboard/subjects/{id}", subject.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/subject-view"));
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_DEAN)
+        void returns200_OKStatus_givenDeanRole() throws Exception {
+            // Given
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+
+            Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
+
+            // When
+            mockMvc.perform(get("/dashboard/subjects/{id}", subject.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/subject-view"));
+        }
     }
 
     @Nested
     class GetSubjects {
         @Test
-        void returns200_withAllSubjectsView_andContent() throws Exception {
+        void returns200_withAllSubjectsView_andContent_givenAdminRole() throws Exception {
             // Given
             FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
             FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
@@ -153,6 +207,36 @@ class SubjectGetControllerIntegrationTest {
                                     "                                        \n" +
                                     "                                    </td>\n"
                     );
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
+        void returns200_OKStatus_givenStudentRole() throws Exception {
+            mockMvc.perform(get("/dashboard/subjects"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/all-subjects"));
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
+        void returns200_OKStatus_givenTeacherRole() throws Exception {
+            mockMvc.perform(get("/dashboard/subjects"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/all-subjects"));
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_DEAN)
+        void returns200_OKStatus_givenDeanRole() throws Exception {
+            mockMvc.perform(get("/dashboard/subjects"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/all-subjects"));
         }
     }
 
@@ -207,12 +291,11 @@ class SubjectGetControllerIntegrationTest {
                                     "        <div class=\"col-sm\">\n" +
                                     "            <select class=\"form-select\" id=\"field_of_study\" name=\"fieldOfStudy\">"
                     );
-
         }
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
-        void returns403ForbiddenStatus_withException_givenStudentRole() {
+        void returns403_ForbiddenStatus_withException_givenStudentRole() {
             assertThatThrownBy(() ->
                     mockMvc.perform(get("/dashboard/subjects/new"))
             ).isExactlyInstanceOf(ServletException.class)
@@ -221,18 +304,29 @@ class SubjectGetControllerIntegrationTest {
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
-        void returns403ForbiddenStatus_withException_givenTeacherRole() {
+        void returns403_ForbiddenStatus_withException_givenTeacherRole() {
             assertThatThrownBy(() ->
                     mockMvc.perform(get("/dashboard/subjects/new"))
             ).isExactlyInstanceOf(ServletException.class)
                     .message().contains("Access Denied");
         }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_DEAN)
+        void returns200_withAddNewSubjectView_givenDeanRole() throws Exception {
+            mockMvc.perform(get("/dashboard/subjects/new"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/subject-create-form"));
+        }
+
     }
 
     @Nested
     class EditSubject {
         @Test
-        void returns200_withEditSubjectView_andContent() throws Exception {
+        void returns200_withEditSubjectView_andContent_givenAdminRole() throws Exception {
             // Given
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
@@ -294,7 +388,7 @@ class SubjectGetControllerIntegrationTest {
                                     "        <div class=\"col-sm\">\n" +
                                     "            <select class=\"form-select\" id=\"field_of_study\" name=\"fieldOfStudy\">\n" +
                                     "                <option value=\"0\"></option>\n" +
-                                    "                <option value=\"30\" selected=\"selected\">"
+                                    "                <option value=\"" + fieldOfStudy.getId() + "\" selected=\"selected\">"
                                     + fieldOfStudy.getName() + ", " + fieldOfStudy.getLevelOfEducation().getValue() + ", " + fieldOfStudy.getMode().getValue() + "</option>"
                     )
                     .contains(
@@ -312,7 +406,7 @@ class SubjectGetControllerIntegrationTest {
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
-        void returns403ForbiddenStatus_withException_givenStudentRole() {
+        void returns403_ForbiddenStatus_withException_givenStudentRole() {
             // Given
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
@@ -329,7 +423,7 @@ class SubjectGetControllerIntegrationTest {
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
-        void returns403ForbiddenStatus_withException_givenTeacherRole() {
+        void returns403_ForbiddenStatus_withException_givenTeacherRole() {
             // Given
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
@@ -342,6 +436,23 @@ class SubjectGetControllerIntegrationTest {
                     mockMvc.perform(get("/dashboard/subjects/edit/{id}", subject.getId()))
             ).isExactlyInstanceOf(ServletException.class)
                     .message().contains("Access Denied");
+        }
+
+        @Test
+        void returns200_withEditSubjectView_givenDeanRole() throws Exception {
+            // Given
+            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+
+            Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
+
+            // When
+            mockMvc.perform(get("/dashboard/subjects/edit/{id}", subject.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("subject/subject-edit-form"));
         }
     }
 }
