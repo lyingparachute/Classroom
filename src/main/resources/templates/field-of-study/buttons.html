@@ -2,7 +2,7 @@
 <div class="row my-2 justify-content-end" id="cancelSubmitBtn" th:fragment="CREATEcancelSubmitBtn">
     <div class="col-auto">
         <a class="btn btn-secondary btn-rounded"
-           onclick="history.go(-1)">
+           th:href="@{/dashboard/fields-of-study}">
             <i class="fa fa-times-circle mr-1"></i>
             <span th:text="#{button.cancel}"></span>
         </a>

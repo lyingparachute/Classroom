@@ -1,7 +1,15 @@
 package com.example.classroom;
 
-import com.example.classroom.model.*;
-import com.example.classroom.repository.*;
+import com.example.classroom.department.Department;
+import com.example.classroom.department.DepartmentRepository;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
+import com.example.classroom.student.Student;
+import com.example.classroom.student.StudentRepository;
+import com.example.classroom.subject.Subject;
+import com.example.classroom.subject.SubjectRepository;
+import com.example.classroom.teacher.Teacher;
+import com.example.classroom.teacher.TeacherRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

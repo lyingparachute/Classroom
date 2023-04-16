@@ -6,40 +6,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("dashboard")
-public class DashboardController {
+class DashboardController {
 
     @GetMapping
-    public String getDashboard(){
+    String getDashboard() {
         return "dashboard/dashboard";
     }
 
     @GetMapping("/library")
-    public String getLibrary(){
+    String getLibrary() {
         return "dashboard/library";
     }
 
     @GetMapping("/calendar")
-    public String getCalendar(){
+    String getCalendar() {
         return "dashboard/calendar";
     }
 
     @GetMapping("/analytics")
-    public String getAnalytics(){
+    String getAnalytics() {
         return "dashboard/analytics";
     }
 
     @GetMapping("/sales")
-    public String getSales(){
+    String getSales() {
         return "dashboard/sales";
     }
 
     @GetMapping("/settings")
-    public String getSettings(){
+    String getSettings() {
         return "dashboard/settings";
     }
 
     @GetMapping("/help")
-    public String getHelp(){
+    String getHelp() {
         return "dashboard/help";
     }
 }

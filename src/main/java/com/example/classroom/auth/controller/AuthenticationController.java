@@ -2,7 +2,7 @@ package com.example.classroom.auth.controller;
 
 import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.auth.service.UserManagementService;
-import com.example.classroom.model.User;
+import com.example.classroom.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,26 +15,26 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
-public class AuthenticationController {
+class AuthenticationController {
 
-    public static final String SIGN_UP_TEMPLATE = "auth/sign-up";
+    static final String SIGN_UP_TEMPLATE = "auth/sign-up";
     private final UserManagementService service;
 
     @GetMapping("/sign-in")
-    public String signIn() {
+    String signIn() {
         return "auth/sign-in";
     }
 
     @GetMapping("/sign-up")
-    public String getSignUpPage(Model model) {
+    String getSignUpPage(Model model) {
         model.addAttribute("user", new RegisterRequest());
         return SIGN_UP_TEMPLATE;
     }
 
     @PostMapping("/sign-up")
-    public String signUp(@Valid @ModelAttribute("user") RegisterRequest user,
-                         BindingResult result,
-                         RedirectAttributes redirectAttributes) {
+    String signUp(@Valid @ModelAttribute("user") RegisterRequest user,
+                  BindingResult result,
+                  RedirectAttributes redirectAttributes) {
         if (result.hasErrors())
             return SIGN_UP_TEMPLATE;
         User created = service.register(user);
@@ -43,12 +43,12 @@ public class AuthenticationController {
     }
 
     @GetMapping("/password/reset")
-    public String getPasswordResetPage() {
+    String getPasswordResetPage() {
         return "auth/password-reset";
     }
 
     @PostMapping("/password/reset")
-    public String resetPassword() {
+    String resetPassword() {
         return "auth/sign-in";
     }
 }

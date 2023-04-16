@@ -22,7 +22,7 @@
         <passay.version>1.0</passay.version>
         <jwt.version>0.11.5</jwt.version>
         <mysql-connector.version>8.0.32</mysql-connector.version>
-        <h2.version>2.1.214</h2.version>
+        <h2.version>1.4.200</h2.version>
         <lombok.version>1.18.26</lombok.version>
         <modelmapper.version>3.1.0</modelmapper.version>
         <bootstrap.version>5.2.3</bootstrap.version>
@@ -79,6 +79,19 @@
             <artifactId>spring-security-config</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
 
         <!-- Tests -->
         <dependency>

@@ -3,15 +3,16 @@ package com.example.classroom.auth.service;
 import com.example.classroom.auth.model.AuthenticationRequest;
 import com.example.classroom.auth.model.AuthenticationResponse;
 import com.example.classroom.auth.model.RegisterRequest;
-import com.example.classroom.config.jwt.JwtService;
-import com.example.classroom.enums.UserRole;
-import com.example.classroom.model.User;
-import com.example.classroom.repository.UserRepository;
+import com.example.classroom.token.JwtService;
 import com.example.classroom.token.Token;
 import com.example.classroom.token.TokenRepository;
 import com.example.classroom.token.TokenType;
+import com.example.classroom.user.User;
+import com.example.classroom.user.UserRepository;
+import com.example.classroom.user.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final UserRepository repository;
+    private final ModelMapper mapper;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -31,12 +33,11 @@ public class AuthenticationService {
     @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
         User userDetails = new User();
-        userDetails.setFirstName(request.getFirstName());
-        userDetails.setLastName(request.getLastName());
-        userDetails.setEmail(request.getEmail());
+        mapper.map(request, userDetails);
         userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
-        userDetails.setRole(UserRole.ROLE_STUDENT);
-        //TODO delete auto-assign role
+        if (userDetails.getRole() == null) {
+            userDetails.setRole(UserRole.ROLE_STUDENT);
+        }
         var savedUser = repository.save(userDetails);
         var jwtToken = jwtService.generateToken(savedUser);
         saveUserToken(savedUser, jwtToken);

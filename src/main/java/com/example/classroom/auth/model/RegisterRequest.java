@@ -1,6 +1,6 @@
 package com.example.classroom.auth.model;
 
-import com.example.classroom.enums.UserRole;
+import com.example.classroom.user.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

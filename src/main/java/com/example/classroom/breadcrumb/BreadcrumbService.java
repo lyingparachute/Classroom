@@ -14,6 +14,9 @@ public class BreadcrumbService {
 
 
     public List<Breadcrumb> getBreadcrumbs(String endpoint) {
+        if (endpoint == null || endpoint.isEmpty())
+            throw new IllegalArgumentException("Invalid endpoint!");
+
         List<Breadcrumb> breadcrumbs = new ArrayList<>();
         breadcrumbs.add(createHomeBreadcrumb());
 
@@ -73,9 +76,6 @@ public class BreadcrumbService {
     }
 
     private String capitalize(String str) {
-        if (str == null || str.isEmpty()) {
-            return str;
-        }
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 

@@ -1,17 +1,20 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <!-- ======= Form for FieldOfStudy ======= -->
 <div th:fragment="item-form">
-    <div class="mb-4">
+    <div class="mb-4" th:classappend="${#fields.hasErrors('name')} ? mb-5">
         <h4 th:text="#{fieldOfStudy.edit.card.body.name}"></h4>
         <div class="form-outline">
             <input class="form-control"
                    id="name"
+                   data-mdb-showcounter="true"
                    th:field="*{name}"
+                   maxlength="50" th:classappend="${#fields.hasErrors('name')} ? is-invalid"
                    type="text"/>
             <label class="form-label" for="name" th:text="#{fieldOfStudy.name}"></label>
+            <div th:if="${#fields.hasErrors('name')}" class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('name')}" th:text="${error}"></span>
+            </div>
         </div>
-        <div class="alert alert-danger" th:errors="*{name}"
-             th:if="${#fields.hasErrors('name')}"></div>
     </div>
     <hr>
     <div class="mb-4">
@@ -55,19 +58,19 @@
         </select>
     </div>
     <hr>
-    <div class="mb-4">
+    <div class="mb-4" th:classappend="${#fields.hasErrors('description')} ? mb-5">
         <h4 th:text="#{fieldOfStudy.item.card.body.description}"></h4>
         <div class="form-outline">
-                                    <textarea class="form-control"
-                                              id="description"
-                                              rows="5"
-                                              th:field="*{description}"></textarea>
-            <label class="form-label" for="description"
-                   th:text="#{fieldOfStudy.description}"></label>
-            <div class="form-helper" th:text="#{fieldOfStudy.description.helper}"></div>
+            <textarea class="form-control" id="description" rows="5"
+                      th:classappend="${#fields.hasErrors('description')} ? is-invalid"
+                      th:field="*{description}"></textarea>
+            <label class="form-label" for="description" th:text="#{fieldOfStudy.description}"></label>
+            <div class="form-helper" th:unless="${#fields.hasErrors('description')}"
+                 th:text="#{fieldOfStudy.description.helper}"></div>
+            <div th:if="${#fields.hasErrors('description')}" class="invalid-tooltip">
+                <span class="mr-1" th:each="error: ${#fields.errors('description')}" th:text="${error}"></span>
+            </div>
         </div>
-        <div class="alert alert-danger" th:errors="*{description}"
-             th:if="${#fields.hasErrors('description')}"></div>
     </div>
     <hr>
     <div class="mb-4">
@@ -102,11 +105,13 @@
     <div class="mb-4">
         <h4 th:text="#{fieldOfStudy.item.card.body.department}"></h4>
         <a class="text-body"
-           th:if="${fieldOfStudy.department != null}"
+           th:unless="${fieldOfStudy.department == null}"
            th:href="@{/dashboard/departments/{id}(id=${fieldOfStudy.department.id})}">
             <span th:text="${fieldOfStudy.department.name}"></span>
             <i class="fas fa-regular fa-up-right-from-square"></i>
         </a>
+        <span th:if="${fieldOfStudy.department == null}"
+              th:text="#{fieldOfStudy.item.card.body.no.department}"></span>
     </div>
     <hr>
     <div class="mb-4">
