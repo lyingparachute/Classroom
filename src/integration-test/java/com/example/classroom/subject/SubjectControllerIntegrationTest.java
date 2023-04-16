@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -445,12 +444,11 @@ class SubjectControllerIntegrationTest {
             String expectedExceptionMsg = "Invalid subject id: " + id;
 
             // When
-            MvcResult mvcResult = mockMvc.perform(get("/dashboard/subjects/delete/{id}", id))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-                    .andExpect(content().contentType(MediaType.TEXT_PLAIN_VALUE + ";charset=UTF-8"))
-                    .andExpect(content().string(expectedExceptionMsg))
-                    .andReturn();
+           mockMvc.perform(get("/dashboard/subjects/delete/{id}", id))
+                   .andDo(print())
+                   .andExpect(status().isBadRequest())
+                   .andExpect(content().contentType(MediaType.TEXT_PLAIN_VALUE + ";charset=UTF-8"))
+                   .andExpect(content().string(expectedExceptionMsg));
         }
     }
 
