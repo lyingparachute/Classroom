@@ -295,7 +295,7 @@ class SubjectGetControllerIntegrationTest {
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
-        void returns403_ForbiddenStatus_withServletException_givenStudentRole() {
+        void returns403_forbiddenStatus_withServletException_givenStudentRole() {
             assertThatThrownBy(() ->
                     mockMvc.perform(get("/dashboard/subjects/new"))
             ).isExactlyInstanceOf(ServletException.class)
@@ -304,7 +304,7 @@ class SubjectGetControllerIntegrationTest {
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
-        void returns403_ForbiddenStatus_withServletException_givenTeacherRole() {
+        void returns403_forbiddenStatus_withServletException_givenTeacherRole() {
             assertThatThrownBy(() ->
                     mockMvc.perform(get("/dashboard/subjects/new"))
             ).isExactlyInstanceOf(ServletException.class)
@@ -406,7 +406,7 @@ class SubjectGetControllerIntegrationTest {
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
-        void returns403_ForbiddenStatus_withServletException_givenStudentRole() {
+        void returns403_forbiddenStatus_withServletException_givenStudentRole() {
             // Given
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
@@ -423,7 +423,7 @@ class SubjectGetControllerIntegrationTest {
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
-        void returns403_ForbiddenStatus_withServletException_givenTeacherRole() {
+        void returns403_forbiddenStatus_withServletException_givenTeacherRole() {
             // Given
             FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
