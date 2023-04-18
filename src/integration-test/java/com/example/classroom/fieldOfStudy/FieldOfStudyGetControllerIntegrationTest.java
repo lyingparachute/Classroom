@@ -1,15 +1,11 @@
 package com.example.classroom.fieldOfStudy;
 
 import com.example.classroom.department.Department;
-import com.example.classroom.enums.AcademicTitle;
-import com.example.classroom.enums.LevelOfEducation;
-import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.test.util.IntegrationTestsInitData;
 import com.example.classroom.user.UserRole;
-import jakarta.servlet.ServletException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -26,9 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -72,6 +66,7 @@ class FieldOfStudyGetControllerIntegrationTest {
 
             // When
             MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME + "/" + expected.getId()))
+                    .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
                     .andExpect(view().name("field-of-study/fieldOfStudy-view"))
@@ -107,7 +102,8 @@ class FieldOfStudyGetControllerIntegrationTest {
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
-        void returns403_forbiddenStatus_withServletException_givenStudentRole() {
+        void returns200_OKStatus_givenStudentRole() throws Exception {
+            // Given
             Department department = initData.createDepartmentOne(null, List.of());
             Subject subject1 = initData.createSubjectOne(null, List.of());
             Subject subject2 = initData.createSubjectTwo(null, List.of());
@@ -117,96 +113,189 @@ class FieldOfStudyGetControllerIntegrationTest {
                     department, List.of(subject1, subject2), List.of(student1, student2));
 
             // When
-            assertThatThrownBy(() ->
-                    mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME + "/" + expected.getId()))
-                            .andExpect(status().isOk())
-                            .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                            .andExpect(view().name("subject/subject-view"))
-                            .andReturn()
-            ).isExactlyInstanceOf(ServletException.class)
-                    .message().contains("Access Denied");
+            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME + "/" + expected.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/fieldOfStudy-view"));
         }
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
-        void returns403_forbiddenStatus_withServletException_givenTeacherRole() {
+        void returns200_OKStatus_givenTeacherRole() throws Exception {
             // Given
             Department department = initData.createDepartmentOne(null, List.of());
             Subject subject1 = initData.createSubjectOne(null, List.of());
             Subject subject2 = initData.createSubjectTwo(null, List.of());
             Student student1 = initData.createStudentOne(null, List.of());
             Student student2 = initData.createStudentTwo(null, List.of());
-            FieldOfStudyDto expected = createFieldOfStudyDto();
+            FieldOfStudy expected = initData.createFieldOfStudyOne(
+                    department, List.of(subject1, subject2), List.of(student1, student2));
 
             // When
-            assertThatThrownBy(() ->
-                    mockMvc.perform(post("/dashboard/" + ENDPOINT_NAME + "/new")
-                            .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                            .content("name=" + expected.getName() +
-                                    "&description=" + expected.getDescription() +
-                                    "&semester=" + expected.getLevelOfEducation() +
-                                    "&hoursInSemester=" + expected.getMode() +
-                                    "&ectsPoints=" + expected.getTitle() +
-                                    "&image=" + expected.getImage() +
-                                    "&department=" + department.getId() +
-                                    "&subjects=" + subject1.getId() +
-                                    "&_subjectsList=on" +
-                                    "&subjects=" + subject2.getId() +
-                                    "&_subjectsList=on" +
-                                    "&add=" +
-                                    "&students=" + student1.getId() +
-                                    "&_studentsList=on" +
-                                    "&students=" + student2.getId() +
-                                    "&_studentsList=on" +
-                                    "&add="))
-            ).isExactlyInstanceOf(ServletException.class)
-                    .message().contains("Access Denied");
+            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME + "/" + expected.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/fieldOfStudy-view"));
         }
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_DEAN)
-        void createsSubject_andRedirectsToAllSubjects_givenDeanRole() throws Exception {
+        void returns200_OKStatus_givenDeanRole() throws Exception {
             // Given
             Department department = initData.createDepartmentOne(null, List.of());
             Subject subject1 = initData.createSubjectOne(null, List.of());
             Subject subject2 = initData.createSubjectTwo(null, List.of());
             Student student1 = initData.createStudentOne(null, List.of());
             Student student2 = initData.createStudentTwo(null, List.of());
-            FieldOfStudyDto expected = createFieldOfStudyDto();
+            FieldOfStudy expected = initData.createFieldOfStudyOne(
+                    department, List.of(subject1, subject2), List.of(student1, student2));
 
             // When
-            mockMvc.perform(post("/dashboard/" + ENDPOINT_NAME + "/new")
-                            .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                            .content("name=" + expected.getName() +
-                                    "&description=" + expected.getDescription() +
-                                    "&semester=" + expected.getLevelOfEducation() +
-                                    "&hoursInSemester=" + expected.getMode() +
-                                    "&ectsPoints=" + expected.getTitle() +
-                                    "&image=" + expected.getImage() +
-                                    "&department=" + department.getId() +
-                                    "&subjects=" + subject1.getId() +
-                                    "&_subjectsList=on" +
-                                    "&subjects=" + subject2.getId() +
-                                    "&_subjectsList=on" +
-                                    "&add=" +
-                                    "&students=" + student1.getId() +
-                                    "&_studentsList=on" +
-                                    "&students=" + student2.getId() +
-                                    "&_studentsList=on" +
-                                    "&add="))
+            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME + "/" + expected.getId()))
                     .andDo(print())
-                    .andExpect(status().is3xxRedirection());
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/fieldOfStudy-view"));
         }
     }
 
-    private FieldOfStudyDto createFieldOfStudyDto() {
-        FieldOfStudyDto expected = new FieldOfStudyDto();
-        expected.setName("name");
-        expected.setDescription("description");
-        expected.setLevelOfEducation(LevelOfEducation.SECOND);
-        expected.setMode(ModeOfStudy.FT);
-        expected.setTitle(AcademicTitle.MGR);
-        expected.setImage("Image.jpg");
-        return expected;
+    @Nested
+    class GetAllFieldsOfStudy {
+        @Test
+        void returns200_withAllFieldsOfStudyView_andContent_givenAdminRole() throws Exception {
+            // Given
+            Department department1 = initData.createDepartmentOne(null, List.of());
+            Department department2 = initData.createDepartmentTwo(null, List.of());
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectThree(null, List.of());
+            Student student1 = initData.createStudentOne(null, List.of());
+            Student student2 = initData.createStudentTwo(null, List.of());
+            Student student3 = initData.createStudentThree(null, List.of());
+            FieldOfStudy expected1 = initData.createFieldOfStudyOne(
+                    department1, List.of(subject1, subject2), List.of(student1, student2));
+
+            FieldOfStudy expected2 = initData.createFieldOfStudyTwo(
+                    department2, List.of(subject3), List.of(student3));
+
+            // When
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/all-fieldsOfStudy"))
+                    .andReturn();
+
+            // Then
+            assertThat(mvcResult.getResponse().getContentAsString()).isNotNull().isNotEmpty()
+                    .contains(
+                            "                <div class=\"card-body\">\n" +
+                                    "                    <h5 class=\"card-title\">" + expected1.getName() + "</h5>\n" +
+                                    "                    <p class=\"card-text\">" + expected1.getDescription() + "</p>\n" +
+                                    "                </div>"
+                    )
+                    .contains(
+                            "                                    <a class=\"dropdown-item\"\n" +
+                                    "                                       href=\"/dashboard/fields-of-study/" + expected1.getId() + "\">\n" +
+                                    "                                                                    <span>"
+                                    + expected1.getLevelOfEducation().getValue() + ", " + expected1.getMode().getValue().toLowerCase() + "</span>\n" +
+                                    "                                        <i class=\"fas fa-regular fa-up-right-from-square\"></i>\n" +
+                                    "                                    </a>"
+                    )
+                    .contains(
+                            "                <div class=\"card-body\">\n" +
+                                    "                    <h5 class=\"card-title\">" + expected2.getName() + "</h5>\n" +
+                                    "                    <p class=\"card-text\">" + expected2.getDescription() + "</p>\n" +
+                                    "                </div>"
+                    ).contains(
+                            "                                    <a class=\"dropdown-item\"\n" +
+                                    "                                       href=\"/dashboard/fields-of-study/" + expected2.getId() + "\">\n" +
+                                    "                                                                    <span>"
+                                    + expected2.getLevelOfEducation().getValue() + ", " + expected2.getMode().getValue().toLowerCase() + "</span>\n" +
+                                    "                                        <i class=\"fas fa-regular fa-up-right-from-square\"></i>\n" +
+                                    "                                    </a>"
+                    );
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
+        void returns200_OKStatus_givenStudentRole() throws Exception {
+            // Given
+            Department department1 = initData.createDepartmentOne(null, List.of());
+            Department department2 = initData.createDepartmentTwo(null, List.of());
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectThree(null, List.of());
+            Student student1 = initData.createStudentOne(null, List.of());
+            Student student2 = initData.createStudentTwo(null, List.of());
+            Student student3 = initData.createStudentThree(null, List.of());
+            FieldOfStudy expected1 = initData.createFieldOfStudyOne(
+                    department1, List.of(subject1, subject2), List.of(student1, student2));
+
+            FieldOfStudy expected2 = initData.createFieldOfStudyTwo(
+                    department2, List.of(subject3), List.of(student3));
+
+            // When
+            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/all-fieldsOfStudy"));
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
+        void returns200_OKStatus_givenTeacherRole() throws Exception {
+            // Given
+            Department department1 = initData.createDepartmentOne(null, List.of());
+            Department department2 = initData.createDepartmentTwo(null, List.of());
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectThree(null, List.of());
+            Student student1 = initData.createStudentOne(null, List.of());
+            Student student2 = initData.createStudentTwo(null, List.of());
+            Student student3 = initData.createStudentThree(null, List.of());
+            FieldOfStudy expected1 = initData.createFieldOfStudyOne(
+                    department1, List.of(subject1, subject2), List.of(student1, student2));
+
+            FieldOfStudy expected2 = initData.createFieldOfStudyTwo(
+                    department2, List.of(subject3), List.of(student3));
+
+            // When
+            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/all-fieldsOfStudy"));
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_DEAN)
+        void returns200_OKStatus_givenDeanRole() throws Exception {
+            // Given
+            Department department1 = initData.createDepartmentOne(null, List.of());
+            Department department2 = initData.createDepartmentTwo(null, List.of());
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Subject subject3 = initData.createSubjectThree(null, List.of());
+            Student student1 = initData.createStudentOne(null, List.of());
+            Student student2 = initData.createStudentTwo(null, List.of());
+            Student student3 = initData.createStudentThree(null, List.of());
+            FieldOfStudy expected1 = initData.createFieldOfStudyOne(
+                    department1, List.of(subject1, subject2), List.of(student1, student2));
+
+            FieldOfStudy expected2 = initData.createFieldOfStudyTwo(
+                    department2, List.of(subject3), List.of(student3));
+
+            // When
+            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/all-fieldsOfStudy"));
+        }
     }
+
 }
