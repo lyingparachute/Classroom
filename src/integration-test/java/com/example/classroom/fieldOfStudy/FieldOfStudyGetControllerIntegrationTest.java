@@ -71,19 +71,38 @@ class FieldOfStudyGetControllerIntegrationTest {
                     department, List.of(subject1, subject2), List.of(student1, student2));
 
             // When
-            MvcResult mvcResult = mockMvc.perform(get("/dashboard" + ENDPOINT_NAME + "/" + expected.getId()))
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME + "/" + expected.getId()))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
                     .andExpect(view().name("field-of-study/fieldOfStudy-view"))
                     .andReturn();
 
             // Then
-            assertThat(mvcResult.getResponse().getContentAsString()).isNotNull().isNotEmpty().satisfies(content -> {
-                        assertThat(content)
-                                .contains("<div class=\"page-title\">Inżynieria mechaniczno-medyczna</div>")
-                                .contains();
-                    }
-            );
+            assertThat(mvcResult.getResponse().getContentAsString()).isNotNull().isNotEmpty()
+                    .contains(
+                            "<div class=\"page-title\">" + expected.getName() + "</div>"
+                    ).contains(
+                            "<h4>Field of study name:</h4>\n" +
+                                    "        <span>" + expected.getName() + "</span>"
+                    ).contains(
+                            "<h4>Level of education:</h4>\n" +
+                                    "        <span>" + expected.getLevelOfEducation().getValue() + "</span>"
+                    ).contains(
+                            "        <h4>Mode of studies:</h4>\n" +
+                                    "        <span>" + expected.getMode().getValue() + "</span>"
+                    ).contains(
+                            "        <h4>Department:</h4>\n" +
+                                    "        <a class=\"text-body\"\n" +
+                                    "           href=\"/dashboard/departments/" + department.getId() + "\">\n" +
+                                    "            <span>" + department.getName() + "</span>\n" +
+                                    "            <i class=\"fas fa-regular fa-up-right-from-square\"></i>\n" +
+                                    "        </a>"
+                    ).contains(
+                            "            <div class=\"mb-2\">\n" +
+                                    "                <i class=\"fas fa-regular fa-check\"></i>\n" +
+                                    "                <span>" + expected.getDescription() + "</span>\n" +
+                                    "            </div>"
+                    );
         }
 
         @Test
