@@ -6,6 +6,7 @@ import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.test.util.IntegrationTestsInitData;
 import com.example.classroom.user.UserRole;
+import jakarta.servlet.ServletException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -22,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -32,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockCustomUser
 class FieldOfStudyGetControllerIntegrationTest {
 
-    private static final String ENDPOINT_NAME = "fields-of-study";
+    private static final String FIELDS_OF_STUDY_ENDPOINT_NAME = "fields-of-study";
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -65,7 +67,7 @@ class FieldOfStudyGetControllerIntegrationTest {
                     department, List.of(subject1, subject2), List.of(student1, student2));
 
             // When
-            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME + "/" + expected.getId()))
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/" + expected.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -113,7 +115,7 @@ class FieldOfStudyGetControllerIntegrationTest {
                     department, List.of(subject1, subject2), List.of(student1, student2));
 
             // When
-            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME + "/" + expected.getId()))
+            mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/" + expected.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -133,7 +135,7 @@ class FieldOfStudyGetControllerIntegrationTest {
                     department, List.of(subject1, subject2), List.of(student1, student2));
 
             // When
-            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME + "/" + expected.getId()))
+            mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/" + expected.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -153,7 +155,7 @@ class FieldOfStudyGetControllerIntegrationTest {
                     department, List.of(subject1, subject2), List.of(student1, student2));
 
             // When
-            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME + "/" + expected.getId()))
+            mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/" + expected.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -181,7 +183,7 @@ class FieldOfStudyGetControllerIntegrationTest {
                     department2, List.of(subject3), List.of(student3));
 
             // When
-            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME))
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -238,7 +240,7 @@ class FieldOfStudyGetControllerIntegrationTest {
                     department2, List.of(subject3), List.of(student3));
 
             // When
-            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME))
+            mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -264,7 +266,7 @@ class FieldOfStudyGetControllerIntegrationTest {
                     department2, List.of(subject3), List.of(student3));
 
             // When
-            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME))
+            mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -290,11 +292,89 @@ class FieldOfStudyGetControllerIntegrationTest {
                     department2, List.of(subject3), List.of(student3));
 
             // When
-            mockMvc.perform(get("/dashboard/" + ENDPOINT_NAME))
+            mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
                     .andExpect(view().name("field-of-study/all-fieldsOfStudy"));
+        }
+    }
+
+    @Nested
+    class CreateFieldOfStudy {
+        @Test
+        void returns200_withAddNewFieldOfStudyView_andContent_givenAdminRole() throws Exception {
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/new"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/fieldOfStudy-create-form"))
+                    .andReturn();
+
+            // Then
+            String contentAsString = mvcResult.getResponse().getContentAsString();
+            assertThat(contentAsString)
+                    .contains(
+                            "<div class=\"page-title\">Add field of study</div>"
+                    )
+                    .contains(
+                            "        <h4>Level of education:</h4>\n" +
+                                    "        <select class=\"form-select\" id=\"levelOfEducation\" name=\"levelOfEducation\">\n" +
+                                    "            <option value=\"FIRST\">First degree studies</option>\n" +
+                                    "            <option value=\"SECOND\">Second degree studies</option>\n" +
+                                    "        </select>"
+                    )
+                    .contains(
+                            "        <h4>Mode of studies:</h4>\n" +
+                                    "        <select class=\"form-select\" id=\"mode\" name=\"mode\">\n" +
+                                    "            <option value=\"FT\">Full-time</option>\n" +
+                                    "            <option value=\"PT\">Part-time</option>\n" +
+                                    "        </select>"
+                    )
+                    .contains(
+                            "        <h4>Professional title obtained by the graduate:</h4>\n" +
+                                    "        <select class=\"form-select\" id=\"titleGained\" name=\"title\">\n" +
+                                    "            <option value=\"BACH\">Bachelor</option>\n" +
+                                    "            <option value=\"ENG\">Engineer</option>\n" +
+                                    "            <option value=\"MGR\">Master</option>\n" +
+                                    "            <option value=\"MGR_ENG\">Master Engineer</option>\n" +
+                                    "            <option value=\"DR\">Doctor</option>\n" +
+                                    "            <option value=\"DR_ENG\">Doctor Engineer</option>\n" +
+                                    "            <option value=\"DR_HAB\">Habilitated Doctor</option>\n" +
+                                    "            <option value=\"DR_HAB_ENG\">Habilitated Doctor Engineer</option>\n" +
+                                    "            <option value=\"PROF\">Professor Habilitated Doctor</option>\n" +
+                                    "            <option value=\"PROF_ENG\">Professor Habilitated Doctor Engineer</option>\n" +
+                                    "        </select>"
+                    )
+            ;
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
+        void returns403_forbiddenStatus_withServletException_givenStudentRole() {
+            assertThatThrownBy(() ->
+                    mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/new"))
+            ).isExactlyInstanceOf(ServletException.class)
+                    .message().contains("Access Denied");
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
+        void returns403_forbiddenStatus_withServletException_givenTeacherRole() {
+            assertThatThrownBy(() ->
+                    mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/new"))
+            ).isExactlyInstanceOf(ServletException.class)
+                    .message().contains("Access Denied");
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_DEAN)
+        void returns200_withAddNewFieldOfStudyView_givenDeanRole() throws Exception {
+            mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/new"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/fieldOfStudy-create-form"));
         }
     }
 
