@@ -1,6 +1,6 @@
 # Classroom
 
-### Web application for classroom management. App provides frontend endpoints
+### Web application for classroom management.
 
 Classroom is a powerful tool that enables universities to manage their academic operations from a single,
 centralized platform, providing an efficient and effective solution for academic management.
@@ -17,7 +17,7 @@ The application is specifically designed to streamline and simplify administrati
 * grade tracking,
 * attendance management,
 * assignment submission,
-* platform for students to interact with teachers and peers, allowing them to collaborate on projects,
+* chat for students to interact with teachers and peers, allowing them to collaborate on projects,
   discuss coursework, and receive feedback.
 
 ## HOW TO RUN APP LOCALLY:
