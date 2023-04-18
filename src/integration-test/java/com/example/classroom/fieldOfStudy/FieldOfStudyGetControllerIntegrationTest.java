@@ -378,4 +378,134 @@ class FieldOfStudyGetControllerIntegrationTest {
         }
     }
 
+    @Nested
+    class EditSubject {
+        @Test
+        void returns200_withEditFieldOfStudyView_andContent_givenAdminRole() throws Exception {
+            // Given
+            Department department = initData.createDepartmentOne(null, List.of());
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Student student1 = initData.createStudentOne(null, List.of());
+            Student student2 = initData.createStudentTwo(null, List.of());
+            FieldOfStudy expected = initData.createFieldOfStudyOne(
+                    department, List.of(subject1, subject2), List.of(student1, student2));
+
+            // When
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/edit/{id}", expected.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/fieldOfStudy-edit-form"))
+                    .andReturn();
+
+            // Then
+            String contentAsString = mvcResult.getResponse().getContentAsString();
+            assertThat(contentAsString)
+                    .contains(
+                            "<div class=\"page-title\">Edit field of study</div>"
+                    ).contains(
+                            "        <h4>Field of study name:</h4>\n" +
+                                    "        <div class=\"form-outline\">\n" +
+                                    "            <input class=\"form-control\"\n" +
+                                    "                   id=\"name\"\n" +
+                                    "                   data-mdb-showcounter=\"true\"\n" +
+                                    "                   maxlength=\"50\" type=\"text\" name=\"name\" value=\"" + expected.getName() + "\"/>\n" +
+                                    "            <label class=\"form-label\" for=\"name\">Name</label>"
+                    ).contains(
+                            "        <h4>Level of education:</h4>\n" +
+                                    "        <select class=\"form-select\" id=\"levelOfEducation\" name=\"levelOfEducation\">\n" +
+                                    "            <option value=\"FIRST\">First degree studies</option>\n" +
+                                    "            <option value=\"SECOND\" selected=\"selected\">Second degree studies</option>\n" +
+                                    "        </select>"
+                    ).contains(
+                            "        <h4>Mode of studies:</h4>\n" +
+                                    "        <select class=\"form-select\" id=\"mode\" name=\"mode\">\n" +
+                                    "            <option value=\"FT\" selected=\"selected\">Full-time</option>\n" +
+                                    "            <option value=\"PT\">Part-time</option>\n" +
+                                    "        </select>"
+                    ).contains(
+                            "        <h4>Department:</h4>\n" +
+                                    "        <select class=\"form-select\" id=\"department\" name=\"department\">\n" +
+                                    "            <option value=\"0\"></option>\n" +
+                                    "            <option value=\"" + department.getId() + "\" selected=\"selected\">" + department.getName() + "</option>\n" +
+                                    "        </select>"
+                    ).contains(
+                            "        <h4>Professional title obtained by the graduate:</h4>\n" +
+                                    "        <select class=\"form-select\" id=\"titleGained\" name=\"title\">\n" +
+                                    "            <option value=\"BACH\">Bachelor</option>\n" +
+                                    "            <option value=\"ENG\">Engineer</option>\n" +
+                                    "            <option value=\"MGR\" selected=\"selected\">Master</option>\n" +
+                                    "            <option value=\"MGR_ENG\">Master Engineer</option>\n" +
+                                    "            <option value=\"DR\">Doctor</option>\n" +
+                                    "            <option value=\"DR_ENG\">Doctor Engineer</option>\n" +
+                                    "            <option value=\"DR_HAB\">Habilitated Doctor</option>\n" +
+                                    "            <option value=\"DR_HAB_ENG\">Habilitated Doctor Engineer</option>\n" +
+                                    "            <option value=\"PROF\">Professor Habilitated Doctor</option>\n" +
+                                    "            <option value=\"PROF_ENG\">Professor Habilitated Doctor Engineer</option>\n" +
+                                    "        </select>"
+                    ).contains(
+                            "        <h4>Graduate profile and further education opportunities:</h4>\n" +
+                                    "        <div class=\"form-outline\">\n" +
+                                    "            <textarea class=\"form-control\" id=\"description\" rows=\"5\" name=\"description\">" + expected.getDescription() + "</textarea>"
+                    );
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
+        void returns403_forbiddenStatus_withServletException_givenStudentRole() {
+            // Given
+            Department department = initData.createDepartmentOne(null, List.of());
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Student student1 = initData.createStudentOne(null, List.of());
+            Student student2 = initData.createStudentTwo(null, List.of());
+            FieldOfStudy expected = initData.createFieldOfStudyOne(
+                    department, List.of(subject1, subject2), List.of(student1, student2));
+
+            // When
+            assertThatThrownBy(() ->
+                    mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/edit/{id}", expected.getId()))
+            ).isExactlyInstanceOf(ServletException.class)
+                    .message().contains("Access Denied");
+        }
+
+        @Test
+        @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
+        void returns403_forbiddenStatus_withServletException_givenTeacherRole() {
+            // Given
+            Department department = initData.createDepartmentOne(null, List.of());
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Student student1 = initData.createStudentOne(null, List.of());
+            Student student2 = initData.createStudentTwo(null, List.of());
+            FieldOfStudy expected = initData.createFieldOfStudyOne(
+                    department, List.of(subject1, subject2), List.of(student1, student2));
+
+            // When
+            assertThatThrownBy(() ->
+                    mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/edit/{id}", expected.getId()))
+            ).isExactlyInstanceOf(ServletException.class)
+                    .message().contains("Access Denied");
+        }
+
+        @Test
+        void returns200_withEditFieldOfStudyView_givenDeanRole() throws Exception {
+            // Given
+            Department department = initData.createDepartmentOne(null, List.of());
+            Subject subject1 = initData.createSubjectOne(null, List.of());
+            Subject subject2 = initData.createSubjectTwo(null, List.of());
+            Student student1 = initData.createStudentOne(null, List.of());
+            Student student2 = initData.createStudentTwo(null, List.of());
+            FieldOfStudy expected = initData.createFieldOfStudyOne(
+                    department, List.of(subject1, subject2), List.of(student1, student2));
+
+            // When
+            mockMvc.perform(get("/dashboard/" + FIELDS_OF_STUDY_ENDPOINT_NAME + "/edit/{id}", expected.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                    .andExpect(view().name("field-of-study/fieldOfStudy-edit-form"));
+        }
+    }
 }
