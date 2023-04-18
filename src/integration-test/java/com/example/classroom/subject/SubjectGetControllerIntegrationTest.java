@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockCustomUser
 class SubjectGetControllerIntegrationTest {
 
+    private static final String SUBJECTS_ENDPOINT_NAME = "subjects";
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -57,7 +58,7 @@ class SubjectGetControllerIntegrationTest {
             Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
 
             // When
-            MvcResult mvcResult = mockMvc.perform(get("/dashboard/subjects/{id}", subject.getId()))
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/{id}", subject.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -113,7 +114,7 @@ class SubjectGetControllerIntegrationTest {
             Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
 
             // When
-            mockMvc.perform(get("/dashboard/subjects/{id}", subject.getId()))
+            mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/{id}", subject.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -131,7 +132,7 @@ class SubjectGetControllerIntegrationTest {
             Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
 
             // When
-            mockMvc.perform(get("/dashboard/subjects/{id}", subject.getId()))
+            mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/{id}", subject.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -149,7 +150,7 @@ class SubjectGetControllerIntegrationTest {
             Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
 
             // When
-            mockMvc.perform(get("/dashboard/subjects/{id}", subject.getId()))
+            mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/{id}", subject.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -171,11 +172,11 @@ class SubjectGetControllerIntegrationTest {
             Subject subject2 = initData.createSubjectTwo(fieldOfStudy2, List.of());
 
             // When
-            MvcResult mvcResult = mockMvc.perform(get("/dashboard/subjects"))
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                    .andExpect(view().name("subject/all-subjects"))
+                    .andExpect(view().name("subject/all-" + SUBJECTS_ENDPOINT_NAME))
                     .andReturn();
 
             // Then
@@ -212,31 +213,31 @@ class SubjectGetControllerIntegrationTest {
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
         void returns200_OKStatus_givenStudentRole() throws Exception {
-            mockMvc.perform(get("/dashboard/subjects"))
+            mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                    .andExpect(view().name("subject/all-subjects"));
+                    .andExpect(view().name("subject/all-" + SUBJECTS_ENDPOINT_NAME));
         }
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
         void returns200_OKStatus_givenTeacherRole() throws Exception {
-            mockMvc.perform(get("/dashboard/subjects"))
+            mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                    .andExpect(view().name("subject/all-subjects"));
+                    .andExpect(view().name("subject/all-" + SUBJECTS_ENDPOINT_NAME));
         }
 
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_DEAN)
         void returns200_OKStatus_givenDeanRole() throws Exception {
-            mockMvc.perform(get("/dashboard/subjects"))
+            mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                    .andExpect(view().name("subject/all-subjects"));
+                    .andExpect(view().name("subject/all-" + SUBJECTS_ENDPOINT_NAME));
         }
     }
 
@@ -244,7 +245,7 @@ class SubjectGetControllerIntegrationTest {
     class CreateSubject {
         @Test
         void returns200_withAddNewSubjectView_andContent_givenAdminRole() throws Exception {
-            MvcResult mvcResult = mockMvc.perform(get("/dashboard/subjects/new"))
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/new"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -297,7 +298,7 @@ class SubjectGetControllerIntegrationTest {
         @WithMockCustomUser(role = UserRole.ROLE_STUDENT)
         void returns403_forbiddenStatus_withServletException_givenStudentRole() {
             assertThatThrownBy(() ->
-                    mockMvc.perform(get("/dashboard/subjects/new"))
+                    mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/new"))
             ).isExactlyInstanceOf(ServletException.class)
                     .message().contains("Access Denied");
         }
@@ -306,7 +307,7 @@ class SubjectGetControllerIntegrationTest {
         @WithMockCustomUser(role = UserRole.ROLE_TEACHER)
         void returns403_forbiddenStatus_withServletException_givenTeacherRole() {
             assertThatThrownBy(() ->
-                    mockMvc.perform(get("/dashboard/subjects/new"))
+                    mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/new"))
             ).isExactlyInstanceOf(ServletException.class)
                     .message().contains("Access Denied");
         }
@@ -314,13 +315,12 @@ class SubjectGetControllerIntegrationTest {
         @Test
         @WithMockCustomUser(role = UserRole.ROLE_DEAN)
         void returns200_withAddNewSubjectView_givenDeanRole() throws Exception {
-            mockMvc.perform(get("/dashboard/subjects/new"))
+            mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/new"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
                     .andExpect(view().name("subject/subject-create-form"));
         }
-
     }
 
     @Nested
@@ -335,7 +335,7 @@ class SubjectGetControllerIntegrationTest {
             Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
 
             // When
-            MvcResult mvcResult = mockMvc.perform(get("/dashboard/subjects/edit/{id}", subject.getId()))
+            MvcResult mvcResult = mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/edit/{id}", subject.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
@@ -416,7 +416,7 @@ class SubjectGetControllerIntegrationTest {
 
             // When
             assertThatThrownBy(() ->
-                    mockMvc.perform(get("/dashboard/subjects/edit/{id}", subject.getId()))
+                    mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/edit/{id}", subject.getId()))
             ).isExactlyInstanceOf(ServletException.class)
                     .message().contains("Access Denied");
         }
@@ -433,7 +433,7 @@ class SubjectGetControllerIntegrationTest {
 
             // When
             assertThatThrownBy(() ->
-                    mockMvc.perform(get("/dashboard/subjects/edit/{id}", subject.getId()))
+                    mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/edit/{id}", subject.getId()))
             ).isExactlyInstanceOf(ServletException.class)
                     .message().contains("Access Denied");
         }
@@ -448,7 +448,7 @@ class SubjectGetControllerIntegrationTest {
             Subject subject = initData.createSubjectFour(fieldOfStudy, List.of(teacher1, teacher2));
 
             // When
-            mockMvc.perform(get("/dashboard/subjects/edit/{id}", subject.getId()))
+            mockMvc.perform(get("/dashboard/" + SUBJECTS_ENDPOINT_NAME + "/edit/{id}", subject.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
