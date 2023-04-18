@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -357,6 +356,28 @@ class SubjectControllerIntegrationTest {
                     .message().contains("Access Denied");
         }
 
+        @Test
+        void returns400_badRequest_withIllegalArgumentExceptionAsContent_givenAdminRole_andWrongSubjectID() throws Exception {
+            // Given
+            long id = 100L;
+            SubjectDto expected = createSubjectDto();
+            expected.setId(id);
+            String expectedExceptionMsg = "Invalid subject '" + expected + "' with ID: " + expected.getId();
+
+            // When
+            mockMvc.perform(post("/dashboard/subjects/update")
+                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                            .content("id=" + id +
+                                    "&name=" + expected.getName() +
+                                    "&description=" + expected.getDescription() +
+                                    "&semester=" + expected.getSemester() +
+                                    "&hoursInSemester=" + expected.getHoursInSemester() +
+                                    "&ectsPoints=" + expected.getEctsPoints()))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.TEXT_PLAIN_VALUE + ";charset=UTF-8"))
+                    .andExpect(content().string(expectedExceptionMsg));
+        }
     }
 
     @Nested
@@ -439,18 +460,17 @@ class SubjectControllerIntegrationTest {
         }
 
         @Test
-        void returns400_withIllegalArgumentExceptionAsContent_givenAdminRole_andWrongSubjectID() throws Exception {
+        void returns400_badRequest_withIllegalArgumentExceptionAsContent_givenAdminRole_andWrongSubjectID() throws Exception {
             // Given
             Long id = 100L;
             String expectedExceptionMsg = "Invalid subject id: " + id;
 
             // When
-            MvcResult mvcResult = mockMvc.perform(get("/dashboard/subjects/delete/{id}", id))
+            mockMvc.perform(get("/dashboard/subjects/delete/{id}", id))
                     .andDo(print())
                     .andExpect(status().isBadRequest())
                     .andExpect(content().contentType(MediaType.TEXT_PLAIN_VALUE + ";charset=UTF-8"))
-                    .andExpect(content().string(expectedExceptionMsg))
-                    .andReturn();
+                    .andExpect(content().string(expectedExceptionMsg));
         }
     }
 
