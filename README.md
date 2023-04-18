@@ -2,6 +2,24 @@
 
 ### Web application for classroom management. App provides frontend endpoints
 
+Classroom is a powerful tool that enables universities to manage their academic operations from a single,
+centralized platform, providing an efficient and effective solution for academic management.
+
+It is a comprehensive **web application** developed using **Java and Spring** framework,
+designed to provide a centralized management system for universities.
+With Classroom, students, teachers, and deans can login to their respective accounts and access a wide range of
+functionalities to efficiently manage academic activities.
+The application is specifically designed to streamline and simplify administrative tasks.
+
+**Feature ideas:**
+
+* course scheduling,
+* grade tracking,
+* attendance management,
+* assignment submission,
+* platform for students to interact with teachers and peers, allowing them to collaborate on projects,
+  discuss coursework, and receive feedback.
+
 ## HOW TO RUN APP LOCALLY:
 
 ### 1. Clone the project
