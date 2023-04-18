@@ -221,7 +221,7 @@ public class IntegrationTestsInitData {
     public FieldOfStudy createFieldOfStudyOne(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Inżynieria mechaniczno-medyczna");
-        fieldOfStudy.setDescription("Najlepszy kierunek studiów dla osób chcących budowa protez");
+        fieldOfStudy.setDescription("Najlepszy kierunek studiow dla osob chcacych budowac protezy");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.SECOND);
         fieldOfStudy.setMode(ModeOfStudy.FT);
         fieldOfStudy.setTitle(AcademicTitle.MGR);
@@ -234,7 +234,7 @@ public class IntegrationTestsInitData {
     public FieldOfStudy createFieldOfStudyTwo(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Mechatronika");
-        fieldOfStudy.setDescription("Najlepszy kierunek studiów dla osób chcących budowa robotów");
+        fieldOfStudy.setDescription("Najlepszy kierunek studiow dla osób chcacych budowac roboty");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
         fieldOfStudy.setMode(ModeOfStudy.PT);
         fieldOfStudy.setTitle(AcademicTitle.BACH);
@@ -247,7 +247,7 @@ public class IntegrationTestsInitData {
     public FieldOfStudy createFieldOfStudyThree(Department department, List<Subject> subjects, List<Student> students) {
         FieldOfStudy fieldOfStudy = new FieldOfStudy();
         fieldOfStudy.setName("Informatyka");
-        fieldOfStudy.setDescription("Kierunek studiów dla osób lubiących programować.");
+        fieldOfStudy.setDescription("Kierunek studiow dla osob lubiacych programować.");
         fieldOfStudy.setLevelOfEducation(LevelOfEducation.FIRST);
         fieldOfStudy.setMode(ModeOfStudy.FT);
         fieldOfStudy.setTitle(AcademicTitle.DR);
