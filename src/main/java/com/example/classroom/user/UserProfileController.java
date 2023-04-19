@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.file.Path;
@@ -62,6 +59,14 @@ class UserProfileController {
         User updated = service.update(userRequest);
         redirectAttributes.addFlashAttribute("editSuccess", updated);
         return "redirect:/dashboard/profile";
+    }
+
+    @GetMapping("delete/{id}")
+    String deleteAccount(@PathVariable Long id,
+                         RedirectAttributes redirectAttributes) {
+        service.removeById(id);
+        redirectAttributes.addFlashAttribute("deleteSuccess", "removed");
+        return "redirect:/";
     }
 
     private void addAttributeUserByUsername(Model model, Principal principal) {
