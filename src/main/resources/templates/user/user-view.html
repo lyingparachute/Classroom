@@ -43,7 +43,7 @@
                                         <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                                             <a class="mb-0 text-body"
                                                th:href="${'mailto:' + user.email}">
-                                                <i class="fab fa-envelope" style="color: #acafbf;"></i>
+                                                <i class="fas fa-envelope fa-lg" style="color: #acafbf;"></i>
                                             </a>
                                             <a class="mb-0 text-body"
                                                th:href="${'mailto:' + user.email}"
@@ -51,9 +51,7 @@
                                             </a>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <a class="mb-0 text-body"
-                                               th:href="@{https://www.igorbykowski.pl/}"
-                                               th:text="#{user.profile.website}">
+                                            <a class="mb-0 text-body" th:href="@{https://www.igorbykowski.pl/}">
                                                 <i class="fas fa-globe fa-lg text-warning"></i>
                                             </a>
                                             <a class="mb-0 text-body"
@@ -99,8 +97,15 @@
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.email}"></p>
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-7">
                                             <p class="text-muted mb-0" th:text="${user.email}"></p>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <a class="btn btn-outline-primary"
+                                               th:href="@{/dashboard/profile/email/edit}">
+                                                <i class="fas fa-pen mr-1"></i>
+                                                <span th:text="#{button.edit}"></span>
+                                            </a>
                                         </div>
                                     </div>
                                     <hr>
@@ -108,8 +113,15 @@
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.password}"></p>
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-7">
                                             <p class="text-muted mb-0" th:text="#{user.password.value}"></p>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <a class="btn btn-outline-primary"
+                                               th:href="@{/dashboard/profile/password/edit}">
+                                                <i class="fas fa-pen mr-1"></i>
+                                                <span th:text="#{button.edit}"></span>
+                                            </a>
                                         </div>
                                     </div>
                                     <hr>
