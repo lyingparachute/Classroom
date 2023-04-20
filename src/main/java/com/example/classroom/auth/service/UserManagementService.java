@@ -74,12 +74,11 @@ public class UserManagementService implements UserDetailsService {
 
     @Transactional
     public void removeById(Long id) {
-        repository.delete(
-                repository.findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException(
-                                User.class, "User with given ID does not exist in database.")
-                        )
-        );
-        //TODO - invalidate session and logout user
+        User byId = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        User.class, "User with given ID does not exist in database."));
+        byId.removeAttendee();
+        repository.delete(byId);
+        //TODO - invalidate session, logout user and delete associated student or teacher entity
     }
 }
