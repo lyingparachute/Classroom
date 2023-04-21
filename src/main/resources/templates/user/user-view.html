@@ -36,8 +36,7 @@
                                     </div>
                                     <div class="row justify-content-center mb-2">
                                         <a class="col-6 btn btn-outline-danger delBtn"
-                                           th:fragment="btn-delete"
-                                           th:href="@{/dashboard/profile/delete/{id}(id=${user.id})}">
+                                           data-bs-toggle="modal" data-bs-target="#delete-account-modal">
                                             <i class="fa fa-trash-can fa-lg mr-1"></i>
                                             <span th:text="#{button.delete.account}"></span>
                                         </a>
@@ -207,40 +206,38 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div th:if="${user.student}" class="col-md-6">
                                     <div class="card mb-4">
-                                        <div th:if="${user.student}">
-                                            <div th:unless="${user.attendee.fieldOfStudy == null}">
-                                                <div class="bg-image hover-overlay ripple"
-                                                     data-mdb-ripple-color="light">
-                                                    <img class="field-of-study-img"
-                                                         th:alt="${user.attendee.fieldOfStudy.name}"
-                                                         th:unless="${user.attendee.fieldOfStudy.image} == null"
-                                                         th:src="@{${imagesPath} + '/' + ${user.attendee.fieldOfStudy.image}}"/>
-                                                    <img class="field-of-study-img"
-                                                         th:alt="${user.attendee.fieldOfStudy.name}"
-                                                         th:src="@{${imagesPath} + '/' + 'default.jpg'}"
-                                                         th:if="${user.attendee.fieldOfStudy.image} == null"/>
-                                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${user.attendee.fieldOfStudy.id})}">
-                                                        <div class="mask"
-                                                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                                                    </a>
-                                                </div>
-                                                <div class="card-body">
-                                                    <h5 class="card-title"
-                                                        th:text="${user.attendee.fieldOfStudy.name}"></h5>
-                                                    <span class="text-muted"
-                                                          th:text="${user.attendee.fieldOfStudy.mode.value}"></span>
-                                                    <p class="card-text"
-                                                       th:text="${user.attendee.fieldOfStudy.description}"></p>
-                                                </div>
-                                                <div class="card-footer text-center">
-                                                    <a class="btn btn-primary"
-                                                       th:href="@{/dashboard/fields-of-study/{id}(id=${user.attendee.fieldOfStudy.id})}">
-                                                        <span th:text="#{button.view.fielOfStudy}"></span>
-                                                        <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                    </a>
-                                                </div>
+                                        <div th:unless="${user.attendee.fieldOfStudy == null}">
+                                            <div class="bg-image hover-overlay ripple"
+                                                 data-mdb-ripple-color="light">
+                                                <img class="field-of-study-img"
+                                                     th:alt="${user.attendee.fieldOfStudy.name}"
+                                                     th:unless="${user.attendee.fieldOfStudy.image} == null"
+                                                     th:src="@{${imagesPath} + '/' + ${user.attendee.fieldOfStudy.image}}"/>
+                                                <img class="field-of-study-img"
+                                                     th:alt="${user.attendee.fieldOfStudy.name}"
+                                                     th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                                                     th:if="${user.attendee.fieldOfStudy.image} == null"/>
+                                                <a th:href="@{/dashboard/fields-of-study/{id}(id=${user.attendee.fieldOfStudy.id})}">
+                                                    <div class="mask"
+                                                         style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                                </a>
+                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title"
+                                                    th:text="${user.attendee.fieldOfStudy.name}"></h5>
+                                                <span class="text-muted"
+                                                      th:text="${user.attendee.fieldOfStudy.mode.value}"></span>
+                                                <p class="card-text"
+                                                   th:text="${user.attendee.fieldOfStudy.description}"></p>
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                <a class="btn btn-primary"
+                                                   th:href="@{/dashboard/fields-of-study/{id}(id=${user.attendee.fieldOfStudy.id})}">
+                                                    <span th:text="#{button.view.fielOfStudy}"></span>
+                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -373,6 +370,36 @@
         </section>
     </div>
 </main>
+
+<!-- Delete Account Modal -->
+<div th:fragment="delete-account-modal" class="modal fade" id="delete-account-modal" tabindex="-1"
+     aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" th:text="#{delete.account.modal.header}"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" th:aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p th:text="#{delete.account.modal.body}"></p>
+                <p th:text="#{delete.account.modal.body2}"></p>
+            </div>
+            <div class="modal-footer">
+                <div class="col-auto">
+                    <a class="btn btn-secondary" href="" data-bs-dismiss="modal">
+                        <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
+                </div>
+                <div class="col-auto">
+                    <a class="btn btn btn-danger btn-block"
+                       th:href="@{/dashboard/profile/delete/{id}(id=${user.id})}">
+                        <i class="fa fa-trash-can fa-lg mr-1"></i>
+                        <span th:text="#{button.delete}"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- JS Scripts -->
 <div th:replace="~{fragments/scripts :: scripts}"></div>
