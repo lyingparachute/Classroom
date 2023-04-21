@@ -91,7 +91,7 @@ public class StudentService {
     }
 
     @Transactional
-    void remove(Long id) {
+    public void remove(Long id) {
         Student student = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
         removeReferencingObjects(student);

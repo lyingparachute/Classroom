@@ -69,7 +69,7 @@ public class TeacherService {
     }
 
     @Transactional
-    void remove(final Long id) {
+    public void remove(final Long id) {
         Teacher teacher = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid teacher ID: " + id));
         removeReferencingObjects(teacher);
