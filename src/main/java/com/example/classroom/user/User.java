@@ -90,7 +90,6 @@ public class User implements UserDetails {
         return teacher != null;
     }
 
-
     public void setAttendee(Object attendee) {
         if (role.equals(UserRole.ROLE_STUDENT))
             this.student = (Student) attendee;
@@ -100,16 +99,5 @@ public class User implements UserDetails {
 
     public Object getAttendee() {
         return isTeacher() ? teacher : student;
-    }
-
-    public void removeAttendee() {
-        if (role.equals(UserRole.ROLE_STUDENT)) {
-            this.student.removeUserDetails();
-            this.student = null;
-        }
-        if (role.equals(UserRole.ROLE_TEACHER) || role.equals(UserRole.ROLE_DEAN)) {
-            this.teacher = null;
-            this.teacher.removeUserDetails();
-        }
     }
 }

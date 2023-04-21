@@ -151,8 +151,4 @@ public class Teacher {
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, age, email);
     }
-
-    public void removeUserDetails() {
-        userDetails = null;
-    }
 }

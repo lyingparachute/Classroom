@@ -115,8 +115,4 @@ public class Student {
     public String toString() {
         return firstName + " " + lastName;
     }
-
-    public void removeUserDetails() {
-        userDetails = null;
-    }
 }
