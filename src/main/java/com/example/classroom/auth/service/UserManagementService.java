@@ -10,9 +10,12 @@ import com.example.classroom.teacher.TeacherService;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -77,8 +80,27 @@ public class UserManagementService implements UserDetailsService {
         User byId = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         User.class, "User with given ID does not exist in database."));
+
+        removeUniversityAttendeeAccount(byId);
         byId.removeAttendee();
         repository.delete(byId);
-        //TODO - invalidate session, logout user and delete associated student or teacher entity
+    }
+
+    private void removeUniversityAttendeeAccount(User user) {
+        if (user.getStudent() != null) {
+            studentService.remove(user.getStudent().getId());
+        }
+        if (user.getTeacher() != null) {
+            teacherService.remove(user.getTeacher().getId());
+        }
+    }
+
+
+    public void invalidateSession(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        SecurityContextHolder.clearContext();
+        if (session != null) {
+            session.invalidate();
+        }
     }
 }

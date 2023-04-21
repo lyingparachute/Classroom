@@ -63,10 +63,12 @@ class UserProfileController {
 
     @GetMapping("delete/{id}")
     String deleteAccount(@PathVariable Long id,
+                         HttpServletRequest request,
                          RedirectAttributes redirectAttributes) {
+        service.invalidateSession(request);
         service.removeById(id);
         redirectAttributes.addFlashAttribute("deleteSuccess", "removed");
-        return "redirect:/";
+        return "redirect:/sign-up";
     }
 
     private void addAttributeUserByUsername(Model model, Principal principal) {
