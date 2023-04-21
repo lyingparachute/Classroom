@@ -172,19 +172,22 @@
                                             <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <div class="row" th:if="${user.teacher}">
+                                    <hr th:if="${user.role == T(com.example.classroom.user.UserRole).ROLE_DEAN}">
+                                    <div class="row"
+                                         th:if="${user.role == T(com.example.classroom.user.UserRole).ROLE_DEAN}">
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.department}"></p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <p class="text-muted mb-0" th:if="${user.attendee.department == null}">
-                                                <em th:text="#{input.undefined}"></em>
-                                            </p>
-                                            <p class="text-muted mb-0" th:unless="${user.attendee.department == null}"
-                                               th:text="${user.attendee.department}"></p>
+                                            <a class="text-muted mb-0"
+                                               th:href="@{/dashboard/departments/{id}(id=${user.attendee.department.id})}">
+                                                <span th:text="${user.attendee.department.name}"></span>
+                                                <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
+                                            </a>
                                         </div>
                                     </div>
+
+                                    <hr th:if="${user.student}">
                                     <div class="row" th:if="${user.student}">
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.fieldOfStudy}"></p>
