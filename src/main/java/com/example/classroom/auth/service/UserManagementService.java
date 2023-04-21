@@ -93,7 +93,6 @@ public class UserManagementService implements UserDetailsService {
         }
     }
 
-
     public void invalidateSession(HttpServletRequest request) {
         HttpSession session = request.getSession();
         SecurityContextHolder.clearContext();
