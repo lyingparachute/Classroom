@@ -80,9 +80,7 @@ public class UserManagementService implements UserDetailsService {
         User byId = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         User.class, "User with given ID does not exist in database."));
-
         removeUniversityAttendeeAccount(byId);
-        byId.removeAttendee();
         repository.delete(byId);
     }
 
