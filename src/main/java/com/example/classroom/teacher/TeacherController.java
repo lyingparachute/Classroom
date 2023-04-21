@@ -1,7 +1,9 @@
 package com.example.classroom.teacher;
 
+import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
 import com.example.classroom.subject.SubjectService;
+import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import static com.example.classroom.pageable.PageableService.getFirstItemOnPage;
+import static com.example.classroom.pageable.PageableService.getLastItemOnPage;
 
 @Controller
 @RequestMapping("dashboard/teachers")
@@ -22,6 +25,7 @@ class TeacherController {
 
     private final TeacherService service;
     private final SubjectService subjectService;
+    private final UserManagementService userService;
     private final BreadcrumbService crumb;
 
     static final String REDIRECT_DASHBOARD_TEACHERS = "redirect:/dashboard/teachers";
@@ -36,29 +40,14 @@ class TeacherController {
                                 Model model) {
         addAttributeBreadcrumb(model, request);
 
-        Page<TeacherDto> pageTeachers;
-        if (name == null) {
-            pageTeachers = service.fetchAllPaginated(page, size, sortField, sortDir);
-        } else {
-            pageTeachers = service.findByFirstOrLastNamePaginated(page, size, sortField, sortDir, name);
-            model.addAttribute("name", name);
-        }
-        List<TeacherDto> teachers = pageTeachers.getContent();
-        int firstItemShownOnPage = 1;
-        int lastItemShownOnPage;
-        if (page == 1 && pageTeachers.getTotalElements() <= size) {
-            lastItemShownOnPage = Math.toIntExact(pageTeachers.getTotalElements());
-        } else if (page == 1 && pageTeachers.getTotalElements() > size) {
-            lastItemShownOnPage = size * page;
-        } else if (page != 1 && pageTeachers.getTotalElements() <= ((long) size * page)) {
-            firstItemShownOnPage = size * (page - 1) + 1;
-            lastItemShownOnPage = Math.toIntExact(pageTeachers.getTotalElements());
-        } else {
-            firstItemShownOnPage = size * (page - 1) + 1;
-            lastItemShownOnPage = size * (page - 1) + size;
-        }
+        User user = userService.loadUserByUsername(request.getUserPrincipal().getName());
+        Page<TeacherDto> pageTeachers = getTeacherDtos(name, page, size, sortField, sortDir, model);
 
-        model.addAttribute("teachers", teachers);
+        model.addAttribute("teachers",
+                user.isStudent() ?
+                        user.getStudent().getTeachers() :
+                        pageTeachers.getContent());
+
         model.addAttribute("currentPage", pageTeachers.getNumber() + 1);
         model.addAttribute("totalPages", pageTeachers.getTotalPages());
         model.addAttribute("totalItems", pageTeachers.getTotalElements());
@@ -66,9 +55,18 @@ class TeacherController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-        model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
-        model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
+        model.addAttribute("firstItemShownOnPage", getFirstItemOnPage(pageTeachers, page, size));
+        model.addAttribute("lastItemShownOnPage", getLastItemOnPage(pageTeachers, page, size));
         return "teacher/all-teachers";
+    }
+
+    private Page<TeacherDto> getTeacherDtos(String name, int page, int size, String sortField, String sortDir, Model model) {
+        if (name == null || name.isBlank()) {
+            return service.fetchAllPaginated(page, size, sortField, sortDir);
+        } else {
+            model.addAttribute("name", name);
+            return service.findByFirstOrLastNamePaginated(page, size, sortField, sortDir, name);
+        }
     }
 
     @GetMapping("{id}")
