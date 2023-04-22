@@ -35,7 +35,7 @@ public class PageableService {
         return attributes;
     }
 
-    private static boolean isNamePresent(String name) {
+    public static boolean isNamePresent(String name) {
         return !(name == null || name.isBlank());
     }
 }
