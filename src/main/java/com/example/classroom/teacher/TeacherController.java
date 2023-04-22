@@ -38,7 +38,6 @@ class TeacherController {
                                 @RequestParam(defaultValue = "asc") String sortDir,
                                 HttpServletRequest request,
                                 Model model) {
-        addAttributeBreadcrumb(model, request);
         PageableRequest pageableRequest = PageableRequest.builder()
                 .name(name)
                 .pageNumber(page)
@@ -47,22 +46,12 @@ class TeacherController {
                 .sortField(sortField)
                 .build();
         User user = userService.loadUserByUsername(request.getUserPrincipal().getName());
-        Page<TeacherDto> pageTeachers = getTeacherDtos(pageableRequest, model);
-        model.addAttribute("teachers",
-                user.isStudent() ?
-                        user.getStudent().getTeachers() :
-                        pageTeachers.getContent());
-        model.addAllAttributes(getAttributesForPageable(pageTeachers, pageableRequest));
-        return "teacher/all-teachers";
-    }
+        Page<TeacherDto> teachers = service.getAllTeachersFromRequest(pageableRequest, user);
 
-    private Page<TeacherDto> getTeacherDtos(PageableRequest request, Model model) {
-        if (request.name() == null || request.name().isBlank()) {
-            return service.fetchAllPaginated(request);
-        } else {
-            model.addAttribute("name", request.name());
-            return service.findByFirstOrLastNamePaginated(request);
-        }
+        addAttributeBreadcrumb(model, request);
+        model.addAttribute("teachers", teachers.getContent());
+        model.addAllAttributes(getAttributesForPageable(teachers, pageableRequest));
+        return "teacher/all-teachers";
     }
 
     @GetMapping("{id}")
