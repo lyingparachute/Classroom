@@ -2,6 +2,7 @@ package com.example.classroom.teacher;
 
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
+import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.subject.SubjectService;
 import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,8 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import static com.example.classroom.pageable.PageableService.getFirstItemOnPage;
-import static com.example.classroom.pageable.PageableService.getLastItemOnPage;
+import static com.example.classroom.pageable.PageableService.getAttributesForPageable;
 
 @Controller
 @RequestMapping("dashboard/teachers")
@@ -39,33 +39,29 @@ class TeacherController {
                                 HttpServletRequest request,
                                 Model model) {
         addAttributeBreadcrumb(model, request);
-
+        PageableRequest pageableRequest = PageableRequest.builder()
+                .name(name)
+                .pageNumber(page)
+                .pageSize(size)
+                .sortDir(sortDir)
+                .sortField(sortField)
+                .build();
         User user = userService.loadUserByUsername(request.getUserPrincipal().getName());
-        Page<TeacherDto> pageTeachers = getTeacherDtos(name, page, size, sortField, sortDir, model);
-
+        Page<TeacherDto> pageTeachers = getTeacherDtos(pageableRequest, model);
         model.addAttribute("teachers",
                 user.isStudent() ?
                         user.getStudent().getTeachers() :
                         pageTeachers.getContent());
-
-        model.addAttribute("currentPage", pageTeachers.getNumber() + 1);
-        model.addAttribute("totalPages", pageTeachers.getTotalPages());
-        model.addAttribute("totalItems", pageTeachers.getTotalElements());
-        model.addAttribute("pageSize", size);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-        model.addAttribute("firstItemShownOnPage", getFirstItemOnPage(pageTeachers, page, size));
-        model.addAttribute("lastItemShownOnPage", getLastItemOnPage(pageTeachers, page, size));
+        model.addAllAttributes(getAttributesForPageable(pageTeachers, pageableRequest));
         return "teacher/all-teachers";
     }
 
-    private Page<TeacherDto> getTeacherDtos(String name, int page, int size, String sortField, String sortDir, Model model) {
-        if (name == null || name.isBlank()) {
-            return service.fetchAllPaginated(page, size, sortField, sortDir);
+    private Page<TeacherDto> getTeacherDtos(PageableRequest request, Model model) {
+        if (request.name() == null || request.name().isBlank()) {
+            return service.fetchAllPaginated(request);
         } else {
-            model.addAttribute("name", name);
-            return service.findByFirstOrLastNamePaginated(page, size, sortField, sortDir, name);
+            model.addAttribute("name", request.name());
+            return service.findByFirstOrLastNamePaginated(request);
         }
     }
 
