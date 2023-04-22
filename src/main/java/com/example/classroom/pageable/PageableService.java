@@ -30,8 +30,12 @@ public class PageableService {
         attributes.put("reverseSortDir", request.sortDir().equals("asc") ? "desc" : "asc");
         attributes.put("firstItemShownOnPage", getFirstItemOnPage(page, request.pageNumber(), request.pageSize()));
         attributes.put("lastItemShownOnPage", getLastItemOnPage(page, request.pageNumber(), request.pageSize()));
-        if (request.name() != null && !request.name().isBlank())
+        if (isNamePresent(request.name()))
             attributes.put("name", request.name());
         return attributes;
+    }
+
+    private static boolean isNamePresent(String name) {
+        return !(name == null || name.isBlank());
     }
 }
