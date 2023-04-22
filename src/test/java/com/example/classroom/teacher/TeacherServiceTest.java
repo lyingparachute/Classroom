@@ -2,6 +2,7 @@ package com.example.classroom.teacher;
 
 import com.example.classroom.department.Department;
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.test.util.UnitTestsInitData;
@@ -356,7 +357,13 @@ class TeacherServiceTest {
             Page<Teacher> teachers = new PageImpl<>(List.of(expectedTeacher3));
             //when
             when(repository.findAll(any(Pageable.class))).thenReturn(teachers);
-            Page<TeacherDto> actual = service.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
+            PageableRequest pageableRequest = PageableRequest.builder()
+                    .pageNumber(pageNo)
+                    .pageSize(pageSize)
+                    .sortDir(sortDirection)
+                    .sortField(sortField)
+                    .build();
+            Page<TeacherDto> actual = service.fetchAllPaginated(pageableRequest);
             //then
             verify(repository).findAll(any(Pageable.class));
             List<TeacherDto> actualContent = actual.getContent();
@@ -584,7 +591,14 @@ class TeacherServiceTest {
             //when
             when(repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(anyString(), any(Pageable.class)))
                     .thenReturn(teachers);
-            Page<TeacherDto> actual = service.findByFirstOrLastNamePaginated(pageNo, pageSize, sortField, sortDirection, name);
+            PageableRequest pageableRequest = PageableRequest.builder()
+                    .pageNumber(pageNo)
+                    .pageSize(pageSize)
+                    .sortDir(sortDirection)
+                    .sortField(sortField)
+                    .build();
+            Page<TeacherDto> actual = service.fetchAllPaginated(pageableRequest);
+
             //then
             verify(repository).findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(anyString(), any(Pageable.class));
             List<TeacherDto> content = actual.getContent();

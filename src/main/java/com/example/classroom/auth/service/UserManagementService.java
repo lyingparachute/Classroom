@@ -74,7 +74,6 @@ public class UserManagementService implements UserDetailsService {
         repository.delete(loadUserByUsername(email));
     }
 
-
     @Transactional
     public void removeById(Long id) {
         User byId = repository.findById(id)

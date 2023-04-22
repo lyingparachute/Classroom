@@ -1,6 +1,7 @@
 package com.example.classroom.teacher;
 
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import jakarta.transaction.Transactional;
@@ -50,13 +51,9 @@ public class TeacherService {
     }
 
     @Transactional
-    Page<TeacherDto> fetchAllPaginated(int pageNo,
-                                       int pageSize,
-                                       String sortField,
-                                       String sortDirection) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+    Page<TeacherDto> fetchAllPaginated(PageableRequest request) {
+        Sort sort = getSortOrder(request.sortField(), request.sortDir());
+        Pageable pageable = PageRequest.of(request.pageNumber() - 1, request.pageSize(), sort);
         Page<Teacher> all = repository.findAll(pageable);
         return all.map(teacher -> mapper.map(teacher, TeacherDto.class));
     }
@@ -87,14 +84,10 @@ public class TeacherService {
         return found.stream().map(s -> mapper.map(s, TeacherDto.class)).toList();
     }
 
-    Page<TeacherDto> findByFirstOrLastNamePaginated(int pageNo,
-                                                    int pageSize,
-                                                    String sortField,
-                                                    String sortDirection,
-                                                    String searched) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Teacher> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
+    Page<TeacherDto> findByFirstOrLastNamePaginated(PageableRequest request) {
+        Sort sort = getSortOrder(request.sortField(), request.sortDir());
+        Pageable pageable = PageRequest.of(request.pageNumber() - 1, request.pageSize(), sort);
+        Page<Teacher> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(request.name(), pageable);
         return all.map(student -> mapper.map(student, TeacherDto.class));
     }
 
