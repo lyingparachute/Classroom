@@ -92,34 +92,37 @@ public class TeacherService {
 
     Page<TeacherDto> getAllTeachersFromRequest(final PageableRequest pageable, final User user) {
         if (user.isStudent())
-            return extractTeachersFromStudentAsPageable(user, pageable);
+            return getFilteredAndSortedTeachersPageFromStudent(user, pageable);
         if (isNamePresent(pageable.name()))
             return findByFirstOrLastNamePaginated(pageable);
         else
             return fetchAllPaginated(pageable);
     }
 
-    private Page<TeacherDto> extractTeachersFromStudentAsPageable(final User user, final PageableRequest pageableReq) {
+    private Page<TeacherDto> getFilteredAndSortedTeachersPageFromStudent(final User user, final PageableRequest pageableReq) {
         Sort sort = getSortOrder(pageableReq.sortField(), pageableReq.sortDir());
         Pageable pageable = PageRequest.of(pageableReq.pageNumber() - 1, pageableReq.pageSize(), sort);
         List<TeacherDto> teachers = user.getStudent().getTeachers().stream()
                 .filter(teacher -> filterForFirstOrLastNameContainingString(teacher, pageableReq.name()))
                 .map(teacher -> mapper.map(teacher, TeacherDto.class))
                 .toList();
-
-        List<TeacherDto> output = teachers.stream()
-                .skip(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .toList();
+        List<TeacherDto> output = getDisplayedTeachers(pageable, teachers);
         return new PageImpl<>(output, pageable, teachers.size());
     }
 
-    private static boolean filterForFirstOrLastNameContainingString(Teacher teacher, String searched) {
+    private List<TeacherDto> getDisplayedTeachers(Pageable pageable, List<TeacherDto> teachers) {
+        return teachers.stream()
+                .skip(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .toList();
+    }
+
+    private boolean filterForFirstOrLastNameContainingString(Teacher teacher, String searched) {
         return !isNamePresent(searched) ||
                 (isNamePresent(searched) && firstOrLastNameContainsString(teacher, searched));
     }
 
-    private static boolean firstOrLastNameContainsString(Teacher teacher, String searched) {
+    private boolean firstOrLastNameContainsString(Teacher teacher, String searched) {
         return teacher.getFirstName().toLowerCase().contains(searched.toLowerCase()) ||
                 teacher.getLastName().toLowerCase().contains(searched.toLowerCase());
     }
