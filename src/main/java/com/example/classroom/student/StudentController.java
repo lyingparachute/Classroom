@@ -1,8 +1,11 @@
 package com.example.classroom.student;
 
+import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
 import com.example.classroom.fieldOfStudy.FieldOfStudyService;
+import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.teacher.TeacherService;
+import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import static com.example.classroom.pageable.PageableService.getAttributesForPageable;
 
 @Controller
 @RequestMapping("dashboard/students")
@@ -23,6 +26,7 @@ class StudentController {
 
     private final StudentService service;
     private final TeacherService teacherService;
+    private final UserManagementService userService;
     private final FieldOfStudyService fieldOfStudyService;
     private final BreadcrumbService crumb;
 
@@ -38,40 +42,19 @@ class StudentController {
                                 @RequestParam(defaultValue = "asc") String sortDir,
                                 HttpServletRequest request,
                                 Model model) {
+        PageableRequest pageableRequest = PageableRequest.builder()
+                .name(name)
+                .pageNumber(page)
+                .pageSize(size)
+                .sortDir(sortDir)
+                .sortField(sortField)
+                .build();
+        User user = userService.loadUserByUsername(request.getUserPrincipal().getName());
+        Page<StudentDto> pageStudents = service.getAllStudentsFromRequest(pageableRequest, user);
+
         addAttributeBreadcrumb(model, request);
-
-        Page<StudentDto> pageStudents;
-        if (name == null) {
-            pageStudents = service.fetchAllPaginated(page, size, sortField, sortDir);
-        } else {
-            pageStudents = service.findByFirstOrLastNamePaginated(page, size, sortField, sortDir, name);
-            model.addAttribute("name", name);
-        }
-        List<StudentDto> students = pageStudents.getContent();
-        int firstItemShownOnPage = 1;
-        int lastItemShownOnPage;
-        if (page == 1 && pageStudents.getTotalElements() <= size) {
-            lastItemShownOnPage = Math.toIntExact(pageStudents.getTotalElements());
-        } else if (page == 1 && pageStudents.getTotalElements() > size) {
-            lastItemShownOnPage = size * page;
-        } else if (page != 1 && pageStudents.getTotalElements() <= ((long) size * page)) {
-            firstItemShownOnPage = size * (page - 1) + 1;
-            lastItemShownOnPage = Math.toIntExact(pageStudents.getTotalElements());
-        } else {
-            firstItemShownOnPage = size * (page - 1) + 1;
-            lastItemShownOnPage = size * (page - 1) + size;
-        }
-
-        model.addAttribute("students", students);
-        model.addAttribute("currentPage", pageStudents.getNumber() + 1);
-        model.addAttribute("totalPages", pageStudents.getTotalPages());
-        model.addAttribute("totalItems", pageStudents.getTotalElements());
-        model.addAttribute("pageSize", size);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-        model.addAttribute("firstItemShownOnPage", firstItemShownOnPage);
-        model.addAttribute("lastItemShownOnPage", lastItemShownOnPage);
+        model.addAttribute("students", pageStudents.getContent());
+        model.addAllAttributes(getAttributesForPageable(pageStudents, pageableRequest));
         return "student/all-students";
     }
 
