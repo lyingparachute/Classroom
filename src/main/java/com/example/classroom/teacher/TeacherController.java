@@ -46,11 +46,11 @@ class TeacherController {
                 .sortField(sortField)
                 .build();
         User user = userService.loadUserByUsername(request.getUserPrincipal().getName());
-        Page<TeacherDto> teachers = service.getAllTeachersFromRequest(pageableRequest, user);
+        Page<TeacherDto> pageTeachers = service.getAllTeachersFromRequest(pageableRequest, user);
 
         addAttributeBreadcrumb(model, request);
-        model.addAttribute("teachers", teachers.getContent());
-        model.addAllAttributes(getAttributesForPageable(teachers, pageableRequest));
+        model.addAttribute("teachers", pageTeachers.getContent());
+        model.addAllAttributes(getAttributesForPageable(pageTeachers, pageableRequest));
         return "teacher/all-teachers";
     }
 
