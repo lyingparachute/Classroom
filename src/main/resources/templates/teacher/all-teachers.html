@@ -46,7 +46,12 @@
                 </div>
                 <div class="card-body">
                     <div class="text-center h5"
+                         sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"
                          th:text="#{teachers.desc}">
+                    </div>
+                    <div class="text-center h5"
+                         sec:authorize="hasRole('ROLE_STUDENT')"
+                         th:text="#{teachers.for.student.desc}">
                     </div>
                     <!-- Search Form -->
                     <form id="teacherForm"
@@ -100,8 +105,10 @@
                                 <th th:text="#{teacher.table.department}"></th>
                                 <th th:text="#{teacher.table.status}"></th>
                                 <th th:text="#{teacher.table.title}"></th>
-                                <th th:text="#{teacher.table.students}"></th>
-                                <th th:text="#{teacher.table.subjects}"></th>
+                                <th sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"
+                                    th:text="#{teacher.table.students}"></th>
+                                <th sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"
+                                    th:text="#{teacher.table.subjects}"></th>
                                 <th class="text-center" th:text="#{button.actions}"></th>
                             </tr>
                             </thead>
@@ -154,8 +161,10 @@
                                     <span th:unless="${teacher.department == null}"
                                           th:text="#{teacher.role.dean}"></span>
                                 </td>
-                                <td th:text="${teacher.students.size()}"></td>
-                                <td th:text="${teacher.subjects.size()}"></td>
+                                <td sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"
+                                    th:text="${teacher.students.size()}"></td>
+                                <td sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')"
+                                    th:text="${teacher.subjects.size()}"></td>
 
                                 <td>
                                     <div class="container">
