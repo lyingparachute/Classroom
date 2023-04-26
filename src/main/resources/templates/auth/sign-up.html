@@ -26,7 +26,7 @@
                                 <form class="form-sign-up" th:action="@{/sign-up}"
                                       method="post" th:object="${user}"
                                       novalidate>
-                                    <p th:text="#{signup.new.account}"></p>
+                                    <p class="text-center" th:text="#{signup.new.account}"></p>
 
                                     <!-- First and Last name input -->
                                     <div class="row">
@@ -114,7 +114,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="text-center pt-1 mb-5 pb-1">
+                                    <div class="text-center pt-1 mb-4 pb-1">
                                         <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
                                                 type="submit" th:text="#{signup.button}">
                                         </button>
