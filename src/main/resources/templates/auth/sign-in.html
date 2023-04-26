@@ -60,7 +60,9 @@
                                                 type="submit" th:text="#{signin.button}">
                                         </button>
                                         <a class="text-muted" th:href="@{/password-reset}"
-                                           th:text="#{signin.forgot}"></a>
+                                           th:text="#{signin.forgot}"
+                                           data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
+                                        </a>
                                     </div>
                                 </form>
 
@@ -81,6 +83,37 @@
     </div>
 </section>
 
+<!-- Forgot password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel"
+     aria-hidden="true" data-mdb-backdrop="static" data-mdb-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header text-white bg-primary">
+                <h5 class="modal-title text-center" id="forgotPasswordModalLabel"
+                    th:text="#{forgot.password.modal.header}">
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" th:aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-5">
+                <p class="py-2" th:text="#{forgot.password.modal.body.desc}"></p>
+                <div class="form-outline">
+                    <input type="email" id="typeEmail" class="form-control my-3"
+                    />
+                    <label class="form-label" for="typeEmail" th:text="#{forgot.password.modal.body.email}"></label>
+                </div>
+                <!--                <a href="#" class="btn btn-primary w-100 mb-4" th:text="#{forgot.password.modal.button.reset}"></a>-->
+                <!--            </div>-->
+                <!--            <div class="modal-footer">-->
+                <div class="align-items-end">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal"
+                            th:text="#{forgot.password.modal.button.cancel}"></button>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="#{forgot.password.modal.button.reset}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--/* JS Scripts */-->
 <div th:replace="~{fragments/scripts :: scripts}"></div>
