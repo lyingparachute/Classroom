@@ -41,14 +41,4 @@ class AuthenticationController {
         redirectAttributes.addFlashAttribute("createSuccess", created);
         return "redirect:/sign-in";
     }
-
-    @GetMapping("/password/reset")
-    String getPasswordResetPage() {
-        return "auth/password-reset";
-    }
-
-    @PostMapping("/password/reset")
-    String resetPassword() {
-        return "auth/sign-in";
-    }
 }
