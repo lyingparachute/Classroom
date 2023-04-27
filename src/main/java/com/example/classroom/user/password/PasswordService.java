@@ -11,13 +11,22 @@ import org.springframework.stereotype.Service;
 public class PasswordService {
 
     private final UserManagementService service;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     boolean resetPassword(String email) {
         try {
             User user = service.loadUserByUsername(email);
+
             return true;
         } catch (UsernameNotFoundException e) {
             return false;
         }
+    }
+
+    public void createPasswordResetTokenForUser(User user, String token) {
+        PasswordResetToken myToken = PasswordResetToken.builder()
+                .user(user)
+                .build();
+        passwordResetTokenRepository.save(myToken);
     }
 }
