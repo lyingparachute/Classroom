@@ -64,7 +64,7 @@ public class UserManagementService implements UserDetailsService {
     }
 
     @Override
-    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+    public User loadUserByUsername(String email) {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " does not exist in database."));
     }
