@@ -1,5 +1,6 @@
 package com.example.classroom.user.password;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +16,11 @@ public class PasswordController {
     private final PasswordService service;
 
     @PostMapping("/reset")
-    String resetPassword(@RequestParam("email") String userEmail,
+    String resetPassword(@Valid @RequestParam("email") String userEmail,
                          RedirectAttributes redirectAttributes) {
-        service.resetPassword(userEmail);
-        redirectAttributes.addFlashAttribute("reset-success", userEmail);
+        boolean resetResult = service.resetPassword(userEmail);
+        redirectAttributes.addFlashAttribute("resetPassword", userEmail);
+        redirectAttributes.addFlashAttribute("resetPasswordResult", resetResult);
         return "redirect:/sign-in";
     }
 }

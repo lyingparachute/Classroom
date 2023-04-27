@@ -21,22 +21,51 @@
                                 <div class="text-center">
                                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
                                          style="width: 185px;" alt="logo">
-                                    <h4 class="mt-1 mb-5 pb-1" th:text="#{signin.header}"></h4>
+                                    <h4 class="mt-1 mb-4 pb-1" th:text="#{signin.header}"></h4>
                                 </div>
 
-                                <!--Alert Section -->
+
                                 <section th:if="${createSuccess}">
+                                    <!-- Create Account Alert Section -->
                                     <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
                                         <i class="fas fa-check-circle"></i>
-                                        <strong class="mx-1" th:text="#{msg.success}"></strong>
-                                        <span th:text="#{fieldOfStudy.success.msg1}"></span>
-                                        <span th:text="#{alert.success.msg2}"></span>
-                                        <strong class="mx-1" th:text="${createSuccess}"></strong>
-                                        <span th:text="#{alert.success.msg3}"></span>
+                                        <div class="mx-1">
+                                            <strong th:text="#{msg.success}"></strong>&nbsp;
+                                            <span th:text="#{fieldOfStudy.success.msg1}"></span>&nbsp;
+                                            <span th:text="#{alert.success.msg2}"></span>&nbsp;
+                                            <strong th:text="${createSuccess}"></strong>&nbsp;
+                                            <span th:text="#{alert.success.msg3}"></span>
+                                        </div>
                                         <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
                                     </div>
+                                    <!-- End Create Account Alert Section -->
                                 </section>
-                                <!--End Alert Section -->
+
+                                <section th:if="${resetPassword}">
+                                    <!--Reset Password Alert Section -->
+                                    <div th:if="${resetPasswordResult}" role="alert"
+                                         class="alert alert-success alert-dismissible d-flex align-items-center">
+                                        <i class="fas fa-check-circle mr-2"></i>
+                                        <div>
+                                            <strong th:text="#{msg.success}">&nbsp;</strong>
+                                            <span th:text="#{reset.password.alert.success.msg1}"></span>
+                                        </div>
+                                        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+                                    </div>
+                                    <div th:unless="${resetPasswordResult}" role="alert"
+                                         class="alert alert-danger alert-dismissible d-flex align-items-center">
+                                        <i class="fas fa-xmark-circle mr-2" role="img" aria-label="Error:"></i>
+                                        <div>
+                                            <strong th:text="#{msg.error}">&nbsp;</strong>
+                                            <span th:text="#{reset.password.alert.error.msg1}">&nbsp;</span>
+                                            <strong th:text="${resetPassword}">&nbsp;</strong>
+                                            <span th:text="#{reset.password.alert.error.msg2}"></span>
+                                        </div>
+                                        <button class="btn-close" data-bs-dismiss="alert" type="button"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <!-- End Reset Password Alert Section -->
+                                </section>
 
                                 <form class="form-sign-in" th:action="@{/api/sign-in}" method="post">
                                     <p class="text-center" th:text="#{signin.login}"></p>
@@ -97,7 +126,8 @@
             </div>
             <div class="modal-body px-5">
                 <p class="py-2" th:text="#{forgot.password.modal.body.desc}"></p>
-                <form class="form-password-reset" th:action="@{/password/reset}" method="post">
+                <form class="form-password-reset" th:action="@{/password/reset}" method="post"
+                      novalidate>
                     <div class="form-outline">
                         <input type="email" id="userEmail" class="form-control my-3"
                                name="email" required/>
