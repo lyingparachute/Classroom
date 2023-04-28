@@ -22,7 +22,7 @@ import static java.util.Map.ofEntries;
 @RequiredArgsConstructor
 public class PasswordService {
 
-    private static final String PASSWORD_RESET_FILE_LOCATION = "mail/password-reset.html";
+    private static final String PASSWORD_RESET_TEMPLATE_LOCATION = "mail/password-reset.html";
     private static final String PASSWORD_RESET_EMAIL_SUBJECT = "Password Reset";
     private final UserManagementService userService;
     private final PasswordResetTokenRepository passwordTokenRepository;
@@ -34,13 +34,13 @@ public class PasswordService {
             String token = createAndSavePasswordResetToken(user);
 
             mailSenderService.sendMessageUsingThymeleafTemplate(
-                    userEmail, PASSWORD_RESET_EMAIL_SUBJECT,
-                    PASSWORD_RESET_FILE_LOCATION,
+                    userEmail,
+                    PASSWORD_RESET_EMAIL_SUBJECT,
+                    PASSWORD_RESET_TEMPLATE_LOCATION,
                     ofEntries(
-                            entry("email", userEmail),
-                            entry("token", token),
+                            entry("firstName", user.getFirstName()),
+                            entry("lastName", user.getLastName()),
                             entry("link", getPasswordChangeLink(request, token))
-
                     )
             );
 
