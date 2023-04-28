@@ -10,6 +10,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+
 @Service
 @RequiredArgsConstructor
 public class MailSenderService {
@@ -35,7 +37,7 @@ public class MailSenderService {
                 "<p>We have received a request to reset the password for your account. If you did not request this reset, please disregard this email.</p>" +
                 "<p>To reset your password, please click on the following link: <a href=\"" + resetLink + "\">Reset Password</a></p>" +
                 "<p>This link will expire in 24 hours.</p>" +
-                "<p>If you have any questions or concerns, please contact us at support@classroom.com/p>" +
+                "<p>If you have any questions or concerns, please contact us at support@classroom.com</p>" +
                 "<p>Best regards,<br>Classroom Team</p>" +
                 "</body></html>";
         return constructEmail(MailDetails.builder()
@@ -49,9 +51,13 @@ public class MailSenderService {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setSubject(details.subject());
-        helper.setText(details.msgBody());
+        helper.setText(details.msgBody(), true);
         helper.setTo(details.recipientEmail());
-        helper.setFrom(sender);
+        try {
+            helper.setFrom(sender, "Classroom");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         return message;
     }
 
