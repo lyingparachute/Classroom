@@ -6,5 +6,6 @@ import lombok.Builder;
 public record MailDetails(
         String subject,
         String msgBody,
-        String recipientEmail) {
+        String recipientEmail
+) {
 }
