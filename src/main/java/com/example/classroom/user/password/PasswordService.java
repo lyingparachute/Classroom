@@ -9,15 +9,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.Map.entry;
+import static java.util.Map.ofEntries;
+
 @Service
 @RequiredArgsConstructor
 public class PasswordService {
 
+    private static final String PASSWORD_RESET_FILE_LOCATION = "mail/password-reset.html";
+    private static final String PASSWORD_RESET_EMAIL_SUBJECT = "Password Reset";
     private final UserManagementService userService;
     private final PasswordResetTokenRepository passwordTokenRepository;
     private final MailSenderService mailSenderService;
@@ -26,12 +32,16 @@ public class PasswordService {
         try {
             User user = userService.loadUserByUsername(userEmail);
             String token = createAndSavePasswordResetToken(user);
-            mailSenderService.sendResetPasswordEmail(
-                    PasswordResetRequest.builder()
-                            .httpRequest(request)
-                            .userEmail(userEmail)
-                            .token(token)
-                            .build()
+
+            mailSenderService.sendMessageUsingThymeleafTemplate(
+                    userEmail, PASSWORD_RESET_EMAIL_SUBJECT,
+                    PASSWORD_RESET_FILE_LOCATION,
+                    ofEntries(
+                            entry("email", userEmail),
+                            entry("token", token),
+                            entry("link", getPasswordChangeLink(request, token))
+
+                    )
             );
 
             return true;
@@ -40,6 +50,8 @@ public class PasswordService {
         } catch (MessagingException e) {
             String exception = e.toString();
             e.getCause();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
         return false;
     }
@@ -47,12 +59,12 @@ public class PasswordService {
     private String createAndSavePasswordResetToken(User user) {
         PasswordResetToken myToken = PasswordResetToken.builder()
                 .user(user)
-                .token(createRandomToken())
+                .token(createRandomUUID())
                 .build();
         return savePasswordResetToken(myToken).getToken();
     }
 
-    private String createRandomToken() {
+    private String createRandomUUID() {
         return UUID.randomUUID().toString();
     }
 
@@ -79,5 +91,13 @@ public class PasswordService {
 
     Optional<User> getUserByPasswordResetToken(final String token) {
         return Optional.ofNullable(passwordTokenRepository.findByToken(token).getUser());
+    }
+
+    private String getPasswordChangeLink(HttpServletRequest request, String token) {
+        return getAppUrl(request) + "/password/change?token=" + token;
+    }
+
+    private String getAppUrl(HttpServletRequest request) {
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 }

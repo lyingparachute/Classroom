@@ -1,67 +1,53 @@
 package com.example.classroom.mail_sender;
 
-import com.example.classroom.user.password.PasswordResetRequest;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class MailSenderService {
 
+    private static final String CLASSROOM_NAME = "Classroom";
     private final JavaMailSender javaMailSender;
+    private final SpringTemplateEngine thymeleafTemplateEngine;
 
     @Value("${spring.mail.username}")
     private String sender;
 
-    public void sendResetPasswordEmail(PasswordResetRequest resetRequest) throws MessagingException {
-        javaMailSender.send(constructResetTokenEmail(
-                getAppUrl(resetRequest.httpRequest()),
-                resetRequest.token(),
-                resetRequest.userEmail()));
+    public void sendMessageUsingThymeleafTemplate(
+            String userEmail, String subject, String fileLocation, Map<String, Object> templateModel)
+            throws MessagingException, UnsupportedEncodingException {
+        String htmlBody = getContentFromThymeleafTemplate(fileLocation, templateModel);
+        sendHtmlMessage(userEmail, subject, htmlBody);
     }
 
-    private MimeMessage constructResetTokenEmail(
-            String contextPath, String token, String userEmail) throws MessagingException {
-        String resetLink = contextPath + "/password/change?token=" + token;
-        String subject = "Reset Your Password";
-        String body = "<html><body>" +
-                "<p>Dear user,</p>" +
-                "<p>We have received a request to reset the password for your account. If you did not request this reset, please disregard this email.</p>" +
-                "<p>To reset your password, please click on the following link: <a href=\"" + resetLink + "\">Reset Password</a></p>" +
-                "<p>This link will expire in 24 hours.</p>" +
-                "<p>If you have any questions or concerns, please contact us at support@classroom.com</p>" +
-                "<p>Best regards,<br>Classroom Team</p>" +
-                "</body></html>";
-        return constructEmail(MailDetails.builder()
-                .recipientEmail(userEmail)
-                .subject(subject)
-                .msgBody(body)
-                .build());
+    private String getContentFromThymeleafTemplate(String fileLocation,
+                                                   Map<String, Object> templateModel) {
+        Context thymeleafContext = new Context();
+        thymeleafContext.setVariables(templateModel);
+        return thymeleafTemplateEngine.process(fileLocation, thymeleafContext);
     }
 
-    private MimeMessage constructEmail(MailDetails details) throws MessagingException {
+    private void sendHtmlMessage(String to,
+                                 String subject,
+                                 String htmlBody)
+            throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setSubject(details.subject());
-        helper.setText(details.msgBody(), true);
-        helper.setTo(details.recipientEmail());
-        try {
-            helper.setFrom(sender, "Classroom");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-        return message;
-    }
-
-    private String getAppUrl(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        helper.setFrom(sender, CLASSROOM_NAME);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(htmlBody, true);
+        javaMailSender.send(message);
     }
 }
