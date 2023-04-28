@@ -25,3 +25,6 @@ insert into users (id, first_name, last_name, email, password, role) values(22, 
 insert into users (id, first_name, last_name, email, password, role) values(23, 'Oskar', 'Trzaskoma', 'o.trzaskoma@gmail.com', '$2a$12$97Q/PUDV5AV60R.KI4SkOuDVCXWG.pvRNTBSli5ExV1QXpZ3jmesC', 'ROLE_DEAN');
 insert into users (id, first_name, last_name, email, password, role) values(24, 'Petroniusz', 'Tarczewski', 'p.tarczewski@gmail.com', '$2a$12$97Q/PUDV5AV60R.KI4SkOuDVCXWG.pvRNTBSli5ExV1QXpZ3jmesC', 'ROLE_DEAN');
 insert into users (id, first_name, last_name, email, password, role) values(25, 'Remigiusz', 'Śliwa', 'r.śliwa@gmail.com', '$2a$12$97Q/PUDV5AV60R.KI4SkOuDVCXWG.pvRNTBSli5ExV1QXpZ3jmesC', 'ROLE_TEACHER');
+
+-- ACCOUNT FOR TESTING MAIL SENDER
+insert into users (id, first_name, last_name, email, password, role) values(26, 'Igor', 'Bykowski', 'igor.bykowski1@gmail.com', '$2a$12$97Q/PUDV5AV60R.KI4SkOuDVCXWG.pvRNTBSli5ExV1QXpZ3jmesC', 'ROLE_ADMIN');
