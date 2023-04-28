@@ -1,4 +1,4 @@
-package com.example.classroom.mailSender;
+package com.example.classroom.mail_sender;
 
 import com.example.classroom.user.User;
 import jakarta.mail.MessagingException;
