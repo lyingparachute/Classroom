@@ -1,5 +1,6 @@
 package com.example.classroom.mail_sender;
 
+import com.example.classroom.user.password.PasswordResetRequest;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,11 +19,11 @@ public class MailSenderService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    public void sendResetPasswordEmail(HttpServletRequest request,
-                                       String token,
-                                       String userEmail
-    ) throws MessagingException {
-        javaMailSender.send(constructResetTokenEmail(getAppUrl(request), token, userEmail));
+    public void sendResetPasswordEmail(PasswordResetRequest resetRequest) throws MessagingException {
+        javaMailSender.send(constructResetTokenEmail(
+                getAppUrl(resetRequest.httpRequest()),
+                resetRequest.token(),
+                resetRequest.userEmail()));
     }
 
     private MimeMessage constructResetTokenEmail(
