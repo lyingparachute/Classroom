@@ -1,6 +1,5 @@
 package com.example.classroom.mail_sender;
 
-import com.example.classroom.user.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,18 +18,15 @@ public class MailSenderService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    void sendMail(HttpServletRequest request, String token, User user) throws MessagingException {
-        javaMailSender.send(
-                constructResetTokenEmail(
-                        getAppUrl(request), token, user));
-    }
-
-    private String getAppUrl(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    public void sendResetPasswordEmail(HttpServletRequest request,
+                                       String token,
+                                       String userEmail
+    ) throws MessagingException {
+        javaMailSender.send(constructResetTokenEmail(getAppUrl(request), token, userEmail));
     }
 
     private MimeMessage constructResetTokenEmail(
-            String contextPath, String token, User user) throws MessagingException {
+            String contextPath, String token, String userEmail) throws MessagingException {
         String resetLink = contextPath + "/password/change?token=" + token;
         String subject = "Reset Your Password";
         String body = "<html><body>" +
@@ -41,13 +37,11 @@ public class MailSenderService {
                 "<p>If you have any questions or concerns, please contact us at support@classroom.com/p>" +
                 "<p>Best regards,<br>Classroom Team</p>" +
                 "</body></html>";
-        return constructEmail(
-                MailDetails.builder()
-                        .recipientEmail(user.getEmail())
-                        .subject(subject)
-                        .msgBody(body)
-                        .build()
-        );
+        return constructEmail(MailDetails.builder()
+                .recipientEmail(userEmail)
+                .subject(subject)
+                .msgBody(body)
+                .build());
     }
 
     private MimeMessage constructEmail(MailDetails details) throws MessagingException {
@@ -58,5 +52,9 @@ public class MailSenderService {
         helper.setTo(details.recipientEmail());
         helper.setFrom(sender);
         return message;
+    }
+
+    private String getAppUrl(HttpServletRequest request) {
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 }
