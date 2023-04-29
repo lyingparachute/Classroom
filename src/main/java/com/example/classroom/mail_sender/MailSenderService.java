@@ -17,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MailSenderService {
 
-    private static final String CLASSROOM_NAME = "Classroom";
+    private static final String APP_NAME = "Classroom";
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine thymeleafTemplateEngine;
 
@@ -44,7 +44,7 @@ public class MailSenderService {
             throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setFrom(sender, CLASSROOM_NAME);
+        helper.setFrom(sender, APP_NAME);
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
