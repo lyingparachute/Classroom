@@ -3,13 +3,11 @@ package com.example.classroom.user.password;
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.mail_sender.MailSenderService;
 import com.example.classroom.user.User;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Optional;
@@ -32,7 +30,7 @@ public class PasswordService {
         try {
             User user = userService.loadUserByUsername(userEmail);
             String token = createAndSavePasswordResetToken(user);
-            mailSenderService.sendMessageUsingThymeleafTemplate(
+            mailSenderService.sendEmail(
                     userEmail,
                     PASSWORD_RESET_EMAIL_SUBJECT,
                     PASSWORD_RESET_TEMPLATE_LOCATION,
@@ -45,13 +43,7 @@ public class PasswordService {
             return true;
         } catch (UsernameNotFoundException e) {
             return false;
-        } catch (MessagingException e) {
-            String exception = e.toString();
-            e.getCause();
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
         }
-        return false;
     }
 
     private String createAndSavePasswordResetToken(User user) {

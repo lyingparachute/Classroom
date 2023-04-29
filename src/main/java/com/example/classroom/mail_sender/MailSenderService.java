@@ -1,8 +1,10 @@
 package com.example.classroom.mail_sender;
 
+import com.example.classroom.exception.EmailException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MailSenderService {
 
@@ -26,18 +29,23 @@ public class MailSenderService {
     private String sender;
 
     @Async
-    public void sendMessageUsingThymeleafTemplate(
-            String userEmail, String subject, String fileLocation, Map<String, Object> templateModel)
-            throws MessagingException, UnsupportedEncodingException {
-        String htmlBody = getContentFromThymeleafTemplate(fileLocation, templateModel);
-        sendHtmlMessage(userEmail, subject, htmlBody);
+    public void sendEmail(String userEmail,
+                          String subject,
+                          String fileLocation,
+                          Map<String, Object> templateModel) {
+        String htmlBody = createEmailBody(fileLocation, templateModel);
+        try {
+            sendHtmlMessage(userEmail, subject, htmlBody);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new EmailException("Failed to send email.", e);
+        }
     }
 
-    private String getContentFromThymeleafTemplate(String fileLocation,
-                                                   Map<String, Object> templateModel) {
+    private String createEmailBody(String templateLocation,
+                                   Map<String, Object> templateModel) {
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
-        return thymeleafTemplateEngine.process(fileLocation, thymeleafContext);
+        return thymeleafTemplateEngine.process(templateLocation, thymeleafContext);
     }
 
     private void sendHtmlMessage(String to,
