@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -24,6 +25,7 @@ public class MailSenderService {
     @Value("${spring.mail.username}")
     private String sender;
 
+    @Async
     public void sendMessageUsingThymeleafTemplate(
             String userEmail, String subject, String fileLocation, Map<String, Object> templateModel)
             throws MessagingException, UnsupportedEncodingException {

@@ -32,7 +32,6 @@ public class PasswordService {
         try {
             User user = userService.loadUserByUsername(userEmail);
             String token = createAndSavePasswordResetToken(user);
-
             mailSenderService.sendMessageUsingThymeleafTemplate(
                     userEmail,
                     PASSWORD_RESET_EMAIL_SUBJECT,
@@ -43,7 +42,6 @@ public class PasswordService {
                             entry("websiteLink", getAppUrl(request))
                     )
             );
-
             return true;
         } catch (UsernameNotFoundException e) {
             return false;
