@@ -39,8 +39,8 @@ public class PasswordService {
                     PASSWORD_RESET_TEMPLATE_LOCATION,
                     ofEntries(
                             entry("firstName", user.getFirstName()),
-                            entry("lastName", user.getLastName()),
-                            entry("link", getPasswordChangeLink(request, token))
+                            entry("resetLink", getPasswordChangeLink(request, token)),
+                            entry("websiteLink", getAppUrl(request))
                     )
             );
 
