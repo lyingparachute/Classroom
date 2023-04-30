@@ -2,19 +2,16 @@ package com.example.classroom.user.password;
 
 import com.example.classroom.user.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-
-@Builder
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
 @Entity
 public class PasswordResetToken {
-    private static final int EXPIRATION_HOURS = 60 * 24;
+    private static final int TOKEN_EXPIRATION_TIME_IN_HOURS = 24;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,18 +23,32 @@ public class PasswordResetToken {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    private LocalDate expiryDate;
+    private LocalDateTime expiryDate;
 
     private boolean expired;
 
     private boolean revoked;
+
+    public PasswordResetToken() {
+        setExpiryDate();
+    }
+
+    public PasswordResetToken(User user, String token) {
+        this.token = token;
+        this.user = user;
+        setExpiryDate();
+    }
+
+    private void setExpiryDate() {
+        this.expiryDate = LocalDateTime.now().plusHours(TOKEN_EXPIRATION_TIME_IN_HOURS);
+    }
 
     public boolean isTokenValid() {
         return !(isExpired() || revoked);
     }
 
     public boolean isExpired() {
-        return LocalDate.now().isAfter(LocalDate.now().plusDays(1));
+        return LocalDateTime.now().isAfter(expiryDate);
     }
 
     @Override
