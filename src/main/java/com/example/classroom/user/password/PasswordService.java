@@ -105,10 +105,10 @@ public class PasswordService {
         return passwordTokenRepository.findByUser(user);
     }
 
-    void resetPassword(final String token, final String password) {
+    void resetPassword(final String token, final String newPassword) {
         User user = getUserByPasswordResetToken(token)
                 .orElseThrow(() -> new InvalidTokenException("Invalid token: " + token));
-        userService.changeUserPassword(user, password);
+        userService.resetUserPassword(user, newPassword);
         sendConfirmPasswordResetEmail(user);
     }
 
