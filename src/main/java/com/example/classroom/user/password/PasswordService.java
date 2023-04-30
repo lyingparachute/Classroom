@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,36 +31,36 @@ public class PasswordService {
         try {
             User user = userService.loadUserByUsername(userEmail);
             String token = createAndSavePasswordResetToken(user);
-            mailSenderService.sendEmail(
-                    userEmail,
-                    PASSWORD_RESET_EMAIL_SUBJECT,
-                    PASSWORD_RESET_TEMPLATE_LOCATION,
-                    ofEntries(
-                            entry("firstName", user.getFirstName()),
-                            entry("resetLink", getPasswordChangeLink(request, token)),
-                            entry("websiteLink", getAppUrl(request))
-                    )
-            );
+            sendPasswordResetEmail(request, user, token);
             return true;
         } catch (UsernameNotFoundException e) {
             return false;
         }
     }
 
+    private void sendPasswordResetEmail(HttpServletRequest request, User user, String token) {
+        mailSenderService.sendEmail(
+                user.getEmail(),
+                PASSWORD_RESET_EMAIL_SUBJECT,
+                PASSWORD_RESET_TEMPLATE_LOCATION,
+                createTemplateAttributes(request, user, token)
+        );
+    }
+
+    private Map<String, Object> createTemplateAttributes(HttpServletRequest request, User user, String token) {
+        return ofEntries(
+                entry("firstName", user.getFirstName()),
+                entry("resetLink", getPasswordChangeLink(request, token)),
+                entry("websiteLink", getAppUrl(request))
+        );
+    }
+
     private String createAndSavePasswordResetToken(User user) {
         PasswordResetToken myToken = PasswordResetToken.builder()
                 .user(user)
-                .token(createRandomUUID())
+                .token(UUID.randomUUID().toString())
                 .build();
-        return savePasswordResetToken(myToken).getToken();
-    }
-
-    private String createRandomUUID() {
-        return UUID.randomUUID().toString();
-    }
-
-    private PasswordResetToken savePasswordResetToken(PasswordResetToken myToken) {
-        return passwordTokenRepository.save(myToken);
+        return passwordTokenRepository.save(myToken).getToken();
     }
 
     String validatePasswordResetToken(String token) {
