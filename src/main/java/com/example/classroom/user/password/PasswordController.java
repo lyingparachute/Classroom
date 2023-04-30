@@ -17,34 +17,48 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PasswordController {
 
     private static final String REDIRECT_TO_SIGN_IN_PAGE = "redirect:/sign-in";
+    private static final String PASSWORD_CHANGE_TEMPLATE = "auth/password-change";
     private final PasswordService service;
 
     @PostMapping("/reset")
     String sendResetPasswordEmail(@Valid @RequestParam("email") String userEmail,
                                   HttpServletRequest request,
                                   RedirectAttributes redirectAttributes) {
-        boolean resetResult = service.sendEmailWithResetPasswordInstructions(request, userEmail);
+        boolean emailSent = service.sendEmailWithResetPasswordInstructions(request, userEmail);
         redirectAttributes.addFlashAttribute("resetPassword", userEmail);
-        redirectAttributes.addFlashAttribute("resetPasswordResult", resetResult);
+        redirectAttributes.addFlashAttribute("resetPasswordResult", emailSent);
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
 
     @GetMapping("/change")
-    String getPasswordChangePage(@Valid @RequestParam("token") String token,
-                                 Model model,
-                                 HttpServletRequest request,
-                                 RedirectAttributes redirectAttributes) {
-//        model.addAttribute("passwordChangeRequest", new PasswordChangeRequest());
-        return "auth/password-change";
+    String showPasswordChangeForm(@Valid @RequestParam("token") final String token,
+                                  Model model,
+                                  HttpServletRequest request,
+                                  RedirectAttributes redirectAttributes) {
+        String result = service.validatePasswordResetToken(token);
+        if (result != null) {
+            model.addAttribute("errorMessage", "Invalid or expired token.");
+            return PASSWORD_CHANGE_TEMPLATE;
+        }
+
+        model.addAttribute("token", token);
+        return PASSWORD_CHANGE_TEMPLATE;
     }
 
 
     @PostMapping("/update")
-    String changePassword(@Valid @RequestParam("email") String userEmail,
+    String changePassword(@Valid @RequestParam("token") final String token,
+                          @Valid @RequestParam("password") final String password,
+                          Model model,
                           HttpServletRequest request,
                           RedirectAttributes redirectAttributes) {
-        boolean resetResult = service.sendEmailWithResetPasswordInstructions(request, userEmail);
-        redirectAttributes.addFlashAttribute("changePasswordSuccess", userEmail);
+        String result = service.validatePasswordResetToken(token);
+        if (result != null) {
+            model.addAttribute("errorMessage", "Invalid or expired token.");
+            return PASSWORD_CHANGE_TEMPLATE;
+        }
+        service.resetPassword(token, password);
+        redirectAttributes.addFlashAttribute("successMessage", "Your password has been reset.");
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
 }

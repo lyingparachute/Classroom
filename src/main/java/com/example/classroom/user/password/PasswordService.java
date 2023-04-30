@@ -1,6 +1,7 @@
 package com.example.classroom.user.password;
 
 import com.example.classroom.auth.service.UserManagementService;
+import com.example.classroom.exception.InvalidTokenException;
 import com.example.classroom.mail_sender.MailSenderService;
 import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,6 +23,8 @@ public class PasswordService {
 
     private static final String PASSWORD_RESET_TEMPLATE_LOCATION = "mail/password-reset.html";
     private static final String PASSWORD_RESET_EMAIL_SUBJECT = "Password Reset";
+    private static final String PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION = "mail/password-reset-confirm.html";
+    private static final String PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT = "Password Reset Confirmation";
     private final UserManagementService userService;
     private final PasswordResetTokenRepository passwordTokenRepository;
     private final MailSenderService mailSenderService;
@@ -64,8 +66,7 @@ public class PasswordService {
     }
 
     String validatePasswordResetToken(String token) {
-        final PasswordResetToken passToken = passwordTokenRepository.findByToken(token);
-
+        final PasswordResetToken passToken = getPasswordResetToken(token);
         return !isTokenFound(passToken) ? "invalidToken"
                 : isTokenExpired(passToken) ? "expired"
                 : null;
@@ -76,7 +77,6 @@ public class PasswordService {
     }
 
     private boolean isTokenExpired(PasswordResetToken passToken) {
-        final Calendar cal = Calendar.getInstance();
         return passToken.getExpiryDate().isBefore(LocalDate.now());
     }
 
@@ -90,5 +90,31 @@ public class PasswordService {
 
     private String getAppUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    }
+
+    private PasswordResetToken getPasswordResetToken(String token) {
+        return passwordTokenRepository.findByToken(token);
+    }
+
+    private PasswordResetToken getPasswordResetToken(User user) {
+        return passwordTokenRepository.findByUser(user);
+    }
+
+    void resetPassword(String token, String password) {
+        User user = getUserByPasswordResetToken(token)
+                .orElseThrow(() -> new InvalidTokenException("Invalid token: " + token));
+        userService.changeUserPassword(user, password);
+        sendConfirmPasswordResetEmail(user);
+    }
+
+    private void sendConfirmPasswordResetEmail(User user) {
+        mailSenderService.sendEmail(
+                user.getEmail(),
+                PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT,
+                PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION,
+                ofEntries(
+                        entry("firstName", user.getFirstName())
+                )
+        );
     }
 }
