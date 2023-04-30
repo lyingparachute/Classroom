@@ -67,6 +67,26 @@
                                     <!-- End Reset Password Alert Section -->
                                 </section>
 
+                                <section th:if="${resetPasswordInvalidToken}">
+                                    <!-- Invalid Reset Password Token Alert Section -->
+                                    <div role="alert"
+                                         class="alert alert-danger alert-dismissible d-flex align-items-center">
+                                        <i class="fas fa-xmark-circle mr-2" role="img" aria-label="Error:"></i>
+                                        <div>
+                                            <strong th:text="#{msg.error}">&nbsp;</strong>
+                                            <span th:text="#{reset.password.invalid.token.error.msg1}"></span>
+                                            <strong th:text="#{reset.password.invalid.token.error.msg2}"></strong>
+                                            <span th:text="#{reset.password.invalid.token.error.msg3}"></span>
+                                            <strong th:text="#{reset.password.invalid.token.error.msg4}"></strong>
+                                            <br>
+                                            <span th:text="#{reset.password.invalid.token.error.msg6}"></span>
+                                        </div>
+                                        <button class="btn-close" data-bs-dismiss="alert" type="button"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <!-- End Reset Password Alert Section -->
+                                </section>
+
                                 <form class="form-sign-in" th:action="@{/api/sign-in}" method="post">
                                     <p class="text-center" th:text="#{signin.login}"></p>
 

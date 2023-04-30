@@ -1,5 +1,6 @@
 package com.example.classroom.user.password;
 
+import com.example.classroom.exception.InvalidTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,12 +36,12 @@ public class PasswordController {
                                   Model model,
                                   HttpServletRequest request,
                                   RedirectAttributes redirectAttributes) {
-        String result = service.validatePasswordResetToken(token);
-        if (result != null) {
-            model.addAttribute("errorMessage", "Invalid or expired token.");
-            return PASSWORD_CHANGE_TEMPLATE;
+        try {
+            service.validatePasswordResetToken(token);
+        } catch (InvalidTokenException e) {
+            redirectAttributes.addFlashAttribute("resetPasswordInvalidToken", "fail");
+            return REDIRECT_TO_SIGN_IN_PAGE;
         }
-
         model.addAttribute("token", token);
         return PASSWORD_CHANGE_TEMPLATE;
     }
