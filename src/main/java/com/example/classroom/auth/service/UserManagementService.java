@@ -3,6 +3,7 @@ package com.example.classroom.auth.service;
 import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.exception.EntityNotFoundException;
+import com.example.classroom.exception.UserAlreadyExistException;
 import com.example.classroom.student.StudentDto;
 import com.example.classroom.student.StudentService;
 import com.example.classroom.teacher.TeacherDto;
@@ -33,6 +34,8 @@ public class UserManagementService implements UserDetailsService {
 
     @Transactional
     public User register(RegisterRequest request) {
+        if (emailExists(request.getEmail()))
+            throw new UserAlreadyExistException("There is already an account with email address: " + request.getEmail());
         User userDetails = new User();
         mapper.map(request, userDetails);
         userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -81,6 +84,15 @@ public class UserManagementService implements UserDetailsService {
                         User.class, "User with given ID does not exist in database."));
         removeUniversityAttendeeAccount(byId);
         repository.delete(byId);
+    }
+
+    public void changeUserPassword(final User user, final String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        repository.save(user);
+    }
+
+    private boolean emailExists(final String email) {
+        return repository.findByEmail(email).isPresent();
     }
 
     private void removeUniversityAttendeeAccount(User user) {
