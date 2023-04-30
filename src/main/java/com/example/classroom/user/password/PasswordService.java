@@ -26,7 +26,7 @@ public class PasswordService {
     private final PasswordResetTokenRepository passwordTokenRepository;
     private final MailSenderService mailSenderService;
 
-    boolean resetPassword(HttpServletRequest request, String userEmail) {
+    boolean sendEmailWithResetPasswordInstructions(HttpServletRequest request, String userEmail) {
         try {
             User user = userService.loadUserByUsername(userEmail);
             String token = createAndSavePasswordResetToken(user);
