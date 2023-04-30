@@ -75,8 +75,9 @@ public class PasswordService {
         return "valid";
     }
 
-    Optional<User> getUserByPasswordResetToken(final String token) {
-        return Optional.ofNullable(getPasswordResetToken(token).getUser());
+    User getUserByPasswordResetToken(final String token) {
+        return Optional.ofNullable(getPasswordResetToken(token).getUser())
+                .orElseThrow(() -> new InvalidTokenException("Invalid token: " + token));
     }
 
     private String getPasswordChangeLink(final HttpServletRequest request, final String token) {
@@ -98,18 +99,16 @@ public class PasswordService {
     }
 
     void resetPassword(final String token, final String newPassword) {
-        User user = getUserByPasswordResetToken(token)
-                .orElseThrow(() -> new InvalidTokenException("Invalid token: " + token));
+        User user = getUserByPasswordResetToken(token);
         userService.resetUserPassword(user, newPassword);
-        revokeToken(token);
+        revokeToken(getPasswordResetToken(token));
         // TODO - send confirm reset email
 //        sendConfirmPasswordResetEmail(user);
     }
 
-    void revokeToken(final String token) {
-        PasswordResetToken passwordResetToken = getPasswordResetToken(token);
-        passwordResetToken.setRevoked();
-        passwordTokenRepository.save(passwordResetToken);
+    void revokeToken(final PasswordResetToken token) {
+        token.setRevoked();
+        passwordTokenRepository.save(token);
     }
 
     private void sendConfirmPasswordResetEmail(final User user) {
