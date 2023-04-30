@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
@@ -20,7 +21,7 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
             """)
     List<Token> findAllValidTokenByUser(Long id);
 
-    PasswordResetToken findByUser(User user);
+    Optional<PasswordResetToken> findByUser(User user);
 
     Stream<PasswordResetToken> findAllByExpiryDateLessThan(Date now);
 
@@ -30,5 +31,5 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
     @Query("delete from PasswordResetToken t where t.expiryDate <= ?1")
     void deleteAllExpiredSince(Date now);
 
-    PasswordResetToken findByToken(String token);
+    Optional<PasswordResetToken> findByToken(String token);
 }

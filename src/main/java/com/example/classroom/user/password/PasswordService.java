@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -63,30 +62,21 @@ public class PasswordService {
     }
 
     private String createAndSavePasswordResetToken(final User user) {
-        final PasswordResetToken myToken = PasswordResetToken.builder()
-                .user(user)
-                .token(UUID.randomUUID().toString())
-                .build();
+        final PasswordResetToken myToken = new PasswordResetToken(
+                user,
+                UUID.randomUUID().toString()
+        );
         return passwordTokenRepository.save(myToken).getToken();
     }
 
-    String validatePasswordResetToken(final String token) {
+    String validatePasswordResetToken(final String token) throws InvalidTokenException {
         final PasswordResetToken passToken = getPasswordResetToken(token);
-        return !isTokenFound(passToken) ? "invalidToken"
-                : isTokenExpired(passToken) ? "expired"
-                : null;
-    }
-
-    private boolean isTokenFound(final PasswordResetToken passToken) {
-        return passToken != null;
-    }
-
-    private boolean isTokenExpired(final PasswordResetToken passToken) {
-        return passToken.getExpiryDate().isBefore(LocalDate.now());
+        if (passToken.isExpired()) throw new InvalidTokenException("Token expired: " + token);
+        return "valid";
     }
 
     Optional<User> getUserByPasswordResetToken(final String token) {
-        return Optional.ofNullable(passwordTokenRepository.findByToken(token).getUser());
+        return Optional.ofNullable(getPasswordResetToken(token).getUser());
     }
 
     private String getPasswordChangeLink(final HttpServletRequest request, final String token) {
@@ -98,11 +88,13 @@ public class PasswordService {
     }
 
     private PasswordResetToken getPasswordResetToken(final String token) {
-        return passwordTokenRepository.findByToken(token);
+        return passwordTokenRepository.findByToken(token)
+                .orElseThrow(() -> new InvalidTokenException("Invalid token: " + token));
     }
 
     private PasswordResetToken getPasswordResetToken(final User user) {
-        return passwordTokenRepository.findByUser(user);
+        return passwordTokenRepository.findByUser(user)
+                .orElseThrow(() -> new InvalidTokenException("No tokens for user with email: " + user.getEmail()));
     }
 
     void resetPassword(final String token, final String newPassword) {
