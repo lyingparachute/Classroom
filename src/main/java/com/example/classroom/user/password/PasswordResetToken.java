@@ -51,6 +51,10 @@ public class PasswordResetToken {
         return LocalDateTime.now().isAfter(expiryDate);
     }
 
+    public void setRevoked() {
+        this.revoked = true;
+    }
+
     @Override
     public String toString() {
         return "Token [String=" + token + "]" + "[Expires" + expiryDate + "]";
