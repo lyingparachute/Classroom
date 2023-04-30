@@ -29,10 +29,11 @@ public class PasswordService {
     private final PasswordResetTokenRepository passwordTokenRepository;
     private final MailSenderService mailSenderService;
 
-    boolean sendEmailWithResetPasswordInstructions(HttpServletRequest request, String userEmail) {
+    boolean sendEmailWithResetPasswordInstructions(final HttpServletRequest request,
+                                                   final String userEmail) {
         try {
-            User user = userService.loadUserByUsername(userEmail);
-            String token = createAndSavePasswordResetToken(user);
+            final User user = userService.loadUserByUsername(userEmail);
+            final String token = createAndSavePasswordResetToken(user);
             sendPasswordResetEmail(request, user, token);
             return true;
         } catch (UsernameNotFoundException e) {
@@ -40,7 +41,9 @@ public class PasswordService {
         }
     }
 
-    private void sendPasswordResetEmail(HttpServletRequest request, User user, String token) {
+    private void sendPasswordResetEmail(final HttpServletRequest request,
+                                        final User user,
+                                        final String token) {
         mailSenderService.sendEmail(
                 user.getEmail(),
                 PASSWORD_RESET_EMAIL_SUBJECT,
@@ -49,7 +52,9 @@ public class PasswordService {
         );
     }
 
-    private Map<String, Object> createTemplateAttributes(HttpServletRequest request, User user, String token) {
+    private Map<String, Object> createTemplateAttributes(final HttpServletRequest request,
+                                                         final User user,
+                                                         final String token) {
         return ofEntries(
                 entry("firstName", user.getFirstName()),
                 entry("resetLink", getPasswordChangeLink(request, token)),
@@ -57,26 +62,26 @@ public class PasswordService {
         );
     }
 
-    private String createAndSavePasswordResetToken(User user) {
-        PasswordResetToken myToken = PasswordResetToken.builder()
+    private String createAndSavePasswordResetToken(final User user) {
+        final PasswordResetToken myToken = PasswordResetToken.builder()
                 .user(user)
                 .token(UUID.randomUUID().toString())
                 .build();
         return passwordTokenRepository.save(myToken).getToken();
     }
 
-    String validatePasswordResetToken(String token) {
+    String validatePasswordResetToken(final String token) {
         final PasswordResetToken passToken = getPasswordResetToken(token);
         return !isTokenFound(passToken) ? "invalidToken"
                 : isTokenExpired(passToken) ? "expired"
                 : null;
     }
 
-    private boolean isTokenFound(PasswordResetToken passToken) {
+    private boolean isTokenFound(final PasswordResetToken passToken) {
         return passToken != null;
     }
 
-    private boolean isTokenExpired(PasswordResetToken passToken) {
+    private boolean isTokenExpired(final PasswordResetToken passToken) {
         return passToken.getExpiryDate().isBefore(LocalDate.now());
     }
 
@@ -84,30 +89,30 @@ public class PasswordService {
         return Optional.ofNullable(passwordTokenRepository.findByToken(token).getUser());
     }
 
-    private String getPasswordChangeLink(HttpServletRequest request, String token) {
+    private String getPasswordChangeLink(final HttpServletRequest request, final String token) {
         return getAppUrl(request) + "/password/change?token=" + token;
     }
 
-    private String getAppUrl(HttpServletRequest request) {
+    private String getAppUrl(final HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 
-    private PasswordResetToken getPasswordResetToken(String token) {
+    private PasswordResetToken getPasswordResetToken(final String token) {
         return passwordTokenRepository.findByToken(token);
     }
 
-    private PasswordResetToken getPasswordResetToken(User user) {
+    private PasswordResetToken getPasswordResetToken(final User user) {
         return passwordTokenRepository.findByUser(user);
     }
 
-    void resetPassword(String token, String password) {
+    void resetPassword(final String token, final String password) {
         User user = getUserByPasswordResetToken(token)
                 .orElseThrow(() -> new InvalidTokenException("Invalid token: " + token));
         userService.changeUserPassword(user, password);
         sendConfirmPasswordResetEmail(user);
     }
 
-    private void sendConfirmPasswordResetEmail(User user) {
+    private void sendConfirmPasswordResetEmail(final User user) {
         mailSenderService.sendEmail(
                 user.getEmail(),
                 PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT,
