@@ -29,7 +29,7 @@ public class SecurityConfig {
     private static final String SIGN_IN_API = "/api/sign-in";
     private static final String SIGN_OUT_API = "/api/sign-out";
     private static final String API_AUTH_ENDPOINTS = "/api/auth/**";
-    private static final String PASSWORD_RESET_PAGE = "/password-reset";
+    private static final String PASSWORD_CHANGE_ENDPOINTS = "/password/**";
     private static final String PASSWORD_RESET_ENDPOINT = "/password/reset";
 
     @Bean
@@ -38,10 +38,10 @@ public class SecurityConfig {
                 //TODO - enable csrf
                 .csrf().disable()
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(HttpMethod.POST, API_AUTH_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.POST, PASSWORD_RESET_ENDPOINT).permitAll()
-                        .requestMatchers(HOME_PAGE, "/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
-                                SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, PASSWORD_RESET_PAGE).permitAll()
+                                .requestMatchers(HttpMethod.POST, API_AUTH_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.POST, PASSWORD_RESET_ENDPOINT).permitAll()
+                                .requestMatchers(HOME_PAGE, "/css/**", "/js/**", "/assets/**", "/img/home/**", "/webjars/**",
+                                        SIGN_IN_PAGE, SIGN_IN_API, SIGN_UP_PAGE, PASSWORD_CHANGE_ENDPOINTS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
