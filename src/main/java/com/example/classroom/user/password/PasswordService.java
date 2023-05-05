@@ -71,7 +71,7 @@ public class PasswordService {
 
     String validatePasswordResetToken(final String token) throws InvalidTokenException {
         final PasswordResetToken passToken = getPasswordResetToken(token);
-        if (!passToken.isTokenValid()) throw new InvalidTokenException("Token expired: " + token);
+        if (!passToken.isTokenValid()) throw new InvalidTokenException("Token expired or revoked: " + token);
         return "valid";
     }
 
@@ -101,7 +101,9 @@ public class PasswordService {
     void resetPassword(final String token, final String newPassword) {
         User user = getUserByPasswordResetToken(token);
         userService.resetUserPassword(user, newPassword);
-        revokeToken(getPasswordResetToken(token));
+        PasswordResetToken passwordResetToken = getPasswordResetToken(token);
+        revokeToken(passwordResetToken);
+
         // TODO - send confirm reset email
 //        sendConfirmPasswordResetEmail(user);
     }
