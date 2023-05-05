@@ -64,7 +64,7 @@ public class PasswordController {
         // TODO - check if reset password works correctly
         service.resetPassword(token, password);
         // TODO - Add success password reset alert
-        redirectAttributes.addFlashAttribute("successMessage", "Your password has been reset.");
+        redirectAttributes.addFlashAttribute("resetPasswordSuccess", "Your password has been reset.");
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
 }
