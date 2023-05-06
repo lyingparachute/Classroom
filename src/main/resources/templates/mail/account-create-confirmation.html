@@ -1,0 +1,76 @@
+password-reset.html<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{mail/elements :: email-head}"></head>
+
+<body>
+<table class="email-wrapper" role="presentation">
+    <tr>
+        <td>
+            <table class="email-content" role="presentation">
+                <tr th:replace="~{mail/elements :: email-header}"></tr>
+                <!-- Email Body -->
+                <tr>
+                    <td class="email-body">
+                        <table class="email-body_inner" role="presentation">
+                            <!-- Body content -->
+                            <tr>
+                                <td class="content-cell">
+                                    <div>
+                                        <h1>
+                                            <span th:text="#{mail.password.reset.body.welcome}"></span>
+                                            <span th:text="${firstName + ','}"></span>
+                                        </h1>
+                                        <p>
+                                            <span th:text="#{mail.password.reset.body.info}"></span>
+                                            <strong th:text="#{mail.password.reset.body.link.duration}"></strong>
+                                        </p>
+                                        <!-- Action -->
+                                        <table class="body-action" role="presentation">
+                                            <tr>
+                                                <td align="center">
+                                                    <table role="presentation">
+                                                        <tr>
+                                                            <td>
+                                                                <a th:href="${resetLink}"
+                                                                   class="button button--red"
+                                                                   target="_blank"
+                                                                   th:text="#{mail.password.reset.body.button}"></a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <p>
+                                            <span th:text="#{mail.password.reset.body.noRequest1}"></span>
+                                            <a th:href="@{mailto:support@classroom.com}"
+                                               th:text="#{mail.password.reset.body.noRequest2}"></a>
+                                            <span th:text="#{mail.password.reset.body.noRequest3}"></span>
+                                        </p>
+                                        <p>
+                                            <span th:text="#{mail.password.reset.body.thanks}"></span>
+                                            <br>
+                                            <span th:text="#{mail.password.reset.body.team}"></span>
+                                        </p>
+                                        <!-- Sub copy -->
+                                        <table class="body-sub" role="presentation">
+                                            <tr>
+                                                <td>
+                                                    <p class="sub" th:text="#{mail.password.reset.body.sub}"></p>
+                                                    <p class="sub" th:text="${resetLink}"></p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr th:replace="~{mail/elements :: email-footer}"></tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
