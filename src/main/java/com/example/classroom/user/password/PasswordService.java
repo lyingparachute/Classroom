@@ -122,9 +122,13 @@ public class PasswordService {
                 PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION,
                 ofEntries(
                         entry("firstName", user.getFirstName()),
-                        entry("signinLink", appUrl + "/sign-in"),
+                        entry("signinLink", getSignInLink(appUrl)),
                         entry("websiteLink", appUrl)
                 )
         );
+    }
+
+    private String getSignInLink(String appUrl) {
+        return appUrl + "/sign-in";
     }
 }
