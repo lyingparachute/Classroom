@@ -22,7 +22,7 @@ public class PasswordService {
 
     private static final String PASSWORD_RESET_TEMPLATE_LOCATION = "mail/password-reset.html";
     private static final String PASSWORD_RESET_EMAIL_SUBJECT = "Password Reset";
-    private static final String PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION = "mail/password-reset-confirm.html";
+    private static final String PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION = "mail/password-reset-confirmation.html";
     private static final String PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT = "Password Reset Confirmation";
     private final UserManagementService userService;
     private final PasswordResetTokenRepository passwordTokenRepository;
@@ -98,14 +98,14 @@ public class PasswordService {
                 .orElseThrow(() -> new InvalidTokenException("No tokens for user with email: " + user.getEmail()));
     }
 
-    void resetPassword(final String token, final String newPassword) {
+    void resetPassword(final HttpServletRequest request,
+                       final String token,
+                       final String newPassword) {
         User user = getUserByPasswordResetToken(token);
         userService.resetUserPassword(user, newPassword);
         PasswordResetToken passwordResetToken = getPasswordResetToken(token);
         revokeToken(passwordResetToken);
-
-        // TODO - send confirm reset email
-//        sendConfirmPasswordResetEmail(user);
+        sendPasswordResetConfirmationEmail(request, user);
     }
 
     void revokeToken(final PasswordResetToken token) {
@@ -113,13 +113,17 @@ public class PasswordService {
         passwordTokenRepository.save(token);
     }
 
-    private void sendConfirmPasswordResetEmail(final User user) {
+    private void sendPasswordResetConfirmationEmail(final HttpServletRequest request,
+                                                    final User user) {
+        String appUrl = getAppUrl(request);
         mailSenderService.sendEmail(
                 user.getEmail(),
                 PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT,
                 PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION,
                 ofEntries(
-                        entry("firstName", user.getFirstName())
+                        entry("firstName", user.getFirstName()),
+                        entry("signinLink", appUrl + "/sign-in"),
+                        entry("websiteLink", appUrl)
                 )
         );
     }

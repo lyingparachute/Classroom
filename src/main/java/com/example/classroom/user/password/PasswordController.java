@@ -50,20 +50,10 @@ public class PasswordController {
     @PostMapping("/update")
     String changePassword(
             @Valid @RequestParam("token") final String token,
-            // TODO - change parameters
             @Valid @RequestParam("password") final String password,
-            Model model,
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
-        // TODO - check if validation is needed
-//        String result = service.validatePasswordResetToken(token);
-//        if (result != null) {
-//            model.addAttribute("errorMessage", "Invalid or expired token.");
-//            return PASSWORD_CHANGE_TEMPLATE;
-//        }
-        // TODO - check if reset password works correctly
-        service.resetPassword(token, password);
-        // TODO - Add success password reset alert
+        service.resetPassword(request, token, password);
         redirectAttributes.addFlashAttribute("resetPasswordSuccess", "Your password has been reset.");
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
