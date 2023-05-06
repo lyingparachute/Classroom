@@ -1,7 +1,6 @@
 package com.example.classroom.mail_sender;
 
 import com.example.classroom.exception.EmailException;
-import com.example.classroom.user.register.RegisterRequest;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,9 +16,6 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
-
-import static java.util.Map.entry;
-import static java.util.Map.ofEntries;
 
 @Service
 @Slf4j
@@ -64,22 +60,6 @@ public class MailSenderService {
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
         javaMailSender.send(message);
-    }
-
-    public void sendRegistrationConfirmationEmail(HttpServletRequest request, RegisterRequest user) {
-        sendEmail(user.getEmail(),
-                "Welcome to Classroom",
-                "mail/account-create-confirmation.html",
-                ofEntries(
-                        entry("firstName", user.getFirstName()),
-                        entry("confirmLink", getConfirmationLink(request, user.getEmail())),
-                        entry("websiteLink", getAppUrl(request))
-                )
-        );
-    }
-
-    private String getConfirmationLink(HttpServletRequest request, String userEmail) {
-        return getAppUrl(request) + "/verify/" + userEmail;
     }
 
     public static String getAppUrl(final HttpServletRequest request) {
