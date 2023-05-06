@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.example.classroom.mail_sender.MailSenderService.getAppUrl;
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
 
@@ -82,10 +83,6 @@ public class PasswordService {
 
     private String getPasswordChangeLink(final HttpServletRequest request, final String token) {
         return getAppUrl(request) + "/password/change?token=" + token;
-    }
-
-    private String getAppUrl(final HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 
     private PasswordResetToken getPasswordResetToken(final String token) {
