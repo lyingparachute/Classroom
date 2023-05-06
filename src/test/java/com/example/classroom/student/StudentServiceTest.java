@@ -1,6 +1,7 @@
 package com.example.classroom.student;
 
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.test.util.UnitTestsInitData;
 import org.assertj.core.groups.Tuple;
@@ -313,9 +314,15 @@ class StudentServiceTest {
             Student expectedStudent2 = initData.createStudentTwo(fieldOfStudy2, List.of(teacher3));
             Student expectedStudent3 = initData.createStudentThree(fieldOfStudy3, List.of(teacher1, teacher2, teacher3));
             Page<Student> students = new PageImpl<>(List.of(expectedStudent3));
+            PageableRequest pageableRequest = PageableRequest.builder()
+                    .pageNumber(pageNo)
+                    .pageSize(pageSize)
+                    .sortDir(sortDirection)
+                    .sortField(sortField)
+                    .build();
             //when
             when(repository.findAll(any(Pageable.class))).thenReturn(students);
-            Page<StudentDto> actual = service.fetchAllPaginated(pageNo, pageSize, sortField, sortDirection);
+            Page<StudentDto> actual = service.fetchAllPaginated(pageableRequest);
             //then
             verify(repository).findAll(any(Pageable.class));
             List<StudentDto> actualContent = actual.getContent();
@@ -520,10 +527,17 @@ class StudentServiceTest {
             Student expectedStudent2 = initData.createStudentTwo(fieldOfStudy2, List.of(teacher3));
             Student expectedStudent3 = initData.createStudentThree(fieldOfStudy3, List.of(teacher1, teacher2, teacher3));
             Page<Student> students = new PageImpl<>(List.of(expectedStudent3));
+            PageableRequest pageableRequest = PageableRequest.builder()
+                    .pageNumber(pageNo)
+                    .pageSize(pageSize)
+                    .sortDir(sortDirection)
+                    .sortField(sortField)
+                    .build();
             //when
             when(repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(anyString(), any(Pageable.class)))
                     .thenReturn(students);
-            Page<StudentDto> actual = service.findByFirstOrLastNamePaginated(pageNo, pageSize, sortField, sortDirection, name);
+
+            Page<StudentDto> actual = service.findByFirstOrLastNamePaginated(pageableRequest);
             //then
             verify(repository).findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(anyString(), any(Pageable.class));
             List<StudentDto> content = actual.getContent();

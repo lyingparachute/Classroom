@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum UserRole {
-    ROLE_STUDENT("STUDENT"),
-    ROLE_TEACHER("TEACHER"),
-    ROLE_DEAN("DEAN"),
-    ROLE_ADMIN("ADMIN");
+    ROLE_STUDENT("STUDENT", "You are a Student"),
+    ROLE_TEACHER("TEACHER", "You are a Professor"),
+    ROLE_DEAN("DEAN", "You are a Professor and Dean"),
+    ROLE_ADMIN("ADMIN", "ADMIN ACCOUNT");
 
     public final String name;
-
+    public final String description;
 }

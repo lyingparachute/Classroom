@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
 <!-- ======= Form for Teacher ======= -->
 <div th:fragment="teacher-form">
     <div class="mb-4" th:classappend="${#fields.hasErrors('firstName')} ? mb-5">
@@ -176,8 +183,8 @@
             </div>
         </th:block>
     </div>
-    <hr>
-    <div class="mb-4">
+    <hr sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')">
+    <div class="mb-4" sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_DEAN', 'ROLE_ADMIN')">
         <h4 th:text="#{teacher.studentList}"></h4>
         <span th:if="${teacher.students.size() == 0}" th:text="#{teacher.no.students}"></span>
         <th:block th:unless="${teacher.students.size() == 0}" th:each="fieldOpt, count : ${teacher.students}">
@@ -193,3 +200,4 @@
         </th:block>
     </div>
 </div>
+</body>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <header th:replace="~{fragments/header :: header}"></header>
 </head>
@@ -14,7 +14,7 @@
                 <div class="card-header py-4 title-bar">
                     <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
                     <div class="page-title"
-                         th:text="#{user.view.header}">
+                         th:text="#{user.profile.header}">
                     </div>
                 </div>
                 <div class="card-body">
@@ -26,39 +26,65 @@
                                          alt="avatar"
                                          class="rounded-circle img-fluid" style="width: 150px;">
                                     <h5 class="my-3" th:text="${user.firstName + ' ' + user.lastName}"></h5>
-                                    <p class="text-muted mb-1" th:text="${user.role}"></p>
                                     <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
-                                    <div class="d-flex justify-content-center mb-2">
-                                        <a type="button" class="btn btn-outline-primary ms-1"
+                                    <div class="row justify-content-center mb-2">
+                                        <a class="col-6 btn btn-outline-primary ms-1"
                                            th:href="@{/dashboard/profile/edit}">
                                             <i class="fas fa-pen mr-1"></i>
                                             <span th:text="#{button.profile.edit}"></span>
                                         </a>
                                     </div>
+                                    <div class="row justify-content-center mb-2">
+                                        <a class="col-6 btn btn-outline-danger delBtn"
+                                           data-bs-toggle="modal" data-bs-target="#delete-account-modal">
+                                            <i class="fa fa-trash-can fa-lg mr-1"></i>
+                                            <span th:text="#{button.delete.account}"></span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card mb-4 mb-lg-0">
+                            <div class="card mb-4 mb-lg-0"
+                                 sec:authorize="hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_DEAN')">
                                 <div class="card-body p-0">
+                                    <h5 class="my-3 text-center" th:text="#{user.profile.contacts}"></h5>
                                     <ul class="list-group list-group-flush rounded-3">
                                         <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <i class="fas fa-globe fa-lg text-warning"></i>
-                                            <p class="mb-0">https://mdbootstrap.com</p>
+                                            <a class="mb-0 text-body"
+                                               th:href="${'mailto:' + user.email}">
+                                                <i class="fas fa-envelope fa-lg" style="color: #acafbf;"></i>
+                                            </a>
+                                            <a class="mb-0 text-body"
+                                               th:href="${'mailto:' + user.email}"
+                                               th:text="#{user.profile.email}">
+                                            </a>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <i class="fab fa-github fa-lg" style="color: #333333;"></i>
-                                            <p class="mb-0">mdbootstrap</p>
+                                            <a class="mb-0 text-body" th:href="@{https://www.igorbykowski.pl/}"
+                                               target="_blank">
+                                                <i class="fas fa-globe fa-lg text-warning"></i>
+                                            </a>
+                                            <a class="mb-0 text-body"
+                                               th:href="@{https://www.igorbykowski.pl/}" target="_blank"
+                                               th:text="#{user.profile.website}">
+                                            </a>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
-                                            <p class="mb-0">@mdbootstrap</p>
+                                            <a class="mb-0 text-body" th:href="@{https://github.com/lyingparachute}"
+                                               target="_blank">
+                                                <i class="fab fa-github fa-lg" style="color: #333333;"></i>
+                                            </a>
+                                            <a class="mb-0 text-body"
+                                               th:href="@{https://github.com/lyingparachute}"
+                                               th:text="#{user.profile.github}" target="_blank"></a>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
-                                            <p class="mb-0">mdbootstrap</p>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
-                                            <p class="mb-0">mdbootstrap</p>
+                                            <a class="mb-0 text-body"
+                                               th:href="@{https://www.linkedin.com/in/igor-bykowski/}" target="_blank">
+                                                <i class="fab fa-linkedin fa-lg" style="color: #0e76a8;"></i>
+                                            </a>
+                                            <a class="mb-0 text-body"
+                                               th:href="@{https://www.linkedin.com/in/igor-bykowski/}"
+                                               th:text="#{user.profile.linkedIn}" target="_blank"></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -67,7 +93,7 @@
                         <div class="col-lg-8">
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <div class="row">
+                                    <div class="row mb-2">
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.full.name}"></p>
                                         </div>
@@ -76,24 +102,42 @@
                                                th:text="${user.firstName + ' ' + user.lastName}"></p>
                                         </div>
                                     </div>
+
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.email}"></p>
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-7">
                                             <p class="text-muted mb-0" th:text="${user.email}"></p>
                                         </div>
+                                        <div class="col-sm-2">
+                                            <a class="btn btn-outline-primary"
+                                               th:href="@{/dashboard/profile/email/edit}">
+                                                <i class="fas fa-pen mr-1"></i>
+                                                <span th:text="#{button.edit}"></span>
+                                            </a>
+                                        </div>
                                     </div>
+
                                     <hr>
                                     <div class="row">
+
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.password}"></p>
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-7">
                                             <p class="text-muted mb-0" th:text="#{user.password.value}"></p>
                                         </div>
+                                        <div class="col-sm-2">
+                                            <a class="btn btn-outline-primary"
+                                               th:href="@{/dashboard/profile/password/edit}">
+                                                <i class="fas fa-pen mr-1"></i>
+                                                <span th:text="#{button.edit}"></span>
+                                            </a>
+                                        </div>
                                     </div>
+
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-3">
@@ -101,103 +145,138 @@
                                         </div>
                                         <div class="col-sm-9">
                                             <p class="text-muted mb-0"
-                                               th:text="${user.role.toString().toLowerCase()}"></p>
+                                               th:text="${user.role.description}"></p>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0" th:text="#{user.age}"></p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <p class="text-muted mb-0"
-                                               th:text="${user.attendee.age}"></p>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0" th:text="#{user.phone}"></p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <p class="text-muted mb-0">(098) 765-4321</p>
+
+                                    <div sec:authorize="hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_DEAN')">
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0" th:text="#{user.age}"></p>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <p class="text-muted mb-0"
+                                                   th:text="${user.attendee.age}"></p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0" th:text="#{user.address}"></p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row" th:if="${user.teacher}">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0" th:text="#{user.department}"></p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <p class="text-muted mb-0" th:if="${user.attendee.department == null}">
-                                                <em th:text="#{input.undefined}"></em>
-                                            </p>
-                                            <p class="text-muted mb-0" th:unless="${user.attendee.department == null}"
-                                               th:text="${user.attendee.department}"></p>
+
+                                    <div sec:authorize="hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_DEAN')">
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0" th:text="#{user.phone}"></p>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <p class="text-muted mb-0">(098) 765-4321</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row" th:if="${user.student}">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0" th:text="#{user.fieldOfStudy}"></p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <a class="text-muted mb-0" th:unless="${user.attendee.fieldOfStudy == null}"
-                                               th:href="@{/dashboard/fields-of-study/{id}(id=${user.attendee.fieldOfStudy.id})}">
-                                                <span th:text="${user.attendee.fieldOfStudy.name}"></span>
-                                                <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
-                                            </a>
-                                            <p class="text-muted mb-0" th:if="${user.attendee.fieldOfStudy == null}"
-                                               th:text="#{student.no.fieldOfStudy}">
-                                            </p>
+
+                                    <div sec:authorize="hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_DEAN')">
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0" th:text="#{user.address}"></p>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                                            </div>
                                         </div>
                                     </div>
+
+                                    <div sec:authorize="hasRole('ROLE_DEAN')">
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0" th:text="#{user.department}"></p>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <a class="text-muted mb-0"
+                                                   th:href="@{/dashboard/departments/{id}(id=${user.attendee.department.id})}">
+                                                    <span th:text="${user.attendee.department.name}"></span>
+                                                    <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div sec:authorize="hasRole('ROLE_STUDENT')">
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0" th:text="#{user.fieldOfStudy}"></p>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <a class="text-muted mb-0"
+                                                   th:unless="${user.attendee.fieldOfStudy == null}"
+                                                   th:href="@{/dashboard/fields-of-study/{id}(id=${user.attendee.fieldOfStudy.id})}">
+                                                    <span th:text="${user.attendee.fieldOfStudy.name}"></span>
+                                                    <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
+                                                </a>
+                                                <p class="text-muted mb-0"
+                                                   th:if="${user.attendee.fieldOfStudy == null}"
+                                                   th:text="#{student.no.fieldOfStudy}">
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0" th:text="#{user.department}"></p>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <a class="text-muted mb-0"
+                                                   th:unless="${user.attendee.fieldOfStudy == null}"
+                                                   th:href="@{/dashboard/departments/{id}(id=${user.attendee.fieldOfStudy.department.id})}">
+                                                    <span th:text="${user.attendee.fieldOfStudy.department.name}"></span>
+                                                    <i class="fas fa-regular fa-up-right-from-square ml-1"></i>
+                                                </a>
+                                                <p class="text-muted mb-0"
+                                                   th:if="${user.attendee.fieldOfStudy == null}"
+                                                   th:text="#{student.no.department}">
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div sec:authorize="hasRole('ROLE_STUDENT')" class="col-md-6">
                                     <div class="card mb-4">
-                                        <div th:if="${user.student}">
-                                            <div th:unless="${user.attendee.fieldOfStudy == null}">
-                                                <div class="bg-image hover-overlay ripple"
-                                                     data-mdb-ripple-color="light">
-                                                    <img class="field-of-study-img"
-                                                         th:alt="${user.attendee.fieldOfStudy.name}"
-                                                         th:unless="${user.attendee.fieldOfStudy.image} == null"
-                                                         th:src="@{${imagesPath} + '/' + ${user.attendee.fieldOfStudy.image}}"/>
-                                                    <img class="field-of-study-img"
-                                                         th:alt="${user.attendee.fieldOfStudy.name}"
-                                                         th:src="@{${imagesPath} + '/' + 'default.jpg'}"
-                                                         th:if="${user.attendee.fieldOfStudy.image} == null"/>
-                                                    <a th:href="@{/dashboard/fields-of-study/{id}(id=${user.attendee.fieldOfStudy.id})}">
-                                                        <div class="mask"
-                                                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                                                    </a>
-                                                </div>
-                                                <div class="card-body">
-                                                    <h5 class="card-title"
-                                                        th:text="${user.attendee.fieldOfStudy.name}"></h5>
-                                                    <span class="text-muted"
-                                                          th:text="${user.attendee.fieldOfStudy.mode.value}"></span>
-                                                    <p class="card-text"
-                                                       th:text="${user.attendee.fieldOfStudy.description}"></p>
-                                                </div>
-                                                <div class="card-footer text-center">
-                                                    <a class="btn btn-primary"
-                                                       th:href="@{/dashboard/fields-of-study/{id}(id=${user.attendee.fieldOfStudy.id})}">
-                                                        <span th:text="#{button.view.fielOfStudy}"></span>
-                                                        <i class="fas fa-regular fa-up-right-from-square"></i>
-                                                    </a>
-                                                </div>
+                                        <div th:unless="${user.attendee.fieldOfStudy == null}">
+                                            <div class="bg-image hover-overlay ripple"
+                                                 data-mdb-ripple-color="light">
+                                                <img class="field-of-study-img"
+                                                     th:alt="${user.attendee.fieldOfStudy.name}"
+                                                     th:unless="${user.attendee.fieldOfStudy.image} == null"
+                                                     th:src="@{${imagesPath} + '/' + ${user.attendee.fieldOfStudy.image}}"/>
+                                                <img class="field-of-study-img"
+                                                     th:alt="${user.attendee.fieldOfStudy.name}"
+                                                     th:src="@{${imagesPath} + '/' + 'default.jpg'}"
+                                                     th:if="${user.attendee.fieldOfStudy.image} == null"/>
+                                                <a th:href="@{/dashboard/fields-of-study/{id}(id=${user.attendee.fieldOfStudy.id})}">
+                                                    <div class="mask"
+                                                         style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                                </a>
+                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title"
+                                                    th:text="${user.attendee.fieldOfStudy.name}"></h5>
+                                                <span class="text-muted"
+                                                      th:text="${user.attendee.fieldOfStudy.mode.value}"></span>
+                                                <p class="card-text"
+                                                   th:text="${user.attendee.fieldOfStudy.description}"></p>
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                <a class="btn btn-primary"
+                                                   th:href="@{/dashboard/fields-of-study/{id}(id=${user.attendee.fieldOfStudy.id})}">
+                                                    <span th:text="#{button.view.fielOfStudy}"></span>
+                                                    <i class="fas fa-regular fa-up-right-from-square"></i>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +284,8 @@
                                 <div class="col-md-6">
                                     <div class="card mb-4 mb-md-0">
                                         <div class="card-body">
-                                            <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span>
+                                            <p class="mb-4"><span
+                                                    class="text-primary font-italic me-1">assigment</span>
                                                 Project Status
                                             </p>
                                             <p class="mb-1" style="font-size: .77rem;">Web Design</p>
@@ -247,7 +327,8 @@
                                 <div class="col-md-6">
                                     <div class="card mb-4 mb-md-0">
                                         <div class="card-body">
-                                            <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span>
+                                            <p class="mb-4"><span
+                                                    class="text-primary font-italic me-1">assigment</span>
                                                 Project Status
                                             </p>
                                             <p class="mb-1" style="font-size: .77rem;">Web Design</p>
@@ -286,7 +367,8 @@
                                 <div class="col-md-6">
                                     <div class="card mb-4 mb-md-0">
                                         <div class="card-body">
-                                            <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span>
+                                            <p class="mb-4"><span
+                                                    class="text-primary font-italic me-1">assigment</span>
                                                 Project Status
                                             </p>
                                             <p class="mb-1" style="font-size: .77rem;">Web Design</p>
@@ -330,6 +412,36 @@
         </section>
     </div>
 </main>
+
+<!-- Delete Account Modal -->
+<div th:fragment="delete-account-modal" class="modal fade" id="delete-account-modal" tabindex="-1"
+     aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" th:text="#{delete.account.modal.header}"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" th:aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p th:text="#{delete.account.modal.body}"></p>
+                <p th:text="#{delete.account.modal.body2}"></p>
+            </div>
+            <div class="modal-footer">
+                <div class="col-auto">
+                    <a class="btn btn-secondary" href="" data-bs-dismiss="modal">
+                        <i class="fa fa-times-circle mr-2"></i><span th:text="#{button.cancel}"></span></a>
+                </div>
+                <div class="col-auto">
+                    <a class="btn btn btn-danger btn-block"
+                       th:href="@{/dashboard/profile/delete/{id}(id=${user.id})}">
+                        <i class="fa fa-trash-can fa-lg mr-1"></i>
+                        <span th:text="#{button.delete}"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- JS Scripts -->
 <div th:replace="~{fragments/scripts :: scripts}"></div>

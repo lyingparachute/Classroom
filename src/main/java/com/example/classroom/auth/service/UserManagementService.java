@@ -2,6 +2,8 @@ package com.example.classroom.auth.service;
 
 import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.auth.model.UpdateRequest;
+import com.example.classroom.exception.EntityNotFoundException;
+import com.example.classroom.exception.UserAlreadyExistException;
 import com.example.classroom.student.StudentDto;
 import com.example.classroom.student.StudentService;
 import com.example.classroom.teacher.TeacherDto;
@@ -9,9 +11,12 @@ import com.example.classroom.teacher.TeacherService;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +34,8 @@ public class UserManagementService implements UserDetailsService {
 
     @Transactional
     public User register(RegisterRequest request) {
+        if (emailExists(request.getEmail()))
+            throw new UserAlreadyExistException("There is already an account with email address: " + request.getEmail());
         User userDetails = new User();
         mapper.map(request, userDetails);
         userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -60,7 +67,7 @@ public class UserManagementService implements UserDetailsService {
     }
 
     @Override
-    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+    public User loadUserByUsername(String email) {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " does not exist in database."));
     }
@@ -70,5 +77,38 @@ public class UserManagementService implements UserDetailsService {
         repository.delete(loadUserByUsername(email));
     }
 
+    @Transactional
+    public void removeById(Long id) {
+        User byId = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        User.class, "User with given ID does not exist in database."));
+        removeUniversityAttendeeAccount(byId);
+        repository.delete(byId);
+    }
 
+    public void resetUserPassword(final User user, final String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        repository.save(user);
+    }
+
+    private boolean emailExists(final String email) {
+        return repository.findByEmail(email).isPresent();
+    }
+
+    private void removeUniversityAttendeeAccount(User user) {
+        if (user.getStudent() != null) {
+            studentService.remove(user.getStudent().getId());
+        }
+        if (user.getTeacher() != null) {
+            teacherService.remove(user.getTeacher().getId());
+        }
+    }
+
+    public void invalidateSession(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        SecurityContextHolder.clearContext();
+        if (session != null) {
+            session.invalidate();
+        }
+    }
 }

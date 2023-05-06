@@ -1,8 +1,8 @@
 package com.example.classroom.student;
 
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
-import com.example.classroom.user.User;
 import com.example.classroom.teacher.Teacher;
+import com.example.classroom.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;

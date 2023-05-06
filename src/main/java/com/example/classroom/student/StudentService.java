@@ -1,20 +1,21 @@
 package com.example.classroom.student;
 
+import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.teacher.Teacher;
+import com.example.classroom.user.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static com.example.classroom.pageable.PageableService.isNamePresent;
 
 @Service
 @RequiredArgsConstructor
@@ -41,12 +42,9 @@ public class StudentService {
         return all.stream().map(student -> mapper.map(student, StudentDto.class)).toList();
     }
 
-    Page<StudentDto> fetchAllPaginated(int pageNo,
-                                       int pageSize,
-                                       String sortField,
-                                       String sortDirection) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+    Page<StudentDto> fetchAllPaginated(final PageableRequest request) {
+        Sort sort = getSortOrder(request.sortField(), request.sortDir());
+        Pageable pageable = PageRequest.of(request.pageNumber() - 1, request.pageSize(), sort);
         Page<Student> all = repository.findAll(pageable);
         return all.map(student -> mapper.map(student, StudentDto.class));
     }
@@ -79,19 +77,54 @@ public class StudentService {
         return found.stream().map(s -> mapper.map(s, StudentDto.class)).toList();
     }
 
-    Page<StudentDto> findByFirstOrLastNamePaginated(int pageNo,
-                                                    int pageSize,
-                                                    String sortField,
-                                                    String sortDirection,
-                                                    String searched) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Student> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searched, pageable);
+    Page<StudentDto> findByFirstOrLastNamePaginated(final PageableRequest request) {
+        Sort sort = getSortOrder(request.sortField(), request.sortDir());
+        Pageable pageable = PageRequest.of(request.pageNumber() - 1, request.pageSize(), sort);
+        Page<Student> all = repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(request.name(), pageable);
         return all.map(student -> mapper.map(student, StudentDto.class));
     }
 
+    Page<StudentDto> getAllStudentsFromRequest(final PageableRequest pageable,
+                                               final User user) {
+        if (user.isTeacher())
+            return getFilteredAndSortedStudentsPageFromStudent(user, pageable);
+        if (isNamePresent(pageable.name()))
+            return findByFirstOrLastNamePaginated(pageable);
+        else
+            return fetchAllPaginated(pageable);
+    }
+
+    private Page<StudentDto> getFilteredAndSortedStudentsPageFromStudent(final User user,
+                                                                         final PageableRequest pageableReq) {
+        Sort sort = getSortOrder(pageableReq.sortField(), pageableReq.sortDir());
+        Pageable pageable = PageRequest.of(pageableReq.pageNumber() - 1, pageableReq.pageSize(), sort);
+        List<StudentDto> students = user.getTeacher().getStudents().stream()
+                .filter(student -> filterForFirstOrLastNameContainingString(student, pageableReq.name()))
+                .map(student -> mapper.map(student, StudentDto.class))
+                .toList();
+        List<StudentDto> output = getDisplayedStudents(pageable, students);
+        return new PageImpl<>(output, pageable, students.size());
+    }
+
+    private boolean filterForFirstOrLastNameContainingString(Student student, String searched) {
+        return !isNamePresent(searched) ||
+                (isNamePresent(searched) && firstOrLastNameContainsString(student, searched));
+    }
+
+    private boolean firstOrLastNameContainsString(Student student, String searched) {
+        return student.getFirstName().toLowerCase().contains(searched.toLowerCase()) ||
+                student.getLastName().toLowerCase().contains(searched.toLowerCase());
+    }
+
+    private List<StudentDto> getDisplayedStudents(Pageable pageable, List<StudentDto> students) {
+        return students.stream()
+                .skip(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .toList();
+    }
+
     @Transactional
-    void remove(Long id) {
+    public void remove(Long id) {
         Student student = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
         removeReferencingObjects(student);

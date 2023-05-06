@@ -54,6 +54,12 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Mail Sender -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- Validation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -65,6 +71,13 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>${jakarta.validation.version}</version>
+        </dependency>
+
+        <!-- Password Validation -->
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>${passay.version}</version>
         </dependency>
 
         <!-- Security -->
@@ -106,13 +119,6 @@
             <artifactId>spring-security-test</artifactId>
             <version>${spring-security.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- Password Validator -->
-        <dependency>
-            <groupId>org.passay</groupId>
-            <artifactId>passay</artifactId>
-            <version>${passay.version}</version>
         </dependency>
 
         <!-- JWT -->

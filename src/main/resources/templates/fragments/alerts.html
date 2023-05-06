@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Alert</title>
+</head>
+<body>
+
+<section th:fragment="create-success" th:if="${createSuccess}">
+    <!-- Create Account Alert Section -->
+    <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+        <i class="fas fa-check-circle"></i>
+        <div class="mx-1">
+            <strong th:text="#{signup.create.success.alert.msg1}"></strong>
+            <span th:text="#{signup.create.success.alert.msg2}"></span>
+        </div>
+        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    </div>
+    <!-- End Create Account Alert Section -->
+</section>
+
+<section th:fragment="reset-password" th:if="${resetPassword}">
+    <!--Reset Password Alert Section -->
+    <div th:if="${resetPasswordResult}" role="alert"
+         class="alert alert-success alert-dismissible d-flex align-items-center">
+        <i class="fas fa-check-circle mr-2"></i>
+        <div>
+            <strong th:text="#{msg.success}">&nbsp;</strong>
+            <span th:text="#{reset.password.alert.success.msg1}"></span>
+        </div>
+        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    </div>
+    <div th:unless="${resetPasswordResult}" role="alert"
+         class="alert alert-danger alert-dismissible d-flex align-items-center">
+        <i class="fas fa-xmark-circle mr-2" role="img" aria-label="Error:"></i>
+        <div>
+            <strong th:text="#{msg.error}">&nbsp;</strong>
+            <span th:text="#{reset.password.alert.error.msg1}">&nbsp;</span>
+            <strong th:text="${resetPassword}">&nbsp;</strong>
+            <span th:text="#{reset.password.alert.error.msg2}"></span>
+        </div>
+        <button class="btn-close" data-bs-dismiss="alert" type="button"
+                aria-label="Close"></button>
+    </div>
+    <!-- End Reset Password Alert Section -->
+</section>
+
+<section th:fragment="reset-password-invalid-token" th:if="${resetPasswordInvalidToken}">
+    <!-- Invalid Reset Password Token Alert Section -->
+    <div role="alert"
+         class="alert alert-danger alert-dismissible d-flex align-items-center">
+        <i class="fas fa-xmark-circle mr-2" role="img" aria-label="Error:"></i>
+        <div>
+            <strong th:text="#{msg.error}">&nbsp;</strong>
+            <span th:text="#{reset.password.invalid.token.error.msg1}"></span>
+            <strong th:text="#{reset.password.invalid.token.error.msg2}"></strong>
+            <span th:text="#{reset.password.invalid.token.error.msg3}"></span>
+            <strong th:text="#{reset.password.invalid.token.error.msg4}"></strong>
+            <br>
+            <span th:text="#{reset.password.invalid.token.error.msg6}"></span>
+        </div>
+        <button class="btn-close" data-bs-dismiss="alert" type="button"
+                aria-label="Close"></button>
+    </div>
+    <!-- End Reset Password Alert Section -->
+</section>
+
+<section th:fragment="reset-password-success" th:if="${resetPasswordSuccess}">
+    <!--Reset Password Success Alert Section -->
+    <div role="alert" class="alert alert-success alert-dismissible d-flex align-items-center">
+        <i class="fas fa-check-circle mr-2"></i>
+        <div>
+            <strong th:text="#{msg.success}">&nbsp;</strong>
+            <span th:text="#{reset.password.success.msg1}"></span>
+        </div>
+        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    </div>
+    <!-- End Reset Password Success Alert Section -->
+</section>
+</body>
+</html>
