@@ -1,6 +1,5 @@
 package com.example.classroom.auth.service;
 
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.exception.EntityNotFoundException;
 import com.example.classroom.exception.UserAlreadyExistException;
@@ -11,6 +10,7 @@ import com.example.classroom.teacher.TeacherService;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import com.example.classroom.user.register.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;

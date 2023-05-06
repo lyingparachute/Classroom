@@ -1,7 +1,6 @@
 package com.example.classroom.test.util;
 
 import com.example.classroom.auth.model.AuthenticationRequest;
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.department.Department;
 import com.example.classroom.department.DepartmentRepository;
@@ -21,6 +20,7 @@ import com.example.classroom.token.TokenRepository;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import com.example.classroom.user.register.RegisterRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

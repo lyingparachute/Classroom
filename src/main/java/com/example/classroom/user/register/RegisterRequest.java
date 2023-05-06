@@ -1,4 +1,4 @@
-package com.example.classroom.auth.model;
+package com.example.classroom.user.register;
 
 import com.example.classroom.user.UserRole;
 import jakarta.validation.constraints.Email;

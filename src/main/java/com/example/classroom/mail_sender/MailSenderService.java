@@ -1,7 +1,7 @@
 package com.example.classroom.mail_sender;
 
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.exception.EmailException;
+import com.example.classroom.user.register.RegisterRequest;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;

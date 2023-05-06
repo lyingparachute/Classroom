@@ -2,7 +2,6 @@ package com.example.classroom.auth.service;
 
 import com.example.classroom.auth.model.AuthenticationRequest;
 import com.example.classroom.auth.model.AuthenticationResponse;
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.token.JwtService;
 import com.example.classroom.token.Token;
 import com.example.classroom.token.TokenRepository;
@@ -10,6 +9,7 @@ import com.example.classroom.token.TokenType;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import com.example.classroom.user.register.RegisterRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

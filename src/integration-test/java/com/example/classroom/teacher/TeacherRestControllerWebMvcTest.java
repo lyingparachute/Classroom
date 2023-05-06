@@ -1,7 +1,6 @@
 package com.example.classroom.teacher;
 
 import com.example.classroom.auth.model.AuthenticationResponse;
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.config.jwt.JwtAuthenticationFilter;
 import com.example.classroom.department.Department;
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
@@ -9,6 +8,7 @@ import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.test.util.UnitTestsInitData;
 import com.example.classroom.user.User;
+import com.example.classroom.user.register.RegisterRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

@@ -1,7 +1,6 @@
 package com.example.classroom.test.util;
 
 import com.example.classroom.auth.model.AuthenticationRequest;
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.department.Department;
 import com.example.classroom.enums.AcademicTitle;
@@ -13,6 +12,7 @@ import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.user.User;
+import com.example.classroom.user.register.RegisterRequest;
 
 import java.util.List;
 

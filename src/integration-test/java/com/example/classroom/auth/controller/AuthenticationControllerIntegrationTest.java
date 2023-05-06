@@ -1,6 +1,5 @@
 package com.example.classroom.auth.controller;
 
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.student.Student;
 import com.example.classroom.student.StudentRepository;
 import com.example.classroom.teacher.Teacher;
@@ -9,6 +8,7 @@ import com.example.classroom.test.util.IntegrationTestsInitData;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import com.example.classroom.user.register.RegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
