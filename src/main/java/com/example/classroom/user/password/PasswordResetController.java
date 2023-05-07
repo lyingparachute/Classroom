@@ -34,7 +34,6 @@ public class PasswordResetController {
     @GetMapping("change")
     String showPasswordChangeForm(@Valid @RequestParam("token") final String token,
                                   Model model,
-                                  HttpServletRequest request,
                                   RedirectAttributes redirectAttributes) {
         try {
             service.validatePasswordResetToken(token);
