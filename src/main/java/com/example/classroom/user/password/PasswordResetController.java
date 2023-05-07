@@ -2,7 +2,6 @@ package com.example.classroom.user.password;
 
 import com.example.classroom.exception.InvalidTokenException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +21,7 @@ public class PasswordResetController {
     private final PasswordService service;
 
     @PostMapping("reset")
-    String sendResetPasswordEmail(@Valid @RequestParam("email") String userEmail,
+    String sendResetPasswordEmail(@RequestParam("email") String userEmail,
                                   HttpServletRequest request,
                                   RedirectAttributes redirectAttributes) {
         boolean emailSent = service.sendEmailWithResetPasswordInstructions(request, userEmail);
@@ -32,7 +31,7 @@ public class PasswordResetController {
     }
 
     @GetMapping("change")
-    String showPasswordChangeForm(@Valid @RequestParam("token") final String token,
+    String showPasswordChangeForm(@RequestParam("token") final String token,
                                   Model model,
                                   RedirectAttributes redirectAttributes) {
         try {
@@ -47,11 +46,10 @@ public class PasswordResetController {
 
 
     @PostMapping("update")
-    String changePassword(
-            @Valid @RequestParam("token") final String token,
-            @Valid @RequestParam("password") final String password,
-            HttpServletRequest request,
-            RedirectAttributes redirectAttributes) {
+    String changePassword(@RequestParam("token") final String token,
+                          @RequestParam("password") final String password,
+                          HttpServletRequest request,
+                          RedirectAttributes redirectAttributes) {
         service.resetPassword(request, token, password);
         redirectAttributes.addFlashAttribute("resetPasswordSuccess", "Your password has been reset.");
         return REDIRECT_TO_SIGN_IN_PAGE;
