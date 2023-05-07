@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("password")
 @RequiredArgsConstructor
-public class PasswordController {
+public class PasswordResetController {
 
     private static final String REDIRECT_TO_SIGN_IN_PAGE = "redirect:/sign-in";
     private static final String PASSWORD_CHANGE_TEMPLATE = "auth/password-change";
