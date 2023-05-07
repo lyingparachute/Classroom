@@ -32,6 +32,8 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
+    private Boolean enabled;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -45,7 +47,6 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "userDetails")
     @Setter(AccessLevel.NONE)
     private Teacher teacher;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -79,7 +80,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     public boolean isStudent() {
