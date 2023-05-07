@@ -70,10 +70,9 @@ public class PasswordService {
         return passwordTokenRepository.save(myToken).getToken();
     }
 
-    String validatePasswordResetToken(final String token) throws InvalidTokenException {
+    void validatePasswordResetToken(final String token) throws InvalidTokenException {
         final PasswordResetToken passToken = getPasswordResetToken(token);
         if (!passToken.isTokenValid()) throw new InvalidTokenException("Token expired or revoked: " + token);
-        return "valid";
     }
 
     User getUserByPasswordResetToken(final String token) {
