@@ -1,6 +1,7 @@
 package com.example.classroom.user.register;
 
 import com.example.classroom.auth.service.UserManagementService;
+import com.example.classroom.exception.UserAlreadyExistException;
 import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -17,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 class RegisterController {
 
-    static final String SIGN_UP_TEMPLATE = "auth/sign-up";
+    private static final String SIGN_UP_TEMPLATE = "auth/sign-up";
     private final UserManagementService service;
     private final RegisterService registerService;
 
@@ -29,14 +30,20 @@ class RegisterController {
 
     @PostMapping("/sign-up")
     String signUp(@Valid @ModelAttribute("user") RegisterRequest user,
-                  HttpServletRequest request,
                   BindingResult result,
+                  Model model,
+                  HttpServletRequest request,
                   RedirectAttributes redirectAttributes) {
         if (result.hasErrors())
             return SIGN_UP_TEMPLATE;
-        User created = service.register(user);
-        registerService.sendRegistrationConfirmationEmail(request, user);
-        redirectAttributes.addFlashAttribute("createSuccess", created);
+        try {
+            User registered = service.register(user);
+            registerService.sendRegistrationConfirmationEmail(request, user);
+            redirectAttributes.addFlashAttribute("createSuccess", registered);
+        } catch (UserAlreadyExistException e) {
+            model.addAttribute("emailExists", user.getEmail());
+            return SIGN_UP_TEMPLATE;
+        }
         return "redirect:/sign-in";
     }
 }
