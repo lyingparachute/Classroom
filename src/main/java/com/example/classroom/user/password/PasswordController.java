@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/password")
+@RequestMapping("password")
 @RequiredArgsConstructor
 public class PasswordController {
 
@@ -21,7 +21,7 @@ public class PasswordController {
     private static final String PASSWORD_CHANGE_TEMPLATE = "auth/password-change";
     private final PasswordService service;
 
-    @PostMapping("/reset")
+    @PostMapping("reset")
     String sendResetPasswordEmail(@Valid @RequestParam("email") String userEmail,
                                   HttpServletRequest request,
                                   RedirectAttributes redirectAttributes) {
@@ -31,7 +31,7 @@ public class PasswordController {
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
 
-    @GetMapping("/change")
+    @GetMapping("change")
     String showPasswordChangeForm(@Valid @RequestParam("token") final String token,
                                   Model model,
                                   HttpServletRequest request,
@@ -47,7 +47,7 @@ public class PasswordController {
     }
 
 
-    @PostMapping("/update")
+    @PostMapping("update")
     String changePassword(
             @Valid @RequestParam("token") final String token,
             @Valid @RequestParam("password") final String password,
