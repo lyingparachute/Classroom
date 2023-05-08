@@ -1,6 +1,7 @@
 package com.example.classroom.user.register;
 
 import com.example.classroom.auth.service.UserManagementService;
+import com.example.classroom.exception.InvalidTokenException;
 import com.example.classroom.exception.UserAlreadyExistException;
 import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -19,16 +21,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 class RegisterController {
 
     private static final String SIGN_UP_TEMPLATE = "auth/sign-up";
+    private static final String REDIRECT_TO_SIGN_IN_PAGE = "redirect:/sign-in";
     private final UserManagementService service;
     private final RegisterService registerService;
 
-    @GetMapping("/sign-up")
+    @GetMapping("sign-up")
     String getSignUpPage(Model model) {
         model.addAttribute("user", new RegisterRequest());
         return SIGN_UP_TEMPLATE;
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("sign-up")
     String signUp(@Valid @ModelAttribute("user") RegisterRequest user,
                   BindingResult result,
                   Model model,
@@ -44,6 +47,19 @@ class RegisterController {
             model.addAttribute("emailExists", user.getEmail());
             return SIGN_UP_TEMPLATE;
         }
-        return "redirect:/sign-in";
+        return REDIRECT_TO_SIGN_IN_PAGE;
+    }
+
+    @GetMapping("verify")
+    String confirmAccount(@RequestParam("token") final String token,
+                          RedirectAttributes redirectAttributes) {
+        try {
+            registerService.enableAccount(token);
+            redirectAttributes.addFlashAttribute("emailVerificationSuccess", "Email verified");
+        } catch (InvalidTokenException e) {
+            redirectAttributes.addFlashAttribute("invalidEmailVerificationToken", "Email not verified");
+            return REDIRECT_TO_SIGN_IN_PAGE;
+        }
+        return REDIRECT_TO_SIGN_IN_PAGE;
     }
 }
