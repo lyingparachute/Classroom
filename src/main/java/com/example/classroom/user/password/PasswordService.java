@@ -41,6 +41,21 @@ public class PasswordService {
         }
     }
 
+    void validatePasswordResetToken(final String token) throws InvalidTokenException {
+        final PasswordResetToken passToken = getPasswordResetToken(token);
+        if (!passToken.isTokenValid()) throw new InvalidTokenException("Token expired or revoked: " + token);
+    }
+
+    void resetPassword(final HttpServletRequest request,
+                       final String token,
+                       final String newPassword) {
+        User user = getUserByPasswordResetToken(token);
+        userService.resetUserPassword(user, newPassword);
+        PasswordResetToken passwordResetToken = getPasswordResetToken(token);
+        revokeToken(passwordResetToken);
+        sendPasswordResetConfirmationEmail(request, user);
+    }
+
     private void sendPasswordResetEmail(final HttpServletRequest request,
                                         final User user,
                                         final String token) {
@@ -70,12 +85,7 @@ public class PasswordService {
         return passwordTokenRepository.save(myToken).getToken();
     }
 
-    void validatePasswordResetToken(final String token) throws InvalidTokenException {
-        final PasswordResetToken passToken = getPasswordResetToken(token);
-        if (!passToken.isTokenValid()) throw new InvalidTokenException("Token expired or revoked: " + token);
-    }
-
-    User getUserByPasswordResetToken(final String token) {
+    private User getUserByPasswordResetToken(final String token) {
         return Optional.ofNullable(getPasswordResetToken(token).getUser())
                 .orElseThrow(() -> new InvalidTokenException("Invalid token: " + token));
     }
@@ -89,22 +99,7 @@ public class PasswordService {
                 .orElseThrow(() -> new InvalidTokenException("Invalid token: " + token));
     }
 
-    private PasswordResetToken getPasswordResetToken(final User user) {
-        return passwordTokenRepository.findByUser(user)
-                .orElseThrow(() -> new InvalidTokenException("No tokens for user with email: " + user.getEmail()));
-    }
-
-    void resetPassword(final HttpServletRequest request,
-                       final String token,
-                       final String newPassword) {
-        User user = getUserByPasswordResetToken(token);
-        userService.resetUserPassword(user, newPassword);
-        PasswordResetToken passwordResetToken = getPasswordResetToken(token);
-        revokeToken(passwordResetToken);
-        sendPasswordResetConfirmationEmail(request, user);
-    }
-
-    void revokeToken(final PasswordResetToken token) {
+    private void revokeToken(final PasswordResetToken token) {
         token.setRevoked();
         passwordTokenRepository.save(token);
     }
