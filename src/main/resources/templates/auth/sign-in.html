@@ -27,13 +27,11 @@
                                 <div th:replace="~{fragments/alerts :: reset-password}"></div>
                                 <div th:replace="~{fragments/alerts :: reset-password-success}"></div>
                                 <div th:replace="~{fragments/alerts :: reset-password-invalid-token}"></div>
+                                <div th:replace="~{fragments/alerts :: login-failure}"></div>
+                                <div th:replace="~{fragments/alerts :: too-many-login-attempts}"></div>
 
                                 <form class="form-sign-in" th:action="@{/api/sign-in}" method="post">
                                     <p class="text-center" th:text="#{signin.login}"></p>
-
-                                    <div th:if="${param.error}" th:text="#{signin.invalid.credentials}"
-                                         class="alert alert-danger">
-                                    </div>
 
                                     <div class="form-outline mb-4">
                                         <input type="text" id="username" name="username" class="form-control" required/>
