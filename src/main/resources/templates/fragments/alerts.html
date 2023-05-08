@@ -6,6 +6,23 @@
 </head>
 <body>
 
+<!-- Account Exists Alert Section -->
+<section th:fragment="account-exists" th:if="${emailExists}">
+
+    <div role="alert"
+         class="alert alert-danger d-flex align-items-center">
+        <i class="fas fa-xmark-circle mr-2" role="img" aria-label="Error:"></i>
+        <div>
+            <strong th:text="#{alert.email.exists.msg1}"></strong>
+            <span th:text="#{alert.email.exists.msg2}"></span>
+            <strong th:text="${emailExists} + '.'"></strong>
+            <br>
+            <span th:text="#{alert.email.exists.msg3}"></span>
+        </div>
+    </div>
+</section>
+<!-- End Account Exists Alert Section -->
+
 <!-- Create Account Alert Section -->
 <section th:fragment="account-create-success" th:if="${createSuccess}">
     <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">

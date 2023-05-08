@@ -22,28 +22,12 @@
                                          style="width: 185px;" alt="logo">
                                     <h4 class="mt-1 mb-4 pb-1" th:text="#{signin.header}"></h4>
                                 </div>
+                                <div th:replace="~{fragments/alerts :: account-exists}"></div>
 
                                 <form class="form-sign-up" th:action="@{/sign-up}"
                                       method="post" th:object="${user}"
                                       novalidate>
                                     <p class="text-center" th:text="#{signup.new.account}"></p>
-
-                                    <section th:fragment="email-taken" th:if="${emailExists}">
-                                        <!-- Email Exists Alert Section -->
-                                        <div role="alert"
-                                             class="alert alert-danger d-flex align-items-center">
-                                            <i class="fas fa-xmark-circle mr-2" role="img" aria-label="Error:"></i>
-                                            <div>
-                                                <strong th:text="#{email.exists.alert.msg1}"></strong>
-                                                <span th:text="#{email.exists.alert.msg2}"></span>
-                                                <strong th:text="${emailExists} + '.'"></strong>
-                                                <br>
-                                                <span th:text="#{email.exists.alert.msg3}"></span>
-                                            </div>
-                                        </div>
-                                        <!-- End Reset Password Alert Section -->
-                                    </section>
-
                                     <!-- First and Last name input -->
                                     <div class="row">
                                         <div class="col-md-6 mb-4"
