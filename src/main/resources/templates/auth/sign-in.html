@@ -23,11 +23,13 @@
                                          style="width: 185px;" alt="logo">
                                     <h4 class="mt-1 mb-4 pb-1" th:text="#{signin.header}"></h4>
                                 </div>
-                                <div th:replace="~{fragments/alerts :: create-success}"></div>
-                                <div th:replace="~{fragments/alerts :: reset-password}"></div>
-                                <div th:replace="~{fragments/alerts :: reset-password-success}"></div>
+                                <div th:replace="~{fragments/alerts :: account-create-success}"></div>
+                                <div th:replace="~{fragments/alerts :: reset-password-request}"></div>
                                 <div th:replace="~{fragments/alerts :: reset-password-invalid-token}"></div>
+                                <div th:replace="~{fragments/alerts :: reset-password-success}"></div>
                                 <div th:replace="~{fragments/alerts :: login-failure}"></div>
+                                <div th:replace="~{fragments/alerts :: invalid-email-verification-token}"></div>
+                                <div th:replace="~{fragments/alerts :: email-verification-success}"></div>
                                 <div th:replace="~{fragments/alerts :: too-many-login-attempts}"></div>
 
                                 <form class="form-sign-in" th:action="@{/api/sign-in}" method="post">
