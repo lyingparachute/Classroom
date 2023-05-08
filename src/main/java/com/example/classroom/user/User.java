@@ -16,7 +16,6 @@ import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
@@ -47,6 +46,10 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "userDetails")
     @Setter(AccessLevel.NONE)
     private Teacher teacher;
+
+    public User() {
+        this.enabled = false;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
