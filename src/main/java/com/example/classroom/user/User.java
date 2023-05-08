@@ -104,4 +104,8 @@ public class User implements UserDetails {
     public Object getAttendee() {
         return isTeacher() ? teacher : student;
     }
+
+    public void enableAccount() {
+        this.enabled = true;
+    }
 }
