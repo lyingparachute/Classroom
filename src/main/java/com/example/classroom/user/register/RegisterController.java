@@ -32,7 +32,7 @@ class RegisterController {
     }
 
     @PostMapping("sign-up")
-    String signUp(@Valid @ModelAttribute("user") RegisterRequest user,
+    String signUp(@Valid @ModelAttribute("user") RegisterRequest registerRequest,
                   BindingResult result,
                   Model model,
                   HttpServletRequest request,
@@ -40,11 +40,11 @@ class RegisterController {
         if (result.hasErrors())
             return SIGN_UP_TEMPLATE;
         try {
-            User registered = service.register(user);
-            registerService.sendRegistrationConfirmationEmail(request, user);
+            User registered = service.register(registerRequest);
+            registerService.sendRegistrationConfirmationEmail(request, registered);
             redirectAttributes.addFlashAttribute("createSuccess", registered);
         } catch (UserAlreadyExistException e) {
-            model.addAttribute("emailExists", user.getEmail());
+            model.addAttribute("emailExists", registerRequest.getEmail());
             return SIGN_UP_TEMPLATE;
         }
         return REDIRECT_TO_SIGN_IN_PAGE;
