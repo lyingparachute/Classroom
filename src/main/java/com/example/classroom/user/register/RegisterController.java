@@ -50,16 +50,17 @@ class RegisterController {
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
 
-    @GetMapping("verify")
+    @GetMapping("account/verify")
     String confirmAccount(@RequestParam("token") final String token,
                           RedirectAttributes redirectAttributes) {
         try {
-            registerService.enableAccount(token);
-            redirectAttributes.addFlashAttribute("emailVerificationSuccess", "Email verified");
+            registerService.validateVerificationToken(token);
         } catch (InvalidTokenException e) {
             redirectAttributes.addFlashAttribute("invalidEmailVerificationToken", "Email not verified");
             return REDIRECT_TO_SIGN_IN_PAGE;
         }
+        registerService.verifyAccount(token);
+        redirectAttributes.addFlashAttribute("emailVerificationSuccess", "Email verified");
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
 }
