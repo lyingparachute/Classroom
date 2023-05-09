@@ -33,7 +33,7 @@ public class UserManagementService implements UserDetailsService {
     private final TeacherService teacherService;
 
     @Transactional
-    public User register(RegisterRequest request) {
+    public User register(RegisterRequest request) throws UserAlreadyExistException {
         if (emailExists(request.getEmail()))
             throw new UserAlreadyExistException("There is already an account with email address: " + request.getEmail());
         User userDetails = new User();
