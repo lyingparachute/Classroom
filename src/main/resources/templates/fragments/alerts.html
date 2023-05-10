@@ -99,16 +99,25 @@
     <div role="alert"
          class="alert alert-danger alert-dismissible d-flex align-items-center">
         <i class="fas fa-xmark-circle mr-2" role="img" aria-label="Error:"></i>
-        <div>
+        <!--            <span th:text="${errorMsg}"></span>-->
+        <div th:if="${errorMsg.contains('Bad credentials')}">
             <strong th:text="#{alert.invalid.credentials1}">&nbsp;</strong>
-            <span th:if="${errorMsg.contains('Bad credentials')}" th:text="#{alert.invalid.credentials2}"></span>
-            <span th:if="${errorMsg.contains('User is disabled')}" th:text="#{alert.account.not.verified}"></span>
-            <!--            <span th:text="${errorMsg}"></span>-->
+            <span th:text="#{alert.invalid.credentials2}"></span>
+        </div>
+        <div th:if="${errorMsg.contains('User is disabled')}">
+            <strong th:text="#{alert.invalid.credentials1}">&nbsp;</strong>
+            <span th:text="#{alert.account.not.verified1}"></span>
+            <br>
+            <span th:text="#{alert.account.not.verified2}"></span>
+            <a class="text-danger fw-bold" th:href="@{verification-email/send}"
+               th:text="#{alert.account.not.verified3}"
+               data-bs-toggle="modal" data-bs-target="#resendVerificationEmailModal"></a>
         </div>
         <button class="btn-close" data-bs-dismiss="alert" type="button" aria-label="Close"></button>
     </div>
 </section>
 <!-- End Login Failure Alert Section -->
+
 
 <!-- Email Verification Success Alert Section -->
 <section th:fragment="invalid-email-verification-token" th:if="${invalidEmailVerificationToken}">
@@ -122,8 +131,9 @@
             <strong th:text="#{alert.invalid.email.verification.token.msg4}"></strong>
             <br>
             <span th:text="#{alert.invalid.email.verification.token.msg5}"></span>
-            <a th:href="@{/password-reset}" th:text="#{alert.invalid.email.verification.token.msg6}"
-               data-bs-toggle="modal" data-bs-target="#forgotPasswordModal"></a>
+            <a class="text-danger fw-bold" th:href="@{verification-email/send}"
+               th:text="#{alert.invalid.email.verification.token.msg6}"
+               data-bs-toggle="modal" data-bs-target="#resendVerificationEmailModal"></a>
         </div>
         <button class="btn-close" data-bs-dismiss="alert" type="button" aria-label="Close"></button>
     </div>
