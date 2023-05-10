@@ -1,5 +1,6 @@
 package com.example.classroom.user.register;
 
+import com.example.classroom.exception.AccountAlreadyVerifiedException;
 import com.example.classroom.exception.InvalidTokenException;
 import com.example.classroom.mail_sender.MailSenderService;
 import com.example.classroom.user.User;
@@ -24,6 +25,8 @@ public class RegisterService {
     private final UserRepository userRepository;
 
     void sendAccountVerificationEmail(final HttpServletRequest request, final User user) {
+        if (user.isEnabled())
+            throw new AccountAlreadyVerifiedException("Account with email '" + user.getEmail() + "' is already verified.");
         revokeAllVerificationTokensForUser(user.getId());
         final String verificationToken = createAndSaveEmailVerificationToken(user);
         mailService.sendEmail(user.getEmail(),
