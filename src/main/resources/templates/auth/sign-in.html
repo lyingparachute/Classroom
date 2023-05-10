@@ -105,6 +105,42 @@
         </div>
     </div>
 </div>
+<!-- END Forgot password Modal -->
+
+<!-- Forgot password Modal -->
+<div class="modal fade" id="resendVerificationEmailModal" tabindex="-1"
+     aria-labelledby="resendVerificationEmailModalLabel"
+     aria-hidden="true" data-mdb-backdrop="static" data-mdb-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header text-white gradient-custom-2">
+                <h5 class="modal-title text-center" id="resendVerificationEmailModalLabel"
+                    th:text="#{modal.resend.verification.email.header}">
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        th:aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-5">
+                <p class="py-2" th:text="#{modal.resend.verification.email.desc}"></p>
+                <form class="form-password-reset" th:action="@{verification-email/send}" method="post"
+                      novalidate>
+                    <div class="form-outline">
+                        <input type="email" id="userEmail" class="form-control my-3"
+                               name="email" required/>
+                        <label class="form-label" for="userEmail" th:text="#{user.email}"></label>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a class="btn btn-outline-danger mr-2" data-bs-dismiss="modal"
+                           th:text="#{button.cancel}"></a>
+                        <button type="submit" class="btn text-white gradient-custom-2"
+                                th:text="#{button.submit}"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Forgot password Modal -->
 
 <!--/* JS Scripts */-->
 <div th:replace="~{fragments/scripts :: scripts}"></div>
