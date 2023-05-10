@@ -23,7 +23,8 @@ public class RegisterService {
     private final VerificationTokenRepository tokenRepository;
     private final UserRepository userRepository;
 
-    void sendRegistrationConfirmationEmail(final HttpServletRequest request, final User user) {
+    void sendAccountVerificationEmail(final HttpServletRequest request, final User user) {
+        revokeAllVerificationTokensForUser(user.getId());
         final String verificationToken = createAndSaveEmailVerificationToken(user);
         mailService.sendEmail(user.getEmail(),
                 "Welcome to Classroom!",
@@ -51,6 +52,11 @@ public class RegisterService {
         revokeVerificationToken(token);
     }
 
+    private void revokeAllVerificationTokensForUser(Long id) {
+        tokenRepository.findAllValidTokenByUserId(id)
+                .forEach(VerificationToken::setRevoked);
+    }
+
     @Transactional
     private void revokeVerificationToken(final String token) {
         final VerificationToken verificationToken = getVerificationToken(token);
@@ -65,7 +71,6 @@ public class RegisterService {
     private String getRegistrationConfirmationLink(final HttpServletRequest request, final String token) {
         return getAppUrl(request) + "/account/verify?token=" + token;
     }
-
 
     private VerificationToken getVerificationToken(String token) {
         return tokenRepository.findByToken(token)
