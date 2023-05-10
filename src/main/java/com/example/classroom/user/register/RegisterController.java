@@ -71,9 +71,9 @@ class RegisterController {
                                    RedirectAttributes redirectAttributes) {
         try {
             registerService.resendAccountVerificationEmail(request, userEmail);
-            redirectAttributes.addFlashAttribute("newVerificationEmailSent", userEmail);
+            redirectAttributes.addFlashAttribute("resendVerificationEmailSuccess", userEmail);
         } catch (UsernameNotFoundException e) {
-            redirectAttributes.addFlashAttribute("newVerificationEmailFail", userEmail);
+            redirectAttributes.addFlashAttribute("resendVerificationEmailFail", userEmail);
         }
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
