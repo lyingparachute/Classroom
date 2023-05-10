@@ -1,6 +1,5 @@
 package com.example.classroom.user.register;
 
-import com.example.classroom.token.Token;
 import com.example.classroom.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,7 +18,7 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
             on t.user.id = u.id
             where u.id = :id and (t.expired = false or t.revoked = false)
             """)
-    List<Token> findAllValidTokenByUser(Long id);
+    List<VerificationToken> findAllValidTokenByUserId(Long id);
 
     Optional<VerificationToken> findByUser(User user);
 
