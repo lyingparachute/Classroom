@@ -65,7 +65,7 @@ class RegisterController {
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
 
-    @PostMapping("account/verify/resend")
+    @PostMapping("email-verification/resend")
     String resendVerificationEmail(@RequestParam("email") String userEmail,
                                    HttpServletRequest request,
                                    RedirectAttributes redirectAttributes) {
