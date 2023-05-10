@@ -28,8 +28,8 @@
     <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
         <i class="fas fa-check-circle" role="img" aria-label="Success:"></i>
         <div class="mx-1">
-            <strong th:text="#{signup.create.success.alert.msg1}"></strong>
-            <span th:text="#{signup.create.success.alert.msg2}"></span>
+            <strong th:text="#{alert.signup.success.msg1}"></strong>
+            <span th:text="#{alert.signup.success.msg2}"></span>
         </div>
         <button class="btn-close" data-bs-dismiss="alert" type="button" aria-label="Close"></button>
     </div>
@@ -94,13 +94,16 @@
 <!-- End Reset Password Success Alert Section -->
 
 <!-- Login Failure Alert Section -->
-<section th:fragment="login-failure" th:if="${param.error}">
+<section th:fragment="login-failure" th:if="${param.error}"
+         th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
     <div role="alert"
          class="alert alert-danger alert-dismissible d-flex align-items-center">
         <i class="fas fa-xmark-circle mr-2" role="img" aria-label="Error:"></i>
         <div>
             <strong th:text="#{alert.invalid.credentials1}">&nbsp;</strong>
-            <span th:text="#{alert.invalid.credentials2}"></span>
+            <span th:if="${errorMsg.contains('Bad credentials')}" th:text="#{alert.invalid.credentials2}"></span>
+            <span th:if="${errorMsg.contains('User is disabled')}" th:text="#{alert.account.not.verified}"></span>
+            <!--            <span th:text="${errorMsg}"></span>-->
         </div>
         <button class="btn-close" data-bs-dismiss="alert" type="button" aria-label="Close"></button>
     </div>
