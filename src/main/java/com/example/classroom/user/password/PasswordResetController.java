@@ -2,13 +2,12 @@ package com.example.classroom.user.password;
 
 import com.example.classroom.exception.InvalidTokenException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -40,17 +39,26 @@ public class PasswordResetController {
             redirectAttributes.addFlashAttribute("resetPasswordInvalidToken", "fail");
             return REDIRECT_TO_SIGN_IN_PAGE;
         }
+        model.addAttribute("passwordReset", new PasswordResetRequest());
         model.addAttribute("token", token);
         return PASSWORD_CHANGE_TEMPLATE;
     }
 
 
     @PostMapping("update")
-    String changePassword(@RequestParam("token") final String token,
-                          @RequestParam("password") final String password,
+    String changePassword(@Valid @ModelAttribute("passwordReset") final PasswordResetRequest passwordResetRequest,
+                          BindingResult result,
+                          @ModelAttribute("token") final String token,
                           HttpServletRequest request,
                           RedirectAttributes redirectAttributes) {
-        service.resetPassword(request, token, password);
+        if (result.hasErrors()) {
+            return PASSWORD_CHANGE_TEMPLATE;
+        }
+        service.resetPassword(
+                request,
+                token,
+                passwordResetRequest.getPassword()
+        );
         redirectAttributes.addFlashAttribute("resetPasswordSuccess", "Your password has been reset.");
         return REDIRECT_TO_SIGN_IN_PAGE;
     }

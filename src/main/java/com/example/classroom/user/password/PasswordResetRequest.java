@@ -1,12 +1,16 @@
 package com.example.classroom.user.password;
 
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.Builder;
+import com.example.classroom.auth.validation.PasswordMatches;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Builder
+@Data
+@PasswordMatches
+@NoArgsConstructor
+@AllArgsConstructor
 public record PasswordResetRequest(
-        String token,
-        String userEmail,
-        HttpServletRequest httpRequest
+        String password,
+        String matchingPassword
 ) {
 }
