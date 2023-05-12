@@ -30,7 +30,7 @@ public class RegisterService {
         revokeAllVerificationTokensForUser(user.getId());
         final String verificationToken = createAndSaveEmailVerificationToken(user);
         mailService.sendEmail(user.getEmail(),
-                "Welcome to Classroom!",
+                "Welcome to Classroom! Verify your email address.",
                 "mail/account-create-confirmation.html",
                 ofEntries(
                         entry("firstName", user.getFirstName()),
