@@ -147,9 +147,10 @@
                 <strong th:text="#{alert.invalid.email.verification.token.msg4}"></strong>
                 <br>
                 <span th:text="#{alert.invalid.email.verification.token.msg5}"></span>
-                <a class="text-danger fw-bold" th:href="@{verification-email/send}"
+                <a class="resend-verification-email-link" th:href="@{verification-email}"
                    th:text="#{alert.invalid.email.verification.token.msg6}"
-                   data-bs-toggle="modal" data-bs-target="#resendVerificationEmailModal"></a>
+                   data-bs-toggle="modal" data-bs-target="#resendVerificationEmailModal">
+                </a>
             </div>
             <button class="btn-close" data-bs-dismiss="alert" type="button" aria-label="Close"></button>
         </div>

@@ -14,9 +14,15 @@
         height: 100vh !important;
     }
 }
+
 @media (min-width: 769px) {
     .gradient-custom-2 {
         border-top-right-radius: .3rem;
         border-bottom-right-radius: .3rem;
     }
+}
+
+.resend-verification-email-link {
+    font-weight: bold;
+    color: #af233a;
 }
