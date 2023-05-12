@@ -1,6 +1,7 @@
 package com.example.classroom.user.register;
 
 import com.example.classroom.auth.service.UserManagementService;
+import com.example.classroom.exception.AccountAlreadyVerifiedException;
 import com.example.classroom.exception.InvalidTokenException;
 import com.example.classroom.exception.UserAlreadyExistException;
 import com.example.classroom.user.User;
@@ -65,15 +66,18 @@ class RegisterController {
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
 
-    @PostMapping("email-verification/resend")
+    @PostMapping("verification-email/send")
     String resendVerificationEmail(@RequestParam("email") String userEmail,
                                    HttpServletRequest request,
                                    RedirectAttributes redirectAttributes) {
         try {
-            registerService.resendAccountVerificationEmail(request, userEmail);
+            User user = service.loadUserByUsername(userEmail);
+            registerService.sendAccountVerificationEmail(request, user);
             redirectAttributes.addFlashAttribute("resendVerificationEmailSuccess", userEmail);
         } catch (UsernameNotFoundException e) {
-            redirectAttributes.addFlashAttribute("resendVerificationEmailFail", userEmail);
+            redirectAttributes.addFlashAttribute("accountNotFound", userEmail);
+        } catch (AccountAlreadyVerifiedException e) {
+            redirectAttributes.addFlashAttribute("accountAlreadyVerified", userEmail);
         }
         return REDIRECT_TO_SIGN_IN_PAGE;
     }
