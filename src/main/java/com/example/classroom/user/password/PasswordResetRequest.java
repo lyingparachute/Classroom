@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @PasswordMatches
 @NoArgsConstructor
 @AllArgsConstructor
-public record PasswordResetRequest(
-        String password,
-        String matchingPassword
-) {
+public class PasswordResetRequest {
+        String password;
+        String matchingPassword;
 }
