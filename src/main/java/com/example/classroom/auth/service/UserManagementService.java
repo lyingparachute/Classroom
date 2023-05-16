@@ -2,6 +2,7 @@ package com.example.classroom.auth.service;
 
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.exception.EntityNotFoundException;
+import com.example.classroom.exception.InvalidOldPasswordException;
 import com.example.classroom.exception.UserAlreadyExistException;
 import com.example.classroom.student.StudentDto;
 import com.example.classroom.student.StudentService;
@@ -10,6 +11,7 @@ import com.example.classroom.teacher.TeacherService;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import com.example.classroom.user.password.PasswordChangeRequest;
 import com.example.classroom.user.register.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -110,5 +112,18 @@ public class UserManagementService implements UserDetailsService {
         if (session != null) {
             session.invalidate();
         }
+    }
+
+    public void changeUserPassword(final String userEmail,
+                                   final PasswordChangeRequest passwordChangeRequest) {
+        User user = loadUserByUsername(userEmail);
+        checkOldPassword(passwordChangeRequest.getOldPassword(), user.getPassword());
+
+    }
+
+    private static void checkOldPassword(final String oldPasswordInput,
+                                         final String userPassword) {
+        if (!userPassword.equals(oldPasswordInput))
+            throw new InvalidOldPasswordException("Invalid old password!");
     }
 }
