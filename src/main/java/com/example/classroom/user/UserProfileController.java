@@ -3,6 +3,7 @@ package com.example.classroom.user;
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
+import com.example.classroom.user.password.PasswordChangeRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 class UserProfileController {
 
+    private static final String PASSWORD_CHANGE_TEMPLATE = "user/password-change";
     private final UserManagementService service;
     private final BreadcrumbService crumb;
 
@@ -69,6 +71,28 @@ class UserProfileController {
         service.removeById(id);
         redirectAttributes.addFlashAttribute("deleteSuccess", "removed");
         return "redirect:/sign-up";
+    }
+
+    @GetMapping("password/edit")
+    String getPasswordChangePage(Model model,
+                                 HttpServletRequest request,
+                                 Principal principal) {
+        addAttributeBreadcrumb(model, request);
+        addAttributeUserByUsername(model, principal);
+        return PASSWORD_CHANGE_TEMPLATE;
+    }
+
+    @PostMapping("password/edit")
+    String updatePassword(@Valid @ModelAttribute("passwordReset") final PasswordChangeRequest passwordChangeRequest,
+                          BindingResult result,
+                          Principal principal,
+                          RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            return PASSWORD_CHANGE_TEMPLATE;
+        }
+        service.changeUserPassword(principal.getName(), passwordChangeRequest);
+        redirectAttributes.addFlashAttribute("passwordUpdateSuccess", "removed");
+        return "redirect:/dashboard/profile";
     }
 
     private void addAttributeUserByUsername(Model model, Principal principal) {
