@@ -23,8 +23,8 @@ class UserProfileController {
     private final UserManagementService service;
     private final BreadcrumbService crumb;
 
-    static final String USER_EDIT_TEMPLATE = "user/user-edit";
-    static final String FIELDS_OF_STUDY_UPLOAD_DIR = "fields-of-study/";
+    private static final String USER_EDIT_TEMPLATE = "user/user-edit";
+    private static final String FIELDS_OF_STUDY_UPLOAD_DIR = "fields-of-study/";
 
     @GetMapping
     String getUserDetailsPage(Model model,
