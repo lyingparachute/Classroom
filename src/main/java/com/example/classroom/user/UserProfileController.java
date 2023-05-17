@@ -3,6 +3,7 @@ package com.example.classroom.user;
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
+import com.example.classroom.exception.InvalidOldPasswordException;
 import com.example.classroom.user.password.PasswordChangeRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -79,19 +80,29 @@ class UserProfileController {
                                  Principal principal) {
         addAttributeBreadcrumb(model, request);
         addAttributeUserByUsername(model, principal);
+        model.addAttribute("passwordChange", new PasswordChangeRequest());
         return PASSWORD_CHANGE_TEMPLATE;
     }
 
     @PostMapping("password/edit")
-    String updatePassword(@Valid @ModelAttribute("passwordReset") final PasswordChangeRequest passwordChangeRequest,
+    String updatePassword(@Valid @ModelAttribute("passwordChange") final PasswordChangeRequest passwordChangeRequest,
                           BindingResult result,
                           Principal principal,
+                          Model model,
+                          HttpServletRequest request,
                           RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
+            model.addAttribute("passwordChange", passwordChangeRequest);
             return PASSWORD_CHANGE_TEMPLATE;
         }
-        service.changeUserPassword(principal.getName(), passwordChangeRequest);
-        redirectAttributes.addFlashAttribute("passwordUpdateSuccess", "removed");
+
+        try {
+            service.changeUserPassword(principal.getName(), passwordChangeRequest);
+            redirectAttributes.addFlashAttribute("passwordUpdateSuccess", "removed");
+        } catch (InvalidOldPasswordException e) {
+            redirectAttributes.addAttribute("invalidOldPassword", e.getMessage());
+            return PASSWORD_CHANGE_TEMPLATE;
+        }
         return "redirect:/dashboard/profile";
     }
 
