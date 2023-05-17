@@ -74,7 +74,7 @@ class UserProfileController {
         return "redirect:/sign-up";
     }
 
-    @GetMapping("password/edit")
+    @GetMapping("password")
     String getPasswordChangePage(Model model,
                                  HttpServletRequest request,
                                  Principal principal) {
@@ -84,7 +84,7 @@ class UserProfileController {
         return PASSWORD_CHANGE_TEMPLATE;
     }
 
-    @PostMapping("password/edit")
+    @PostMapping("password")
     String updatePassword(@Valid @ModelAttribute("passwordChange") final PasswordChangeRequest passwordChangeRequest,
                           BindingResult result,
                           Principal principal,
@@ -92,6 +92,8 @@ class UserProfileController {
                           HttpServletRequest request,
                           RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
+            addAttributeBreadcrumb(model, request);
+            addAttributeUserByUsername(model, principal);
             model.addAttribute("passwordChange", passwordChangeRequest);
             return PASSWORD_CHANGE_TEMPLATE;
         }
