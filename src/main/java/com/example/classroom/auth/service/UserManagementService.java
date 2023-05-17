@@ -117,13 +117,13 @@ public class UserManagementService implements UserDetailsService {
     public void changeUserPassword(final String userEmail,
                                    final PasswordChangeRequest passwordChangeRequest) {
         User user = loadUserByUsername(userEmail);
-        checkOldPassword(passwordChangeRequest.getOldPassword(), user.getPassword());
-
+        validateOldPassword(passwordChangeRequest.getOldPassword(), user.getPassword());
+        resetUserPassword(user, passwordChangeRequest.getPasswordResetRequest().getPassword());
     }
 
-    private static void checkOldPassword(final String oldPasswordInput,
-                                         final String userPassword) {
-        if (!userPassword.equals(oldPasswordInput))
+    private void validateOldPassword(final String oldPasswordInput,
+                                     final String userPassword) {
+        if (!passwordEncoder.matches(oldPasswordInput, userPassword))
             throw new InvalidOldPasswordException("Invalid old password!");
     }
 }
