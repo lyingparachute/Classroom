@@ -1,6 +1,7 @@
 package com.example.classroom.user.password;
 
 import com.example.classroom.auth.validation.PasswordMatches;
+import com.example.classroom.auth.validation.ValidPassword;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PasswordResetRequest {
+        @ValidPassword
         String password;
         String matchingPassword;
 }

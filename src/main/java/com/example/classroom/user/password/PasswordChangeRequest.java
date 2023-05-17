@@ -1,16 +1,17 @@
 package com.example.classroom.user.password;
 
-import com.example.classroom.auth.validation.PasswordMatches;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@PasswordMatches
 @NoArgsConstructor
 @AllArgsConstructor
 public class PasswordChangeRequest {
-        String oldPassword;
-        String password;
-        String matchingPassword;
+    @NotBlank(message = "{message.old.password.empty}")
+    private String oldPassword;
+    @Valid
+    private PasswordResetRequest passwordResetRequest;
 }
