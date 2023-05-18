@@ -33,8 +33,7 @@ class UserProfileController {
     String getUserDetailsPage(Model model,
                               HttpServletRequest request,
                               Principal principal) {
-        addAttributeBreadcrumb(model, request);
-        addAttributeUserByUsername(model, principal);
+        addAttributesBreadcrumbAndUser(principal, model, request);
         model.addAttribute("imagesPath", Path.of("/img").resolve(FIELDS_OF_STUDY_UPLOAD_DIR));
         return "user/user-view";
     }
@@ -44,8 +43,7 @@ class UserProfileController {
     String getEditUserDetailsPage(Model model,
                                   HttpServletRequest request,
                                   Principal principal) {
-        addAttributeBreadcrumb(model, request);
-        addAttributeUserByUsername(model, principal);
+        addAttributesBreadcrumbAndUser(principal, model, request);
         return USER_EDIT_TEMPLATE;
     }
 
@@ -78,8 +76,7 @@ class UserProfileController {
     String getPasswordChangePage(Model model,
                                  HttpServletRequest request,
                                  Principal principal) {
-        addAttributeBreadcrumb(model, request);
-        addAttributeUserByUsername(model, principal);
+        addAttributesBreadcrumbAndUser(principal, model, request);
         model.addAttribute("passwordChange", new PasswordChangeRequest());
         return PASSWORD_CHANGE_TEMPLATE;
     }
@@ -92,8 +89,7 @@ class UserProfileController {
                           HttpServletRequest request,
                           RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            addAttributeBreadcrumb(model, request);
-            addAttributeUserByUsername(model, principal);
+            addAttributesBreadcrumbAndUser(principal, model, request);
             model.addAttribute("passwordChange", passwordChangeRequest);
             return PASSWORD_CHANGE_TEMPLATE;
         }
@@ -103,9 +99,15 @@ class UserProfileController {
             redirectAttributes.addFlashAttribute("passwordUpdateSuccess", "removed");
         } catch (InvalidOldPasswordException e) {
             redirectAttributes.addAttribute("invalidOldPassword", e.getMessage());
+            addAttributesBreadcrumbAndUser(principal, model, request);
             return PASSWORD_CHANGE_TEMPLATE;
         }
         return "redirect:/dashboard/profile";
+    }
+
+    private void addAttributesBreadcrumbAndUser(Principal principal, Model model, HttpServletRequest request) {
+        addAttributeBreadcrumb(model, request);
+        addAttributeUserByUsername(model, principal);
     }
 
     private void addAttributeUserByUsername(Model model, Principal principal) {
