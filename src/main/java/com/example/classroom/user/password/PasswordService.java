@@ -25,6 +25,8 @@ public class PasswordService {
     private static final String PASSWORD_RESET_EMAIL_SUBJECT = "Password Reset";
     private static final String PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION = "mail/password-reset-confirmation.html";
     private static final String PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT = "Password Reset Confirmation";
+    private static final String PASSWORD_CHANGE_CONFIRM_TEMPLATE_LOCATION = "mail/password-change-confirmation.html";
+    private static final String PASSWORD_CHANGE_CONFIRM_EMAIL_SUBJECT = "Password Changed Successfully";
     private final UserManagementService userService;
     private final PasswordResetTokenRepository passwordTokenRepository;
     private final MailSenderService mailSenderService;
@@ -50,7 +52,7 @@ public class PasswordService {
                        final String token,
                        final String newPassword) {
         User user = getUserByPasswordResetToken(token);
-        userService.resetUserPassword(user, newPassword);
+        userService.updateUserPassword(user, newPassword);
         PasswordResetToken passwordResetToken = getPasswordResetToken(token);
         revokeToken(passwordResetToken);
         sendPasswordResetConfirmationEmail(request, user);
@@ -111,6 +113,21 @@ public class PasswordService {
                 user.getEmail(),
                 PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT,
                 PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION,
+                ofEntries(
+                        entry("firstName", user.getFirstName()),
+                        entry("signinLink", getSignInLink(appUrl)),
+                        entry("websiteLink", appUrl)
+                )
+        );
+    }
+
+    private void sendPasswordChangeConfirmationEmail(final HttpServletRequest request,
+                                                     final User user) {
+        String appUrl = getAppUrl(request);
+        mailSenderService.sendEmail(
+                user.getEmail(),
+                PASSWORD_CHANGE_CONFIRM_EMAIL_SUBJECT,
+                PASSWORD_CHANGE_CONFIRM_TEMPLATE_LOCATION,
                 ofEntries(
                         entry("firstName", user.getFirstName()),
                         entry("signinLink", getSignInLink(appUrl)),

@@ -88,7 +88,7 @@ public class UserManagementService implements UserDetailsService {
         repository.delete(byId);
     }
 
-    public void resetUserPassword(final User user, final String password) {
+    public void updateUserPassword(final User user, final String password) {
         user.setPassword(passwordEncoder.encode(password));
         repository.save(user);
     }
