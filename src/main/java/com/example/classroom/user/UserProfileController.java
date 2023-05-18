@@ -96,7 +96,7 @@ class UserProfileController {
 
         try {
             service.changeUserPassword(principal.getName(), passwordChangeRequest);
-            redirectAttributes.addFlashAttribute("passwordUpdateSuccess", "removed");
+            redirectAttributes.addFlashAttribute("passwordChangeSuccess", "success");
         } catch (InvalidOldPasswordException e) {
             model.addAttribute("invalidOldPassword", e.getMessage());
             addAttributesBreadcrumbAndUser(principal, model, request);

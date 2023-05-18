@@ -216,5 +216,20 @@
     </section>
     <!-- End Too Many Login Attempts Alert Section -->
 </div>
+
+<div th:fragment="user-profile-view-alerts">
+    <!-- Password Change Success Alert Section -->
+    <section th:fragment="password-change-success" th:if="${passwordChangeSuccess}">
+        <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+            <i class="fas fa-check-circle" role="img" aria-label="Success:"></i>
+            <div class="mx-1">
+                <strong th:text="#{alert.password.change.success.msg1}"></strong>
+                <span th:text="#{alert.password.change.success.msg2}"></span>
+            </div>
+            <button class="btn-close" data-bs-dismiss="alert" type="button" aria-label="Close"></button>
+        </div>
+    </section>
+    <!-- End Password Change Success Alert Section -->
+</div>
 </body>
 </html>
