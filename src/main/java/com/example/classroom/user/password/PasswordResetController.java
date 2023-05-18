@@ -39,14 +39,14 @@ public class PasswordResetController {
             redirectAttributes.addFlashAttribute("resetPasswordInvalidToken", "fail");
             return REDIRECT_TO_SIGN_IN_PAGE;
         }
-        model.addAttribute("passwordReset", new PasswordResetRequest());
+        model.addAttribute("passwordReset", new NewPasswordRequest());
         model.addAttribute("token", token);
         return PASSWORD_CHANGE_TEMPLATE;
     }
 
 
     @PostMapping("update")
-    String changePassword(@Valid @ModelAttribute("passwordReset") final PasswordResetRequest passwordResetRequest,
+    String changePassword(@Valid @ModelAttribute("passwordReset") final NewPasswordRequest newPasswordRequest,
                           BindingResult result,
                           @ModelAttribute("token") final String token,
                           HttpServletRequest request,
@@ -57,7 +57,7 @@ public class PasswordResetController {
         service.resetPassword(
                 request,
                 token,
-                passwordResetRequest.getPassword()
+                newPasswordRequest.getPassword()
         );
         redirectAttributes.addFlashAttribute("resetPasswordSuccess", "Your password has been reset.");
         return REDIRECT_TO_SIGN_IN_PAGE;

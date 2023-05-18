@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @PasswordMatches
 @NoArgsConstructor
 @AllArgsConstructor
-public class PasswordResetRequest {
+public class NewPasswordRequest {
         @ValidPassword
         String password;
         String matchingPassword;
