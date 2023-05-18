@@ -22,7 +22,7 @@
                                          style="width: 185px;" alt="logo">
                                     <h4 class="mt-1 mb-4 pb-1" th:text="#{signin.header}"></h4>
                                 </div>
-                                <div th:replace="~{fragments/alerts :: account-exists}"></div>
+                                <div th:replace="~{fragments/alerts :: sign-up-page-alerts}"></div>
 
                                 <form class="form-sign-up" th:action="@{/sign-up}"
                                       method="post" th:object="${user}"

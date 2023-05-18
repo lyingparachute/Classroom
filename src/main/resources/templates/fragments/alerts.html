@@ -6,22 +6,40 @@
 </head>
 <body>
 
-<!-- Account Exists Alert Section -->
-<section th:fragment="account-exists" th:if="${emailExists}">
+<div th:fragment="sign-up-page-alerts">
+    <!-- Account Exists Alert Section -->
+    <section th:fragment="account-exists" th:if="${emailExists}">
 
-    <div role="alert"
-         class="alert alert-danger d-flex align-items-center">
-        <i class="fas fa-xmark-circle mr-2" role="img" aria-label="Error:"></i>
-        <div>
-            <strong th:text="#{alert.email.exists.msg1}"></strong>
-            <span th:text="#{alert.email.exists.msg2}"></span>
-            <strong th:text="${emailExists} + '.'"></strong>
-            <br>
-            <span th:text="#{alert.email.exists.msg3}"></span>
+        <div role="alert"
+             class="alert alert-danger d-flex align-items-center">
+            <i class="fas fa-xmark-circle mr-2" role="img" aria-label="Error:"></i>
+            <div>
+                <strong th:text="#{alert.email.exists.msg1}"></strong>
+                <span th:text="#{alert.email.exists.msg2}"></span>
+                <strong th:text="${emailExists} + '.'"></strong>
+                <br>
+                <span th:text="#{alert.email.exists.msg3}"></span>
+            </div>
         </div>
-    </div>
-</section>
-<!-- End Account Exists Alert Section -->
+    </section>
+    <!-- End Account Exists Alert Section -->
+
+    <!-- Create Account Alert Section -->
+    <section th:fragment="account-delete-success" th:if="${deleteSuccess}">
+        <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+            <i class="fas fa-check-circle" role="img" aria-label="Success:"></i>
+            <div class="mx-1">
+                <strong th:text="#{alert.success}"></strong>
+                <span th:text="#{alert.account.delete.msg1}"></span>
+                <br>
+                <span th:text="#{alert.account.delete.msg2}"></span>
+            </div>
+            <button class="btn-close" data-bs-dismiss="alert" type="button" aria-label="Close"></button>
+        </div>
+    </section>
+    <!-- End Create Account Alert Section -->
+
+</div>
 
 <div th:fragment="sign-in-page-alerts">
     <!-- Account Not Found Alert Section -->
