@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.example.classroom.mail_sender.MailSenderService.getAppUrl;
+import static com.example.classroom.mail_sender.MailSenderService.getSignInLink;
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
 
@@ -25,8 +26,6 @@ public class PasswordService {
     private static final String PASSWORD_RESET_EMAIL_SUBJECT = "Password Reset";
     private static final String PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION = "mail/password-reset-confirmation.html";
     private static final String PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT = "Password Reset Confirmation";
-    private static final String PASSWORD_CHANGE_CONFIRM_TEMPLATE_LOCATION = "mail/password-change-confirmation.html";
-    private static final String PASSWORD_CHANGE_CONFIRM_EMAIL_SUBJECT = "Password Changed Successfully";
     private final UserManagementService userService;
     private final PasswordResetTokenRepository passwordTokenRepository;
     private final MailSenderService mailSenderService;
@@ -42,6 +41,7 @@ public class PasswordService {
             return false;
         }
     }
+
 
     void validatePasswordResetToken(final String token) throws InvalidTokenException {
         final PasswordResetToken passToken = getPasswordResetToken(token);
@@ -119,24 +119,5 @@ public class PasswordService {
                         entry("websiteLink", appUrl)
                 )
         );
-    }
-
-    private void sendPasswordChangeConfirmationEmail(final HttpServletRequest request,
-                                                     final User user) {
-        String appUrl = getAppUrl(request);
-        mailSenderService.sendEmail(
-                user.getEmail(),
-                PASSWORD_CHANGE_CONFIRM_EMAIL_SUBJECT,
-                PASSWORD_CHANGE_CONFIRM_TEMPLATE_LOCATION,
-                ofEntries(
-                        entry("firstName", user.getFirstName()),
-                        entry("signinLink", getSignInLink(appUrl)),
-                        entry("websiteLink", appUrl)
-                )
-        );
-    }
-
-    private String getSignInLink(String appUrl) {
-        return appUrl + "/sign-in";
     }
 }

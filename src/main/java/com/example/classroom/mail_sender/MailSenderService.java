@@ -65,4 +65,8 @@ public class MailSenderService {
     public static String getAppUrl(final HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
+
+    public static String getSignInLink(String appUrl) {
+        return appUrl + "/sign-in";
+    }
 }
