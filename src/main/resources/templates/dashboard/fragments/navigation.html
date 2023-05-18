@@ -235,14 +235,20 @@
                         <li>
                             <hr class="dropdown-divider"/>
                         </li>
-                        <li><a class="dropdown-item" th:href="@{/dashboard/profile}"
-                               th:text="#{dashboard.navigation.avatar.profile}"></a></li>
-                        <li><a class="dropdown-item" th:href="@{/dashboard/settings}"
-                               th:text="#{dashboard.navigation.avatar.settings}"></a>
+                        <li><a class="dropdown-item" th:href="@{/dashboard/profile}">
+                            <i class="fas fa-user mr-1"></i>
+                            <span th:text="#{dashboard.navigation.avatar.profile}"></span>
+                        </a></li>
+                        <li><a class="dropdown-item" th:href="@{/dashboard/settings}">
+                            <i class="fas fa-regular fa-gear mr-1"></i>
+                            <span th:text="#{dashboard.navigation.avatar.settings}"></span>
+                        </a>
                         </li>
                         <li><a class="dropdown-item"
-                               data-bs-toggle="modal" data-bs-target="#signOutModal"
-                               th:text="#{dashboard.navigation.avatar.logout}"></a></li>
+                               data-bs-toggle="modal" data-bs-target="#signOutModal">
+                            <i class="fas fa-right-from-bracket mr-1"></i>
+                            <span th:text="#{dashboard.navigation.avatar.logout}"></span>
+                        </a></li>
                     </ul>
                 </li>
             </ul>
