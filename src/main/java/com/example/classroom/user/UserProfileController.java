@@ -3,8 +3,6 @@ package com.example.classroom.user;
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
-import com.example.classroom.exception.InvalidOldPasswordException;
-import com.example.classroom.user.password.PasswordChangeRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +20,6 @@ import java.security.Principal;
 @RequiredArgsConstructor
 class UserProfileController {
 
-    private static final String PASSWORD_CHANGE_TEMPLATE = "user/password-change";
     private final UserManagementService service;
     private final BreadcrumbService crumb;
 
@@ -51,10 +48,11 @@ class UserProfileController {
     String updateUserDetails(@Valid @ModelAttribute UpdateRequest userRequest,
                              BindingResult result,
                              HttpServletRequest request,
+                             Principal principal,
                              RedirectAttributes redirectAttributes,
                              Model model) {
         if (result.hasErrors()) {
-            addAttributeBreadcrumb(model, request);
+            addAttributesBreadcrumbAndUser(principal, model, request);
             return USER_EDIT_TEMPLATE;
         }
         User updated = service.update(userRequest);
@@ -72,49 +70,8 @@ class UserProfileController {
         return "redirect:/sign-up";
     }
 
-    @GetMapping("password")
-    String getPasswordChangePage(Model model,
-                                 HttpServletRequest request,
-                                 Principal principal) {
-        addAttributesBreadcrumbAndUser(principal, model, request);
-        model.addAttribute("passwordChange", new PasswordChangeRequest());
-        return PASSWORD_CHANGE_TEMPLATE;
-    }
-
-    @PostMapping("password")
-    String updatePassword(@Valid @ModelAttribute("passwordChange") final PasswordChangeRequest passwordChangeRequest,
-                          BindingResult result,
-                          Principal principal,
-                          Model model,
-                          HttpServletRequest request,
-                          RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            addAttributesBreadcrumbAndUser(principal, model, request);
-            model.addAttribute("passwordChange", passwordChangeRequest);
-            return PASSWORD_CHANGE_TEMPLATE;
-        }
-
-        try {
-            service.changeUserPassword(principal.getName(), passwordChangeRequest);
-            redirectAttributes.addFlashAttribute("passwordChangeSuccess", "success");
-        } catch (InvalidOldPasswordException e) {
-            model.addAttribute("invalidOldPassword", e.getMessage());
-            addAttributesBreadcrumbAndUser(principal, model, request);
-            return PASSWORD_CHANGE_TEMPLATE;
-        }
-        return "redirect:/dashboard/profile";
-    }
-
     private void addAttributesBreadcrumbAndUser(Principal principal, Model model, HttpServletRequest request) {
-        addAttributeBreadcrumb(model, request);
-        addAttributeUserByUsername(model, principal);
-    }
-
-    private void addAttributeUserByUsername(Model model, Principal principal) {
-        model.addAttribute("user", service.loadUserByUsername(principal.getName()));
-    }
-
-    private void addAttributeBreadcrumb(Model model, HttpServletRequest request) {
         model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        model.addAttribute("user", service.loadUserByUsername(principal.getName()));
     }
 }

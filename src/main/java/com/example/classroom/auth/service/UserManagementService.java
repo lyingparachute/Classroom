@@ -11,7 +11,6 @@ import com.example.classroom.teacher.TeacherService;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
-import com.example.classroom.user.password.PasswordChangeRequest;
 import com.example.classroom.user.register.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -88,8 +87,8 @@ public class UserManagementService implements UserDetailsService {
         repository.delete(byId);
     }
 
-    public void updateUserPassword(final User user, final String password) {
-        user.setPassword(passwordEncoder.encode(password));
+    public void updateUserPassword(final User user, final String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
         repository.save(user);
     }
 
@@ -114,15 +113,8 @@ public class UserManagementService implements UserDetailsService {
         }
     }
 
-    public void changeUserPassword(final String userEmail,
-                                   final PasswordChangeRequest passwordChangeRequest) {
-        User user = loadUserByUsername(userEmail);
-        validateOldPassword(passwordChangeRequest.getOldPassword(), user.getPassword());
-        resetUserPassword(user, passwordChangeRequest.getPasswordResetRequest().getPassword());
-    }
-
-    private void validateOldPassword(final String oldPasswordInput,
-                                     final String userPassword) {
+    public void validateOldPassword(final String oldPasswordInput,
+                                    final String userPassword) {
         if (!passwordEncoder.matches(oldPasswordInput, userPassword))
             throw new InvalidOldPasswordException("Invalid old password!");
     }
