@@ -39,7 +39,7 @@ public class UserManagementService implements UserDetailsService {
             throw new UserAlreadyExistException("There is already an account with email address: " + request.getEmail());
         User userDetails = new User();
         mapper.map(request, userDetails);
-        userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
+        userDetails.setPassword(passwordEncoder.encode(request.getPasswordRequest().getPassword()));
         User saved = repository.save(userDetails);
         createUniversityAttendeeAccount(request, saved);
         saved.getAttendee();

@@ -13,5 +13,5 @@ public class PasswordChangeRequest {
     @NotBlank(message = "{message.old.password.empty}")
     private String oldPassword;
     @Valid
-    private NewPasswordRequest newPasswordRequest;
+    private PasswordRequest passwordRequest;
 }

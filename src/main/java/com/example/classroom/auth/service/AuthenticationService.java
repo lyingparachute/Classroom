@@ -34,7 +34,7 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         User userDetails = new User();
         mapper.map(request, userDetails);
-        userDetails.setPassword(passwordEncoder.encode(request.getPassword()));
+        userDetails.setPassword(passwordEncoder.encode(request.getPasswordRequest().getPassword()));
         if (userDetails.getRole() == null) {
             userDetails.setRole(UserRole.ROLE_STUDENT);
         }
