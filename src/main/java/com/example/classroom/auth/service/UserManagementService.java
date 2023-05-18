@@ -1,8 +1,8 @@
 package com.example.classroom.auth.service;
 
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.exception.EntityNotFoundException;
+import com.example.classroom.exception.InvalidOldPasswordException;
 import com.example.classroom.exception.UserAlreadyExistException;
 import com.example.classroom.student.StudentDto;
 import com.example.classroom.student.StudentService;
@@ -11,6 +11,7 @@ import com.example.classroom.teacher.TeacherService;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import com.example.classroom.user.register.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -33,7 +34,7 @@ public class UserManagementService implements UserDetailsService {
     private final TeacherService teacherService;
 
     @Transactional
-    public User register(RegisterRequest request) {
+    public User register(RegisterRequest request) throws UserAlreadyExistException {
         if (emailExists(request.getEmail()))
             throw new UserAlreadyExistException("There is already an account with email address: " + request.getEmail());
         User userDetails = new User();
@@ -86,8 +87,8 @@ public class UserManagementService implements UserDetailsService {
         repository.delete(byId);
     }
 
-    public void resetUserPassword(final User user, final String password) {
-        user.setPassword(passwordEncoder.encode(password));
+    public void updateUserPassword(final User user, final String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
         repository.save(user);
     }
 
@@ -110,5 +111,11 @@ public class UserManagementService implements UserDetailsService {
         if (session != null) {
             session.invalidate();
         }
+    }
+
+    public void validateOldPassword(final String oldPasswordInput,
+                                    final String userPassword) {
+        if (!passwordEncoder.matches(oldPasswordInput, userPassword))
+            throw new InvalidOldPasswordException("Invalid old password!");
     }
 }

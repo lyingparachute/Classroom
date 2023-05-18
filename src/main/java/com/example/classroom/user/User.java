@@ -16,7 +16,6 @@ import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
@@ -32,6 +31,8 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
+    private Boolean enabled;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -46,6 +47,9 @@ public class User implements UserDetails {
     @Setter(AccessLevel.NONE)
     private Teacher teacher;
 
+    public User() {
+        this.enabled = false;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -79,7 +83,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     public boolean isStudent() {
@@ -99,5 +103,9 @@ public class User implements UserDetails {
 
     public Object getAttendee() {
         return isTeacher() ? teacher : student;
+    }
+
+    public void enableAccount() {
+        this.enabled = true;
     }
 }

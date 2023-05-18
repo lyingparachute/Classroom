@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.example.classroom.mail_sender.MailSenderService.getAppUrl;
+import static com.example.classroom.mail_sender.MailSenderService.getSignInLink;
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
 
@@ -38,6 +40,22 @@ public class PasswordService {
         } catch (UsernameNotFoundException e) {
             return false;
         }
+    }
+
+
+    void validatePasswordResetToken(final String token) throws InvalidTokenException {
+        final PasswordResetToken passToken = getPasswordResetToken(token);
+        if (!passToken.isTokenValid()) throw new InvalidTokenException("Token expired or revoked: " + token);
+    }
+
+    void resetPassword(final HttpServletRequest request,
+                       final String token,
+                       final String newPassword) {
+        User user = getUserByPasswordResetToken(token);
+        userService.updateUserPassword(user, newPassword);
+        PasswordResetToken passwordResetToken = getPasswordResetToken(token);
+        revokeToken(passwordResetToken);
+        sendPasswordResetConfirmationEmail(request, user);
     }
 
     private void sendPasswordResetEmail(final HttpServletRequest request,
@@ -69,13 +87,7 @@ public class PasswordService {
         return passwordTokenRepository.save(myToken).getToken();
     }
 
-    String validatePasswordResetToken(final String token) throws InvalidTokenException {
-        final PasswordResetToken passToken = getPasswordResetToken(token);
-        if (!passToken.isTokenValid()) throw new InvalidTokenException("Token expired or revoked: " + token);
-        return "valid";
-    }
-
-    User getUserByPasswordResetToken(final String token) {
+    private User getUserByPasswordResetToken(final String token) {
         return Optional.ofNullable(getPasswordResetToken(token).getUser())
                 .orElseThrow(() -> new InvalidTokenException("Invalid token: " + token));
     }
@@ -84,31 +96,12 @@ public class PasswordService {
         return getAppUrl(request) + "/password/change?token=" + token;
     }
 
-    private String getAppUrl(final HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-    }
-
     private PasswordResetToken getPasswordResetToken(final String token) {
         return passwordTokenRepository.findByToken(token)
                 .orElseThrow(() -> new InvalidTokenException("Invalid token: " + token));
     }
 
-    private PasswordResetToken getPasswordResetToken(final User user) {
-        return passwordTokenRepository.findByUser(user)
-                .orElseThrow(() -> new InvalidTokenException("No tokens for user with email: " + user.getEmail()));
-    }
-
-    void resetPassword(final HttpServletRequest request,
-                       final String token,
-                       final String newPassword) {
-        User user = getUserByPasswordResetToken(token);
-        userService.resetUserPassword(user, newPassword);
-        PasswordResetToken passwordResetToken = getPasswordResetToken(token);
-        revokeToken(passwordResetToken);
-        sendPasswordResetConfirmationEmail(request, user);
-    }
-
-    void revokeToken(final PasswordResetToken token) {
+    private void revokeToken(final PasswordResetToken token) {
         token.setRevoked();
         passwordTokenRepository.save(token);
     }
@@ -126,9 +119,5 @@ public class PasswordService {
                         entry("websiteLink", appUrl)
                 )
         );
-    }
-
-    private String getSignInLink(String appUrl) {
-        return appUrl + "/sign-in";
     }
 }

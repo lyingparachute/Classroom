@@ -1,6 +1,6 @@
 package com.example.classroom.test.util;
 
-import com.example.classroom.auth.model.RegisterRequest;
+import com.example.classroom.user.register.RegisterRequest;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;

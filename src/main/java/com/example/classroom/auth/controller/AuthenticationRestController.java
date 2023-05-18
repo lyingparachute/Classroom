@@ -2,8 +2,8 @@ package com.example.classroom.auth.controller;
 
 import com.example.classroom.auth.model.AuthenticationRequest;
 import com.example.classroom.auth.model.AuthenticationResponse;
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.auth.service.AuthenticationService;
+import com.example.classroom.user.register.RegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

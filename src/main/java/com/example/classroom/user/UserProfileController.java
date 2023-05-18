@@ -23,15 +23,14 @@ class UserProfileController {
     private final UserManagementService service;
     private final BreadcrumbService crumb;
 
-    static final String USER_EDIT_TEMPLATE = "user/user-edit";
-    static final String FIELDS_OF_STUDY_UPLOAD_DIR = "fields-of-study/";
+    private static final String USER_EDIT_TEMPLATE = "user/user-edit";
+    private static final String FIELDS_OF_STUDY_UPLOAD_DIR = "fields-of-study/";
 
     @GetMapping
     String getUserDetailsPage(Model model,
                               HttpServletRequest request,
                               Principal principal) {
-        addAttributeBreadcrumb(model, request);
-        addAttributeUserByUsername(model, principal);
+        addAttributesBreadcrumbAndUser(principal, model, request);
         model.addAttribute("imagesPath", Path.of("/img").resolve(FIELDS_OF_STUDY_UPLOAD_DIR));
         return "user/user-view";
     }
@@ -41,8 +40,7 @@ class UserProfileController {
     String getEditUserDetailsPage(Model model,
                                   HttpServletRequest request,
                                   Principal principal) {
-        addAttributeBreadcrumb(model, request);
-        addAttributeUserByUsername(model, principal);
+        addAttributesBreadcrumbAndUser(principal, model, request);
         return USER_EDIT_TEMPLATE;
     }
 
@@ -50,10 +48,11 @@ class UserProfileController {
     String updateUserDetails(@Valid @ModelAttribute UpdateRequest userRequest,
                              BindingResult result,
                              HttpServletRequest request,
+                             Principal principal,
                              RedirectAttributes redirectAttributes,
                              Model model) {
         if (result.hasErrors()) {
-            addAttributeBreadcrumb(model, request);
+            addAttributesBreadcrumbAndUser(principal, model, request);
             return USER_EDIT_TEMPLATE;
         }
         User updated = service.update(userRequest);
@@ -71,11 +70,8 @@ class UserProfileController {
         return "redirect:/sign-up";
     }
 
-    private void addAttributeUserByUsername(Model model, Principal principal) {
-        model.addAttribute("user", service.loadUserByUsername(principal.getName()));
-    }
-
-    private void addAttributeBreadcrumb(Model model, HttpServletRequest request) {
+    private void addAttributesBreadcrumbAndUser(Principal principal, Model model, HttpServletRequest request) {
         model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        model.addAttribute("user", service.loadUserByUsername(principal.getName()));
     }
 }

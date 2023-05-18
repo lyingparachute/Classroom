@@ -2,7 +2,6 @@ package com.example.classroom.auth.service;
 
 import com.example.classroom.auth.model.AuthenticationRequest;
 import com.example.classroom.auth.model.AuthenticationResponse;
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.test.util.UnitTestsInitData;
 import com.example.classroom.token.JwtService;
 import com.example.classroom.token.Token;
@@ -10,6 +9,7 @@ import com.example.classroom.token.TokenRepository;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import com.example.classroom.user.register.RegisterRequest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

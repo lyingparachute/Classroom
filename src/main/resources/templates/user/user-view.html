@@ -18,6 +18,8 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div th:replace="~{fragments/alerts :: user-profile-view-alerts}"></div>
+
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="card mb-4">
@@ -25,8 +27,8 @@
                                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
                                          alt="avatar"
                                          class="rounded-circle img-fluid" style="width: 150px;">
-                                    <h5 class="my-3" th:text="${user.firstName + ' ' + user.lastName}"></h5>
-                                    <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
+                                    <h5 class="my-2" th:text="${user.firstName + ' ' + user.lastName}"></h5>
+                                    <p class="text-muted mb-2">Bay Area, San Francisco, CA</p>
                                     <div class="row justify-content-center mb-2">
                                         <a class="col-6 btn btn-outline-primary ms-1"
                                            th:href="@{/dashboard/profile/edit}">
@@ -108,32 +110,31 @@
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.email}"></p>
                                         </div>
-                                        <div class="col-sm-7">
+                                        <div class="col-sm-6">
                                             <p class="text-muted mb-0" th:text="${user.email}"></p>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-3">
                                             <a class="btn btn-outline-primary"
-                                               th:href="@{/dashboard/profile/email/edit}">
+                                               th:href="@{/dashboard/profile/email}">
                                                 <i class="fas fa-pen mr-1"></i>
-                                                <span th:text="#{button.edit}"></span>
+                                                <span th:text="#{button.change}"></span>
                                             </a>
                                         </div>
                                     </div>
 
                                     <hr>
                                     <div class="row">
-
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.password}"></p>
                                         </div>
-                                        <div class="col-sm-7">
+                                        <div class="col-sm-6">
                                             <p class="text-muted mb-0" th:text="#{user.password.value}"></p>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-3">
                                             <a class="btn btn-outline-primary"
-                                               th:href="@{/dashboard/profile/password/edit}">
+                                               th:href="@{/dashboard/profile/password}">
                                                 <i class="fas fa-pen mr-1"></i>
-                                                <span th:text="#{button.edit}"></span>
+                                                <span th:text="#{button.change}"></span>
                                             </a>
                                         </div>
                                     </div>
@@ -277,89 +278,6 @@
                                                     <span th:text="#{button.view.fielOfStudy}"></span>
                                                     <i class="fas fa-regular fa-up-right-from-square"></i>
                                                 </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card mb-4 mb-md-0">
-                                        <div class="card-body">
-                                            <p class="mb-4"><span
-                                                    class="text-primary font-italic me-1">assigment</span>
-                                                Project Status
-                                            </p>
-                                            <p class="mb-1" style="font-size: .77rem;">Web Design</p>
-                                            <div class="progress rounded" style="height: 5px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 80%"
-                                                     aria-valuenow="80"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
-                                            <div class="progress rounded" style="height: 5px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 72%"
-                                                     aria-valuenow="72"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
-                                            <div class="progress rounded" style="height: 5px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 89%"
-                                                     aria-valuenow="89"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
-                                            <div class="progress rounded" style="height: 5px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 55%"
-                                                     aria-valuenow="55"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
-                                            <div class="progress rounded mb-2" style="height: 5px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 66%"
-                                                     aria-valuenow="66"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="card mb-4 mb-md-0">
-                                        <div class="card-body">
-                                            <p class="mb-4"><span
-                                                    class="text-primary font-italic me-1">assigment</span>
-                                                Project Status
-                                            </p>
-                                            <p class="mb-1" style="font-size: .77rem;">Web Design</p>
-                                            <div class="progress rounded" style="height: 5px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 80%"
-                                                     aria-valuenow="80"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
-                                            <div class="progress rounded" style="height: 5px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 72%"
-                                                     aria-valuenow="72"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
-                                            <div class="progress rounded" style="height: 5px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 89%"
-                                                     aria-valuenow="89"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
-                                            <div class="progress rounded" style="height: 5px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 55%"
-                                                     aria-valuenow="55"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
-                                            <div class="progress rounded mb-2" style="height: 5px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 66%"
-                                                     aria-valuenow="66"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                         </div>
                                     </div>

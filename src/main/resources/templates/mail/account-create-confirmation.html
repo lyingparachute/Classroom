@@ -17,12 +17,13 @@
                                 <td class="content-cell">
                                     <div>
                                         <h1>
-                                            <span th:text="#{mail.hi}"></span>
+                                            <span th:text="#{mail.new.account.welcome}"></span>
                                             <span th:text="${firstName + ','}"></span>
                                         </h1>
                                         <p>
-                                            <span th:text="#{mail.password.reset.body.info}"></span>
-                                            <strong th:text="#{mail.password.reset.body.link.duration}"></strong>
+                                            <span th:text="#{mail.new.account.info1}"></span>
+                                            <span th:text="#{mail.new.account.info2}"></span>
+                                            <strong th:text="#{mail.new.account.info.link.duration}"></strong>
                                         </p>
                                         <!-- Action -->
                                         <table class="body-action" role="presentation">
@@ -31,24 +32,25 @@
                                                     <table role="presentation">
                                                         <tr>
                                                             <td>
-                                                                <a th:href="${resetLink}"
+                                                                <a th:href="${confirmLink}"
                                                                    class="button button--red"
                                                                    target="_blank"
-                                                                   th:text="#{mail.password.reset.body.button}"></a>
+                                                                   th:text="#{mail.new.account.button}"></a>
                                                             </td>
                                                         </tr>
                                                     </table>
                                                 </td>
                                             </tr>
                                         </table>
+                                        <p th:text="#{mail.new.account.info3}"></p>
                                         <p>
-                                            <span th:text="#{mail.password.reset.body.noRequest1}"></span>
+                                            <span th:text="#{mail.new.account.support1}"></span>
                                             <a th:href="@{mailto:support@classroom.com}"
-                                               th:text="#{mail.password.reset.body.noRequest2}"></a>
-                                            <span th:text="#{mail.password.reset.body.noRequest3}"></span>
+                                               th:text="#{mail.new.account.support2}"></a>
+                                            <span th:text="#{mail.new.account.support3}"></span>
                                         </p>
                                         <p>
-                                            <span th:text="#{mail.password.reset.body.thanks}"></span>
+                                            <span th:text="#{mail.new.account.bestRegards}"></span>
                                             <br>
                                             <span th:text="#{mail.password.reset.body.team}"></span>
                                         </p>
@@ -57,7 +59,7 @@
                                             <tr>
                                                 <td>
                                                     <p class="sub" th:text="#{mail.password.reset.body.sub}"></p>
-                                                    <p class="sub" th:text="${resetLink}"></p>
+                                                    <p class="sub" th:text="${confirmLink}"></p>
                                                 </td>
                                             </tr>
                                         </table>

@@ -2,10 +2,10 @@ package com.example.classroom.auth.controller;
 
 import com.example.classroom.auth.model.AuthenticationRequest;
 import com.example.classroom.auth.model.AuthenticationResponse;
-import com.example.classroom.auth.model.RegisterRequest;
 import com.example.classroom.test.util.IntegrationTestsInitData;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
+import com.example.classroom.user.register.RegisterRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

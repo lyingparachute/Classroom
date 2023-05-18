@@ -3,6 +3,7 @@ package com.example.classroom.mail_sender;
 import com.example.classroom.exception.EmailException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,5 +60,13 @@ public class MailSenderService {
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
         javaMailSender.send(message);
+    }
+
+    public static String getAppUrl(final HttpServletRequest request) {
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    }
+
+    public static String getSignInLink(String appUrl) {
+        return appUrl + "/sign-in";
     }
 }
