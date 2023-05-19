@@ -31,11 +31,11 @@
                                     <!-- First and Last name input -->
                                     <div class="row">
                                         <div class="col-md-6 mb-4"
-                                             th:classappend="${#fields.hasErrors('firstName')} ? mb-5">
+                                             th:classappend="${#fields.hasErrors('firstName')} ? 'mb-5'">
                                             <div class="form-outline">
                                                 <input th:field="*{firstName}" type="text" id="form3Example1"
                                                        class="form-control"
-                                                       th:classappend="${#fields.hasErrors('firstName')} ? is-invalid"/>
+                                                       th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'"/>
                                                 <label class="form-label" for="form3Example1"
                                                        th:text="#{signup.first.name}"></label>
                                                 <div class="invalid-feedback">
@@ -46,11 +46,11 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-4"
-                                             th:classappend="${#fields.hasErrors('lastName')} ? mb-5">
+                                             th:classappend="${#fields.hasErrors('lastName')} ? 'mb-5'">
                                             <div class="form-outline">
                                                 <input th:field="*{lastName}" type="text" id="form3Example2"
                                                        class="form-control"
-                                                       th:classappend="${#fields.hasErrors('lastName')} ? is-invalid"/>
+                                                       th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid'"/>
                                                 <label class="form-label" for="form3Example2"
                                                        th:text="#{signup.last.name}"></label>
                                                 <div class="invalid-feedback">
@@ -63,7 +63,7 @@
 
                                     <!-- Email input -->
                                     <div class="form-outline mb-4"
-                                         th:classappend="${#fields.hasErrors('email')} ? mb-5">
+                                         th:classappend="${#fields.hasErrors('email')} ? 'mb-5'">
                                         <input th:field="*{email}" type="email" id="form3Example3"
                                                class="form-control"
                                                th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"/>
@@ -76,13 +76,15 @@
 
                                     <!-- Password input -->
                                     <div class="form-outline mb-4"
-                                         th:classappend="${#fields.hasErrors('password')} ? mb-10">
-                                        <input th:field="*{password}" type="password" id="form2Example22"
+                                         th:classappend="${#fields.hasErrors('passwordRequest.password')} ? 'mb-10'">
+                                        <input th:field="*{passwordRequest.password}" type="password" id="password"
                                                class="form-control" required
-                                               th:classappend="${#fields.hasErrors('password')} ? is-invalid"/>
-                                        <label class="form-label" for="form2Example22"
+                                               th:classappend="${#fields.hasErrors('passwordRequest.matchingPassword') ||
+                                                   #fields.hasErrors('passwordRequest.password')} ? 'is-invalid'"/>
+                                        <label class="form-label" for="password"
                                                th:text="#{signup.password}"></label>
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}">
+                                        <div class="invalid-feedback"
+                                             th:if="${#fields.hasErrors('passwordRequest.password')}">
                                             <ul>
                                                 <li th:text="#{input.helper.password1}"></li>
                                                 <li th:text="#{input.helper.password2}"></li>
@@ -93,6 +95,23 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-outline mb-4"
+                                         th:classappend="${#fields.hasErrors('passwordRequest.matchingPassword')} ? 'mb-5'">
+                                        <input th:field="*{passwordRequest.matchingPassword}" type="password"
+                                               id="matchingPassword"
+                                               th:classappend="${#fields.hasErrors('passwordRequest.matchingPassword') ||
+                                                   #fields.hasErrors('passwordRequest.password')} ? 'is-invalid'"
+                                               class="form-control"
+                                               required/>
+                                        <label class="form-label" for="matchingPassword"
+                                               th:text="#{password.change.password.confirm}"></label>
+                                        <div class="invalid-feedback">
+                                                <span class="mr-1"
+                                                      th:each="error: ${#fields.errors('passwordRequest.matchingPassword')}"
+                                                      th:text="${error}"></span>
+                                        </div>
+                                    </div>
+
                                     <!-- Role input -->
                                     <div th:text="#{signup.authority}"></div>
                                     <div class="btn-group mb-4">
@@ -100,7 +119,7 @@
                                                 th:each="roleOpt, iterStat : ${T(com.example.classroom.user.UserRole).values()}">
                                             <input th:field="*{role}"
                                                    th:value="${roleOpt}"
-                                                   th:classappend="${#fields.hasErrors('role')} ? is-invalid"
+                                                   th:classappend="${#fields.hasErrors('role')} ? 'is-invalid'"
                                                    type="radio" class="btn-check" name="options"
                                                    th:id="'option' + ${iterStat.count}"
                                                    autocomplete="off"/>

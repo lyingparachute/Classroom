@@ -1,7 +1,8 @@
 package com.example.classroom.user.register;
 
-import com.example.classroom.auth.validation.ValidPassword;
 import com.example.classroom.user.UserRole;
+import com.example.classroom.user.password.PasswordRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,8 +27,8 @@ public class RegisterRequest {
     @Email(message = "{message.email.valid}")
     private String email;
 
-    @ValidPassword
-    private String password;
+    @Valid
+    private PasswordRequest passwordRequest;
 
     @NotNull(message = "{role.not.null}")
     private UserRole role;
