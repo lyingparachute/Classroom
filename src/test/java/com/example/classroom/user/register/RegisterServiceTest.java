@@ -43,17 +43,14 @@ class RegisterServiceTest {
     @Nested
     class SendAccountVerificationEmail {
         @Test
-        void sendsEmail_givenDisabledUser() {
+        void sendsVerificationEmail_givenDisabledUser() {
             // Given
             User user = initData.createDisabledUser();
-
-            servletRequest.setServerName("localhost");
-            servletRequest.setServerPort(8080);
             String emailSubject = "Welcome to Classroom! Verify your email address.";
             String fileLocation = "mail/account-create-confirmation.html";
             String token = "verification-token";
             VerificationToken verificationToken = new VerificationToken(user, token);
-            String confirmLink = "http://localhost:8080/account/verify?token=" + token;
+            String confirmLink = "http://localhost:80/account/verify?token=" + token;
 
             // When
             when(tokenRepository.save(any(VerificationToken.class))).thenReturn(verificationToken);
@@ -76,8 +73,6 @@ class RegisterServiceTest {
         void throwsAccountAlreadyVerifiedException_givenEnabledUser() {
             // Given
             User user = initData.createUser();
-            servletRequest.setServerName("localhost");
-            servletRequest.setServerPort(8080);
             String token = "verification-token";
 
             // When
