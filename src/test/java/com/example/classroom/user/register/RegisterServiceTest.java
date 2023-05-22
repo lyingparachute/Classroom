@@ -50,7 +50,8 @@ class RegisterServiceTest {
             String fileLocation = "mail/account-create-confirmation.html";
             String token = "verification-token";
             VerificationToken verificationToken = new VerificationToken(user, token);
-            String confirmLink = "http://localhost:80/account/verify?token=" + token;
+            String confirmationLink = "http://" + servletRequest.getServerName() + ":" + servletRequest.getServerPort() +
+                    servletRequest.getContextPath() + "/account/verify?token=" + token;
 
             // When
             when(tokenRepository.save(any(VerificationToken.class))).thenReturn(verificationToken);
@@ -64,7 +65,7 @@ class RegisterServiceTest {
                     emailSubject,
                     fileLocation,
                     Map.ofEntries(entry("firstName", user.getFirstName()),
-                            entry("confirmLink", confirmLink),
+                            entry("confirmLink", confirmationLink),
                             entry("websiteLink", getAppUrl(servletRequest)))
             );
         }
@@ -73,7 +74,6 @@ class RegisterServiceTest {
         void throwsAccountAlreadyVerifiedException_givenEnabledUser() {
             // Given
             User user = initData.createUser();
-            String token = "verification-token";
 
             // When
             Throwable thrown = catchThrowable(() -> service.sendAccountVerificationEmail(servletRequest, user));
