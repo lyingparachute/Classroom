@@ -256,6 +256,18 @@ public class UnitTestsInitData {
                 .lastName("Nowak")
                 .password("encodedPassword")
                 .email("andrzej.nowak@gmail.com")
+                .enabled(true)
+                .build();
+    }
+
+    public User createDisabledUser() {
+        return User.builder()
+                .id(1L)
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .password("encodedPassword")
+                .email("andrzej.nowak@gmail.com")
+                .enabled(false)
                 .build();
     }
 
