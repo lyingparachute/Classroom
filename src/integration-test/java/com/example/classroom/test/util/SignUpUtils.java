@@ -33,7 +33,7 @@ public final class SignUpUtils {
                         .content("{ \"firstName\": \"" + request.getFirstName() + "\",  " +
                                 "\"lastName\": \"" + request.getLastName() + "\"," +
                                 "\"email\": \"" + request.getEmail() + "\", " +
-                                "\"password\": \"" + request.getPassword() +
+                                "\"password\": \"" + request.getPasswordRequest().getPassword() +
                                 "\"}"))
                 .andReturn()
                 .getResponse()

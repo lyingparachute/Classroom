@@ -20,6 +20,7 @@ import com.example.classroom.token.TokenRepository;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import com.example.classroom.user.password.PasswordRequest;
 import com.example.classroom.user.register.RegisterRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -330,7 +331,9 @@ public class IntegrationTestsInitData {
                 .firstName("Andrzej")
                 .lastName("Nowak")
                 .email("andrzej.nowak@gmail.com")
-                .password("123")
+                .passwordRequest(
+                        new PasswordRequest("123", "123")
+                )
                 .role(UserRole.ROLE_STUDENT)
                 .build();
     }

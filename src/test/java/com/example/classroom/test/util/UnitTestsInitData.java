@@ -12,6 +12,7 @@ import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.user.User;
+import com.example.classroom.user.password.PasswordRequest;
 import com.example.classroom.user.register.RegisterRequest;
 
 import java.util.List;
@@ -263,7 +264,9 @@ public class UnitTestsInitData {
                 .firstName("Andrzej")
                 .lastName("Nowak")
                 .email("andrzej.nowak@gmail.com")
-                .password("123")
+                .passwordRequest(
+                        new PasswordRequest("123", "123")
+                )
                 .build();
     }
 

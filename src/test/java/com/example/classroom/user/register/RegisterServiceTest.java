@@ -2,6 +2,7 @@ package com.example.classroom.user.register;
 
 import com.example.classroom.mail_sender.MailSenderService;
 import com.example.classroom.user.UserRepository;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,15 +21,24 @@ class RegisterServiceTest {
     @Mock
     UserRepository userRepository;
 
-    @Test
-    void sendAccountVerificationEmail() {
+    @Nested
+    class SendAccountVerificationEmail {
+        @Test
+        void sendAccountVerificationEmail() {
+        }
     }
 
-    @Test
-    void validateVerificationToken() {
+    @Nested
+    class ValidateVerificationToken {
+        @Test
+        void validateVerificationToken() {
+        }
     }
 
-    @Test
-    void verifyAccount() {
+    @Nested
+    class VerifyAccount {
+        @Test
+        void verifyAccount() {
+        }
     }
 }
