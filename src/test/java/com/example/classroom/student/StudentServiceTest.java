@@ -528,6 +528,7 @@ class StudentServiceTest {
             Student expectedStudent3 = initData.createStudentThree(fieldOfStudy3, List.of(teacher1, teacher2, teacher3));
             Page<Student> students = new PageImpl<>(List.of(expectedStudent3));
             PageableRequest pageableRequest = PageableRequest.builder()
+                    .name(name)
                     .pageNumber(pageNo)
                     .pageSize(pageSize)
                     .sortDir(sortDirection)

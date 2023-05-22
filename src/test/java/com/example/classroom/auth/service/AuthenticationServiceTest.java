@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -55,6 +56,10 @@ class AuthenticationServiceTest {
 
     @Spy
     UnitTestsInitData initData;
+
+    // ModelMapper object is used in service classes, therefore it needs to be initialized (SPY) here
+    @Spy
+    ModelMapper mapper;
 
 
     @Nested

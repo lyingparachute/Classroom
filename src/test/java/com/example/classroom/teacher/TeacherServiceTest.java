@@ -589,9 +589,10 @@ class TeacherServiceTest {
             Teacher expectedTeacher3 = initData.createTeacherThree(department3, List.of(subject3), List.of(student3));
             Page<Teacher> teachers = new PageImpl<>(List.of(expectedTeacher3));
             //when
-            when(repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(anyString(), any(Pageable.class)))
+            when(repository.findAll(any(Pageable.class)))
                     .thenReturn(teachers);
             PageableRequest pageableRequest = PageableRequest.builder()
+                    .name(name)
                     .pageNumber(pageNo)
                     .pageSize(pageSize)
                     .sortDir(sortDirection)
@@ -600,7 +601,7 @@ class TeacherServiceTest {
             Page<TeacherDto> actual = service.fetchAllPaginated(pageableRequest);
 
             //then
-            verify(repository).findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(anyString(), any(Pageable.class));
+            verify(repository).findAll(any(Pageable.class));
             List<TeacherDto> content = actual.getContent();
             assertThat(content).as("Check %s's list size", "students").hasSize(1);
             TeacherDto actualTeacher = content.get(0);
