@@ -20,7 +20,7 @@ import static java.util.Map.ofEntries;
 
 @Service
 @RequiredArgsConstructor
-public class PasswordService {
+public class PasswordResetService {
 
     private static final String PASSWORD_RESET_TEMPLATE_LOCATION = "mail/password-reset.html";
     private static final String PASSWORD_RESET_EMAIL_SUBJECT = "Password Reset";
