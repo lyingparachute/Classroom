@@ -260,7 +260,7 @@ public class UnitTestsInitData {
                 .build();
     }
 
-    public User createDisabledUser() {
+    public User createUnverifiedUser() {
         return User.builder()
                 .id(1L)
                 .firstName("Andrzej")
