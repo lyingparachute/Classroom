@@ -32,9 +32,9 @@ public class MailSenderService {
     @Async
     public void sendEmail(String userEmail,
                           String subject,
-                          String fileLocation,
+                          String templateLocation,
                           Map<String, Object> templateModel) {
-        String htmlBody = createEmailBody(fileLocation, templateModel);
+        String htmlBody = createEmailBody(templateLocation, templateModel);
         try {
             sendHtmlMessage(userEmail, subject, htmlBody);
         } catch (MessagingException | UnsupportedEncodingException e) {
