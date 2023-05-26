@@ -22,8 +22,7 @@ import static com.example.classroom.mail_sender.MailSenderService.getAppUrl;
 import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterServiceTest {
@@ -46,7 +45,7 @@ class RegisterServiceTest {
         @Test
         void sendsVerificationEmail_givenDisabledUser() {
             // Given
-            User user = initData.createDisabledUser();
+            User user = initData.createUnverifiedUser();
             String emailSubject = "Welcome to Classroom! Verify your email address.";
             String fileLocation = "mail/account-create-confirmation.html";
             String token = "verification-token";
@@ -88,7 +87,7 @@ class RegisterServiceTest {
         @Test
         void returnsNothing_givenValidToken() {
             // Given
-            User user = initData.createDisabledUser();
+            User user = initData.createUnverifiedUser();
             String token = "verification-token";
             VerificationToken verificationToken = new VerificationToken(user, token);
 
@@ -103,7 +102,7 @@ class RegisterServiceTest {
         @Test
         void throwsInvalidTokenException_givenRevokedToken() {
             // Given
-            User user = initData.createDisabledUser();
+            User user = initData.createUnverifiedUser();
             String token = "verification-token";
             VerificationToken verificationToken = new VerificationToken(user, token);
             verificationToken.setRevoked();
@@ -118,7 +117,7 @@ class RegisterServiceTest {
         @Test
         void throwsInvalidTokenException_givenExpiredToken() {
             // Given
-            User user = initData.createDisabledUser();
+            User user = initData.createUnverifiedUser();
             String token = "verification-token";
             VerificationToken verificationToken = new VerificationToken(user, token);
 
@@ -127,32 +126,53 @@ class RegisterServiceTest {
 //            LocalDateTime dateTime = LocalDateTime.now(clock);
 //            doReturn(dateTime).when(LocalDateTime.now());
             when(tokenRepository.findByToken(token)).thenReturn(Optional.of(verificationToken));
-
             assertThatThrownBy(() -> service.validateVerificationToken(token))
                     .isExactlyInstanceOf(InvalidTokenException.class)
                     .hasMessage("Verification Token expired or revoked: " + token);
-
         }
 
         @Test
-        void throwsInvalidTokenException_givenInvalidToken() {
+        void throwsInvalidTokenException_givenNotExistingToken() {
             // Given
+            String token = "verification-token";
 
-            // When
+            // When, Then
+            when(tokenRepository.findByToken(token)).thenReturn(Optional.empty());
+            assertThatThrownBy(() -> service.validateVerificationToken(token))
+                    .isExactlyInstanceOf(InvalidTokenException.class)
+                    .hasMessage("Invalid Verification Token: " + token);
 
-            // Then
         }
     }
 
     @Nested
     class VerifyAccount {
         @Test
-        void verifyAccount() {
+        void savesVerifiedUser_givenValidToken() {
             // Given
+            User user = initData.createUnverifiedUser();
+            String token = "verification-token";
+            VerificationToken verificationToken = new VerificationToken(user, token);
 
             // When
+            when(tokenRepository.findByToken(token)).thenReturn(Optional.of(verificationToken));
+            service.verifyAccount(token);
 
             // Then
+            verify(tokenRepository, times(2)).findByToken(token);
+            verify(userRepository).save(user);
+        }
+
+        @Test
+        void throwsInvalidTokenException_givenNotExistingToken() {
+            // Given
+            String token = "verification-token";
+
+            // When, Then
+            when(tokenRepository.findByToken(token)).thenReturn(Optional.empty());
+            assertThatThrownBy(() -> service.validateVerificationToken(token))
+                    .isExactlyInstanceOf(InvalidTokenException.class)
+                    .hasMessage("Invalid Verification Token: " + token);
         }
     }
 }
