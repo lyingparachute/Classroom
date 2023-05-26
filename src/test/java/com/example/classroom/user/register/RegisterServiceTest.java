@@ -15,19 +15,15 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.example.classroom.mail_sender.MailSenderService.getAppUrl;
 import static java.util.Map.entry;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterServiceTest {
@@ -80,11 +76,9 @@ class RegisterServiceTest {
             // Given
             User user = initData.createUser();
 
-            // When
-            Throwable thrown = catchThrowable(() -> service.sendAccountVerificationEmail(servletRequest, user));
-
-            // Then
-            assertThat(thrown).isExactlyInstanceOf(AccountAlreadyVerifiedException.class)
+            // When, Then
+            assertThatThrownBy(() -> service.sendAccountVerificationEmail(servletRequest, user))
+                    .isExactlyInstanceOf(AccountAlreadyVerifiedException.class)
                     .hasMessage("Account with email '" + user.getEmail() + "' is already verified.");
         }
     }
@@ -114,12 +108,10 @@ class RegisterServiceTest {
             VerificationToken verificationToken = new VerificationToken(user, token);
             verificationToken.setRevoked();
 
-            // When
+            // When, Then
             when(tokenRepository.findByToken(token)).thenReturn(Optional.of(verificationToken));
-            Throwable thrown = catchThrowable(() -> service.validateVerificationToken(token));
-
-            // Then
-            assertThat(thrown).isExactlyInstanceOf(InvalidTokenException.class)
+            assertThatThrownBy(() -> service.validateVerificationToken(token))
+                    .isExactlyInstanceOf(InvalidTokenException.class)
                     .hasMessage("Verification Token expired or revoked: " + token);
         }
 
@@ -130,17 +122,16 @@ class RegisterServiceTest {
             String token = "verification-token";
             VerificationToken verificationToken = new VerificationToken(user, token);
 
-            // When
-            Clock clock = Clock.fixed(Instant.parse("2014-12-22T10:15:30.00Z"), ZoneId.of("UTC"));
-            LocalDateTime dateTime = LocalDateTime.now(clock);
-            doReturn(dateTime).when(LocalDateTime.now());
+            // When, Then
+//            Clock clock = Clock.fixed(Instant.parse("2014-12-22T10:15:30.00Z"), ZoneId.of("UTC"));
+//            LocalDateTime dateTime = LocalDateTime.now(clock);
+//            doReturn(dateTime).when(LocalDateTime.now());
             when(tokenRepository.findByToken(token)).thenReturn(Optional.of(verificationToken));
 
-            Throwable thrown = catchThrowable(() -> service.validateVerificationToken(token));
-
-            // Then
-            assertThat(thrown).isExactlyInstanceOf(InvalidTokenException.class)
+            assertThatThrownBy(() -> service.validateVerificationToken(token))
+                    .isExactlyInstanceOf(InvalidTokenException.class)
                     .hasMessage("Verification Token expired or revoked: " + token);
+
         }
 
         @Test
