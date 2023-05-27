@@ -22,7 +22,9 @@ import static com.example.classroom.mail_sender.MailSenderService.getAppUrl;
 import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterServiceTest {
@@ -59,8 +61,8 @@ class RegisterServiceTest {
             service.sendAccountVerificationEmail(servletRequest, user);
 
             // Then
-            verify(tokenRepository).save(any(VerificationToken.class));
-            verify(mailService).sendEmail(
+            then(tokenRepository).should().save(any(VerificationToken.class));
+            then(mailService).should().sendEmail(
                     user.getEmail(),
                     emailSubject,
                     fileLocation,
@@ -96,7 +98,7 @@ class RegisterServiceTest {
             service.validateVerificationToken(token);
 
             // Then
-            verify(tokenRepository).findByToken(token);
+            then(tokenRepository).should().findByToken(token);
         }
 
         @Test
@@ -159,8 +161,8 @@ class RegisterServiceTest {
             service.verifyAccount(token);
 
             // Then
-            verify(tokenRepository, times(2)).findByToken(token);
-            verify(userRepository).save(user);
+            then(tokenRepository).should(times(2)).findByToken(token);
+            then(userRepository).should().save(user);
         }
 
         @Test
