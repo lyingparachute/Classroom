@@ -2,6 +2,7 @@ package com.example.classroom.mail_sender;
 
 import com.example.classroom.exception.EmailException;
 import jakarta.mail.internet.MimeMessage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +12,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.thymeleaf.ITemplateEngine;
 
 import java.util.Map;
@@ -27,7 +28,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@TestPropertySource(properties = "spring.mail.username=sender@example.com")
 class MailSenderServiceTest {
 
     @InjectMocks
@@ -40,8 +40,11 @@ class MailSenderServiceTest {
     ITemplateEngine thymeleafTemplateEngine;
     @Spy
     MockHttpServletRequest servletRequest;
-//    @Value("${spring.mail.username}")
-//    private String sender;
+
+    @BeforeEach
+    public void setUp() {
+        ReflectionTestUtils.setField(service, "sender", "sender@example.com");
+    }
 
     @Nested
     class SendEmail {
@@ -55,8 +58,6 @@ class MailSenderServiceTest {
                     Map.entry("key", "value")
             );
             String htmlBody = "Test HTML Body";
-//            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-//            given(thymeleafTemplateEngine.process(anyString(), any())).willReturn(htmlBody);
 
             // When
             when(thymeleafTemplateEngine.process(anyString(), any())).thenReturn(htmlBody);
