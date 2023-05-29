@@ -62,7 +62,6 @@ class MailSenderServiceTest {
             // When
             when(thymeleafTemplateEngine.process(anyString(), any())).thenReturn(htmlBody);
             when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
-//            doReturn("s").when(thymeleafTemplateEngine).process(templateLocation, new Context());
             service.sendEmail(userEmail, subject, templateLocation, templateModel);
 
             // Then
@@ -83,7 +82,9 @@ class MailSenderServiceTest {
             // When
             when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
             when(thymeleafTemplateEngine.process(anyString(), any())).thenReturn(htmlBody);
-            doThrow(new RuntimeException("Failed to send email.")).when(javaMailSender).send(mimeMessage);
+            doThrow(new EmailException("Failed to send email."))
+                    .when(javaMailSender)
+                    .send(mimeMessage);
 
             // Then
             assertThatThrownBy(() -> {
