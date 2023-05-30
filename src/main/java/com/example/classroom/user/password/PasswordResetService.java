@@ -28,7 +28,7 @@ public class PasswordResetService {
     private static final String PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT = "Password Reset Confirmation";
     private final UserManagementService userService;
     private final PasswordResetTokenRepository passwordTokenRepository;
-    private final MailSenderService mailSenderService;
+    private final MailSenderService mailService;
 
     boolean sendEmailWithResetPasswordInstructions(final HttpServletRequest request,
                                                    final String userEmail) {
@@ -61,7 +61,7 @@ public class PasswordResetService {
     private void sendPasswordResetEmail(final HttpServletRequest request,
                                         final User user,
                                         final String token) {
-        mailSenderService.sendEmail(
+        mailService.sendEmail(
                 user.getEmail(),
                 PASSWORD_RESET_EMAIL_SUBJECT,
                 PASSWORD_RESET_TEMPLATE_LOCATION,
@@ -109,7 +109,7 @@ public class PasswordResetService {
     private void sendPasswordResetConfirmationEmail(final HttpServletRequest request,
                                                     final User user) {
         String appUrl = getAppUrl(request);
-        mailSenderService.sendEmail(
+        mailService.sendEmail(
                 user.getEmail(),
                 PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT,
                 PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION,
