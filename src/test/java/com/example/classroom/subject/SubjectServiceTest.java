@@ -17,8 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -367,6 +369,34 @@ class SubjectServiceTest {
                             ).containsExactlyInAnyOrder(
                                     Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
                                             teacher3.getEmail(), teacher3.getAge()))
+            );
+        }
+
+        @Test
+        void fetchAllGroupedBySemesters_returnsSubjectsMap_groupedBySemesters() {
+            // Given
+            Subject expected1 = initData.createSubjectOne(null, List.of());
+            Subject expected2 = initData.createSubjectTwo(null, List.of());
+            Subject expected3 = initData.createSubjectThree(null, List.of());
+            Subject expected4 = initData.createSubjectFour(null, List.of());
+
+            // When
+            when(repository.findAllBySemester(Semester.FIRST)).thenReturn(List.of(expected3));
+            when(repository.findAllBySemester(Semester.SECOND)).thenReturn(List.of(expected2));
+            when(repository.findAllBySemester(Semester.THIRD)).thenReturn(List.of());
+            when(repository.findAllBySemester(Semester.FOURTH)).thenReturn(List.of());
+            when(repository.findAllBySemester(Semester.FIFTH)).thenReturn(List.of(expected1, expected4));
+            when(repository.findAllBySemester(Semester.SIXTH)).thenReturn(List.of());
+            when(repository.findAllBySemester(Semester.SEVENTH)).thenReturn(List.of());
+
+            Map<Semester, List<Subject>> result = service.fetchAllGroupedBySemesters();
+
+            // Then
+            assertThat(result).isNotNull().isNotEmpty().contains(
+                    entry(Semester.FIRST, List.of(expected3)),
+                    entry(Semester.SECOND, List.of(expected2)),
+                    entry(Semester.THIRD, List.of()),
+                    entry(Semester.FIFTH, List.of(expected1, expected4))
             );
         }
     }
