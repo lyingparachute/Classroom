@@ -21,8 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PasswordResetServiceTest {
@@ -149,7 +148,12 @@ class PasswordResetServiceTest {
 
             // When
             when(passwordTokenRepository.findByToken(anyString())).thenReturn(Optional.of(passwordResetToken));
-
+//            try(MockedStatic<LocalDateTime> mock = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+//                doReturn(LocalDateTime.of(2022,01,01,22,22,22))
+//                        .when(mock);
+//                // Put the execution of the test inside of the try, otherwise it won't work
+//            }
+            when(passwordResetToken.isExpired()).thenReturn(true);
             assertThatThrownBy(() -> service.validatePasswordResetToken(token))
                     .isExactlyInstanceOf(InvalidTokenException.class)
                     .hasMessage("Token expired or revoked: " + token);
@@ -162,7 +166,48 @@ class PasswordResetServiceTest {
     @Nested
     class ResetPassword {
         @Test
-        void resetPassword() {
+        void resetsPassword_andRevokesToken_givenValidParameters() {
+            // Given
+            User user = initData.createUser();
+            String userEmail = user.getEmail();
+            PasswordResetToken passwordResetToken = initData.createPasswordResetToken(user);
+            String token = passwordResetToken.getToken();
+            String newPassword = "newPassword";
+            String PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT = "Password Reset Confirmation";
+            String PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION = "mail/password-reset-confirmation.html";
+
+            // When
+            when(passwordTokenRepository.findByToken(anyString())).thenReturn(Optional.of(passwordResetToken));
+
+            service.resetPassword(servletRequest, token, newPassword);
+
+            // Then
+            then(passwordTokenRepository).should(times(2)).findByToken(token);
+            then(userService).should().updateUserPassword(user, newPassword);
+            then(passwordTokenRepository).should().save(passwordResetToken);
+            then(mailService).should().sendEmail(
+                    eq(userEmail),
+                    eq(PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT),
+                    eq(PASSWORD_RESET_CONFIRM_TEMPLATE_LOCATION),
+                    anyMap()
+            );
+        }
+
+        @Test
+        void throwsInvalidTokenException_givenInvalidToken() {
+            // Given
+            String token = "invalid-token";
+            String newPassword = "newPassword";
+
+            // When
+            when(passwordTokenRepository.findByToken(anyString())).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> service.resetPassword(servletRequest, token, newPassword))
+                    .isExactlyInstanceOf(InvalidTokenException.class)
+                    .hasMessage("Invalid token: " + token);
+
+            // Then
+            then(passwordTokenRepository).should().findByToken(token);
         }
     }
 }
