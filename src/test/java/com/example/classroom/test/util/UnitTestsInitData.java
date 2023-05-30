@@ -13,9 +13,11 @@ import com.example.classroom.subject.Subject;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.user.User;
 import com.example.classroom.user.password.PasswordRequest;
+import com.example.classroom.user.password.PasswordResetToken;
 import com.example.classroom.user.register.RegisterRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 public class UnitTestsInitData {
 
@@ -296,6 +298,13 @@ public class UnitTestsInitData {
                 .email("andrzej.nowak@gmail.com")
                 .password("newEncodedpassword")
                 .build();
+    }
+
+    public PasswordResetToken createPasswordResetToken(User user) {
+        return new PasswordResetToken(
+                user,
+                UUID.randomUUID().toString()
+        );
     }
 }
 
