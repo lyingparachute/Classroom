@@ -17,7 +17,6 @@ import com.example.classroom.user.password.PasswordResetToken;
 import com.example.classroom.user.register.RegisterRequest;
 
 import java.util.List;
-import java.util.UUID;
 
 public class UnitTestsInitData {
 
@@ -303,7 +302,7 @@ public class UnitTestsInitData {
     public PasswordResetToken createPasswordResetToken(User user) {
         return new PasswordResetToken(
                 user,
-                UUID.randomUUID().toString()
+                "test-token"
         );
     }
 }
