@@ -87,15 +87,15 @@ public class StudentService {
     Page<StudentDto> getAllStudentsFromRequest(final PageableRequest pageable,
                                                final User user) {
         if (user.isTeacher())
-            return getFilteredAndSortedStudentsPageFromStudent(user, pageable);
+            return getFilteredAndSortedStudentsPage(user, pageable);
         if (isNamePresent(pageable.name()))
             return findByFirstOrLastNamePaginated(pageable);
         else
             return fetchAllPaginated(pageable);
     }
 
-    private Page<StudentDto> getFilteredAndSortedStudentsPageFromStudent(final User user,
-                                                                         final PageableRequest pageableReq) {
+    private Page<StudentDto> getFilteredAndSortedStudentsPage(final User user,
+                                                              final PageableRequest pageableReq) {
         Sort sort = getSortOrder(pageableReq.sortField(), pageableReq.sortDir());
         Pageable pageable = PageRequest.of(pageableReq.pageNumber() - 1, pageableReq.pageSize(), sort);
         List<StudentDto> students = user.getTeacher().getStudents().stream()
