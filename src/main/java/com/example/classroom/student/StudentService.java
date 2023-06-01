@@ -31,7 +31,7 @@ public class StudentService {
         return mapper.map(saved, StudentDto.class);
     }
 
-    private static Sort getSortOrder(String sortField, String sortDirection) {
+    private Sort getSortOrder(String sortField, String sortDirection) {
         return sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
