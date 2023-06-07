@@ -604,8 +604,62 @@ class StudentServiceTest {
             Page<StudentDto> result = service.getAllStudentsFromRequest(pageableRequest, user);
 
             // Then
-            assertThat(result).isNotEmpty().hasSize(1)
-                    .extracting(
+            assertThat(result).isNotEmpty().extracting(
+                            StudentDto::getId,
+                            StudentDto::getFirstName,
+                            StudentDto::getLastName,
+                            StudentDto::getAge,
+                            StudentDto::getEmail,
+                            StudentDto::getTeachers,
+                            StudentDto::getFieldOfStudy
+                    )
+                    .containsExactlyInAnyOrder(
+                            Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(), student2.getAge(),
+                                    student2.getEmail(), student2.getTeachers(), student2.getFieldOfStudy())
+                    );
+        }
+
+        @Test
+        void returnsFilteredAndSortedStudentsPage_givenUserWithRoleStudent_searchByName() {
+            // Given
+            int pageNo = 1;
+            int pageSize = 2;
+            String sortField = "name";
+            String sortDirection = Sort.Direction.ASC.name();
+            String name = "wer";
+
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+            Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+
+            Student student1 = initData.createStudentOne(fieldOfStudy1, List.of(teacher1, teacher2));
+            Student student2 = initData.createStudentTwo(fieldOfStudy2, List.of(teacher1, teacher3));
+
+            User user = initData.createUserWithStudentRole(student1);
+
+            teacher1.addStudent(student1);
+            teacher1.addStudent(student2);
+
+            PageableRequest pageableRequest = PageableRequest.builder()
+                    .name(name)
+                    .pageNumber(pageNo)
+                    .pageSize(pageSize)
+                    .sortDir(sortDirection)
+                    .sortField(sortField)
+                    .build();
+
+            Page<Student> page = new PageImpl<>(List.of(student2));
+
+            // When
+            when(repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(eq(name), any(Pageable.class)))
+                    .thenReturn(page);
+            Page<StudentDto> result = service.getAllStudentsFromRequest(pageableRequest, user);
+
+            // Then
+            assertThat(result).isNotEmpty().extracting(
                             StudentDto::getId,
                             StudentDto::getFirstName,
                             StudentDto::getLastName,
