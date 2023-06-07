@@ -275,6 +275,19 @@ public class UnitTestsInitData {
                 .build();
     }
 
+    public User createUserWithStudentRole(Student student) {
+        return User.builder()
+                .id(1L)
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .password("encodedPassword")
+                .email("andrzej.nowak@gmail.com")
+                .role(UserRole.ROLE_STUDENT)
+                .student(student)
+                .enabled(true)
+                .build();
+    }
+
     public User createUnverifiedUser() {
         return User.builder()
                 .id(1L)
