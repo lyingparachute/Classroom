@@ -87,11 +87,11 @@ public class User implements UserDetails {
     }
 
     public boolean isStudent() {
-        return student != null;
+        return role == UserRole.ROLE_STUDENT;
     }
 
     public boolean isTeacher() {
-        return teacher != null;
+        return role == UserRole.ROLE_TEACHER;
     }
 
     public void setAttendee(Object attendee) {
