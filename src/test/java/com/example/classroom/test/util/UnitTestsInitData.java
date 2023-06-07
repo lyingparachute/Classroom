@@ -12,6 +12,7 @@ import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.user.User;
+import com.example.classroom.user.UserRole;
 import com.example.classroom.user.password.PasswordRequest;
 import com.example.classroom.user.password.PasswordResetToken;
 import com.example.classroom.user.register.RegisterRequest;
@@ -257,6 +258,19 @@ public class UnitTestsInitData {
                 .lastName("Nowak")
                 .password("encodedPassword")
                 .email("andrzej.nowak@gmail.com")
+                .enabled(true)
+                .build();
+    }
+
+    public User createUserWithTeacherRole(Teacher teacher) {
+        return User.builder()
+                .id(1L)
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .password("encodedPassword")
+                .email("andrzej.nowak@gmail.com")
+                .role(UserRole.ROLE_TEACHER)
+                .teacher(teacher)
                 .enabled(true)
                 .build();
     }
