@@ -332,5 +332,9 @@ public class UnitTestsInitData {
                 "test-token"
         );
     }
+
+    public String createExpiredToken() {
+        return "cf619a21-5b6f-4237-a22d-de3e51198fd0";
+    }
 }
 
