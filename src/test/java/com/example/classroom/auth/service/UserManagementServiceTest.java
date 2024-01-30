@@ -274,7 +274,6 @@ class UserManagementServiceTest {
 
     @Nested
     class RemoveByUsername {
-
         @Test
         void removesUser_givenExistingUsername() {
             // Given
