@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -38,9 +37,6 @@ class UserManagementServiceTest {
 
     @Mock
     UserRepository repository;
-
-    @Spy
-    ModelMapper mapper;
 
     @Mock
     BCryptPasswordEncoder passwordEncoder;
