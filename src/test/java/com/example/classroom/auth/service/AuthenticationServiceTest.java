@@ -55,10 +55,11 @@ class AuthenticationServiceTest {
     AuthenticationManager authenticationManager;
 
     @Spy
-    ModelMapper mapper;
-
-    @Spy
     UnitTestsInitData initData;
+
+    // ModelMapper object is used in service classes, therefore it needs to be initialized (SPY) here
+    @Spy
+    ModelMapper mapper;
 
 
     @Nested

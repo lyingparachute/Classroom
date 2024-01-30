@@ -8,6 +8,7 @@ import com.example.classroom.test.util.IntegrationTestsInitData;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
+import com.example.classroom.user.password.PasswordRequest;
 import com.example.classroom.user.register.RegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -92,7 +93,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.getFirstName() +
                                     "&lastName=" + request.getLastName() +
                                     "&email=" + request.getEmail() +
-                                    "&password=" + request.getPassword() +
+                                    "&password=" + request.getPasswordRequest().getPassword() +
                                     "&role=" + request.getRole()
                             )
                     )
@@ -131,7 +132,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.getFirstName() +
                                     "&lastName=" + request.getLastName() +
                                     "&email=" + request.getEmail() +
-                                    "&password=" + request.getPassword() +
+                                    "&password=" + request.getPasswordRequest().getPassword() +
                                     "&role=" + request.getRole()
                             )
                     )
@@ -170,7 +171,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.getFirstName() +
                                     "&lastName=" + request.getLastName() +
                                     "&email=" + request.getEmail() +
-                                    "&password=" + request.getPassword() +
+                                    "&password=" + request.getPasswordRequest().getPassword() +
                                     "&role=" + request.getRole()
                             )
                     )
@@ -209,7 +210,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.getFirstName() +
                                     "&lastName=" + request.getLastName() +
                                     "&email=" + request.getEmail() +
-                                    "&password=" + request.getPassword() +
+                                    "&password=" + request.getPasswordRequest().getPassword() +
                                     "&role=" + request.getRole()
                             )
                     )
@@ -248,7 +249,9 @@ class AuthenticationControllerIntegrationTest {
                     .firstName("s")
                     .lastName("a")
                     .email("a")
-                    .password("123")
+                    .passwordRequest(
+                            new PasswordRequest("123", "123")
+                    )
                     .build();
 
             // When
@@ -257,7 +260,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.getFirstName() +
                                     "&lastName=" + request.getLastName() +
                                     "&email=" + request.getEmail() +
-                                    "&password=" + request.getPassword()
+                                    "&password=" + request.getPasswordRequest().getPassword()
                             )
                     )
                     .andDo(print())
@@ -287,7 +290,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.getFirstName() +
                                     "&lastName=" + request.getLastName() +
                                     "&email=" + request.getEmail() +
-                                    "&password=" + request.getPassword() +
+                                    "&password=" + request.getPasswordRequest().getPassword() +
                                     "&role=" + request.getRole()
                             )
                     )
@@ -308,7 +311,7 @@ class AuthenticationControllerIntegrationTest {
             String expectedErrorMsgForPassword = "Invalid Password";
 
             RegisterRequest request = initData.createRegisterRequest();
-            request.setPassword("s");
+            request.getPasswordRequest().setPassword("s");
 
             // When
             MvcResult mvcResult = mockMvc.perform(post("/sign-up")
@@ -316,7 +319,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.getFirstName() +
                                     "&lastName=" + request.getLastName() +
                                     "&email=" + request.getEmail() +
-                                    "&password=" + request.getPassword() +
+                                    "&password=" + request.getPasswordRequest().getPassword() +
                                     "&role=" + request.getRole()
                             )
                     )

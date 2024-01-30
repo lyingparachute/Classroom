@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -38,9 +37,6 @@ class UserManagementServiceTest {
 
     @Mock
     UserRepository repository;
-
-    @Spy
-    ModelMapper mapper;
 
     @Mock
     BCryptPasswordEncoder passwordEncoder;
@@ -71,7 +67,7 @@ class UserManagementServiceTest {
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.getPassword());
+            verify(passwordEncoder).encode(request.getPasswordRequest().getPassword());
             verify(repository).save(any(User.class));
             verify(studentService).create(any(StudentDto.class));
             verifyNoInteractions(teacherService);
@@ -106,7 +102,7 @@ class UserManagementServiceTest {
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.getPassword());
+            verify(passwordEncoder).encode(request.getPasswordRequest().getPassword());
             verify(repository).save(any(User.class));
             verifyNoInteractions(studentService);
             verify(teacherService).create(any(TeacherDto.class));
@@ -141,7 +137,7 @@ class UserManagementServiceTest {
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.getPassword());
+            verify(passwordEncoder).encode(request.getPasswordRequest().getPassword());
             verify(repository).save(any(User.class));
             verifyNoInteractions(studentService);
             verify(teacherService).create(any(TeacherDto.class));
@@ -176,7 +172,7 @@ class UserManagementServiceTest {
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.getPassword());
+            verify(passwordEncoder).encode(request.getPasswordRequest().getPassword());
             verify(repository).save(any(User.class));
             verifyNoInteractions(studentService);
             verifyNoInteractions(teacherService);
@@ -274,7 +270,6 @@ class UserManagementServiceTest {
 
     @Nested
     class RemoveByUsername {
-
         @Test
         void removesUser_givenExistingUsername() {
             // Given

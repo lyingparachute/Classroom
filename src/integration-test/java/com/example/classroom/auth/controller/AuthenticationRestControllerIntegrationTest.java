@@ -87,7 +87,7 @@ class AuthenticationRestControllerIntegrationTest {
         void returnsStatusCode400_givenInvalidPasswordFormat() throws Exception {
             // Given
             RegisterRequest request = initData.createRegisterRequest();
-            request.setPassword("invalid password");
+            request.getPasswordRequest().setPassword("invalid password");
             // When
             ResponseEntity<AuthenticationResponse> response = restTemplate
                     .postForEntity(createURL("/api/auth/register"), request, AuthenticationResponse.class);

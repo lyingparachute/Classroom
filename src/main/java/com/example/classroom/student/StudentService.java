@@ -31,12 +31,6 @@ public class StudentService {
         return mapper.map(saved, StudentDto.class);
     }
 
-    private static Sort getSortOrder(String sortField, String sortDirection) {
-        return sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-                Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
-    }
-
     List<StudentDto> fetchAll() {
         List<Student> all = repository.findAll();
         return all.stream().map(student -> mapper.map(student, StudentDto.class)).toList();
@@ -67,6 +61,14 @@ public class StudentService {
     }
 
     @Transactional
+    public void remove(Long id) {
+        Student student = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
+        removeReferencingObjects(student);
+        repository.delete(student);
+    }
+
+    @Transactional
     void removeAll() {
         repository.findAll().forEach(this::removeReferencingObjects);
         repository.deleteAll();
@@ -87,15 +89,21 @@ public class StudentService {
     Page<StudentDto> getAllStudentsFromRequest(final PageableRequest pageable,
                                                final User user) {
         if (user.isTeacher())
-            return getFilteredAndSortedStudentsPageFromStudent(user, pageable);
+            return getFilteredAndSortedStudentsPage(user, pageable);
         if (isNamePresent(pageable.name()))
             return findByFirstOrLastNamePaginated(pageable);
         else
             return fetchAllPaginated(pageable);
     }
 
-    private Page<StudentDto> getFilteredAndSortedStudentsPageFromStudent(final User user,
-                                                                         final PageableRequest pageableReq) {
+    private Sort getSortOrder(String sortField, String sortDirection) {
+        return sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+    }
+
+    private Page<StudentDto> getFilteredAndSortedStudentsPage(final User user,
+                                                              final PageableRequest pageableReq) {
         Sort sort = getSortOrder(pageableReq.sortField(), pageableReq.sortDir());
         Pageable pageable = PageRequest.of(pageableReq.pageNumber() - 1, pageableReq.pageSize(), sort);
         List<StudentDto> students = user.getTeacher().getStudents().stream()
@@ -121,14 +129,6 @@ public class StudentService {
                 .skip(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .toList();
-    }
-
-    @Transactional
-    public void remove(Long id) {
-        Student student = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Student ID: " + id));
-        removeReferencingObjects(student);
-        repository.delete(student);
     }
 
     private void addReferencingObjects(final Student student) {

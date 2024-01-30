@@ -4,6 +4,7 @@ import com.example.classroom.fieldOfStudy.FieldOfStudy;
 import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.test.util.UnitTestsInitData;
+import com.example.classroom.user.User;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -528,6 +529,7 @@ class StudentServiceTest {
             Student expectedStudent3 = initData.createStudentThree(fieldOfStudy3, List.of(teacher1, teacher2, teacher3));
             Page<Student> students = new PageImpl<>(List.of(expectedStudent3));
             PageableRequest pageableRequest = PageableRequest.builder()
+                    .name(name)
                     .pageNumber(pageNo)
                     .pageSize(pageSize)
                     .sortDir(sortDirection)
@@ -560,6 +562,170 @@ class StudentServiceTest {
                             .as("Check if %s contains %s", "actualStudent3", "teachers")
                             .contains(teacher1, teacher2, teacher3)
             );
+        }
+    }
+
+
+    @Nested
+    class GetAllStudentsFromRequest {
+        @Test
+        void returnsFilteredAndSortedStudentsPage_givenUserWithRoleTeacher() {
+            // Given
+            int pageNo = 1;
+            int pageSize = 2;
+            String sortField = "name";
+            String sortDirection = Sort.Direction.ASC.name();
+            String name = "wer";
+
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+            Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+
+            User user = initData.createUserWithTeacherRole(teacher1);
+
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+
+            Student student1 = initData.createStudentOne(fieldOfStudy1, List.of(teacher1, teacher2));
+            Student student2 = initData.createStudentTwo(fieldOfStudy2, List.of(teacher1, teacher3));
+
+            teacher1.addStudent(student1);
+            teacher1.addStudent(student2);
+
+            PageableRequest pageableRequest = PageableRequest.builder()
+                    .name(name)
+                    .pageNumber(pageNo)
+                    .pageSize(pageSize)
+                    .sortDir(sortDirection)
+                    .sortField(sortField)
+                    .build();
+
+            // When
+            Page<StudentDto> result = service.getAllStudentsFromRequest(pageableRequest, user);
+
+            // Then
+            assertThat(result).isNotEmpty().extracting(
+                            StudentDto::getId,
+                            StudentDto::getFirstName,
+                            StudentDto::getLastName,
+                            StudentDto::getAge,
+                            StudentDto::getEmail,
+                            StudentDto::getTeachers,
+                            StudentDto::getFieldOfStudy
+                    )
+                    .containsExactlyInAnyOrder(
+                            Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(), student2.getAge(),
+                                    student2.getEmail(), student2.getTeachers(), student2.getFieldOfStudy())
+                    );
+        }
+
+        @Test
+        void returnsFilteredAndSortedStudentsPage_givenUserWithRoleStudent_searchedByName() {
+            // Given
+            int pageNo = 1;
+            int pageSize = 2;
+            String sortField = "name";
+            String sortDirection = Sort.Direction.ASC.name();
+            String name = "wer";
+
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+            Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+
+            Student student1 = initData.createStudentOne(fieldOfStudy1, List.of(teacher1, teacher2));
+            Student student2 = initData.createStudentTwo(fieldOfStudy2, List.of(teacher1, teacher3));
+
+            User user = initData.createUserWithStudentRole(student1);
+
+            teacher1.addStudent(student1);
+            teacher1.addStudent(student2);
+
+            PageableRequest pageableRequest = PageableRequest.builder()
+                    .name(name)
+                    .pageNumber(pageNo)
+                    .pageSize(pageSize)
+                    .sortDir(sortDirection)
+                    .sortField(sortField)
+                    .build();
+
+            Page<Student> page = new PageImpl<>(List.of(student2));
+
+            // When
+            when(repository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(eq(name), any(Pageable.class)))
+                    .thenReturn(page);
+            Page<StudentDto> result = service.getAllStudentsFromRequest(pageableRequest, user);
+
+            // Then
+            assertThat(result).isNotEmpty().extracting(
+                            StudentDto::getId,
+                            StudentDto::getFirstName,
+                            StudentDto::getLastName,
+                            StudentDto::getAge,
+                            StudentDto::getEmail,
+                            StudentDto::getTeachers,
+                            StudentDto::getFieldOfStudy
+                    )
+                    .containsExactlyInAnyOrder(
+                            Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(), student2.getAge(),
+                                    student2.getEmail(), student2.getTeachers(), student2.getFieldOfStudy())
+                    );
+        }
+
+        @Test
+        void returnsFilteredAndSortedStudentsPage_givenUserWithRoleStudent_notSearchedByName() {
+            // Given
+            int pageNo = 1;
+            int pageSize = 2;
+            String sortField = "name";
+            String sortDirection = Sort.Direction.ASC.name();
+
+            FieldOfStudy fieldOfStudy1 = initData.createFieldOfStudyOne(null, List.of(), List.of());
+            FieldOfStudy fieldOfStudy2 = initData.createFieldOfStudyTwo(null, List.of(), List.of());
+
+            Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
+            Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
+            Teacher teacher3 = initData.createTeacherThree(null, List.of(), List.of());
+
+            Student student1 = initData.createStudentOne(fieldOfStudy1, List.of(teacher1, teacher2));
+            Student student2 = initData.createStudentTwo(fieldOfStudy2, List.of(teacher1, teacher3));
+
+            User user = initData.createUserWithStudentRole(student1);
+
+            teacher1.addStudent(student1);
+            teacher1.addStudent(student2);
+
+            PageableRequest pageableRequest = PageableRequest.builder()
+                    .pageNumber(pageNo)
+                    .pageSize(pageSize)
+                    .sortDir(sortDirection)
+                    .sortField(sortField)
+                    .build();
+
+            Page<Student> page = new PageImpl<>(List.of(student1, student2));
+
+            // When
+            when(repository.findAll(any(Pageable.class))).thenReturn(page);
+            Page<StudentDto> result = service.getAllStudentsFromRequest(pageableRequest, user);
+
+            // Then
+            assertThat(result).isNotEmpty().extracting(
+                            StudentDto::getId,
+                            StudentDto::getFirstName,
+                            StudentDto::getLastName,
+                            StudentDto::getAge,
+                            StudentDto::getEmail,
+                            StudentDto::getTeachers,
+                            StudentDto::getFieldOfStudy
+                    )
+                    .containsExactlyInAnyOrder(
+                            Tuple.tuple(student1.getId(), student1.getFirstName(), student1.getLastName(), student1.getAge(),
+                                    student1.getEmail(), student1.getTeachers(), student1.getFieldOfStudy()),
+                            Tuple.tuple(student2.getId(), student2.getFirstName(), student2.getLastName(), student2.getAge(),
+                                    student2.getEmail(), student2.getTeachers(), student2.getFieldOfStudy())
+                    );
         }
     }
 }

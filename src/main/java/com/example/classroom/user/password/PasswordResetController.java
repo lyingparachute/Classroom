@@ -17,7 +17,7 @@ public class PasswordResetController {
 
     private static final String REDIRECT_TO_SIGN_IN_PAGE = "redirect:/sign-in";
     private static final String PASSWORD_CHANGE_TEMPLATE = "auth/password-change";
-    private final PasswordService service;
+    private final PasswordResetService service;
 
     @PostMapping("reset")
     String sendResetPasswordEmail(@RequestParam("email") String userEmail,
