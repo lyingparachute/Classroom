@@ -23,7 +23,7 @@
         <jwt.version>0.11.5</jwt.version>
         <mysql-connector.version>8.0.32</mysql-connector.version>
         <h2.version>1.4.200</h2.version>
-        <lombok.version>1.18.26</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <modelmapper.version>3.1.0</modelmapper.version>
         <bootstrap.version>5.2.3</bootstrap.version>
         <bootstrap-icons.version>1.10.3</bootstrap-icons.version>
