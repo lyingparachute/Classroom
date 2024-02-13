@@ -27,4 +27,4 @@ insert into users (id, first_name, last_name, email, enabled, password, role) va
 insert into users (id, first_name, last_name, email, enabled, password, role) values(25, 'Remigiusz', 'Śliwa', 'r.śliwa@gmail.com', true, '$2a$12$dFONNqdhBCuhmN6.05.1c.ZJESG1S9NO1QJmr93KibNkqp0KMMwoi', 'ROLE_TEACHER');
 
 -- ACCOUNT FOR TESTING MAIL SENDER
-insert into users (id, first_name, last_name, email, enabled, password, role) values(26, 'Igor', 'Bykowski', 'igor.bykowski1@gmail.com', true, '$2a$12$dFONNqdhBCuhmN6.05.1c.ZJESG1S9NO1QJmr93KibNkqp0KMMwoi', 'ROLE_ADMIN');
+insert into users (id, first_name, last_name, email, enabled, password, role) values(26, 'Igor', 'Bykowski', 'igor.bykowski1@gmail.com', true, '$2a$12$13xOtEzisdPunDeynOlS0OMnT6NdnKH/j1zgXaXJLdK17W1RlUiFa', 'ROLE_ADMIN');
