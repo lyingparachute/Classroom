@@ -18,84 +18,18 @@
                     </div>
                 </div>
                 <div class="card-body">
+
                     <div th:replace="~{fragments/alerts :: user-profile-view-alerts}"></div>
 
                     <div class="row">
                         <div class="col-lg-4">
-                            <div class="card mb-4">
-                                <div class="card-body text-center">
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                                         alt="avatar"
-                                         class="rounded-circle img-fluid" style="width: 150px;">
-                                    <h5 class="my-2" th:text="${user.firstName + ' ' + user.lastName}"></h5>
-                                    <p class="text-muted mb-2">Bay Area, San Francisco, CA</p>
-                                    <div class="row justify-content-center mb-2">
-                                        <a class="col-6 btn btn-outline-primary ms-1"
-                                           th:href="@{/dashboard/profile/edit}">
-                                            <i class="fas fa-pen mr-1"></i>
-                                            <span th:text="#{button.profile.edit}"></span>
-                                        </a>
-                                    </div>
-                                    <div class="row justify-content-center mb-2">
-                                        <a class="col-6 btn btn-outline-danger delBtn"
-                                           data-bs-toggle="modal" data-bs-target="#delete-account-modal">
-                                            <i class="fa fa-trash-can fa-lg mr-1"></i>
-                                            <span th:text="#{button.delete.account}"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-4 mb-lg-0"
-                                 sec:authorize="hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_DEAN')">
-                                <div class="card-body p-0">
-                                    <h5 class="my-3 text-center" th:text="#{user.profile.contacts}"></h5>
-                                    <ul class="list-group list-group-flush rounded-3">
-                                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <a class="mb-0 text-body"
-                                               th:href="${'mailto:' + user.email}">
-                                                <i class="fas fa-envelope fa-lg" style="color: #acafbf;"></i>
-                                            </a>
-                                            <a class="mb-0 text-body"
-                                               th:href="${'mailto:' + user.email}"
-                                               th:text="#{user.profile.email}">
-                                            </a>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <a class="mb-0 text-body" th:href="@{https://www.igorbykowski.pl/}"
-                                               target="_blank">
-                                                <i class="fas fa-globe fa-lg text-warning"></i>
-                                            </a>
-                                            <a class="mb-0 text-body"
-                                               th:href="@{https://www.igorbykowski.pl/}" target="_blank"
-                                               th:text="#{user.profile.website}">
-                                            </a>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <a class="mb-0 text-body" th:href="@{https://github.com/lyingparachute}"
-                                               target="_blank">
-                                                <i class="fab fa-github fa-lg" style="color: #333333;"></i>
-                                            </a>
-                                            <a class="mb-0 text-body"
-                                               th:href="@{https://github.com/lyingparachute}"
-                                               th:text="#{user.profile.github}" target="_blank"></a>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                            <a class="mb-0 text-body"
-                                               th:href="@{https://www.linkedin.com/in/igor-bykowski/}" target="_blank">
-                                                <i class="fab fa-linkedin fa-lg" style="color: #0e76a8;"></i>
-                                            </a>
-                                            <a class="mb-0 text-body"
-                                               th:href="@{https://www.linkedin.com/in/igor-bykowski/}"
-                                               th:text="#{user.profile.linkedIn}" target="_blank"></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <div th:replace="~{user/elements :: profile-details-picture}"></div>
+
                         </div>
                         <div class="col-lg-8">
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <div class="row mb-2">
+                                    <div class="row">
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.full.name}"></p>
                                         </div>
@@ -110,7 +44,7 @@
                                         <div class="col-sm-3">
                                             <p class="mb-0" th:text="#{user.email}"></p>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-9">
                                             <p class="text-muted mb-0" th:text="${user.email}"></p>
                                         </div>
                                     </div>
@@ -319,6 +253,20 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row justify-content-end m-4">
+                    <a class="col-auto btn btn-outline-primary ms-1 mr-2"
+                       th:href="@{/dashboard/profile/edit}">
+                        <i class="fas fa-pen mr-1"></i>
+                        <span th:text="#{button.profile.edit}"></span>
+                    </a>
+                    <a class="col-auto btn btn-outline-danger delBtn"
+                       data-bs-toggle="modal" data-bs-target="#delete-account-modal">
+                        <i class="fa fa-trash-can fa-lg mr-1"></i>
+                        <span th:text="#{button.delete.account}"></span>
+                    </a>
+                </div>
+
             </div>
         </section>
     </div>
