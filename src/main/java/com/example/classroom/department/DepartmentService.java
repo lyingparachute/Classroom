@@ -1,7 +1,7 @@
 package com.example.classroom.department;
 
 import com.example.classroom.exception.DepartmentNotFoundException;
-import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldofstudy.FieldOfStudy;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

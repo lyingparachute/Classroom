@@ -1,7 +1,7 @@
 package com.example.classroom.subject;
 
 import com.example.classroom.enums.Semester;
-import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldofstudy.FieldOfStudy;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.test.util.UnitTestsInitData;
 import org.assertj.core.groups.Tuple;

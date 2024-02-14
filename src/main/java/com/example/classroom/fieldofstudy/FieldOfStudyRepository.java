@@ -1,4 +1,4 @@
-package com.example.classroom.fieldOfStudy;
+package com.example.classroom.fieldofstudy;
 
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.subject.Subject;

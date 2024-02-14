@@ -3,7 +3,7 @@ package com.example.classroom.teacher;
 import com.example.classroom.auth.model.AuthenticationResponse;
 import com.example.classroom.config.jwt.JwtAuthenticationFilter;
 import com.example.classroom.department.Department;
-import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldofstudy.FieldOfStudy;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.test.util.UnitTestsInitData;

@@ -2,8 +2,8 @@ package com.example.classroom;
 
 import com.example.classroom.department.Department;
 import com.example.classroom.department.DepartmentRepository;
-import com.example.classroom.fieldOfStudy.FieldOfStudy;
-import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
+import com.example.classroom.fieldofstudy.FieldOfStudy;
+import com.example.classroom.fieldofstudy.FieldOfStudyRepository;
 import com.example.classroom.student.Student;
 import com.example.classroom.student.StudentRepository;
 import com.example.classroom.subject.Subject;

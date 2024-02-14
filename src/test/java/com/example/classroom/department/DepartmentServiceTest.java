@@ -1,7 +1,7 @@
 package com.example.classroom.department;
 
 import com.example.classroom.exception.DepartmentNotFoundException;
-import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldofstudy.FieldOfStudy;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.test.util.UnitTestsInitData;
 import org.junit.jupiter.api.Nested;

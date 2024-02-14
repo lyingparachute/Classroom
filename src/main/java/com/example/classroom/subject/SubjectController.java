@@ -2,7 +2,7 @@ package com.example.classroom.subject;
 
 
 import com.example.classroom.breadcrumb.BreadcrumbService;
-import com.example.classroom.fieldOfStudy.FieldOfStudyService;
+import com.example.classroom.fieldofstudy.FieldOfStudyService;
 import com.example.classroom.teacher.TeacherService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

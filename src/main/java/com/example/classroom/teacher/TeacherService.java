@@ -1,6 +1,6 @@
 package com.example.classroom.teacher;
 
-import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldofstudy.FieldOfStudy;
 import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;

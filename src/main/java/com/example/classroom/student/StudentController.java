@@ -2,7 +2,7 @@ package com.example.classroom.student;
 
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
-import com.example.classroom.fieldOfStudy.FieldOfStudyService;
+import com.example.classroom.fieldofstudy.FieldOfStudyService;
 import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.teacher.TeacherService;
 import com.example.classroom.user.User;

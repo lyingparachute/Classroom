@@ -1,4 +1,4 @@
-package com.example.classroom.fieldOfStudy;
+package com.example.classroom.fieldofstudy;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
