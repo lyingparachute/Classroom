@@ -29,7 +29,10 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -67,9 +70,9 @@ class AuthenticationServiceTest {
         @Test
         void returnsAuthenticationResponse_withToken_givenValidRegisterRequest() {
             // Given
-            User user = initData.createUser();
-            user.setRole(UserRole.ROLE_STUDENT);
-            RegisterRequest registerRequest = initData.createRegisterRequest();
+            final var role = UserRole.ROLE_STUDENT;
+            User user = initData.createUser(role);
+            RegisterRequest registerRequest = initData.createRegisterRequest(role);
             String token = "generatedToken";
             String encodedPassword = "encodedPassword";
 
@@ -84,7 +87,7 @@ class AuthenticationServiceTest {
             verify(repository).save(any(User.class));
             verify(jwtService).generateToken(user);
             assertThat(response).isNotNull();
-            assertThat(response.getToken()).isNotNull().isNotEmpty().isEqualTo(token);
+            assertThat(response.token()).isNotNull().isNotEmpty().isEqualTo(token);
         }
     }
 
@@ -94,23 +97,23 @@ class AuthenticationServiceTest {
         void returnsAuthenticationResponse_givenValidAuthenticationRequest() {
             // Given
             AuthenticationRequest authRequest = initData.createAuthenticationRequest();
-            User user = initData.createUser();
+            User user = initData.createUser(null);
             String token = "generatedToken";
 
             // When
-            when(repository.findByEmail(authRequest.getEmail())).thenReturn(Optional.of(user));
+            when(repository.findByEmail(authRequest.email())).thenReturn(Optional.of(user));
             when(jwtService.generateToken(user)).thenReturn(token);
             when(tokenRepository.findAllValidTokenByUser(anyLong())).thenReturn(List.of(new Token()));
 
             AuthenticationResponse response = service.authenticate(authRequest);
 
             // Then
-            verify(repository).findByEmail(authRequest.getEmail());
+            verify(repository).findByEmail(authRequest.email());
             verify(jwtService).generateToken(user);
             verify(tokenRepository).save(any(Token.class));
             verify(tokenRepository).saveAll(anyList());
             assertThat(response).isNotNull();
-            assertThat(response.getToken()).isNotNull().isNotEmpty().isEqualTo(token);
+            assertThat(response.token()).isNotNull().isNotEmpty().isEqualTo(token);
         }
 
         @Test
@@ -119,12 +122,12 @@ class AuthenticationServiceTest {
             AuthenticationRequest authRequest = initData.createAuthenticationRequest();
 
             // When
-            when(repository.findByEmail(authRequest.getEmail())).thenReturn(Optional.empty());
+            when(repository.findByEmail(authRequest.email())).thenReturn(Optional.empty());
 
             Throwable thrown = catchThrowable(() -> service.authenticate(authRequest));
 
             // Then
-            verify(repository).findByEmail(authRequest.getEmail());
+            verify(repository).findByEmail(authRequest.email());
             assertThat(thrown)
                     .isExactlyInstanceOf(UsernameNotFoundException.class)
                     .hasMessage("User with email andrzej.nowak@gmail.com does not exist in database.");
@@ -134,8 +137,14 @@ class AuthenticationServiceTest {
         void returnsUsernameNotFoundException_givenWrongCredentials() {
             // Given
             AuthenticationRequest authRequest = initData.createAuthenticationRequest();
-            User user = initData.createUser();
-            user.setPassword("wrongPassword");
+            User user = User.builder()
+                .id(1L)
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .password("wrongPassword")
+                .email("andrzej.nowak@gmail.com")
+                .enabled(true)
+                .build();
             String exceptionMsg = "Invalid credentials.";
 
             // When

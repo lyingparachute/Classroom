@@ -27,7 +27,9 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserManagementServiceTest {
@@ -56,18 +58,16 @@ class UserManagementServiceTest {
         @Test
         void createsUser_withAssociatedStudent_givenRegisterRequest_withStudentRole() {
             // Given
-            UserRole role = UserRole.ROLE_STUDENT;
-            RegisterRequest request = initData.createRegisterRequest();
-            request.setRole(role);
-            User expectedUser = initData.createUser();
-            expectedUser.setRole(role);
+            final var role = UserRole.ROLE_STUDENT;
+            final var request = initData.createRegisterRequest(role);
+            final var expectedUser = initData.createUser(role);
             // When
             when(passwordEncoder.encode(anyString())).thenReturn(expectedUser.getPassword());
             when(repository.save(any(User.class))).thenReturn(expectedUser);
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.getPasswordRequest().getPassword());
+            verify(passwordEncoder).encode(request.passwordRequest().password());
             verify(repository).save(any(User.class));
             verify(studentService).create(any(StudentDto.class));
             verifyNoInteractions(teacherService);
@@ -92,17 +92,15 @@ class UserManagementServiceTest {
         void createsUser_withAssociatedTeacher_givenRegisterRequest_withTeacherRole() {
             // Given
             UserRole role = UserRole.ROLE_TEACHER;
-            RegisterRequest request = initData.createRegisterRequest();
-            request.setRole(role);
-            User expectedUser = initData.createUser();
-            expectedUser.setRole(role);
+            RegisterRequest request = initData.createRegisterRequest(role);
+            User expectedUser = initData.createUser(role);
             // When
             when(passwordEncoder.encode(anyString())).thenReturn(expectedUser.getPassword());
             when(repository.save(any(User.class))).thenReturn(expectedUser);
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.getPasswordRequest().getPassword());
+            verify(passwordEncoder).encode(request.passwordRequest().password());
             verify(repository).save(any(User.class));
             verifyNoInteractions(studentService);
             verify(teacherService).create(any(TeacherDto.class));
@@ -127,17 +125,15 @@ class UserManagementServiceTest {
         void createsUser_withAssociatedTeacher_givenRegisterRequest_withDeanRole() {
             // Given
             UserRole role = UserRole.ROLE_DEAN;
-            RegisterRequest request = initData.createRegisterRequest();
-            request.setRole(role);
-            User expectedUser = initData.createUser();
-            expectedUser.setRole(role);
+            RegisterRequest request = initData.createRegisterRequest(role);
+            User expectedUser = initData.createUser(role);
             // When
             when(passwordEncoder.encode(anyString())).thenReturn(expectedUser.getPassword());
             when(repository.save(any(User.class))).thenReturn(expectedUser);
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.getPasswordRequest().getPassword());
+            verify(passwordEncoder).encode(request.passwordRequest().password());
             verify(repository).save(any(User.class));
             verifyNoInteractions(studentService);
             verify(teacherService).create(any(TeacherDto.class));
@@ -162,17 +158,15 @@ class UserManagementServiceTest {
         void createsUser_withoutAssociatedEntity_givenRegisterRequest_withAdminRole() {
             // Given
             UserRole role = UserRole.ROLE_ADMIN;
-            RegisterRequest request = initData.createRegisterRequest();
-            request.setRole(role);
-            User expectedUser = initData.createUser();
-            expectedUser.setRole(role);
+            RegisterRequest request = initData.createRegisterRequest(role);
+            User expectedUser = initData.createUser(role);
             // When
             when(passwordEncoder.encode(anyString())).thenReturn(expectedUser.getPassword());
             when(repository.save(any(User.class))).thenReturn(expectedUser);
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.getPasswordRequest().getPassword());
+            verify(passwordEncoder).encode(request.passwordRequest().password());
             verify(repository).save(any(User.class));
             verifyNoInteractions(studentService);
             verifyNoInteractions(teacherService);
@@ -199,7 +193,7 @@ class UserManagementServiceTest {
         @Test
         void updatesUser_givenExistingUsername() {
             // Given
-            User user = initData.createUser();
+            User user = initData.createUser(null);
 
             UpdateRequest updateRequest = initData.createUpdateRequest();
             String email = user.getEmail();
@@ -239,7 +233,7 @@ class UserManagementServiceTest {
         @Test
         void returnsUser_whenUserExists_inDatabase() {
             // Given
-            User expectedUser = initData.createUser();
+            User expectedUser = initData.createUser(null);
             String email = expectedUser.getEmail();
 
             // When
@@ -254,7 +248,7 @@ class UserManagementServiceTest {
         @Test
         void throwsUsernameNotFoundException_whenUserDoesNotExist_inDatabase() {
             // Given
-            String email = initData.createUser().getEmail();
+            String email = initData.createUser(null).getEmail();
 
             // When
             when(repository.findByEmail(email)).thenReturn(Optional.empty());
@@ -273,7 +267,7 @@ class UserManagementServiceTest {
         @Test
         void removesUser_givenExistingUsername() {
             // Given
-            User user = initData.createUser();
+            User user = initData.createUser(null);
             String email = user.getEmail();
 
             // When

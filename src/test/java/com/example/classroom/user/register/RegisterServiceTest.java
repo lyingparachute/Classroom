@@ -75,7 +75,7 @@ class RegisterServiceTest {
         @Test
         void throwsAccountAlreadyVerifiedException_givenEnabledUser() {
             // Given
-            User user = initData.createUser();
+            User user = initData.createUser(null);
 
             // When, Then
             assertThatThrownBy(() -> service.sendAccountVerificationEmail(servletRequest, user))

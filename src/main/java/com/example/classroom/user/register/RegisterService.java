@@ -28,7 +28,7 @@ public class RegisterService {
         if (user.isEnabled())
             throw new AccountAlreadyVerifiedException("Account with email '" + user.getEmail() + "' is already verified.");
         revokeAllVerificationTokensForUser(user.getId());
-        final String verificationToken = createAndSaveEmailVerificationToken(user);
+        final var verificationToken = createAndSaveEmailVerificationToken(user);
         mailService.sendEmail(user.getEmail(),
                 "Welcome to Classroom! Verify your email address.",
                 "mail/account-create-confirmation.html",
@@ -42,27 +42,27 @@ public class RegisterService {
     }
 
     void validateVerificationToken(final String token) throws InvalidTokenException {
-        final VerificationToken verificationToken = getVerificationToken(token);
+        final var verificationToken = getVerificationToken(token);
         if (!verificationToken.isValid())
             throw new InvalidTokenException("Verification Token expired or revoked: " + token);
     }
 
     @Transactional
     void verifyAccount(final String token) {
-        User user = getUserByVerificationToken(token);
+        final var user = getUserByVerificationToken(token);
         user.enableAccount();
         userRepository.save(user);
         revokeVerificationToken(token);
     }
 
-    private void revokeAllVerificationTokensForUser(Long id) {
+    private void revokeAllVerificationTokensForUser(final Long id) {
         tokenRepository.findAllValidTokenByUserId(id)
                 .forEach(VerificationToken::setRevoked);
     }
 
     @Transactional
-    private void revokeVerificationToken(final String token) {
-        final VerificationToken verificationToken = getVerificationToken(token);
+    protected void revokeVerificationToken(final String token) {
+        final var verificationToken = getVerificationToken(token);
         verificationToken.setRevoked();
         tokenRepository.save(verificationToken);
     }
@@ -75,13 +75,13 @@ public class RegisterService {
         return getAppUrl(request) + "/account/verify?token=" + token;
     }
 
-    private VerificationToken getVerificationToken(String token) {
+    private VerificationToken getVerificationToken(final String token) {
         return tokenRepository.findByToken(token)
                 .orElseThrow(() -> new InvalidTokenException("Invalid Verification Token: " + token));
     }
 
     private String createAndSaveEmailVerificationToken(final User user) {
-        final VerificationToken myToken = new VerificationToken(
+        final var myToken = new VerificationToken(
                 user,
                 UUID.randomUUID().toString()
         );

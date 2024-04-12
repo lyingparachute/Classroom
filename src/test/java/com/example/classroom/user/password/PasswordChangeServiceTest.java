@@ -12,7 +12,11 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.anyMap;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.eq;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PasswordChangeServiceTest {
@@ -31,7 +35,7 @@ class PasswordChangeServiceTest {
     @Test
     void changesUserPassword_givenValidPasswordChangeRequest_andUserEmail() {
         // Given
-        User user = initData.createUser();
+        User user = initData.createUser(null);
         String userEmail = user.getEmail();
         String newPassword = "newPassword";
         PasswordChangeRequest passwordChangeRequest = new PasswordChangeRequest(
@@ -52,7 +56,7 @@ class PasswordChangeServiceTest {
     @Test
     void sendsPasswordChangeConfirmationEmail_givenValidHttpServletRequest_andUserEmail() {
         // Given
-        User user = initData.createUser();
+        User user = initData.createUser(null);
         String userEmail = user.getEmail();
         String PASSWORD_CHANGE_CONFIRM_TEMPLATE_LOCATION = "mail/password-change-confirmation.html";
         String PASSWORD_CHANGE_CONFIRM_EMAIL_SUBJECT = "Password Changed Successfully!";

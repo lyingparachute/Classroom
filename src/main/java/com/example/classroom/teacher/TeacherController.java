@@ -13,7 +13,12 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static com.example.classroom.pageable.PageableService.getAttributesForPageable;
@@ -38,11 +43,11 @@ class TeacherController {
                                 @RequestParam(defaultValue = "asc") String sortDir,
                                 HttpServletRequest request,
                                 Model model) {
-        PageableRequest pageableRequest = PageableRequest.builder()
-                .name(name)
+        final var pageableRequest = PageableRequest.builder()
+                .searched(name)
                 .pageNumber(page)
                 .pageSize(size)
-                .sortDir(sortDir)
+                .sortDirection(sortDir)
                 .sortField(sortField)
                 .build();
         User user = userService.loadUserByUsername(request.getUserPrincipal().getName());

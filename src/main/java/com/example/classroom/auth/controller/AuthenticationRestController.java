@@ -20,12 +20,12 @@ class AuthenticationRestController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest request) {
+    ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody final RegisterRequest request) {
         return ResponseEntity.ok(service.register(request));
     }
 
     @PostMapping("/authenticate")
-    ResponseEntity<AuthenticationResponse> authenticate(@Valid @RequestBody AuthenticationRequest request) {
+    ResponseEntity<AuthenticationResponse> authenticate(@Valid @RequestBody final AuthenticationRequest request) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 }

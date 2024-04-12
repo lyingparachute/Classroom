@@ -2,13 +2,18 @@ package com.example.classroom.subject;
 
 import com.example.classroom.enums.Semester;
 import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.test.util.UnitTestsInitData;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -24,7 +29,9 @@ import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -65,56 +72,56 @@ class SubjectServiceTest {
             Subject actual = argumentCaptor.getValue();
             assertThat(actual).as("Check if %s is not null", "Subject").isNotNull();
             assertAll("Subject's properties",
-                    () -> assertThat(actual.getId())
-                            .as("Check %s's %s", "Subject", "ID").isEqualTo(expected.getId()),
-                    () -> assertThat(actual.getName())
-                            .as("Check %s's %s", "Subject", "Name").isEqualTo(expected.getName()),
-                    () -> assertThat(actual.getDescription())
-                            .as("Check %s's %s", "Subject", "Description").isEqualTo(expected.getDescription()),
-                    () -> assertThat(actual.getSemester())
-                            .as("Check %s's %s", "Subject", "Semester").isEqualTo(expected.getSemester()),
-                    () -> assertThat(actual.getHoursInSemester())
-                            .as("Check %s's %s", "Subject", "Hours in semester").isEqualTo(expected.getHoursInSemester())
+                () -> assertThat(actual.getId())
+                    .as("Check %s's %s", "Subject", "ID").isEqualTo(expected.getId()),
+                () -> assertThat(actual.getName())
+                    .as("Check %s's %s", "Subject", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(actual.getDescription())
+                    .as("Check %s's %s", "Subject", "Description").isEqualTo(expected.getDescription()),
+                () -> assertThat(actual.getSemester())
+                    .as("Check %s's %s", "Subject", "Semester").isEqualTo(expected.getSemester()),
+                () -> assertThat(actual.getHoursInSemester())
+                    .as("Check %s's %s", "Subject", "Hours in semester").isEqualTo(expected.getHoursInSemester())
             );
             assertAll("Subject's fieldOfStudy properties",
-                    () -> assertThat(actual.getFieldOfStudy().getId())
-                            .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Id").isEqualTo(fieldOfStudy.getId()),
-                    () -> assertThat(actual.getFieldOfStudy().getName())
-                            .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Name").isEqualTo(fieldOfStudy.getName()),
-                    () -> assertThat(actual.getFieldOfStudy().getLevelOfEducation())
-                            .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Level of education").isEqualTo(fieldOfStudy.getLevelOfEducation()),
-                    () -> assertThat(actual.getFieldOfStudy().getMode())
-                            .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Study mode").isEqualTo(fieldOfStudy.getMode()),
-                    () -> assertThat(actual.getFieldOfStudy().getTitle())
-                            .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Obtained title").isEqualTo(fieldOfStudy.getTitle()),
-                    () -> assertThat(actual.getFieldOfStudy().getSubjects())
-                            .as("Check %s's %s properties", "fieldOfStudy", "subjects")
-                            .extracting(
-                                    Subject::getName,
-                                    Subject::getDescription,
-                                    Subject::getSemester,
-                                    Subject::getHoursInSemester,
-                                    Subject::getFieldOfStudy
-                            ).containsExactlyInAnyOrder(
-                                    Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
-                                            expected.getHoursInSemester(), fieldOfStudy))
+                () -> assertThat(actual.getFieldOfStudy().getId())
+                    .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Id").isEqualTo(fieldOfStudy.getId()),
+                () -> assertThat(actual.getFieldOfStudy().getName())
+                    .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Name").isEqualTo(fieldOfStudy.getName()),
+                () -> assertThat(actual.getFieldOfStudy().getLevelOfEducation())
+                    .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Level of education").isEqualTo(fieldOfStudy.getLevelOfEducation()),
+                () -> assertThat(actual.getFieldOfStudy().getMode())
+                    .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Study mode").isEqualTo(fieldOfStudy.getMode()),
+                () -> assertThat(actual.getFieldOfStudy().getTitle())
+                    .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Obtained title").isEqualTo(fieldOfStudy.getTitle()),
+                () -> assertThat(actual.getFieldOfStudy().getSubjects())
+                    .as("Check %s's %s properties", "fieldOfStudy", "subjects")
+                    .extracting(
+                        Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy
+                    ).containsExactlyInAnyOrder(
+                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                            expected.getHoursInSemester(), fieldOfStudy))
             );
             assertThat(actual.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
-                    .extracting(
-                            Teacher::getId,
-                            Teacher::getFirstName,
-                            Teacher::getLastName,
-                            Teacher::getEmail,
-                            Teacher::getAge
-                    ).containsExactlyInAnyOrder(
-                            Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                    teacher1.getEmail(), teacher1.getAge()),
-                            Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                    teacher2.getEmail(), teacher2.getAge()));
+                .extracting(
+                    Teacher::getId,
+                    Teacher::getFirstName,
+                    Teacher::getLastName,
+                    Teacher::getEmail,
+                    Teacher::getAge
+                ).containsExactlyInAnyOrder(
+                    Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                        teacher1.getEmail(), teacher1.getAge()),
+                    Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                        teacher2.getEmail(), teacher2.getAge()));
             assertThat(teacher1.getSubjects()).as("Check if %s' %s list contains subject", "teacher1", "subjects")
-                    .isNotNull().isNotEmpty().hasSize(1).contains(actual);
+                .isNotNull().isNotEmpty().hasSize(1).contains(actual);
             assertThat(teacher2.getSubjects()).as("Check if %s' %s list contains subject", "teacher2", "subjects")
-                    .isNotNull().isNotEmpty().hasSize(1).contains(actual);
+                .isNotNull().isNotEmpty().hasSize(1).contains(actual);
         }
     }
 
@@ -147,58 +154,58 @@ class SubjectServiceTest {
 
             assertThat(actual).as("Check if %s is not null", "Subject").isNotNull();
             assertAll("Subject's properties",
-                    () -> assertThat(actual.getId())
-                            .as("Check %s's %s", "Subject", "ID").isEqualTo(expected.getId()),
-                    () -> assertThat(actual.getName())
-                            .as("Check %s's %s", "Subject", "Name").isEqualTo(expected.getName()),
-                    () -> assertThat(actual.getDescription())
-                            .as("Check %s's %s", "Subject", "Description").isEqualTo(expected.getDescription()),
-                    () -> assertThat(actual.getSemester())
-                            .as("Check %s's %s", "Subject", "Semester").isEqualTo(expected.getSemester()),
-                    () -> assertThat(actual.getHoursInSemester())
-                            .as("Check %s's %s", "Subject", "Hours in semester").isEqualTo(expected.getHoursInSemester())
+                () -> assertThat(actual.getId())
+                    .as("Check %s's %s", "Subject", "ID").isEqualTo(expected.getId()),
+                () -> assertThat(actual.getName())
+                    .as("Check %s's %s", "Subject", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(actual.getDescription())
+                    .as("Check %s's %s", "Subject", "Description").isEqualTo(expected.getDescription()),
+                () -> assertThat(actual.getSemester())
+                    .as("Check %s's %s", "Subject", "Semester").isEqualTo(expected.getSemester()),
+                () -> assertThat(actual.getHoursInSemester())
+                    .as("Check %s's %s", "Subject", "Hours in semester").isEqualTo(expected.getHoursInSemester())
             );
             assertAll("Subject's fieldOfStudy properties",
-                    () -> assertThat(actual.getFieldOfStudy().getId())
-                            .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Id").isEqualTo(fieldOfStudy.getId()),
-                    () -> assertThat(actual.getFieldOfStudy().getName())
-                            .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Name").isEqualTo(fieldOfStudy.getName()),
-                    () -> assertThat(actual.getFieldOfStudy().getLevelOfEducation())
-                            .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Level of education").isEqualTo(fieldOfStudy.getLevelOfEducation()),
-                    () -> assertThat(actual.getFieldOfStudy().getMode())
-                            .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Study mode").isEqualTo(fieldOfStudy.getMode()),
-                    () -> assertThat(actual.getFieldOfStudy().getTitle())
-                            .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Obtained title").isEqualTo(fieldOfStudy.getTitle()),
-                    () -> assertThat(actual.getFieldOfStudy().getSubjects())
-                            .as("Check %s's %s properties", "fieldOfStudy", "subjects")
-                            .extracting(
-                                    Subject::getName,
-                                    Subject::getDescription,
-                                    Subject::getSemester,
-                                    Subject::getHoursInSemester,
-                                    Subject::getFieldOfStudy
-                            ).containsExactlyInAnyOrder(
-                                    Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
-                                            expected.getHoursInSemester(), fieldOfStudy))
+                () -> assertThat(actual.getFieldOfStudy().getId())
+                    .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Id").isEqualTo(fieldOfStudy.getId()),
+                () -> assertThat(actual.getFieldOfStudy().getName())
+                    .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Name").isEqualTo(fieldOfStudy.getName()),
+                () -> assertThat(actual.getFieldOfStudy().getLevelOfEducation())
+                    .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Level of education").isEqualTo(fieldOfStudy.getLevelOfEducation()),
+                () -> assertThat(actual.getFieldOfStudy().getMode())
+                    .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Study mode").isEqualTo(fieldOfStudy.getMode()),
+                () -> assertThat(actual.getFieldOfStudy().getTitle())
+                    .as("Check %s's %s %s", "Subject", "fieldOfStudy", "Obtained title").isEqualTo(fieldOfStudy.getTitle()),
+                () -> assertThat(actual.getFieldOfStudy().getSubjects())
+                    .as("Check %s's %s properties", "fieldOfStudy", "subjects")
+                    .extracting(
+                        Subject::getName,
+                        Subject::getDescription,
+                        Subject::getSemester,
+                        Subject::getHoursInSemester,
+                        Subject::getFieldOfStudy
+                    ).containsExactlyInAnyOrder(
+                        Tuple.tuple(expected.getName(), expected.getDescription(), expected.getSemester(),
+                            expected.getHoursInSemester(), fieldOfStudy))
             );
             assertThat(actual.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
-                    .extracting(
-                            Teacher::getId,
-                            Teacher::getFirstName,
-                            Teacher::getLastName,
-                            Teacher::getEmail,
-                            Teacher::getAge
-                    ).containsExactlyInAnyOrder(
-                            Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                    teacher1.getEmail(), teacher1.getAge()),
-                            Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                    teacher2.getEmail(), teacher2.getAge()));
+                .extracting(
+                    Teacher::getId,
+                    Teacher::getFirstName,
+                    Teacher::getLastName,
+                    Teacher::getEmail,
+                    Teacher::getAge
+                ).containsExactlyInAnyOrder(
+                    Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                        teacher1.getEmail(), teacher1.getAge()),
+                    Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                        teacher2.getEmail(), teacher2.getAge()));
             assertThat(teacher1.getSubjects())
-                    .as("Check if %s' %s list contains subject", "teacher1", "subjects")
-                    .isNotNull().isNotEmpty().hasSize(1).contains(actual);
+                .as("Check if %s' %s list contains subject", "teacher1", "subjects")
+                .isNotNull().isNotEmpty().hasSize(1).contains(actual);
             assertThat(teacher2.getSubjects())
-                    .as("Check if %s' %s list contains subject", "teacher2", "subjects")
-                    .isNotNull().isNotEmpty().hasSize(1).contains(actual);
+                .as("Check if %s' %s list contains subject", "teacher2", "subjects")
+                .isNotNull().isNotEmpty().hasSize(1).contains(actual);
         }
 
         @Test
@@ -211,8 +218,8 @@ class SubjectServiceTest {
             Throwable thrown = catchThrowable(() -> service.update(dto));
             //then
             assertThat(thrown)
-                    .isExactlyInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("Invalid subject '" + dto + "' with ID: " + dto.getId());
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid subject '" + dto + "' with ID: " + dto.getId());
         }
     }
 
@@ -241,82 +248,82 @@ class SubjectServiceTest {
             SubjectDto actualSubject2 = actual.get(1);
             SubjectDto actualSubject3 = actual.get(2);
             assertAll("Subject1 properties",
-                    () -> assertThat(actualSubject1.getId())
-                            .as("Check %s's %s", "Subject1", "ID").isEqualTo(expectedSubject1.getId()),
-                    () -> assertThat(actualSubject1.getName())
-                            .as("Check %s's %s", "Subject1", "Name").isEqualTo(expectedSubject1.getName()),
-                    () -> assertThat(actualSubject1.getDescription())
-                            .as("Check %s's %s", "Subject1", "Description").isEqualTo(expectedSubject1.getDescription()),
-                    () -> assertThat(actualSubject1.getSemester())
-                            .as("Check %s's %s", "Subject1", "Semester").isEqualTo(expectedSubject1.getSemester()),
-                    () -> assertThat(actualSubject1.getHoursInSemester())
-                            .as("Check %s's %s", "Subject1", "Hours in semester").isEqualTo(expectedSubject1.getHoursInSemester()),
-                    () -> assertThat(actualSubject1.getFieldOfStudy())
-                            .as("Check %s's %s", "Subject1", "fieldOfStudy").isEqualTo(fieldOfStudy1),
-                    () -> assertThat(actualSubject1.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
-                            .extracting(
-                                    Teacher::getId,
-                                    Teacher::getFirstName,
-                                    Teacher::getLastName,
-                                    Teacher::getEmail,
-                                    Teacher::getAge
-                            ).containsExactlyInAnyOrder(
-                                    Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                            teacher1.getEmail(), teacher1.getAge()),
-                                    Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                            teacher2.getEmail(), teacher2.getAge()))
+                () -> assertThat(actualSubject1.getId())
+                    .as("Check %s's %s", "Subject1", "ID").isEqualTo(expectedSubject1.getId()),
+                () -> assertThat(actualSubject1.getName())
+                    .as("Check %s's %s", "Subject1", "Name").isEqualTo(expectedSubject1.getName()),
+                () -> assertThat(actualSubject1.getDescription())
+                    .as("Check %s's %s", "Subject1", "Description").isEqualTo(expectedSubject1.getDescription()),
+                () -> assertThat(actualSubject1.getSemester())
+                    .as("Check %s's %s", "Subject1", "Semester").isEqualTo(expectedSubject1.getSemester()),
+                () -> assertThat(actualSubject1.getHoursInSemester())
+                    .as("Check %s's %s", "Subject1", "Hours in semester").isEqualTo(expectedSubject1.getHoursInSemester()),
+                () -> assertThat(actualSubject1.getFieldOfStudy())
+                    .as("Check %s's %s", "Subject1", "fieldOfStudy").isEqualTo(fieldOfStudy1),
+                () -> assertThat(actualSubject1.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
+                    .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge
+                    ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                            teacher1.getEmail(), teacher1.getAge()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                            teacher2.getEmail(), teacher2.getAge()))
             );
             assertAll("Subject2 properties",
-                    () -> assertThat(actualSubject2.getId())
-                            .as("Check %s's %s", "Subject2", "ID").isEqualTo(expectedSubject2.getId()),
-                    () -> assertThat(actualSubject2.getName())
-                            .as("Check %s's %s", "Subject2", "Name").isEqualTo(expectedSubject2.getName()),
-                    () -> assertThat(actualSubject2.getDescription())
-                            .as("Check %s's %s", "Subject2", "Description").isEqualTo(expectedSubject2.getDescription()),
-                    () -> assertThat(actualSubject2.getSemester())
-                            .as("Check %s's %s", "Subject2", "Semester").isEqualTo(expectedSubject2.getSemester()),
-                    () -> assertThat(actualSubject2.getHoursInSemester())
-                            .as("Check %s's %s", "Subject2", "Hours in semester").isEqualTo(expectedSubject2.getHoursInSemester()),
-                    () -> assertThat(actualSubject2.getFieldOfStudy())
-                            .as("Check %s's %s", "Subject2", "fieldOfStudy").isEqualTo(fieldOfStudy1),
-                    () -> assertThat(actualSubject2.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
-                            .extracting(
-                                    Teacher::getId,
-                                    Teacher::getFirstName,
-                                    Teacher::getLastName,
-                                    Teacher::getEmail,
-                                    Teacher::getAge
-                            ).containsExactlyInAnyOrder(
-                                    Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                            teacher3.getEmail(), teacher3.getAge()))
+                () -> assertThat(actualSubject2.getId())
+                    .as("Check %s's %s", "Subject2", "ID").isEqualTo(expectedSubject2.getId()),
+                () -> assertThat(actualSubject2.getName())
+                    .as("Check %s's %s", "Subject2", "Name").isEqualTo(expectedSubject2.getName()),
+                () -> assertThat(actualSubject2.getDescription())
+                    .as("Check %s's %s", "Subject2", "Description").isEqualTo(expectedSubject2.getDescription()),
+                () -> assertThat(actualSubject2.getSemester())
+                    .as("Check %s's %s", "Subject2", "Semester").isEqualTo(expectedSubject2.getSemester()),
+                () -> assertThat(actualSubject2.getHoursInSemester())
+                    .as("Check %s's %s", "Subject2", "Hours in semester").isEqualTo(expectedSubject2.getHoursInSemester()),
+                () -> assertThat(actualSubject2.getFieldOfStudy())
+                    .as("Check %s's %s", "Subject2", "fieldOfStudy").isEqualTo(fieldOfStudy1),
+                () -> assertThat(actualSubject2.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
+                    .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge
+                    ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                            teacher3.getEmail(), teacher3.getAge()))
             );
             assertAll("Subject3 properties",
-                    () -> assertThat(actualSubject3.getId())
-                            .as("Check %s's %s", "Subject3", "ID").isEqualTo(expectedSubject3.getId()),
-                    () -> assertThat(actualSubject3.getName())
-                            .as("Check %s's %s", "Subject3", "Name").isEqualTo(expectedSubject3.getName()),
-                    () -> assertThat(actualSubject3.getDescription())
-                            .as("Check %s's %s", "Subject3", "Description").isEqualTo(expectedSubject3.getDescription()),
-                    () -> assertThat(actualSubject3.getSemester())
-                            .as("Check %s's %s", "Subject3", "Semester").isEqualTo(expectedSubject3.getSemester()),
-                    () -> assertThat(actualSubject3.getHoursInSemester())
-                            .as("Check %s's %s", "Subject3", "Hours in semester").isEqualTo(expectedSubject3.getHoursInSemester()),
-                    () -> assertThat(actualSubject3.getFieldOfStudy())
-                            .as("Check %s's %s", "Subject3", "fieldOfStudy").isEqualTo(fieldOfStudy2),
-                    () -> assertThat(actualSubject3.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
-                            .extracting(
-                                    Teacher::getId,
-                                    Teacher::getFirstName,
-                                    Teacher::getLastName,
-                                    Teacher::getEmail,
-                                    Teacher::getAge
-                            ).containsExactlyInAnyOrder(
-                                    Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                            teacher1.getEmail(), teacher1.getAge()),
-                                    Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                            teacher2.getEmail(), teacher2.getAge()),
-                                    Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                            teacher3.getEmail(), teacher3.getAge()))
+                () -> assertThat(actualSubject3.getId())
+                    .as("Check %s's %s", "Subject3", "ID").isEqualTo(expectedSubject3.getId()),
+                () -> assertThat(actualSubject3.getName())
+                    .as("Check %s's %s", "Subject3", "Name").isEqualTo(expectedSubject3.getName()),
+                () -> assertThat(actualSubject3.getDescription())
+                    .as("Check %s's %s", "Subject3", "Description").isEqualTo(expectedSubject3.getDescription()),
+                () -> assertThat(actualSubject3.getSemester())
+                    .as("Check %s's %s", "Subject3", "Semester").isEqualTo(expectedSubject3.getSemester()),
+                () -> assertThat(actualSubject3.getHoursInSemester())
+                    .as("Check %s's %s", "Subject3", "Hours in semester").isEqualTo(expectedSubject3.getHoursInSemester()),
+                () -> assertThat(actualSubject3.getFieldOfStudy())
+                    .as("Check %s's %s", "Subject3", "fieldOfStudy").isEqualTo(fieldOfStudy2),
+                () -> assertThat(actualSubject3.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
+                    .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge
+                    ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                            teacher1.getEmail(), teacher1.getAge()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                            teacher2.getEmail(), teacher2.getAge()),
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                            teacher3.getEmail(), teacher3.getAge()))
             );
         }
 
@@ -347,28 +354,28 @@ class SubjectServiceTest {
             assertThat(actualContent).as("Check %s's list size", "subjects").hasSize(1);
             SubjectDto actualSubject = actualContent.get(0);
             assertAll("Subject2 properties",
-                    () -> assertThat(actualSubject.getId())
-                            .as("Check %s's %s", "Subject2", "ID").isEqualTo(expectedSubject2.getId()),
-                    () -> assertThat(actualSubject.getName())
-                            .as("Check %s's %s", "Subject2", "Name").isEqualTo(expectedSubject2.getName()),
-                    () -> assertThat(actualSubject.getDescription())
-                            .as("Check %s's %s", "Subject2", "Description").isEqualTo(expectedSubject2.getDescription()),
-                    () -> assertThat(actualSubject.getSemester())
-                            .as("Check %s's %s", "Subject2", "Semester").isEqualTo(expectedSubject2.getSemester()),
-                    () -> assertThat(actualSubject.getHoursInSemester())
-                            .as("Check %s's %s", "Subject2", "Hours in semester").isEqualTo(expectedSubject2.getHoursInSemester()),
-                    () -> assertThat(actualSubject.getFieldOfStudy())
-                            .as("Check %s's %s", "Subject2", "fieldOfStudy").isEqualTo(fieldOfStudy1),
-                    () -> assertThat(actualSubject.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
-                            .extracting(
-                                    Teacher::getId,
-                                    Teacher::getFirstName,
-                                    Teacher::getLastName,
-                                    Teacher::getEmail,
-                                    Teacher::getAge
-                            ).containsExactlyInAnyOrder(
-                                    Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                            teacher3.getEmail(), teacher3.getAge()))
+                () -> assertThat(actualSubject.getId())
+                    .as("Check %s's %s", "Subject2", "ID").isEqualTo(expectedSubject2.getId()),
+                () -> assertThat(actualSubject.getName())
+                    .as("Check %s's %s", "Subject2", "Name").isEqualTo(expectedSubject2.getName()),
+                () -> assertThat(actualSubject.getDescription())
+                    .as("Check %s's %s", "Subject2", "Description").isEqualTo(expectedSubject2.getDescription()),
+                () -> assertThat(actualSubject.getSemester())
+                    .as("Check %s's %s", "Subject2", "Semester").isEqualTo(expectedSubject2.getSemester()),
+                () -> assertThat(actualSubject.getHoursInSemester())
+                    .as("Check %s's %s", "Subject2", "Hours in semester").isEqualTo(expectedSubject2.getHoursInSemester()),
+                () -> assertThat(actualSubject.getFieldOfStudy())
+                    .as("Check %s's %s", "Subject2", "fieldOfStudy").isEqualTo(fieldOfStudy1),
+                () -> assertThat(actualSubject.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
+                    .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge
+                    ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                            teacher3.getEmail(), teacher3.getAge()))
             );
         }
 
@@ -393,10 +400,10 @@ class SubjectServiceTest {
 
             // Then
             assertThat(result).isNotNull().isNotEmpty().contains(
-                    entry(Semester.FIRST, List.of(expected3)),
-                    entry(Semester.SECOND, List.of(expected2)),
-                    entry(Semester.THIRD, List.of()),
-                    entry(Semester.FIFTH, List.of(expected1, expected4))
+                entry(Semester.FIRST, List.of(expected3)),
+                entry(Semester.SECOND, List.of(expected2)),
+                entry(Semester.THIRD, List.of()),
+                entry(Semester.FIFTH, List.of(expected1, expected4))
             );
         }
     }
@@ -420,30 +427,30 @@ class SubjectServiceTest {
             Long actualId = idArgCaptor.getValue();
             assertThat(actual).as("Check if %s is not null", "Subject").isNotNull();
             assertAll("Subject's properties",
-                    () -> assertThat(actualId)
-                            .as("Check %s's %s", "Subject", "ID").isEqualTo(expected.getId()),
-                    () -> assertThat(actual.getName())
-                            .as("Check %s's %s", "Subject", "Name").isEqualTo(expected.getName()),
-                    () -> assertThat(actual.getDescription())
-                            .as("Check %s's %s", "Subject", "Description").isEqualTo(expected.getDescription()),
-                    () -> assertThat(actual.getSemester())
-                            .as("Check %s's %s", "Subject", "Semester").isEqualTo(expected.getSemester()),
-                    () -> assertThat(actual.getHoursInSemester())
-                            .as("Check %s's %s", "Subject", "Hours in semester").isEqualTo(expected.getHoursInSemester()),
-                    () -> assertThat(actual.getFieldOfStudy())
-                            .as("Check %s's %s", "Subject", "fieldOfStudy").isEqualTo(fieldOfStudy),
-                    () -> assertThat(actual.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
-                            .extracting(
-                                    Teacher::getId,
-                                    Teacher::getFirstName,
-                                    Teacher::getLastName,
-                                    Teacher::getEmail,
-                                    Teacher::getAge
-                            ).containsExactlyInAnyOrder(
-                                    Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                            teacher1.getEmail(), teacher1.getAge()),
-                                    Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                            teacher2.getEmail(), teacher2.getAge()))
+                () -> assertThat(actualId)
+                    .as("Check %s's %s", "Subject", "ID").isEqualTo(expected.getId()),
+                () -> assertThat(actual.getName())
+                    .as("Check %s's %s", "Subject", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(actual.getDescription())
+                    .as("Check %s's %s", "Subject", "Description").isEqualTo(expected.getDescription()),
+                () -> assertThat(actual.getSemester())
+                    .as("Check %s's %s", "Subject", "Semester").isEqualTo(expected.getSemester()),
+                () -> assertThat(actual.getHoursInSemester())
+                    .as("Check %s's %s", "Subject", "Hours in semester").isEqualTo(expected.getHoursInSemester()),
+                () -> assertThat(actual.getFieldOfStudy())
+                    .as("Check %s's %s", "Subject", "fieldOfStudy").isEqualTo(fieldOfStudy),
+                () -> assertThat(actual.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
+                    .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge
+                    ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                            teacher1.getEmail(), teacher1.getAge()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                            teacher2.getEmail(), teacher2.getAge()))
             );
         }
 
@@ -455,8 +462,8 @@ class SubjectServiceTest {
             Throwable thrown = catchThrowable(() -> service.fetchById(id));
             //then
             assertThat(thrown)
-                    .isExactlyInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("Invalid subject id: " + id);
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid subject id: " + id);
         }
     }
 
@@ -486,8 +493,8 @@ class SubjectServiceTest {
             Throwable thrown = catchThrowable(() -> service.remove(id));
             //then
             assertThat(thrown)
-                    .isExactlyInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("Invalid subject id: " + id);
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid subject id: " + id);
         }
 
         @Test
@@ -537,69 +544,71 @@ class SubjectServiceTest {
             SubjectDto actualSubject1 = actual.get(0);
             SubjectDto actualSubject2 = actual.get(1);
             assertAll("Subject1 properties",
-                    () -> assertThat(actualSubject1.getId())
-                            .as("Check %s's %s", "Subject1", "ID").isEqualTo(expectedSubject1.getId()),
-                    () -> assertThat(actualSubject1.getName())
-                            .as("Check %s's %s", "Subject1", "Name").isEqualTo(expectedSubject1.getName()),
-                    () -> assertThat(actualSubject1.getDescription())
-                            .as("Check %s's %s", "Subject1", "Description").isEqualTo(expectedSubject1.getDescription()),
-                    () -> assertThat(actualSubject1.getSemester())
-                            .as("Check %s's %s", "Subject1", "Semester").isEqualTo(expectedSubject1.getSemester()),
-                    () -> assertThat(actualSubject1.getHoursInSemester())
-                            .as("Check %s's %s", "Subject1", "Hours in semester").isEqualTo(expectedSubject1.getHoursInSemester()),
-                    () -> assertThat(actualSubject1.getFieldOfStudy())
-                            .as("Check %s's %s", "Subject1", "fieldOfStudy").isEqualTo(expectedSubject1.getFieldOfStudy()),
-                    () -> assertThat(actualSubject1.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
-                            .extracting(
-                                    Teacher::getId,
-                                    Teacher::getFirstName,
-                                    Teacher::getLastName,
-                                    Teacher::getEmail,
-                                    Teacher::getAge
-                            ).containsExactlyInAnyOrder(
-                                    Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                            teacher1.getEmail(), teacher1.getAge()),
-                                    Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                            teacher2.getEmail(), teacher2.getAge()))
+                () -> assertThat(actualSubject1.getId())
+                    .as("Check %s's %s", "Subject1", "ID").isEqualTo(expectedSubject1.getId()),
+                () -> assertThat(actualSubject1.getName())
+                    .as("Check %s's %s", "Subject1", "Name").isEqualTo(expectedSubject1.getName()),
+                () -> assertThat(actualSubject1.getDescription())
+                    .as("Check %s's %s", "Subject1", "Description").isEqualTo(expectedSubject1.getDescription()),
+                () -> assertThat(actualSubject1.getSemester())
+                    .as("Check %s's %s", "Subject1", "Semester").isEqualTo(expectedSubject1.getSemester()),
+                () -> assertThat(actualSubject1.getHoursInSemester())
+                    .as("Check %s's %s", "Subject1", "Hours in semester").isEqualTo(expectedSubject1.getHoursInSemester()),
+                () -> assertThat(actualSubject1.getFieldOfStudy())
+                    .as("Check %s's %s", "Subject1", "fieldOfStudy").isEqualTo(expectedSubject1.getFieldOfStudy()),
+                () -> assertThat(actualSubject1.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
+                    .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge
+                    ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                            teacher1.getEmail(), teacher1.getAge()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                            teacher2.getEmail(), teacher2.getAge()))
             );
             assertAll("Subject2 properties",
-                    () -> assertThat(actualSubject2.getId())
-                            .as("Check %s's %s", "Subject2", "ID").isEqualTo(expectedSubject3.getId()),
-                    () -> assertThat(actualSubject2.getName())
-                            .as("Check %s's %s", "Subject2", "Name").isEqualTo(expectedSubject3.getName()),
-                    () -> assertThat(actualSubject2.getDescription())
-                            .as("Check %s's %s", "Subject2", "Description").isEqualTo(expectedSubject3.getDescription()),
-                    () -> assertThat(actualSubject2.getSemester())
-                            .as("Check %s's %s", "Subject2", "Semester").isEqualTo(expectedSubject3.getSemester()),
-                    () -> assertThat(actualSubject2.getHoursInSemester())
-                            .as("Check %s's %s", "Subject2", "Hours in semester").isEqualTo(expectedSubject3.getHoursInSemester()),
-                    () -> assertThat(actualSubject2.getFieldOfStudy())
-                            .as("Check %s's %s", "Subject2", "fieldOfStudy").isEqualTo(expectedSubject3.getFieldOfStudy()),
-                    () -> assertThat(actualSubject2.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
-                            .extracting(
-                                    Teacher::getId,
-                                    Teacher::getFirstName,
-                                    Teacher::getLastName,
-                                    Teacher::getEmail,
-                                    Teacher::getAge
-                            ).containsExactlyInAnyOrder(
-                                    Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                            teacher1.getEmail(), teacher1.getAge()),
-                                    Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                            teacher2.getEmail(), teacher2.getAge()),
-                                    Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
-                                            teacher3.getEmail(), teacher3.getAge()))
+                () -> assertThat(actualSubject2.getId())
+                    .as("Check %s's %s", "Subject2", "ID").isEqualTo(expectedSubject3.getId()),
+                () -> assertThat(actualSubject2.getName())
+                    .as("Check %s's %s", "Subject2", "Name").isEqualTo(expectedSubject3.getName()),
+                () -> assertThat(actualSubject2.getDescription())
+                    .as("Check %s's %s", "Subject2", "Description").isEqualTo(expectedSubject3.getDescription()),
+                () -> assertThat(actualSubject2.getSemester())
+                    .as("Check %s's %s", "Subject2", "Semester").isEqualTo(expectedSubject3.getSemester()),
+                () -> assertThat(actualSubject2.getHoursInSemester())
+                    .as("Check %s's %s", "Subject2", "Hours in semester").isEqualTo(expectedSubject3.getHoursInSemester()),
+                () -> assertThat(actualSubject2.getFieldOfStudy())
+                    .as("Check %s's %s", "Subject2", "fieldOfStudy").isEqualTo(expectedSubject3.getFieldOfStudy()),
+                () -> assertThat(actualSubject2.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
+                    .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge
+                    ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                            teacher1.getEmail(), teacher1.getAge()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                            teacher2.getEmail(), teacher2.getAge()),
+                        Tuple.tuple(teacher3.getId(), teacher3.getFirstName(), teacher3.getLastName(),
+                            teacher3.getEmail(), teacher3.getAge()))
             );
         }
 
         @Test
         void findByNamePaginated_shouldReturnSubjectsSearchedByNamePaginated_givenName_pageNo_pageSize_sortDir() {
             //given
-            int pageNo = 1;
-            int pageSize = 1;
-            String sortField = "name";
-            String sortDirection = Sort.Direction.ASC.name();
-            String name = "i";
+            final var pageableRequest = PageableRequest.builder()
+                .searched("i")
+                .pageNumber(1)
+                .pageSize(1)
+                .sortDirection(Sort.Direction.ASC.name())
+                .sortField("name")
+                .build();
 
             Teacher teacher1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher teacher2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -613,37 +622,37 @@ class SubjectServiceTest {
             Page<Subject> subjects = new PageImpl<>(List.of(expectedSubject1));
             //when
             when(repository.findAllByNameContainingIgnoreCase(anyString(), any(Pageable.class))).thenReturn(subjects);
-            Page<SubjectDto> actual = service.findByNamePaginated(pageNo, pageSize, sortField, sortDirection, name);
+            Page<SubjectDto> actual = service.findByNamePaginated(pageableRequest);
             //then
             verify(repository).findAllByNameContainingIgnoreCase(anyString(), any(Pageable.class));
             List<SubjectDto> content = actual.getContent();
             assertThat(content).as("Check %s's list size", "subjects").hasSize(1);
             SubjectDto actualSubject = content.get(0);
             assertAll("Subject1 properties",
-                    () -> assertThat(actualSubject.getId())
-                            .as("Check %s's %s", "Subject1", "ID").isEqualTo(expectedSubject1.getId()),
-                    () -> assertThat(actualSubject.getName())
-                            .as("Check %s's %s", "Subject1", "Name").isEqualTo(expectedSubject1.getName()),
-                    () -> assertThat(actualSubject.getDescription())
-                            .as("Check %s's %s", "Subject1", "Description").isEqualTo(expectedSubject1.getDescription()),
-                    () -> assertThat(actualSubject.getSemester())
-                            .as("Check %s's %s", "Subject1", "Semester").isEqualTo(expectedSubject1.getSemester()),
-                    () -> assertThat(actualSubject.getHoursInSemester())
-                            .as("Check %s's %s", "Subject1", "Hours in semester").isEqualTo(expectedSubject1.getHoursInSemester()),
-                    () -> assertThat(actualSubject.getFieldOfStudy())
-                            .as("Check %s's %s", "Subject1", "fieldOfStudy").isEqualTo(expectedSubject1.getFieldOfStudy()),
-                    () -> assertThat(actualSubject.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
-                            .extracting(
-                                    Teacher::getId,
-                                    Teacher::getFirstName,
-                                    Teacher::getLastName,
-                                    Teacher::getEmail,
-                                    Teacher::getAge
-                            ).containsExactlyInAnyOrder(
-                                    Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
-                                            teacher1.getEmail(), teacher1.getAge()),
-                                    Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
-                                            teacher2.getEmail(), teacher2.getAge()))
+                () -> assertThat(actualSubject.getId())
+                    .as("Check %s's %s", "Subject1", "ID").isEqualTo(expectedSubject1.getId()),
+                () -> assertThat(actualSubject.getName())
+                    .as("Check %s's %s", "Subject1", "Name").isEqualTo(expectedSubject1.getName()),
+                () -> assertThat(actualSubject.getDescription())
+                    .as("Check %s's %s", "Subject1", "Description").isEqualTo(expectedSubject1.getDescription()),
+                () -> assertThat(actualSubject.getSemester())
+                    .as("Check %s's %s", "Subject1", "Semester").isEqualTo(expectedSubject1.getSemester()),
+                () -> assertThat(actualSubject.getHoursInSemester())
+                    .as("Check %s's %s", "Subject1", "Hours in semester").isEqualTo(expectedSubject1.getHoursInSemester()),
+                () -> assertThat(actualSubject.getFieldOfStudy())
+                    .as("Check %s's %s", "Subject1", "fieldOfStudy").isEqualTo(expectedSubject1.getFieldOfStudy()),
+                () -> assertThat(actualSubject.getTeachers()).as("Check %s's %s properties", "Subject", "teachers")
+                    .extracting(
+                        Teacher::getId,
+                        Teacher::getFirstName,
+                        Teacher::getLastName,
+                        Teacher::getEmail,
+                        Teacher::getAge
+                    ).containsExactlyInAnyOrder(
+                        Tuple.tuple(teacher1.getId(), teacher1.getFirstName(), teacher1.getLastName(),
+                            teacher1.getEmail(), teacher1.getAge()),
+                        Tuple.tuple(teacher2.getId(), teacher2.getFirstName(), teacher2.getLastName(),
+                            teacher2.getEmail(), teacher2.getAge()))
             );
         }
     }
