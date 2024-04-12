@@ -1,29 +1,40 @@
 package com.example.classroom.auth.model;
 
+import com.example.classroom.auth.validation.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class UpdateRequest {
 
+@Builder
+public record UpdateRequest(
     @Length(min = 2, max = 30, message = "{message.firstName.length}")
-    private String firstName;
+    String firstName,
 
     @Length(min = 2, max = 30, message = "{message.lastName.length}")
-    private String lastName;
+    String lastName,
 
     @NotBlank(message = "{message.email.empty}")
     @Email(message = "{message.email.valid}")
-    private String email;
+    String email,
 
+    @ValidPassword
+    String password
+) {
+
+//    @Length(min = 2, max = 30, message = "{message.firstName.length}")
+//    private String firstName;
+//
+//    @Length(min = 2, max = 30, message = "{message.lastName.length}")
+//    private String lastName;
+//
+//    @NotBlank(message = "{message.email.empty}")
+//    @Email(message = "{message.email.valid}")
+//    private String email;
+
+
+    // FIXME - Password shouldn't be editable
     //    @ValidPassword
-    private String password;
+//    private String password;
 }

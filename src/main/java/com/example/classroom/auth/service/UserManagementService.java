@@ -61,10 +61,10 @@ public class UserManagementService implements UserDetailsService {
     }
 
     @Transactional
-    public User update(UpdateRequest request) {
-        User userLogin = loadUserByUsername(request.getEmail());
-        mapper.map(request, userLogin);
-        return repository.save(userLogin);
+    public User update(final UpdateRequest request) {
+        final var user = loadUserByUsername(request.email());
+        mapper.map(request, user);
+        return repository.save(user);
     }
 
     @Override

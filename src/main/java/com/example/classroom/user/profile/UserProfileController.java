@@ -28,9 +28,9 @@ class UserProfileController {
     private static final String FIELDS_OF_STUDY_UPLOAD_DIR = "fields-of-study/";
 
     @GetMapping
-    String getUserProfilePage(Model model,
-                              HttpServletRequest request,
-                              Principal principal) {
+    String getUserProfilePage(final Model model,
+                              final HttpServletRequest request,
+                              final Principal principal) {
         addAttributesBreadcrumbAndUser(principal, model, request);
         model.addAttribute("imagesPath", Path.of("/img").resolve(FIELDS_OF_STUDY_UPLOAD_DIR));
         return "user/user-view";
@@ -38,40 +38,42 @@ class UserProfileController {
 
 
     @GetMapping("/edit")
-    String getEditUserProfilePage(Model model,
-                                  HttpServletRequest request,
-                                  Principal principal) {
+    String getEditUserProfilePage(final Model model,
+                                  final HttpServletRequest request,
+                                  final Principal principal) {
         addAttributesBreadcrumbAndUser(principal, model, request);
         return USER_EDIT_TEMPLATE;
     }
 
     @PostMapping("/update")
-    String updateUserDetails(@Valid @ModelAttribute UpdateRequest userRequest,
-                             BindingResult result,
-                             HttpServletRequest request,
-                             Principal principal,
-                             RedirectAttributes redirectAttributes,
-                             Model model) {
+    String updateUserDetails(@Valid @ModelAttribute final UpdateRequest userRequest,
+                             final BindingResult result,
+                             final HttpServletRequest request,
+                             final Principal principal,
+                             final RedirectAttributes redirectAttributes,
+                             final Model model) {
         if (result.hasErrors()) {
             addAttributesBreadcrumbAndUser(principal, model, request);
             return USER_EDIT_TEMPLATE;
         }
-        User updated = userManagementService.update(userRequest);
+        final var updated = userManagementService.update(userRequest);
         redirectAttributes.addFlashAttribute("editSuccess", updated);
         return "redirect:/dashboard/profile";
     }
 
     @GetMapping("delete/{id}")
-    String deleteAccount(@PathVariable Long id,
-                         HttpServletRequest request,
-                         RedirectAttributes redirectAttributes) {
+    String deleteAccount(@PathVariable final Long id,
+                         final HttpServletRequest request,
+                         final RedirectAttributes redirectAttributes) {
         userManagementService.invalidateSession(request);
         userManagementService.removeById(id);
         redirectAttributes.addFlashAttribute("deleteSuccess", "removed");
         return "redirect:/sign-up";
     }
 
-    private void addAttributesBreadcrumbAndUser(Principal principal, Model model, HttpServletRequest request) {
+    private void addAttributesBreadcrumbAndUser(final Principal principal,
+                                                final Model model,
+                                                final HttpServletRequest request) {
         model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
         model.addAttribute("user", userManagementService.loadUserByUsername(principal.getName()));
     }

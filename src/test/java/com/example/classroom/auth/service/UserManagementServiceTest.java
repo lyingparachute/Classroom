@@ -206,9 +206,9 @@ class UserManagementServiceTest {
             User expected = User.builder()
                     .id(user.getId())
                     .email(user.getEmail())
-                    .firstName(updateRequest.getFirstName())
-                    .lastName(updateRequest.getLastName())
-                    .password(updateRequest.getPassword())
+                    .firstName(updateRequest.firstName())
+                    .lastName(updateRequest.lastName())
+                    .password(updateRequest.password())
                     .build();
 
             // When
@@ -222,13 +222,13 @@ class UserManagementServiceTest {
             assertThat(updated).isNotNull();
             assertAll("Check User's properties",
                     () -> assertThat(updated.getFirstName()).as("Check user's First Name")
-                            .isEqualTo(updateRequest.getFirstName()),
+                            .isEqualTo(updateRequest.firstName()),
                     () -> assertThat(updated.getLastName()).as("Check user's Last Name")
-                            .isEqualTo(updateRequest.getLastName()),
+                            .isEqualTo(updateRequest.lastName()),
                     () -> assertThat(updated.getEmail()).as("Check user's Email")
-                            .isEqualTo(updateRequest.getEmail()),
+                            .isEqualTo(updateRequest.email()),
                     () -> assertThat(updated.getPassword()).as("Check user's Password")
-                            .isEqualTo(updateRequest.getPassword())
+                            .isEqualTo(updateRequest.password())
             );
 
         }
