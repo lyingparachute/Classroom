@@ -1,8 +1,9 @@
-package com.example.classroom.user;
+package com.example.classroom.user.profile;
 
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
+import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +21,14 @@ import java.security.Principal;
 @RequiredArgsConstructor
 class UserProfileController {
 
-    private final UserManagementService service;
+    private final UserManagementService userManagementService;
     private final BreadcrumbService crumb;
 
     private static final String USER_EDIT_TEMPLATE = "user/user-edit";
     private static final String FIELDS_OF_STUDY_UPLOAD_DIR = "fields-of-study/";
 
     @GetMapping
-    String getUserDetailsPage(Model model,
+    String getUserProfilePage(Model model,
                               HttpServletRequest request,
                               Principal principal) {
         addAttributesBreadcrumbAndUser(principal, model, request);
@@ -37,7 +38,7 @@ class UserProfileController {
 
 
     @GetMapping("/edit")
-    String getEditUserDetailsPage(Model model,
+    String getEditUserProfilePage(Model model,
                                   HttpServletRequest request,
                                   Principal principal) {
         addAttributesBreadcrumbAndUser(principal, model, request);
@@ -55,7 +56,7 @@ class UserProfileController {
             addAttributesBreadcrumbAndUser(principal, model, request);
             return USER_EDIT_TEMPLATE;
         }
-        User updated = service.update(userRequest);
+        User updated = userManagementService.update(userRequest);
         redirectAttributes.addFlashAttribute("editSuccess", updated);
         return "redirect:/dashboard/profile";
     }
@@ -64,14 +65,14 @@ class UserProfileController {
     String deleteAccount(@PathVariable Long id,
                          HttpServletRequest request,
                          RedirectAttributes redirectAttributes) {
-        service.invalidateSession(request);
-        service.removeById(id);
+        userManagementService.invalidateSession(request);
+        userManagementService.removeById(id);
         redirectAttributes.addFlashAttribute("deleteSuccess", "removed");
         return "redirect:/sign-up";
     }
 
     private void addAttributesBreadcrumbAndUser(Principal principal, Model model, HttpServletRequest request) {
         model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
-        model.addAttribute("user", service.loadUserByUsername(principal.getName()));
+        model.addAttribute("user", userManagementService.loadUserByUsername(principal.getName()));
     }
 }
