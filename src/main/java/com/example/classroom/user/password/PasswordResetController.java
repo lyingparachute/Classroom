@@ -61,7 +61,7 @@ public class PasswordResetController {
         service.resetPassword(
                 request,
                 token,
-                passwordRequest.password()
+                passwordRequest.getPassword()
         );
         redirectAttributes.addFlashAttribute("resetPasswordSuccess", "Your password has been reset.");
         return REDIRECT_TO_SIGN_IN_PAGE;

@@ -13,7 +13,7 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
     public boolean isValid(final Object obj,
                            final ConstraintValidatorContext context) {
         final var request = (PasswordRequest) obj;
-        final var isValid = request.password().equals(request.matchingPassword());
+        final var isValid = request.getPassword().equals(request.getMatchingPassword());
         if (!isValid) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())

@@ -106,7 +106,7 @@ class TeacherRestControllerWebMvcTest {
                             .content("{ \"firstName\": \"" + request.firstName() + "\",  " +
                                     "\"lastName\": \"" + request.lastName() + "\"," +
                                     "\"email\": \"" + request.email() + "\", " +
-                                    "\"password\": \"" + request.passwordRequest().password() +
+                                    "\"password\": \"" + request.passwordRequest().getPassword() +
                                     "\"}"))
                     .andReturn()
                     .getResponse()

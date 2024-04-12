@@ -70,7 +70,7 @@ class UserManagementServiceTest {
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.passwordRequest().password());
+            verify(passwordEncoder).encode(request.passwordRequest().getPassword());
             verify(repository).save(any(User.class));
             verify(studentService).create(any(StudentDto.class));
             verifyNoInteractions(teacherService);
@@ -103,7 +103,7 @@ class UserManagementServiceTest {
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.passwordRequest().password());
+            verify(passwordEncoder).encode(request.passwordRequest().getPassword());
             verify(repository).save(any(User.class));
             verifyNoInteractions(studentService);
             verify(teacherService).create(any(TeacherDto.class));
@@ -136,7 +136,7 @@ class UserManagementServiceTest {
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.passwordRequest().password());
+            verify(passwordEncoder).encode(request.passwordRequest().getPassword());
             verify(repository).save(any(User.class));
             verifyNoInteractions(studentService);
             verify(teacherService).create(any(TeacherDto.class));
@@ -169,7 +169,7 @@ class UserManagementServiceTest {
 
             User actualUser = service.register(request);
             // Then
-            verify(passwordEncoder).encode(request.passwordRequest().password());
+            verify(passwordEncoder).encode(request.passwordRequest().getPassword());
             verify(repository).save(any(User.class));
             verifyNoInteractions(studentService);
             verifyNoInteractions(teacherService);

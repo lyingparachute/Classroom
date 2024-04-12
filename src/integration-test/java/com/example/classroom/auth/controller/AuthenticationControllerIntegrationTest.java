@@ -94,7 +94,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.firstName() +
                                     "&lastName=" + request.lastName() +
                                     "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().password() +
+                                    "&password=" + request.passwordRequest().getPassword() +
                                     "&role=" + request.role()
                             )
                     )
@@ -132,7 +132,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.firstName() +
                                     "&lastName=" + request.lastName() +
                                     "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().password() +
+                                    "&password=" + request.passwordRequest().getPassword() +
                                     "&role=" + request.role()
                             )
                     )
@@ -170,7 +170,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.firstName() +
                                     "&lastName=" + request.lastName() +
                                     "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().password() +
+                                    "&password=" + request.passwordRequest().getPassword() +
                                     "&role=" + request.role()
                             )
                     )
@@ -208,7 +208,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.firstName() +
                                     "&lastName=" + request.lastName() +
                                     "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().password() +
+                                    "&password=" + request.passwordRequest().getPassword() +
                                     "&role=" + request.role()
                             )
                     )
@@ -257,7 +257,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.firstName() +
                                     "&lastName=" + request.lastName() +
                                     "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().password()
+                                    "&password=" + request.passwordRequest().getPassword()
                             )
                     )
                     .andDo(print())
@@ -293,7 +293,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.firstName() +
                                     "&lastName=" + request.lastName() +
                                     "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().password() +
+                                    "&password=" + request.passwordRequest().getPassword() +
                                     "&role=" + request.role()
                             )
                     )
@@ -328,7 +328,7 @@ class AuthenticationControllerIntegrationTest {
                             .content("firstName=" + request.firstName() +
                                     "&lastName=" + request.lastName() +
                                     "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().password() +
+                                    "&password=" + request.passwordRequest().getPassword() +
                                     "&role=" + request.role()
                             )
                     )

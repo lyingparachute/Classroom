@@ -38,7 +38,7 @@ public class UserManagementService implements UserDetailsService {
             throw new UserAlreadyExistException("There is already an account with email address: " + request.email());
         final var user = new User();
         mapper.map(request, user);
-        user.setPassword(passwordEncoder.encode(request.passwordRequest().password()));
+        user.setPassword(passwordEncoder.encode(request.passwordRequest().getPassword()));
         final var savedUser = repository.save(user);
         createUniversityAttendeeAccount(request, savedUser);
         savedUser.getAttendee();
