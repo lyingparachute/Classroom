@@ -3,8 +3,21 @@ package com.example.classroom.user;
 import com.example.classroom.student.Student;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.token.Token;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,7 +61,7 @@ public class User implements UserDetails {
     private Teacher teacher;
 
     public User() {
-        this.enabled = false;
+        enabled = false;
     }
 
     @Override
@@ -83,7 +96,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return enabled != null && enabled;
     }
 
     public boolean isStudent() {
@@ -94,11 +107,11 @@ public class User implements UserDetails {
         return role == UserRole.ROLE_TEACHER;
     }
 
-    public void setAttendee(Object attendee) {
+    public void setAttendee(final Object attendee) {
         if (role.equals(UserRole.ROLE_STUDENT))
-            this.student = (Student) attendee;
+            student = (Student) attendee;
         if (role.equals(UserRole.ROLE_TEACHER) || role.equals(UserRole.ROLE_DEAN))
-            this.teacher = (Teacher) attendee;
+            teacher = (Teacher) attendee;
     }
 
     public Object getAttendee() {
@@ -106,6 +119,6 @@ public class User implements UserDetails {
     }
 
     public void enableAccount() {
-        this.enabled = true;
+        enabled = true;
     }
 }

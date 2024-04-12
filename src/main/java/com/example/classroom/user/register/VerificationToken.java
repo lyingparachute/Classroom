@@ -1,7 +1,13 @@
 package com.example.classroom.user.register;
 
 import com.example.classroom.user.User;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -33,14 +39,14 @@ public class VerificationToken {
         setExpiryDate();
     }
 
-    VerificationToken(User user, String token) {
+    VerificationToken(final User user, final String token) {
         this.token = token;
         this.user = user;
         setExpiryDate();
     }
 
     private void setExpiryDate() {
-        this.expiryDate = LocalDateTime.now().plusHours(TOKEN_EXPIRATION_TIME_IN_HOURS);
+        expiryDate = LocalDateTime.now().plusHours(TOKEN_EXPIRATION_TIME_IN_HOURS);
     }
 
     boolean isValid() {
@@ -52,7 +58,7 @@ public class VerificationToken {
     }
 
     void setRevoked() {
-        this.revoked = true;
+        revoked = true;
     }
 
     @Override

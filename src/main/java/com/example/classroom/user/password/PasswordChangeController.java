@@ -28,9 +28,9 @@ public class PasswordChangeController {
     private final BreadcrumbService crumb;
 
     @GetMapping("password")
-    String getPasswordChangePage(Model model,
-                                 HttpServletRequest request,
-                                 Principal principal) {
+    String getPasswordChangePage(final Model model,
+                                 final HttpServletRequest request,
+                                 final Principal principal) {
         addAttributesBreadcrumbAndUser(principal, model, request);
         model.addAttribute("passwordChange", new PasswordChangeRequest());
         return PASSWORD_CHANGE_TEMPLATE;
@@ -38,11 +38,11 @@ public class PasswordChangeController {
 
     @PostMapping("password")
     String updatePassword(@Valid @ModelAttribute("passwordChange") final PasswordChangeRequest passwordChangeRequest,
-                          BindingResult result,
-                          Principal principal,
-                          Model model,
-                          HttpServletRequest request,
-                          RedirectAttributes redirectAttributes) {
+                          final BindingResult result,
+                          final Principal principal,
+                          final Model model,
+                          final HttpServletRequest request,
+                          final RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             addAttributesBreadcrumbAndUser(principal, model, request);
             model.addAttribute("passwordChange", passwordChangeRequest);
@@ -61,7 +61,9 @@ public class PasswordChangeController {
         return "redirect:/dashboard/profile";
     }
 
-    private void addAttributesBreadcrumbAndUser(Principal principal, Model model, HttpServletRequest request) {
+    private void addAttributesBreadcrumbAndUser(final Principal principal,
+                                                final Model model,
+                                                final HttpServletRequest request) {
         model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
         model.addAttribute("user", userService.loadUserByUsername(principal.getName()));
     }

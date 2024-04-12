@@ -1,6 +1,7 @@
 package com.example.classroom.subject;
 
 import com.example.classroom.enums.Semester;
+import com.example.classroom.pageable.PageableRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static java.util.Map.entry;
 
@@ -24,16 +24,16 @@ public class SubjectService {
     private final ModelMapper mapper;
 
     @Transactional
-    SubjectDto create(SubjectDto dto) {
-        Subject subject = mapper.map(dto, Subject.class);
+    SubjectDto create(final SubjectDto dto) {
+        final var subject = mapper.map(dto, Subject.class);
         addReferencingObjects(subject);
-        Subject saved = repository.save(subject);
+        final var saved = repository.save(subject);
         return mapper.map(saved, SubjectDto.class);
     }
 
     @Transactional
     SubjectDto update(SubjectDto dto) {
-        Subject subject = repository.findById(dto.getId())
+        final var subject = repository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid subject '" + dto + "' with ID: " + dto.getId()));
         removeReferencingObjects(subject);
         mapper.map(dto, subject);
@@ -43,17 +43,17 @@ public class SubjectService {
     }
 
     public List<SubjectDto> fetchAll() {
-        List<Subject> subjects = repository.findAll();
+        final var subjects = repository.findAll();
         return subjects.stream().map(subject -> mapper.map(subject, SubjectDto.class)).toList();
     }
 
-    Page<SubjectDto> fetchAllPaginated(int pageNo,
-                                       int pageSize,
-                                       String sortField,
-                                       String sortDirection) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Subject> all = repository.findAll(pageable);
+    Page<SubjectDto> fetchAllPaginated(final int pageNo,
+                                       final int pageSize,
+                                       final String sortField,
+                                       final String sortDirection) {
+        final var sort = getSortOrder(sortField, sortDirection);
+        final Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        final var all = repository.findAll(pageable);
         return all.map(subject -> mapper.map(subject, SubjectDto.class));
     }
 
@@ -69,15 +69,15 @@ public class SubjectService {
         );
     }
 
-    SubjectDto fetchById(Long id) {
-        Optional<Subject> byId = repository.findById(id);
+    SubjectDto fetchById(final Long id) {
+        final var byId = repository.findById(id);
         return byId.map(subject -> mapper.map(subject, SubjectDto.class))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid subject id: " + id));
     }
 
     @Transactional
-    void remove(Long id) {
-        Subject subject = repository.findById(id)
+    void remove(final Long id) {
+        final var subject = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid subject id: " + id));
         removeReferencingObjects(subject);
         repository.delete(subject);
@@ -89,20 +89,15 @@ public class SubjectService {
         repository.deleteAll();
     }
 
-    List<SubjectDto> findByName(String searched) {
-        List<Subject> found = repository.findAllByNameContainingIgnoreCase(searched);
+    List<SubjectDto> findByName(final String searched) {
+        final var found = repository.findAllByNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, SubjectDto.class)).toList();
     }
 
-    Page<SubjectDto> findByNamePaginated(int pageNo,
-                                         int pageSize,
-                                         String sortField,
-                                         String sortDirection,
-                                         String searched) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Subject> all = repository.findAllByNameContainingIgnoreCase(searched, pageable);
+    Page<SubjectDto> findByNamePaginated(final PageableRequest request) {
+        final var sort = getSortOrder(request.sortField(), request.sortDirection());
+        final Pageable pageable = PageRequest.of(request.pageNumber() - 1, request.pageSize(), sort);
+        final var all = repository.findAllByNameContainingIgnoreCase(request.searched(), pageable);
         return all.map(subject -> mapper.map(subject, SubjectDto.class));
     }
 

@@ -51,9 +51,9 @@ public class PasswordResetService {
     void resetPassword(final HttpServletRequest request,
                        final String token,
                        final String newPassword) {
-        User user = getUserByPasswordResetToken(token);
+        final var user = getUserByPasswordResetToken(token);
         userService.updateUserPassword(user, newPassword);
-        PasswordResetToken passwordResetToken = getPasswordResetToken(token);
+        final var passwordResetToken = getPasswordResetToken(token);
         revokeToken(passwordResetToken);
         sendPasswordResetConfirmationEmail(request, user);
     }
@@ -80,7 +80,7 @@ public class PasswordResetService {
     }
 
     private String createAndSavePasswordResetToken(final User user) {
-        final PasswordResetToken myToken = new PasswordResetToken(
+        final var myToken = new PasswordResetToken(
                 user,
                 UUID.randomUUID().toString()
         );
@@ -108,7 +108,7 @@ public class PasswordResetService {
 
     private void sendPasswordResetConfirmationEmail(final HttpServletRequest request,
                                                     final User user) {
-        String appUrl = getAppUrl(request);
+        final var appUrl = getAppUrl(request);
         mailService.sendEmail(
                 user.getEmail(),
                 PASSWORD_RESET_CONFIRM_EMAIL_SUBJECT,

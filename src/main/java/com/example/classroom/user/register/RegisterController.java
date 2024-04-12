@@ -4,7 +4,6 @@ import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.exception.AccountAlreadyVerifiedException;
 import com.example.classroom.exception.InvalidTokenException;
 import com.example.classroom.exception.UserAlreadyExistException;
-import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,25 +27,25 @@ class RegisterController {
     private final RegisterService registerService;
 
     @GetMapping("sign-up")
-    String getSignUpPage(Model model) {
+    String getSignUpPage(final Model model) {
         model.addAttribute("user", new RegisterRequest());
         return SIGN_UP_TEMPLATE;
     }
 
     @PostMapping("sign-up")
-    String createNewUserAccount(@Valid @ModelAttribute("user") RegisterRequest registerRequest,
-                                BindingResult result,
-                                Model model,
-                                HttpServletRequest request,
-                                RedirectAttributes redirectAttributes) {
+    String createNewUserAccount(@Valid @ModelAttribute("user") final RegisterRequest registerRequest,
+                                final BindingResult result,
+                                final Model model,
+                                final HttpServletRequest request,
+                                final RedirectAttributes redirectAttributes) {
         if (result.hasErrors())
             return SIGN_UP_TEMPLATE;
         try {
-            User registered = service.register(registerRequest);
+            final var registered = service.register(registerRequest);
             registerService.sendAccountVerificationEmail(request, registered);
             redirectAttributes.addFlashAttribute("createSuccess", registered);
         } catch (UserAlreadyExistException e) {
-            model.addAttribute("emailExists", registerRequest.getEmail());
+            model.addAttribute("emailExists", registerRequest.email());
             return SIGN_UP_TEMPLATE;
         }
         return REDIRECT_TO_SIGN_IN_PAGE;
@@ -54,7 +53,7 @@ class RegisterController {
 
     @GetMapping("account/verify")
     String verifyAccount(@RequestParam("token") final String token,
-                         RedirectAttributes redirectAttributes) {
+                         final RedirectAttributes redirectAttributes) {
         try {
             registerService.validateVerificationToken(token);
         } catch (InvalidTokenException e) {
@@ -67,11 +66,11 @@ class RegisterController {
     }
 
     @PostMapping("verification-email/send")
-    String resendVerificationEmail(@RequestParam("email") String userEmail,
-                                   HttpServletRequest request,
-                                   RedirectAttributes redirectAttributes) {
+    String resendVerificationEmail(@RequestParam("email") final String userEmail,
+                                   final HttpServletRequest request,
+                                   final RedirectAttributes redirectAttributes) {
         try {
-            User user = service.loadUserByUsername(userEmail);
+            final var user = service.loadUserByUsername(userEmail);
             registerService.sendAccountVerificationEmail(request, user);
             redirectAttributes.addFlashAttribute("resendVerificationEmailSuccess", userEmail);
         } catch (UsernameNotFoundException e) {

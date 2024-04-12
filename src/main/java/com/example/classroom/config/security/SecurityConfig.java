@@ -34,7 +34,7 @@ public class SecurityConfig {
     private static final String EMAIL_VERIFICATION_ENDPOINTS = "/verification-email/**";
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http
                 //TODO - enable csrf
                 .csrf().disable()

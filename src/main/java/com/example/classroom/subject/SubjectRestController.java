@@ -5,7 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,8 +24,8 @@ class SubjectRestController {
     private final SubjectService subjectService;
 
     @GetMapping("{id}")
-    ResponseEntity<SubjectDto> getSubject(@PathVariable Long id) {
-        SubjectDto dto = subjectService.fetchById(id);
+    ResponseEntity<SubjectDto> getSubject(@PathVariable final Long id) {
+        final var dto = subjectService.fetchById(id);
         return dto != null ?
                 ResponseEntity.ok(dto) :
                 ResponseEntity.notFound().build();
@@ -26,7 +33,7 @@ class SubjectRestController {
 
     @GetMapping
     ResponseEntity<List<SubjectDto>> getAllSubjects() {
-        List<SubjectDto> subjects = subjectService.fetchAll();
+        final var subjects = subjectService.fetchAll();
         return subjects.isEmpty() ?
                 ResponseEntity.notFound().build() :
                 ResponseEntity.ok(subjects);
@@ -34,8 +41,8 @@ class SubjectRestController {
 
     @PostMapping
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    ResponseEntity<SubjectDto> createSubject(@Valid @RequestBody SubjectDto subjectDto) {
-        SubjectDto created = subjectService.create(subjectDto);
+    ResponseEntity<SubjectDto> createSubject(@Valid @RequestBody final SubjectDto subjectDto) {
+        final var created = subjectService.create(subjectDto);
         return created != null ?
                 ResponseEntity.status(HttpStatus.CREATED)
                         .body(created) :
@@ -44,8 +51,8 @@ class SubjectRestController {
 
     @PutMapping
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    ResponseEntity<SubjectDto> updateSubject(@Valid @RequestBody SubjectDto studentDto) {
-        SubjectDto updated = subjectService.update(studentDto);
+    ResponseEntity<SubjectDto> updateSubject(@Valid @RequestBody final SubjectDto studentDto) {
+        final var updated = subjectService.update(studentDto);
         return updated != null ?
                 ResponseEntity.ok(updated) :
                 ResponseEntity.badRequest().build();
@@ -53,7 +60,7 @@ class SubjectRestController {
 
     @DeleteMapping("{id}")
     @Secured({"ROLE_ADMIN"})
-    ResponseEntity<Void> deleteSubject(@PathVariable Long id) {
+    ResponseEntity<Void> deleteSubject(@PathVariable final Long id) {
         subjectService.remove(id);
         return ResponseEntity.accepted().build();
     }

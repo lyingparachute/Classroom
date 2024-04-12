@@ -29,7 +29,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ActiveProfiles("integration")
 @SpringBootTest
@@ -84,26 +86,25 @@ class AuthenticationControllerIntegrationTest {
         @Test
         void createsNewUserAccount_withAssociatedStudent_givenValidRegisterRequest_withStudentRole() throws Exception {
             // Given
-            RegisterRequest request = initData.createRegisterRequest();
-            request.setRole(UserRole.ROLE_STUDENT);
+            RegisterRequest request = initData.createRegisterRequest(UserRole.ROLE_STUDENT);
 
             // When
             mockMvc.perform(post("/sign-up")
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.getFirstName() +
-                                    "&lastName=" + request.getLastName() +
-                                    "&email=" + request.getEmail() +
-                                    "&password=" + request.getPasswordRequest().getPassword() +
-                                    "&role=" + request.getRole()
+                            .content("firstName=" + request.firstName() +
+                                    "&lastName=" + request.lastName() +
+                                    "&email=" + request.email() +
+                                    "&password=" + request.passwordRequest().getPassword() +
+                                    "&role=" + request.role()
                             )
                     )
                     .andDo(print())
                     .andExpect(status().is3xxRedirection());
 
             // Then
-            Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
-            Optional<Student> studentByEmail = studentRepository.findByEmail(request.getEmail());
-            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.getEmail());
+            Optional<User> userByEmail = userRepository.findByEmail(request.email());
+            Optional<Student> studentByEmail = studentRepository.findByEmail(request.email());
+            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.email());
 
             assertThat(userByEmail).isPresent();
             assertThat(studentByEmail).isPresent();
@@ -112,10 +113,10 @@ class AuthenticationControllerIntegrationTest {
             User user = userByEmail.get();
             Student student = studentByEmail.get();
 
-            assertThat(user.getFirstName()).isEqualTo(student.getFirstName()).isEqualTo(request.getFirstName());
-            assertThat(user.getLastName()).isEqualTo(student.getLastName()).isEqualTo(request.getLastName());
-            assertThat(user.getEmail()).isEqualTo(student.getEmail()).isEqualTo(request.getEmail());
-            assertThat(user.getRole()).isEqualTo(request.getRole());
+            assertThat(user.getFirstName()).isEqualTo(student.getFirstName()).isEqualTo(request.firstName());
+            assertThat(user.getLastName()).isEqualTo(student.getLastName()).isEqualTo(request.lastName());
+            assertThat(user.getEmail()).isEqualTo(student.getEmail()).isEqualTo(request.email());
+            assertThat(user.getRole()).isEqualTo(request.role());
             assertThat(user.getStudent()).isNotNull().isEqualTo(student);
             assertThat(user.getTeacher()).isNull();
         }
@@ -123,26 +124,25 @@ class AuthenticationControllerIntegrationTest {
         @Test
         void createsNewUserAccount_withAssociatedTeacher_givenValidRegisterRequest_withTeacherRole() throws Exception {
             // Given
-            RegisterRequest request = initData.createRegisterRequest();
-            request.setRole(UserRole.ROLE_TEACHER);
+            RegisterRequest request = initData.createRegisterRequest(UserRole.ROLE_TEACHER);
 
             // When
             mockMvc.perform(post("/sign-up")
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.getFirstName() +
-                                    "&lastName=" + request.getLastName() +
-                                    "&email=" + request.getEmail() +
-                                    "&password=" + request.getPasswordRequest().getPassword() +
-                                    "&role=" + request.getRole()
+                            .content("firstName=" + request.firstName() +
+                                    "&lastName=" + request.lastName() +
+                                    "&email=" + request.email() +
+                                    "&password=" + request.passwordRequest().getPassword() +
+                                    "&role=" + request.role()
                             )
                     )
                     .andDo(print())
                     .andExpect(status().is3xxRedirection());
 
             // Then
-            Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
-            Optional<Student> studentByEmail = studentRepository.findByEmail(request.getEmail());
-            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.getEmail());
+            Optional<User> userByEmail = userRepository.findByEmail(request.email());
+            Optional<Student> studentByEmail = studentRepository.findByEmail(request.email());
+            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.email());
 
             assertThat(userByEmail).isPresent();
             assertThat(studentByEmail).isNotPresent();
@@ -151,10 +151,10 @@ class AuthenticationControllerIntegrationTest {
             User user = userByEmail.get();
             Teacher teacher = teacherByEmail.get();
 
-            assertThat(user.getFirstName()).isEqualTo(teacher.getFirstName()).isEqualTo(request.getFirstName());
-            assertThat(user.getLastName()).isEqualTo(teacher.getLastName()).isEqualTo(request.getLastName());
-            assertThat(user.getEmail()).isEqualTo(teacher.getEmail()).isEqualTo(request.getEmail());
-            assertThat(user.getRole()).isEqualTo(request.getRole());
+            assertThat(user.getFirstName()).isEqualTo(teacher.getFirstName()).isEqualTo(request.firstName());
+            assertThat(user.getLastName()).isEqualTo(teacher.getLastName()).isEqualTo(request.lastName());
+            assertThat(user.getEmail()).isEqualTo(teacher.getEmail()).isEqualTo(request.email());
+            assertThat(user.getRole()).isEqualTo(request.role());
             assertThat(user.getStudent()).isNull();
             assertThat(user.getTeacher()).isNotNull().isEqualTo(teacher);
         }
@@ -162,26 +162,25 @@ class AuthenticationControllerIntegrationTest {
         @Test
         void createsNewUserAccount_withAssociatedTeacher_givenValidRegisterRequest_withDeanRole() throws Exception {
             // Given
-            RegisterRequest request = initData.createRegisterRequest();
-            request.setRole(UserRole.ROLE_DEAN);
+            RegisterRequest request = initData.createRegisterRequest(UserRole.ROLE_DEAN);
 
             // When
             mockMvc.perform(post("/sign-up")
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.getFirstName() +
-                                    "&lastName=" + request.getLastName() +
-                                    "&email=" + request.getEmail() +
-                                    "&password=" + request.getPasswordRequest().getPassword() +
-                                    "&role=" + request.getRole()
+                            .content("firstName=" + request.firstName() +
+                                    "&lastName=" + request.lastName() +
+                                    "&email=" + request.email() +
+                                    "&password=" + request.passwordRequest().getPassword() +
+                                    "&role=" + request.role()
                             )
                     )
                     .andDo(print())
                     .andExpect(status().is3xxRedirection());
 
             // Then
-            Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
-            Optional<Student> studentByEmail = studentRepository.findByEmail(request.getEmail());
-            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.getEmail());
+            Optional<User> userByEmail = userRepository.findByEmail(request.email());
+            Optional<Student> studentByEmail = studentRepository.findByEmail(request.email());
+            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.email());
 
             assertThat(userByEmail).isPresent();
             assertThat(studentByEmail).isNotPresent();
@@ -190,10 +189,10 @@ class AuthenticationControllerIntegrationTest {
             User user = userByEmail.get();
             Teacher teacher = teacherByEmail.get();
 
-            assertThat(user.getFirstName()).isEqualTo(teacher.getFirstName()).isEqualTo(request.getFirstName());
-            assertThat(user.getLastName()).isEqualTo(teacher.getLastName()).isEqualTo(request.getLastName());
-            assertThat(user.getEmail()).isEqualTo(teacher.getEmail()).isEqualTo(request.getEmail());
-            assertThat(user.getRole()).isEqualTo(request.getRole());
+            assertThat(user.getFirstName()).isEqualTo(teacher.getFirstName()).isEqualTo(request.firstName());
+            assertThat(user.getLastName()).isEqualTo(teacher.getLastName()).isEqualTo(request.lastName());
+            assertThat(user.getEmail()).isEqualTo(teacher.getEmail()).isEqualTo(request.email());
+            assertThat(user.getRole()).isEqualTo(request.role());
             assertThat(user.getStudent()).isNull();
             assertThat(user.getTeacher()).isNotNull().isEqualTo(teacher);
         }
@@ -201,26 +200,25 @@ class AuthenticationControllerIntegrationTest {
         @Test
         void createsNewUserAccount_givenValidRegisterRequest_withAdminRole() throws Exception {
             // Given
-            RegisterRequest request = initData.createRegisterRequest();
-            request.setRole(UserRole.ROLE_ADMIN);
+            RegisterRequest request = initData.createRegisterRequest(UserRole.ROLE_ADMIN);
 
             // When
             mockMvc.perform(post("/sign-up")
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.getFirstName() +
-                                    "&lastName=" + request.getLastName() +
-                                    "&email=" + request.getEmail() +
-                                    "&password=" + request.getPasswordRequest().getPassword() +
-                                    "&role=" + request.getRole()
+                            .content("firstName=" + request.firstName() +
+                                    "&lastName=" + request.lastName() +
+                                    "&email=" + request.email() +
+                                    "&password=" + request.passwordRequest().getPassword() +
+                                    "&role=" + request.role()
                             )
                     )
                     .andDo(print())
                     .andExpect(status().is3xxRedirection());
 
             // Then
-            Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
-            Optional<Student> studentByEmail = studentRepository.findByEmail(request.getEmail());
-            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.getEmail());
+            Optional<User> userByEmail = userRepository.findByEmail(request.email());
+            Optional<Student> studentByEmail = studentRepository.findByEmail(request.email());
+            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.email());
 
             assertThat(userByEmail).isPresent();
             assertThat(studentByEmail).isNotPresent();
@@ -228,10 +226,10 @@ class AuthenticationControllerIntegrationTest {
 
             User user = userByEmail.get();
 
-            assertThat(user.getFirstName()).isEqualTo(request.getFirstName());
-            assertThat(user.getLastName()).isEqualTo(request.getLastName());
-            assertThat(user.getEmail()).isEqualTo(request.getEmail());
-            assertThat(user.getRole()).isEqualTo(request.getRole());
+            assertThat(user.getFirstName()).isEqualTo(request.firstName());
+            assertThat(user.getLastName()).isEqualTo(request.lastName());
+            assertThat(user.getEmail()).isEqualTo(request.email());
+            assertThat(user.getRole()).isEqualTo(request.role());
             assertThat(user.getStudent()).isNull();
             assertThat(user.getTeacher()).isNull();
         }
@@ -244,8 +242,7 @@ class AuthenticationControllerIntegrationTest {
             String expectedErrorMsgForEmail = "Enter valid email address.";
             String expectedErrorMsgForRole = "Role must be chosen when creating new account.";
 
-
-            RegisterRequest request = RegisterRequest.builder()
+            final var request = RegisterRequest.builder()
                     .firstName("s")
                     .lastName("a")
                     .email("a")
@@ -257,10 +254,10 @@ class AuthenticationControllerIntegrationTest {
             // When
             MvcResult mvcResult = mockMvc.perform(post("/sign-up")
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.getFirstName() +
-                                    "&lastName=" + request.getLastName() +
-                                    "&email=" + request.getEmail() +
-                                    "&password=" + request.getPasswordRequest().getPassword()
+                            .content("firstName=" + request.firstName() +
+                                    "&lastName=" + request.lastName() +
+                                    "&email=" + request.email() +
+                                    "&password=" + request.passwordRequest().getPassword()
                             )
                     )
                     .andDo(print())
@@ -280,18 +277,24 @@ class AuthenticationControllerIntegrationTest {
         void returnsErrors_givenEmptyEmail_roleNull() throws Exception {
             // Given
             String expectedErrorMsgForEmail = "Email cannot be empty.";
-
-            RegisterRequest request = initData.createRegisterRequest();
-            request.setEmail("");
+            final var request = RegisterRequest.builder()
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .email("")
+                .passwordRequest(
+                    new PasswordRequest("invalid password", "123")
+                )
+                .role(UserRole.ROLE_STUDENT)
+                .build();
 
             // When
             MvcResult mvcResult = mockMvc.perform(post("/sign-up")
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.getFirstName() +
-                                    "&lastName=" + request.getLastName() +
-                                    "&email=" + request.getEmail() +
-                                    "&password=" + request.getPasswordRequest().getPassword() +
-                                    "&role=" + request.getRole()
+                            .content("firstName=" + request.firstName() +
+                                    "&lastName=" + request.lastName() +
+                                    "&email=" + request.email() +
+                                    "&password=" + request.passwordRequest().getPassword() +
+                                    "&role=" + request.role()
                             )
                     )
                     .andDo(print())
@@ -309,18 +312,24 @@ class AuthenticationControllerIntegrationTest {
         void returnsErrors_givenInvalidPassword() throws Exception {
             // Given
             String expectedErrorMsgForPassword = "Invalid Password";
-
-            RegisterRequest request = initData.createRegisterRequest();
-            request.getPasswordRequest().setPassword("s");
+            final var request = RegisterRequest.builder()
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .email("andrzej.nowak@gmail.com")
+                .passwordRequest(
+                    new PasswordRequest("invalid password", "123")
+                )
+                .role(UserRole.ROLE_STUDENT)
+                .build();
 
             // When
             MvcResult mvcResult = mockMvc.perform(post("/sign-up")
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.getFirstName() +
-                                    "&lastName=" + request.getLastName() +
-                                    "&email=" + request.getEmail() +
-                                    "&password=" + request.getPasswordRequest().getPassword() +
-                                    "&role=" + request.getRole()
+                            .content("firstName=" + request.firstName() +
+                                    "&lastName=" + request.lastName() +
+                                    "&email=" + request.email() +
+                                    "&password=" + request.passwordRequest().getPassword() +
+                                    "&role=" + request.role()
                             )
                     )
                     .andDo(print())
