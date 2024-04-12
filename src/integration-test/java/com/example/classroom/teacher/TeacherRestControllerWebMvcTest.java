@@ -8,6 +8,7 @@ import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.test.util.UnitTestsInitData;
 import com.example.classroom.user.User;
+import com.example.classroom.user.UserRole;
 import com.example.classroom.user.register.RegisterRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
@@ -41,7 +42,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -73,7 +77,7 @@ class TeacherRestControllerWebMvcTest {
     void setUp() {
         byte[] keyBytes = Decoders.BASE64.decode("635266556A586E327234753778214125442A472D4B6150645367566B59703373");
         Key key = Keys.hmacShaKeyFor(keyBytes);
-        user = initData.createUser();
+        user = initData.createUser(UserRole.ROLE_STUDENT);
         jwt = "Bearer" + Jwts.builder()
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -96,19 +100,19 @@ class TeacherRestControllerWebMvcTest {
             TeacherDto dto = mapper.map(expected, TeacherDto.class);
             given(service.fetchById(expected.getId())).willReturn(dto);
             // When
-            RegisterRequest request = initData.createRegisterRequest();
+            RegisterRequest request = initData.createRegisterRequest(UserRole.ROLE_STUDENT);
             final byte[] content = mockMvc.perform(post("/api/auth/register")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{ \"firstName\": \"" + request.getFirstName() + "\",  " +
-                                    "\"lastName\": \"" + request.getLastName() + "\"," +
-                                    "\"email\": \"" + request.getEmail() + "\", " +
-                                    "\"password\": \"" + request.getPasswordRequest().getPassword() +
+                            .content("{ \"firstName\": \"" + request.firstName() + "\",  " +
+                                    "\"lastName\": \"" + request.lastName() + "\"," +
+                                    "\"email\": \"" + request.email() + "\", " +
+                                    "\"password\": \"" + request.passwordRequest().password() +
                                     "\"}"))
                     .andReturn()
                     .getResponse()
                     .getContentAsByteArray();
             AuthenticationResponse authResponse = objectMapper.readValue(content, AuthenticationResponse.class);
-            String token = authResponse.getToken();
+            String token = authResponse.token();
             MvcResult mvcResult = mockMvc.perform(get("/api/teachers/{id}", expected.getId())
                                     .header(HttpHeaders.AUTHORIZATION, "Bearer token")
 //                            .with(jwt())

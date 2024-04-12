@@ -5,6 +5,8 @@ import com.example.classroom.auth.model.AuthenticationResponse;
 import com.example.classroom.test.util.IntegrationTestsInitData;
 import com.example.classroom.user.User;
 import com.example.classroom.user.UserRepository;
+import com.example.classroom.user.UserRole;
+import com.example.classroom.user.password.PasswordRequest;
 import com.example.classroom.user.register.RegisterRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +56,7 @@ class AuthenticationRestControllerIntegrationTest {
         @Test
         void returnsStatusCode200_withToken_givenValidRegisterRequest() throws Exception {
             // Given
-            RegisterRequest request = initData.createRegisterRequest();
+            RegisterRequest request = initData.createRegisterRequest(UserRole.ROLE_STUDENT);
 
             // When
             ResponseEntity<AuthenticationResponse> response = restTemplate
@@ -62,39 +64,55 @@ class AuthenticationRestControllerIntegrationTest {
 
             // Then
             assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.OK);
-            assertThat(userRepository.findByEmail(request.getEmail())).isPresent();
+            assertThat(userRepository.findByEmail(request.email())).isPresent();
             AuthenticationResponse actual = response.getBody();
             assertThat(actual).isNotNull();
-            assertThat(actual.getToken()).isNotNull().isNotEmpty();
+            assertThat(actual.token()).isNotNull().isNotEmpty();
         }
 
         @Test
         void returnsStatusCode400_givenInvalidEmailFormat() throws Exception {
             // Given
-            RegisterRequest request = initData.createRegisterRequest();
-            request.setEmail("invalid email");
+            final var request = RegisterRequest.builder()
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .email("invalid email")
+                .passwordRequest(
+                    new PasswordRequest("123", "123")
+                )
+                .role(UserRole.ROLE_STUDENT)
+                .build();
+
             // When
             ResponseEntity<AuthenticationResponse> response = restTemplate
                     .postForEntity(createURL("/api/auth/register"), request, AuthenticationResponse.class);
 
             // Then
             assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.BAD_REQUEST);
-            assertThat(userRepository.findByEmail(request.getEmail())).isNotPresent();
+            assertThat(userRepository.findByEmail(request.email())).isNotPresent();
         }
 
         @Disabled("Disabled because @ValidPassword annotation is commented out for demonstration purposes")
         @Test
         void returnsStatusCode400_givenInvalidPasswordFormat() throws Exception {
             // Given
-            RegisterRequest request = initData.createRegisterRequest();
-            request.getPasswordRequest().setPassword("invalid password");
+            final var request = RegisterRequest.builder()
+                .firstName("Andrzej")
+                .lastName("Nowak")
+                .email("invalid email")
+                .passwordRequest(
+                    new PasswordRequest("invalid password", "123")
+                )
+                .role(UserRole.ROLE_STUDENT)
+                .build();
+
             // When
             ResponseEntity<AuthenticationResponse> response = restTemplate
                     .postForEntity(createURL("/api/auth/register"), request, AuthenticationResponse.class);
 
             // Then
             assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.BAD_REQUEST);
-            assertThat(userRepository.findByEmail(request.getEmail())).isNotPresent();
+            assertThat(userRepository.findByEmail(request.email())).isNotPresent();
         }
     }
 
@@ -104,9 +122,8 @@ class AuthenticationRestControllerIntegrationTest {
         @Test
         void returnsStatusCode200_withToken_givenAuthRequest_withCorrectCredentials() throws Exception {
             // Given
-            AuthenticationRequest request = initData.createAuthenticationRequest();
-            User user = initData.createUser();
-            request.setEmail(user.getEmail());
+            final var user = initData.createUser();
+            final var request = new AuthenticationRequest(user.getEmail(), "encodedPassword");
 
             // When
             ResponseEntity<AuthenticationResponse> response = restTemplate
@@ -117,7 +134,7 @@ class AuthenticationRestControllerIntegrationTest {
             assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.OK);
             AuthenticationResponse actual = response.getBody();
             assertThat(actual).isNotNull();
-            assertThat(actual.getToken()).isNotNull().isNotEmpty();
+            assertThat(actual.token()).isNotNull().isNotEmpty();
         }
 
         @Test
@@ -130,16 +147,15 @@ class AuthenticationRestControllerIntegrationTest {
                     .postForEntity(createURL("/api/auth/authenticate"), request, AuthenticationResponse.class);
 
             // Then
-            assertThat(userRepository.findByEmail(request.getEmail())).isNotPresent();
+            assertThat(userRepository.findByEmail(request.email())).isNotPresent();
             assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.FOUND);
         }
 
         @Test
         void returnsStatusCode302_givenAuthRequest_withWrongEmail() throws Exception {
             // Given
-            AuthenticationRequest request = initData.createAuthenticationRequest();
-            User user = initData.createUser();
-            request.setEmail("wrong.email@gmail.com");
+            final var user = initData.createUser();
+            final var request = new AuthenticationRequest("wrong.email@gmail.com", "encodedPassword");
 
             // When
             ResponseEntity<AuthenticationResponse> response = restTemplate
@@ -153,10 +169,8 @@ class AuthenticationRestControllerIntegrationTest {
         @Test
         void returnsStatusCode302_givenAuthRequest_withWrongPassword() throws Exception {
             // Given
-            AuthenticationRequest request = initData.createAuthenticationRequest();
             User user = initData.createUser();
-            request.setEmail(user.getEmail());
-            request.setPassword("wrongPassword");
+            final var request = new AuthenticationRequest(user.getEmail(), "wrongPassword");
 
             // When
             ResponseEntity<AuthenticationResponse> response = restTemplate
