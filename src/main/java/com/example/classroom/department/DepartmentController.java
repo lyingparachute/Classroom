@@ -10,7 +10,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.file.Path;
@@ -24,7 +28,6 @@ class DepartmentController {
     private final DepartmentService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
-    private final BreadcrumbService crumb;
 
     @GetMapping()
     String getAllDepartments(Model model, HttpServletRequest request) {
@@ -111,7 +114,7 @@ class DepartmentController {
     }
 
     private void addAttributeBreadcrumbs(Model model, HttpServletRequest request) {
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        model.addAttribute("crumbs", BreadcrumbService.getBreadcrumbs(request.getRequestURI()));
     }
 
     private void addAttributesForCreateDepartment(Model model) {

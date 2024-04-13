@@ -31,7 +31,6 @@ class SubjectController {
     private final SubjectService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
-    private final BreadcrumbService crumb;
 
     @GetMapping
     String getSubjects(@RequestParam(required = false) final String name,
@@ -176,6 +175,6 @@ class SubjectController {
     }
 
     private void addAttributeBreadcrumb(final Model model, final HttpServletRequest request) {
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        model.addAttribute("crumbs", BreadcrumbService.getBreadcrumbs(request.getRequestURI()));
     }
 }

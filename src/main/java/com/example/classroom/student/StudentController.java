@@ -32,7 +32,6 @@ class StudentController {
     private final TeacherService teacherService;
     private final UserManagementService userService;
     private final FieldOfStudyService fieldOfStudyService;
-    private final BreadcrumbService crumb;
 
     @GetMapping
     @Secured({"ROLE_TEACHER", "ROLE_DEAN", "ROLE_ADMIN"})
@@ -152,6 +151,6 @@ class StudentController {
     }
 
     private void addAttributeBreadcrumb(final Model model, final HttpServletRequest request) {
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        model.addAttribute("crumbs", BreadcrumbService.getBreadcrumbs(request.getRequestURI()));
     }
 }

@@ -31,7 +31,6 @@ class TeacherController {
     private final TeacherService service;
     private final SubjectService subjectService;
     private final UserManagementService userService;
-    private final BreadcrumbService crumb;
 
     static final String REDIRECT_DASHBOARD_TEACHERS = "redirect:/dashboard/teachers";
 
@@ -148,6 +147,6 @@ class TeacherController {
     }
 
     private void addAttributeBreadcrumb(Model model, HttpServletRequest request) {
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        model.addAttribute("crumbs", BreadcrumbService.getBreadcrumbs(request.getRequestURI()));
     }
 }

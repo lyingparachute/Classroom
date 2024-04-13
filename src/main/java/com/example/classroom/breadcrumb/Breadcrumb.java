@@ -1,18 +1,11 @@
 package com.example.classroom.breadcrumb;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-class Breadcrumb {
-    private String label;
-    private String url;
-    private boolean last;
-
-    Breadcrumb(String label, String url) {
-        this.label = label;
-        this.url = url;
-        this.last = false;
+public record Breadcrumb(
+    String label,
+    String url,
+    Boolean last
+) {
+    Breadcrumb(final String label, final String url) {
+        this(label, url, false);
     }
 }

@@ -1,18 +1,21 @@
 package com.example.classroom.breadcrumb;
 
-import org.springframework.stereotype.Service;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.IntStream;
 
-@Service
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BreadcrumbService {
 
     private static final String EDIT_SEGMENT = "edit";
     private static final String SEPARATOR = "/";
     private static final String HOME_LABEL = "Classroom";
 
-    public List<Breadcrumb> getBreadcrumbs(final String endpoint) {
+    public static Collection<Breadcrumb> getBreadcrumbs(final String endpoint) {
         if (endpoint == null || endpoint.isEmpty())
             throw new IllegalArgumentException("Invalid endpoint!");
 
@@ -22,61 +25,52 @@ public class BreadcrumbService {
         final var segments = splitEndpoint(endpoint);
         final var path = new StringBuilder();
 
-        for (int segmentNumber = 0; segmentNumber < segments.length; segmentNumber++) {
-            if (segments[segmentNumber].isEmpty()) continue;
-
+        IntStream.range(0, segments.length).forEach(segmentNumber -> {
+            final var segment = segments[segmentNumber];
+            if (segment.isEmpty()) return;
             if (segmentNumber > 0) path.append(SEPARATOR);
-            path.append(segments[segmentNumber]);
 
-            final var label = formatEndpointSegment(segments[segmentNumber]);
-
+            path.append(segment);
+            final var label = formatEndpointSegment(segment);
             if (isEditEndpoint(segments, segmentNumber)) {
                 addEditEndpointBreadcrumb(breadcrumbs, segments, path, segmentNumber);
-                segmentNumber++; // skip the ID segment
             } else {
-                addBreadcrumb(breadcrumbs, segments, path, segmentNumber, label);
+                breadcrumbs.add(new Breadcrumb(
+                    label,
+                    path.toString(),
+                    isLastSegment(segments, segmentNumber))
+                );
             }
-        }
-
+        });
         return breadcrumbs;
     }
 
-    private void addBreadcrumb(final List<Breadcrumb> breadcrumbs,
-                               final String[] segments,
-                               final StringBuilder path,
-                               final int i,
-                               final String label) {
-        final var breadcrumb = new Breadcrumb(label, path.toString());
-        checkIfSegmentIsLast(segments, i, breadcrumb);
-        breadcrumbs.add(breadcrumb);
+    private static void addEditEndpointBreadcrumb(final Collection<Breadcrumb> breadcrumbs,
+                                                  final String[] segments,
+                                                  final StringBuilder path,
+                                                  final int segmentNumber) {
+        final var id = segments[segmentNumber + 1];
+        breadcrumbs.add(new Breadcrumb(
+            "Edit",
+            path + SEPARATOR + id,
+            isLastSegment(segments, segmentNumber)));
     }
 
-    private void checkIfSegmentIsLast(final String[] segments,
-                                      final int i,
-                                      final Breadcrumb breadcrumb) {
-        if (i == segments.length - 1) breadcrumb.setLast(true);
+    private static boolean isLastSegment(final String[] segments,
+                                         final int segmentNumber) {
+        return segmentNumber == segments.length - 1;
     }
 
-    private void addEditEndpointBreadcrumb(final List<Breadcrumb> breadcrumbs,
-                                           final String[] segments,
-                                           final StringBuilder path,
-                                           int i) {
-        final var id = segments[i + 1];
-        final var breadcrumb = new Breadcrumb("Edit  /  " + id, path + SEPARATOR + id);
-        checkIfSegmentIsLast(segments, ++i, breadcrumb);
-        breadcrumbs.add(breadcrumb);
+    private static boolean isEditEndpoint(final String[] segments,
+                                          final int segmentNumber) {
+        return segmentNumber < segments.length - 1 && segments[segmentNumber].equals(EDIT_SEGMENT);
     }
 
-    private boolean isEditEndpoint(final String[] segments,
-                                   final int i) {
-        return i < segments.length - 1 && segments[i].equals(EDIT_SEGMENT);
-    }
-
-    private String[] splitEndpoint(final String endpoint) {
+    private static String[] splitEndpoint(final String endpoint) {
         return endpoint.split(SEPARATOR);
     }
 
-    private String formatEndpointSegment(final String segment) {
+    private static String formatEndpointSegment(final String segment) {
         final var segmentSplit = segment.split("-");
         for (int i = 0; i < segmentSplit.length; i++) {
             segmentSplit[i] = capitalize(segmentSplit[i]);
@@ -84,11 +78,11 @@ public class BreadcrumbService {
         return String.join(" ", segmentSplit);
     }
 
-    private String capitalize(final String str) {
+    private static String capitalize(final String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    private Breadcrumb createHomeBreadcrumb() {
+    private static Breadcrumb createHomeBreadcrumb() {
         return new Breadcrumb(HOME_LABEL, SEPARATOR);
     }
 }

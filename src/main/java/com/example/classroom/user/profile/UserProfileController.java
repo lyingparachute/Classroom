@@ -3,14 +3,17 @@ package com.example.classroom.user.profile;
 import com.example.classroom.auth.model.UpdateRequest;
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
-import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.file.Path;
@@ -22,7 +25,6 @@ import java.security.Principal;
 class UserProfileController {
 
     private final UserManagementService userManagementService;
-    private final BreadcrumbService crumb;
 
     private static final String USER_EDIT_TEMPLATE = "user/user-edit";
     private static final String FIELDS_OF_STUDY_UPLOAD_DIR = "fields-of-study/";
@@ -74,7 +76,7 @@ class UserProfileController {
     private void addAttributesBreadcrumbAndUser(final Principal principal,
                                                 final Model model,
                                                 final HttpServletRequest request) {
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        model.addAttribute("crumbs", BreadcrumbService.getBreadcrumbs(request.getRequestURI()));
         model.addAttribute("user", userManagementService.loadUserByUsername(principal.getName()));
     }
 }

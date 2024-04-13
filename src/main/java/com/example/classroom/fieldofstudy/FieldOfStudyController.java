@@ -14,7 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -30,13 +35,12 @@ class FieldOfStudyController {
     private final FieldOfStudyService service;
     private final DepartmentService departmentService;
     private final SubjectService subjectService;
-    private final BreadcrumbService crumb;
     static final String UPLOAD_DIR = "fields-of-study/";
     static final String REDIRECT_DASHBOARD_FIELDS_OF_STUDY = "redirect:/dashboard/fields-of-study";
 
     @GetMapping()
-    String getAllFieldsOfStudy(Model model,
-                               HttpServletRequest request) {
+    String getAllFieldsOfStudy(final Model model,
+                               final HttpServletRequest request) {
         model.addAttribute("fieldsOfStudyMap", service.fetchAllGroupedByNameAndSortedByName());
         model.addAttribute("firstFieldsOfStudy", service.fetchAllByLevelOfEducationSortedByName(LevelOfEducation.FIRST));
         model.addAttribute("secondFieldsOfStudy", service.fetchAllByLevelOfEducationSortedByName(LevelOfEducation.SECOND));
@@ -46,9 +50,9 @@ class FieldOfStudyController {
     }
 
     @GetMapping("{id}")
-    String getFieldOfStudy(@PathVariable Long id,
-                           HttpServletRequest request,
-                           Model model) {
+    String getFieldOfStudy(@PathVariable final Long id,
+                           final HttpServletRequest request,
+                           final Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributes(id, model);
@@ -56,9 +60,9 @@ class FieldOfStudyController {
     }
 
     @GetMapping("{id}/subjects")
-    String getFieldOfStudySubjects(@PathVariable Long id,
-                                   HttpServletRequest request,
-                                   Model model) {
+    String getFieldOfStudySubjects(@PathVariable final Long id,
+                                   final HttpServletRequest request,
+                                   final Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributeNumberOfSemesters(id, model);
@@ -71,8 +75,8 @@ class FieldOfStudyController {
 
     @GetMapping("new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    String getCreateFieldOfStudyForm(Model model,
-                                     HttpServletRequest request) {
+    String getCreateFieldOfStudyForm(final Model model,
+                                     final HttpServletRequest request) {
         addAttributeBreadcrumb(model, request);
         model.addAttribute("fieldOfStudy", new FieldOfStudyDto());
         addAttributeDepartments(model);
@@ -81,31 +85,31 @@ class FieldOfStudyController {
 
     @PostMapping("new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    String createFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
-                              BindingResult result,
-                              @RequestParam(value = "imageUpload") MultipartFile multipartFile,
-                              RedirectAttributes redirectAttributes,
-                              HttpServletRequest request,
-                              Model model) throws IOException {
+    String createFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") final FieldOfStudyDto dto,
+                              final BindingResult result,
+                              @RequestParam(value = "imageUpload") final MultipartFile multipartFile,
+                              final RedirectAttributes redirectAttributes,
+                              final HttpServletRequest request,
+                              final Model model) throws IOException {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributeDepartments(model);
             return "field-of-study/fieldOfStudy-create-form";
         }
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        final var fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         dto.setImage(fileName);
-        FieldOfStudyDto saved = service.create(dto);
+        final var saved = service.create(dto);
         FileUploadUtil.saveFile(UPLOAD_DIR, fileName, multipartFile);
         addFlashAttributeSuccess(redirectAttributes, saved);
         redirectAttributes.addFlashAttribute("createSuccess", "saved");
         return REDIRECT_DASHBOARD_FIELDS_OF_STUDY;
     }
 
-    @GetMapping("edit/{id}")
+    @GetMapping("{id}/edit")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    String getEditFieldOfStudyForm(@PathVariable Long id,
-                                   HttpServletRequest request,
-                                   Model model) {
+    String getEditFieldOfStudyForm(@PathVariable final Long id,
+                                   final HttpServletRequest request,
+                                   final Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributeDepartments(model);
@@ -114,31 +118,31 @@ class FieldOfStudyController {
 
     @PostMapping("update")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    String editFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
-                            @RequestParam(value = "imageUpload") MultipartFile multipartFile,
-                            BindingResult result,
-                            RedirectAttributes redirectAttributes,
-                            HttpServletRequest request,
-                            Model model) throws IOException {
+    String editFieldOfStudy(@Valid @ModelAttribute("fieldOfStudy") final FieldOfStudyDto dto,
+                            @RequestParam(value = "imageUpload") final MultipartFile multipartFile,
+                            final BindingResult result,
+                            final RedirectAttributes redirectAttributes,
+                            final HttpServletRequest request,
+                            final Model model) throws IOException {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributeDepartments(model);
             return "field-of-study/fieldOfStudy-edit-form";
         }
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        final var fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         dto.setImage(fileName);
-        FieldOfStudyDto updated = service.update(dto);
+        final var updated = service.update(dto);
         FileUploadUtil.saveFile(UPLOAD_DIR, fileName, multipartFile);
         addFlashAttributeSuccess(redirectAttributes, updated);
         redirectAttributes.addFlashAttribute("updateSuccess", "updated");
         return REDIRECT_DASHBOARD_FIELDS_OF_STUDY;
     }
 
-    @GetMapping("edit/{id}/subjects")
+    @GetMapping("{id}/subjects/edit")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    String getSubjectsForm(@PathVariable Long id,
-                           HttpServletRequest request,
-                           Model model) {
+    String getSubjectsForm(@PathVariable final Long id,
+                           final HttpServletRequest request,
+                           final Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeFieldOfStudyFetchById(id, model);
         addAttributeAllSubjectsMapGroupedBySemesters(model);
@@ -148,71 +152,72 @@ class FieldOfStudyController {
 
     @PostMapping("subjects/update")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    String editSubjects(@Valid @ModelAttribute("fieldOfStudy") FieldOfStudyDto dto,
-                        RedirectAttributes redirectAttributes) {
+    String editSubjects(@Valid @ModelAttribute("fieldOfStudy") final FieldOfStudyDto dto,
+                        final RedirectAttributes redirectAttributes) {
         service.updateSubjects(dto);
         redirectAttributes.addFlashAttribute("updateSuccess", "update success");
         return "redirect:/dashboard/fields-of-study/" + dto.getId() + "/subjects";
     }
 
-    @GetMapping("delete/{id}")
+    @GetMapping("{id}/delete")
     @Secured({"ROLE_ADMIN"})
-    String deleteFieldOfStudy(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        FieldOfStudyDto dto = service.fetchById(id);
+    String deleteFieldOfStudy(@PathVariable final Long id,
+                              final RedirectAttributes redirectAttributes) {
+        final var dto = service.fetchById(id);
         service.remove(id);
         addFlashAttributeSuccess(redirectAttributes, dto);
         redirectAttributes.addFlashAttribute("deleteSuccess", "deleted");
         return REDIRECT_DASHBOARD_FIELDS_OF_STUDY;
     }
 
-    private void addAttributeBreadcrumb(Model model, HttpServletRequest request) {
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+    private void addAttributeBreadcrumb(final Model model, final HttpServletRequest request) {
+        model.addAttribute("crumbs", BreadcrumbService.getBreadcrumbs(request.getRequestURI()));
     }
 
-    private void addAttributes(Long id, Model model) {
+    private void addAttributes(final Long id, final Model model) {
         addAttributeDescriptionList(id, model);
         addAttributeTotalEctsPoints(id, model);
         addAttributeNumberOfSemesters(id, model);
         addAttributeImagePath(id, model);
     }
 
-    private void addAttributeImagePath(Long id, Model model) {
+    private void addAttributeImagePath(final Long id, final Model model) {
         model.addAttribute("imagePath", service.getImagePath(id));
     }
 
-    private void addAttributeNumberOfSemesters(Long id, Model model) {
+    private void addAttributeNumberOfSemesters(final Long id, final Model model) {
         model.addAttribute("numberOfSemesters", service.getNumberOfSemesters(id));
     }
 
-    private void addAttributeTotalEctsPoints(Long id, Model model) {
+    private void addAttributeTotalEctsPoints(final Long id, final Model model) {
         model.addAttribute("ects", service.getSumOfEctsPointsFromAllSemesters(id));
     }
 
-    private void addAttributeEctsPointsForEachSemester(Long id, Model model) {
+    private void addAttributeEctsPointsForEachSemester(final Long id, final Model model) {
         model.addAttribute("ectsMap", service.calculateEctsPointsForEachSemester(id));
     }
 
-    private void addAttributeDescriptionList(Long id, Model model) {
+    private void addAttributeDescriptionList(final Long id, final Model model) {
         model.addAttribute("descriptionList", service.splitDescription(id));
     }
 
-    private void addAttributeDepartments(Model model) {
+    private void addAttributeDepartments(final Model model) {
         model.addAttribute("departments", departmentService.fetchAll());
     }
 
-    private void addAttributeFieldOfStudyFetchById(Long id, Model model) {
+    private void addAttributeFieldOfStudyFetchById(final Long id, final Model model) {
         model.addAttribute("fieldOfStudy", service.fetchById(id));
     }
 
-    private void addAttributeAllSubjectsMapGroupedBySemesters(Model model) {
+    private void addAttributeAllSubjectsMapGroupedBySemesters(final Model model) {
         model.addAttribute("subjectsMap", subjectService.fetchAllGroupedBySemesters());
     }
 
-    private void addAttributeSubjectsMapGroupedBySemesters(Long id, Model model) {
+    private void addAttributeSubjectsMapGroupedBySemesters(final Long id, final Model model) {
         model.addAttribute("semestersMap", service.fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(id));
     }
 
-    private void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, FieldOfStudyDto dto) {
+    private void addFlashAttributeSuccess(final RedirectAttributes redirectAttributes, final FieldOfStudyDto dto) {
         redirectAttributes.addFlashAttribute("success", dto);
     }
 }
