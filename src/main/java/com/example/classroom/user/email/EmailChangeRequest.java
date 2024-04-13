@@ -18,7 +18,5 @@ import lombok.Setter;
 public class EmailChangeRequest {
     @Email(message = "{message.email.valid}")
     private String email;
-
-    @Email(message = "{message.email.valid}")
     private String matchingEmail;
 }

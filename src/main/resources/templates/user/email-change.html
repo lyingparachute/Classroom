@@ -53,13 +53,12 @@
                                                    th:text="#{email.change.new.email}"></label>
                                             <div class="invalid-feedback"
                                                  th:if="${#fields.hasErrors('email')}">
-                                                <ul>
-                                                    <li th:text="#{input.helper.email}"></li>
-                                                </ul>
+                                                <span th:text="#{input.helper.email}"></span>
                                             </div>
                                         </div>
 
-                                        <div class="form-outline mb-4">
+                                        <div class="form-outline mb-4"
+                                             th:classappend="${#fields.hasErrors('matchingEmail')} ? 'mb-5'">
                                             <input th:field="*{matchingEmail}" type="email"
                                                    id="matchingEmail"
                                                    th:classappend="${#fields.hasErrors('matchingEmail') ||
