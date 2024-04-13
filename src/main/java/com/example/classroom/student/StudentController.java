@@ -96,7 +96,7 @@ class StudentController {
         return REDIRECT_DASHBOARD_STUDENTS;
     }
 
-    @GetMapping("edit/{id}")
+    @GetMapping("{id}/edit")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     String editStudentForm(@PathVariable final Long id,
                            final HttpServletRequest request,
@@ -125,7 +125,7 @@ class StudentController {
         return REDIRECT_DASHBOARD_STUDENTS;
     }
 
-    @GetMapping("delete/{id}")
+    @GetMapping("{id}/delete")
     @Secured({"ROLE_ADMIN"})
     String deleteStudent(@PathVariable final Long id,
                          final RedirectAttributes redirectAttributes) {

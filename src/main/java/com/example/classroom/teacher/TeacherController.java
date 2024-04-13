@@ -4,11 +4,9 @@ import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.breadcrumb.BreadcrumbService;
 import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.subject.SubjectService;
-import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,29 +26,28 @@ import static com.example.classroom.pageable.PageableService.getAttributesForPag
 @RequiredArgsConstructor
 class TeacherController {
 
+    static final String REDIRECT_DASHBOARD_TEACHERS = "redirect:/dashboard/teachers";
     private final TeacherService service;
     private final SubjectService subjectService;
     private final UserManagementService userService;
 
-    static final String REDIRECT_DASHBOARD_TEACHERS = "redirect:/dashboard/teachers";
-
     @GetMapping
-    String getPaginatedTeachers(@RequestParam(required = false) String name,
-                                @RequestParam(defaultValue = "1") int page,
-                                @RequestParam(defaultValue = "6") int size,
-                                @RequestParam(defaultValue = "firstName") String sortField,
-                                @RequestParam(defaultValue = "asc") String sortDir,
-                                HttpServletRequest request,
-                                Model model) {
+    String getPaginatedTeachers(@RequestParam(required = false) final String name,
+                                @RequestParam(defaultValue = "1") final int page,
+                                @RequestParam(defaultValue = "6") final int size,
+                                @RequestParam(defaultValue = "firstName") final String sortField,
+                                @RequestParam(defaultValue = "asc") final String sortDir,
+                                final HttpServletRequest request,
+                                final Model model) {
         final var pageableRequest = PageableRequest.builder()
-                .searched(name)
-                .pageNumber(page)
-                .pageSize(size)
-                .sortDirection(sortDir)
-                .sortField(sortField)
-                .build();
-        User user = userService.loadUserByUsername(request.getUserPrincipal().getName());
-        Page<TeacherDto> pageTeachers = service.getAllTeachersFromRequest(pageableRequest, user);
+            .searched(name)
+            .pageNumber(page)
+            .pageSize(size)
+            .sortDirection(sortDir)
+            .sortField(sortField)
+            .build();
+        final var user = userService.loadUserByUsername(request.getUserPrincipal().getName());
+        final var pageTeachers = service.getAllTeachersFromRequest(pageableRequest, user);
 
         addAttributeBreadcrumb(model, request);
         model.addAttribute("teachers", pageTeachers.getContent());
@@ -59,9 +56,9 @@ class TeacherController {
     }
 
     @GetMapping("{id}")
-    String getTeacher(@PathVariable Long id,
-                      HttpServletRequest request,
-                      Model model) {
+    String getTeacher(@PathVariable final Long id,
+                      final HttpServletRequest request,
+                      final Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeTeacherById(id, model);
         return "teacher/teacher-view";
@@ -69,8 +66,8 @@ class TeacherController {
 
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @GetMapping("new")
-    String getNewTeacherForm(HttpServletRequest request,
-                             Model model) {
+    String getNewTeacherForm(final HttpServletRequest request,
+                             final Model model) {
         addAttributeBreadcrumb(model, request);
         model.addAttribute("teacher", new TeacherDto());
         addAttributesSubjects(model);
@@ -79,27 +76,27 @@ class TeacherController {
 
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @PostMapping(value = "new")
-    String createTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
-                         BindingResult result,
-                         RedirectAttributes redirectAttributes,
-                         HttpServletRequest request,
-                         Model model) {
+    String createTeacher(@Valid @ModelAttribute("teacher") final TeacherDto dto,
+                         final BindingResult result,
+                         final RedirectAttributes redirectAttributes,
+                         final HttpServletRequest request,
+                         final Model model) {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributesSubjects(model);
             return "teacher/teacher-create-form";
         }
-        TeacherDto saved = service.create(dto);
+        final var saved = service.create(dto);
         addFlashAttributeSuccess(redirectAttributes, saved);
         redirectAttributes.addFlashAttribute("createSuccess", "saved");
         return REDIRECT_DASHBOARD_TEACHERS;
     }
 
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    @GetMapping("edit/{id}")
-    String editTeacher(@PathVariable Long id,
-                       HttpServletRequest request,
-                       Model model) {
+    @GetMapping("{id}/edit")
+    String editTeacher(@PathVariable final Long id,
+                       final HttpServletRequest request,
+                       final Model model) {
         addAttributeBreadcrumb(model, request);
         addAttributeTeacherById(id, model);
         addAttributesSubjects(model);
@@ -108,45 +105,46 @@ class TeacherController {
 
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     @PostMapping(value = "update")
-    String editTeacher(@Valid @ModelAttribute("teacher") TeacherDto dto,
-                       BindingResult result,
-                       RedirectAttributes redirectAttributes,
-                       HttpServletRequest request,
-                       Model model) {
+    String editTeacher(@Valid @ModelAttribute("teacher") final TeacherDto dto,
+                       final BindingResult result,
+                       final RedirectAttributes redirectAttributes,
+                       final HttpServletRequest request,
+                       final Model model) {
         if (result.hasErrors()) {
             addAttributeBreadcrumb(model, request);
             addAttributesSubjects(model);
             return "teacher/teacher-edit-form";
         }
-        TeacherDto updated = service.update(dto);
+        final var updated = service.update(dto);
         addFlashAttributeSuccess(redirectAttributes, updated);
         redirectAttributes.addFlashAttribute("updateSuccess", "updated");
         return REDIRECT_DASHBOARD_TEACHERS;
     }
 
     @Secured({"ROLE_ADMIN"})
-    @GetMapping("delete/{id}")
-    String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        TeacherDto dto = service.fetchById(id);
+    @GetMapping("{id}/delete")
+    String deleteStudent(@PathVariable final Long id,
+                         final RedirectAttributes redirectAttributes) {
+        final var dto = service.fetchById(id);
         service.remove(id);
         addFlashAttributeSuccess(redirectAttributes, dto);
         redirectAttributes.addFlashAttribute("deleteSuccess", "deleted");
         return REDIRECT_DASHBOARD_TEACHERS;
     }
 
-    private void addAttributesSubjects(Model model) {
+    private void addAttributesSubjects(final Model model) {
         model.addAttribute("subjects", subjectService.fetchAll());
     }
 
-    private void addAttributeTeacherById(Long id, Model model) {
+    private void addAttributeTeacherById(final Long id, final Model model) {
         model.addAttribute("teacher", service.fetchById(id));
     }
 
-    private void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, TeacherDto dto) {
+    private void addFlashAttributeSuccess(final RedirectAttributes redirectAttributes, final TeacherDto dto) {
         redirectAttributes.addFlashAttribute("success", dto);
     }
 
-    private void addAttributeBreadcrumb(Model model, HttpServletRequest request) {
+    private void addAttributeBreadcrumb(final Model model, final HttpServletRequest request) {
         model.addAttribute("crumbs", BreadcrumbService.getBreadcrumbs(request.getRequestURI()));
     }
 }

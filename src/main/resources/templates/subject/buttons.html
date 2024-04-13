@@ -25,7 +25,7 @@
 <!-- ======= Edit subject Button ======= -->
 <a class="btn btn-outline-primary btn-rounded"
    th:fragment="btn-edit"
-   th:href="@{/dashboard/subjects/edit/{id}(id=${subject.id})}">
+   th:href="@{/dashboard/subjects/{id}/edit(id=${subject.id})}">
     <i class="fas fa-pen mr-1"></i>
     <span th:text="#{button.edit}"></span>
 </a>
@@ -33,7 +33,7 @@
 <!-- ======= Delete subject Button ======= -->
 <a class="btn btn-outline-danger btn-rounded delBtn"
    th:fragment="btn-delete"
-   th:href="@{/dashboard/subjects/delete/{id}(id=${subject.id})}">
+   th:href="@{/dashboard/subjects/{id}/delete(id=${subject.id})}">
     <i class="fa fa-trash-can fa-lg mr-1"></i>
     <span th:text="#{button.delete}"></span>
 </a>

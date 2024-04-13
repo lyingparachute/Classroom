@@ -121,7 +121,7 @@ class SubjectController {
         return REDIRECT_DASHBOARD_SUBJECTS;
     }
 
-    @GetMapping("edit/{id}")
+    @GetMapping("{id}/edit")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     String editSubjectForm(@PathVariable final Long id,
                            final HttpServletRequest request,
@@ -150,7 +150,7 @@ class SubjectController {
         return REDIRECT_DASHBOARD_SUBJECTS;
     }
 
-    @GetMapping("delete/{id}")
+    @GetMapping("{id}/delete")
     @Secured({"ROLE_ADMIN"})
     String deleteSubject(@PathVariable final Long id,
                          final RedirectAttributes redirectAttributes) {
