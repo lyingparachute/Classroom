@@ -13,7 +13,6 @@ import com.example.classroom.user.UserRepository;
 import com.example.classroom.user.UserRole;
 import com.example.classroom.user.register.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -34,27 +33,28 @@ public class UserManagementService implements UserDetailsService {
     private final TeacherService teacherService;
 
     @Transactional
-    public User register(RegisterRequest request) throws UserAlreadyExistException {
-        if (emailExists(request.getEmail()))
-            throw new UserAlreadyExistException("There is already an account with email address: " + request.getEmail());
-        User userDetails = new User();
-        mapper.map(request, userDetails);
-        userDetails.setPassword(passwordEncoder.encode(request.getPasswordRequest().getPassword()));
-        User saved = repository.save(userDetails);
-        createUniversityAttendeeAccount(request, saved);
-        saved.getAttendee();
-        return saved;
+    public User register(final RegisterRequest request) throws UserAlreadyExistException {
+        if (emailExists(request.email()))
+            throw new UserAlreadyExistException("There is already an account with email address: " + request.email());
+        final var user = new User();
+        mapper.map(request, user);
+        user.setPassword(passwordEncoder.encode(request.passwordRequest().getPassword()));
+        final var savedUser = repository.save(user);
+        createUniversityAttendeeAccount(request, savedUser);
+        savedUser.getAttendee();
+        return savedUser;
     }
 
-    private void createUniversityAttendeeAccount(RegisterRequest request, User user) {
-        UserRole requestRole = request.getRole();
+    private void createUniversityAttendeeAccount(final RegisterRequest request,
+                                                 final User user) {
+        final var requestRole = request.role();
         if (requestRole == UserRole.ROLE_STUDENT) {
-            StudentDto studentDto = mapper.map(request, StudentDto.class);
+            final var studentDto = mapper.map(request, StudentDto.class);
             studentDto.setUserDetails(user);
             studentService.create(studentDto);
         }
         if (requestRole == UserRole.ROLE_TEACHER || requestRole == UserRole.ROLE_DEAN) {
-            TeacherDto teacherDto = mapper.map(request, TeacherDto.class);
+            final var teacherDto = mapper.map(request, TeacherDto.class);
             teacherDto.setUserDetails(user);
             teacherService.create(teacherDto);
         }
@@ -68,26 +68,27 @@ public class UserManagementService implements UserDetailsService {
     }
 
     @Override
-    public User loadUserByUsername(String email) {
+    public User loadUserByUsername(final String email) {
         return repository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " does not exist in database."));
+            .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " does not exist in database."));
     }
 
     @Transactional
-    public void removeByUsername(String email) {
+    public void removeByUsername(final String email) {
         repository.delete(loadUserByUsername(email));
     }
 
     @Transactional
-    public void removeById(Long id) {
-        User byId = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        User.class, "User with given ID does not exist in database."));
+    public void removeById(final Long id) {
+        final var byId = repository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(
+                User.class, "User with given ID does not exist in database."));
         removeUniversityAttendeeAccount(byId);
         repository.delete(byId);
     }
 
-    public void updateUserPassword(final User user, final String newPassword) {
+    public void updateUserPassword(final User user,
+                                   final String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
         repository.save(user);
     }
@@ -96,7 +97,7 @@ public class UserManagementService implements UserDetailsService {
         return repository.findByEmail(email).isPresent();
     }
 
-    private void removeUniversityAttendeeAccount(User user) {
+    private void removeUniversityAttendeeAccount(final User user) {
         if (user.getStudent() != null) {
             studentService.remove(user.getStudent().getId());
         }
@@ -105,8 +106,8 @@ public class UserManagementService implements UserDetailsService {
         }
     }
 
-    public void invalidateSession(HttpServletRequest request) {
-        HttpSession session = request.getSession();
+    public void invalidateSession(final HttpServletRequest request) {
+        final var session = request.getSession();
         SecurityContextHolder.clearContext();
         if (session != null) {
             session.invalidate();

@@ -2,7 +2,6 @@ package com.example.classroom.user.password;
 
 import com.example.classroom.auth.service.UserManagementService;
 import com.example.classroom.mail_sender.MailSenderService;
-import com.example.classroom.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,24 +22,24 @@ public class PasswordChangeService {
 
     void changeUserPassword(final PasswordChangeRequest passwordChangeRequest,
                             final String userEmail) {
-        User user = userService.loadUserByUsername(userEmail);
+        final var user = userService.loadUserByUsername(userEmail);
         userService.validateOldPassword(passwordChangeRequest.getOldPassword(), user.getPassword());
         userService.updateUserPassword(user, passwordChangeRequest.getPasswordRequest().getPassword());
     }
 
     void sendPasswordChangeConfirmationEmail(final HttpServletRequest request,
                                              final String userEmail) {
-        User user = userService.loadUserByUsername(userEmail);
-        String appUrl = getAppUrl(request);
+        final var user = userService.loadUserByUsername(userEmail);
+        final var appUrl = getAppUrl(request);
         mailSenderService.sendEmail(
-                user.getEmail(),
-                PASSWORD_CHANGE_CONFIRM_EMAIL_SUBJECT,
-                PASSWORD_CHANGE_CONFIRM_TEMPLATE_LOCATION,
-                ofEntries(
-                        entry("firstName", user.getFirstName()),
-                        entry("signinLink", getSignInLink(appUrl)),
-                        entry("websiteLink", appUrl)
-                )
+            user.getEmail(),
+            PASSWORD_CHANGE_CONFIRM_EMAIL_SUBJECT,
+            PASSWORD_CHANGE_CONFIRM_TEMPLATE_LOCATION,
+            ofEntries(
+                entry("firstName", user.getFirstName()),
+                entry("signinLink", getSignInLink(appUrl)),
+                entry("websiteLink", appUrl)
+            )
         );
     }
 }

@@ -1,13 +1,18 @@
 package com.example.classroom.department;
 
 import com.example.classroom.exception.DepartmentNotFoundException;
-import com.example.classroom.fieldofstudy.FieldOfStudy;
+import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.test.util.UnitTestsInitData;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -18,9 +23,13 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -62,60 +71,60 @@ class DepartmentServiceTest {
             Department actual = argumentCaptor.getValue();
             assertThat(actual).as("Check if %s is not null", "Department").isNotNull();
             assertAll("Department's properties",
-                    () -> assertThat(actual.getId())
-                            .as("Check %s's %s", "Department", "ID").isEqualTo(expected.getId()),
-                    () -> assertThat(actual.getName())
-                            .as("Check %s's %s", "Department", "Name").isEqualTo(expected.getName()),
-                    () -> assertThat(actual.getAddress())
-                            .as("Check %s's %s", "Department", "Address").isEqualTo(expected.getAddress()),
-                    () -> assertThat(actual.getTelNumber())
-                            .as("Check %s's %s", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
+                () -> assertThat(actual.getId())
+                    .as("Check %s's %s", "Department", "ID").isEqualTo(expected.getId()),
+                () -> assertThat(actual.getName())
+                    .as("Check %s's %s", "Department", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(actual.getAddress())
+                    .as("Check %s's %s", "Department", "Address").isEqualTo(expected.getAddress()),
+                () -> assertThat(actual.getTelNumber())
+                    .as("Check %s's %s", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
             );
             assertThat(actual.getDean()).as("Check if %s is not null", "Department's Dean").isNotNull();
             assertAll("Department's Dean properties",
-                    () -> assertThat(actual.getDean().getId())
-                            .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean.getId()),
-                    () -> assertThat(actual.getDean().getFirstName())
-                            .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean.getFirstName()),
-                    () -> assertThat(actual.getDean().getLastName())
-                            .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean.getLastName()),
-                    () -> assertThat(actual.getDean().getAge())
-                            .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean.getAge()),
-                    () -> assertThat(actual.getDean().getEmail())
-                            .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean.getEmail())
+                () -> assertThat(actual.getDean().getId())
+                    .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean.getId()),
+                () -> assertThat(actual.getDean().getFirstName())
+                    .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean.getFirstName()),
+                () -> assertThat(actual.getDean().getLastName())
+                    .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean.getLastName()),
+                () -> assertThat(actual.getDean().getAge())
+                    .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean.getAge()),
+                () -> assertThat(actual.getDean().getEmail())
+                    .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean.getEmail())
             );
             assertThat(dean.getDepartment()).as("Check if %s is not null", "Dean's Department").isNotNull();
             assertAll("Dean's Department properties",
-                    () -> assertThat(dean.getDepartment().getId())
-                            .as("Check %s's %s %s", "Dean", "Department", "Id").isEqualTo(expected.getId()),
-                    () -> assertThat(dean.getDepartment().getName())
-                            .as("Check %s's %s %s", "Dean", "Department", "Name").isEqualTo(expected.getName()),
-                    () -> assertThat(dean.getDepartment().getAddress())
-                            .as("Check %s's %s %s", "Dean", "Department", "Address").isEqualTo(expected.getAddress()),
-                    () -> assertThat(dean.getDepartment().getTelNumber())
-                            .as("Check %s's %s %s", "Dean", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
+                () -> assertThat(dean.getDepartment().getId())
+                    .as("Check %s's %s %s", "Dean", "Department", "Id").isEqualTo(expected.getId()),
+                () -> assertThat(dean.getDepartment().getName())
+                    .as("Check %s's %s %s", "Dean", "Department", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(dean.getDepartment().getAddress())
+                    .as("Check %s's %s %s", "Dean", "Department", "Address").isEqualTo(expected.getAddress()),
+                () -> assertThat(dean.getDepartment().getTelNumber())
+                    .as("Check %s's %s %s", "Dean", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
             );
             assertThat(actual.getFieldsOfStudy()).isNotNull().isNotEmpty().hasSize(2);
             assertThat(fieldOfStudy1.getDepartment()).as("Check if %s is not null", "fieldOfStudy1's department").isNotNull();
             assertThat(fieldOfStudy1.getDepartment()).as("Check if %s is not null", "fieldOfStudy1's department").isNotNull();
             assertThat(actual.getFieldsOfStudy()).as("Check %s's %s properties", "Department", "Fields Of Study")
-                    .extracting(
-                            FieldOfStudy::getId,
-                            FieldOfStudy::getName,
-                            FieldOfStudy::getMode,
-                            FieldOfStudy::getTitle,
-                            FieldOfStudy::getLevelOfEducation,
-                            fieldOfStudy -> fieldOfStudy.getDepartment().getId(),
-                            fieldOfStudy -> fieldOfStudy.getDepartment().getName(),
-                            fieldOfStudy -> fieldOfStudy.getDepartment().getAddress(),
-                            fieldOfStudy -> fieldOfStudy.getDepartment().getTelNumber()
-                    ).containsExactlyInAnyOrder(
-                            tuple(fieldOfStudy1.getId(), fieldOfStudy1.getName(), fieldOfStudy1.getMode(),
-                                    fieldOfStudy1.getTitle(), fieldOfStudy1.getLevelOfEducation(),
-                                    expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()),
-                            tuple(fieldOfStudy2.getId(), fieldOfStudy2.getName(), fieldOfStudy2.getMode(),
-                                    fieldOfStudy2.getTitle(), fieldOfStudy2.getLevelOfEducation(),
-                                    expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()));
+                .extracting(
+                    FieldOfStudy::getId,
+                    FieldOfStudy::getName,
+                    FieldOfStudy::getMode,
+                    FieldOfStudy::getTitle,
+                    FieldOfStudy::getLevelOfEducation,
+                    fieldOfStudy -> fieldOfStudy.getDepartment().getId(),
+                    fieldOfStudy -> fieldOfStudy.getDepartment().getName(),
+                    fieldOfStudy -> fieldOfStudy.getDepartment().getAddress(),
+                    fieldOfStudy -> fieldOfStudy.getDepartment().getTelNumber()
+                ).containsExactlyInAnyOrder(
+                    tuple(fieldOfStudy1.getId(), fieldOfStudy1.getName(), fieldOfStudy1.getMode(),
+                        fieldOfStudy1.getTitle(), fieldOfStudy1.getLevelOfEducation(),
+                        expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()),
+                    tuple(fieldOfStudy2.getId(), fieldOfStudy2.getName(), fieldOfStudy2.getMode(),
+                        fieldOfStudy2.getTitle(), fieldOfStudy2.getLevelOfEducation(),
+                        expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()));
         }
     }
 
@@ -149,60 +158,60 @@ class DepartmentServiceTest {
 
             assertThat(actual).as("Check if %s is not null", "Department").isNotNull();
             assertAll("Department's properties",
-                    () -> assertThat(actual.getId())
-                            .as("Check %s's %s", "Department", "ID").isEqualTo(expected.getId()),
-                    () -> assertThat(actual.getName())
-                            .as("Check %s's %s", "Department", "Name").isEqualTo(expected.getName()),
-                    () -> assertThat(actual.getAddress())
-                            .as("Check %s's %s", "Department", "Address").isEqualTo(expected.getAddress()),
-                    () -> assertThat(actual.getTelNumber())
-                            .as("Check %s's %s", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
+                () -> assertThat(actual.getId())
+                    .as("Check %s's %s", "Department", "ID").isEqualTo(expected.getId()),
+                () -> assertThat(actual.getName())
+                    .as("Check %s's %s", "Department", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(actual.getAddress())
+                    .as("Check %s's %s", "Department", "Address").isEqualTo(expected.getAddress()),
+                () -> assertThat(actual.getTelNumber())
+                    .as("Check %s's %s", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
             );
             assertThat(actual.getDean()).as("Check if %s is not null", "Department's Dean").isNotNull();
             assertAll("Department's Dean properties",
-                    () -> assertThat(actual.getDean().getId())
-                            .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean.getId()),
-                    () -> assertThat(actual.getDean().getFirstName())
-                            .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean.getFirstName()),
-                    () -> assertThat(actual.getDean().getLastName())
-                            .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean.getLastName()),
-                    () -> assertThat(actual.getDean().getAge())
-                            .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean.getAge()),
-                    () -> assertThat(actual.getDean().getEmail())
-                            .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean.getEmail())
+                () -> assertThat(actual.getDean().getId())
+                    .as("Check %s's %s %s", "Department", "Dean", "Id").isEqualTo(dean.getId()),
+                () -> assertThat(actual.getDean().getFirstName())
+                    .as("Check %s's %s %s", "Department", "Dean", "First Name").isEqualTo(dean.getFirstName()),
+                () -> assertThat(actual.getDean().getLastName())
+                    .as("Check %s's %s %s", "Department", "Dean", "Last Name").isEqualTo(dean.getLastName()),
+                () -> assertThat(actual.getDean().getAge())
+                    .as("Check %s's %s %s", "Department", "Dean", "Age").isEqualTo(dean.getAge()),
+                () -> assertThat(actual.getDean().getEmail())
+                    .as("Check %s's %s %s", "Department", "Dean", "Email").isEqualTo(dean.getEmail())
             );
             assertThat(dean.getDepartment()).as("Check if %s is not null", "Dean's Department").isNotNull();
             assertAll("Dean's Department properties",
-                    () -> assertThat(dean.getDepartment().getId())
-                            .as("Check %s's %s %s", "Dean", "Department", "Id").isEqualTo(expected.getId()),
-                    () -> assertThat(dean.getDepartment().getName())
-                            .as("Check %s's %s %s", "Dean", "Department", "Name").isEqualTo(expected.getName()),
-                    () -> assertThat(dean.getDepartment().getAddress())
-                            .as("Check %s's %s %s", "Dean", "Department", "Address").isEqualTo(expected.getAddress()),
-                    () -> assertThat(dean.getDepartment().getTelNumber())
-                            .as("Check %s's %s %s", "Dean", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
+                () -> assertThat(dean.getDepartment().getId())
+                    .as("Check %s's %s %s", "Dean", "Department", "Id").isEqualTo(expected.getId()),
+                () -> assertThat(dean.getDepartment().getName())
+                    .as("Check %s's %s %s", "Dean", "Department", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(dean.getDepartment().getAddress())
+                    .as("Check %s's %s %s", "Dean", "Department", "Address").isEqualTo(expected.getAddress()),
+                () -> assertThat(dean.getDepartment().getTelNumber())
+                    .as("Check %s's %s %s", "Dean", "Department", "Telephone Number").isEqualTo(expected.getTelNumber())
             );
             assertThat(actual.getFieldsOfStudy()).isNotNull().isNotEmpty().hasSize(2);
             assertThat(fieldOfStudy1.getDepartment()).as("Check if %s is not null", "fieldOfStudy1's department").isNotNull();
             assertThat(fieldOfStudy1.getDepartment()).as("Check if %s is not null", "fieldOfStudy1's department").isNotNull();
             assertThat(actual.getFieldsOfStudy()).as("Check %s's %s properties", "Department", "Fields Of Study")
-                    .extracting(
-                            FieldOfStudy::getId,
-                            FieldOfStudy::getName,
-                            FieldOfStudy::getMode,
-                            FieldOfStudy::getTitle,
-                            FieldOfStudy::getLevelOfEducation,
-                            fieldOfStudy -> fieldOfStudy.getDepartment().getId(),
-                            fieldOfStudy -> fieldOfStudy.getDepartment().getName(),
-                            fieldOfStudy -> fieldOfStudy.getDepartment().getAddress(),
-                            fieldOfStudy -> fieldOfStudy.getDepartment().getTelNumber()
-                    ).containsExactlyInAnyOrder(
-                            tuple(fieldOfStudy1.getId(), fieldOfStudy1.getName(), fieldOfStudy1.getMode(),
-                                    fieldOfStudy1.getTitle(), fieldOfStudy1.getLevelOfEducation(),
-                                    expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()),
-                            tuple(fieldOfStudy2.getId(), fieldOfStudy2.getName(), fieldOfStudy2.getMode(),
-                                    fieldOfStudy2.getTitle(), fieldOfStudy2.getLevelOfEducation(),
-                                    expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()));
+                .extracting(
+                    FieldOfStudy::getId,
+                    FieldOfStudy::getName,
+                    FieldOfStudy::getMode,
+                    FieldOfStudy::getTitle,
+                    FieldOfStudy::getLevelOfEducation,
+                    fieldOfStudy -> fieldOfStudy.getDepartment().getId(),
+                    fieldOfStudy -> fieldOfStudy.getDepartment().getName(),
+                    fieldOfStudy -> fieldOfStudy.getDepartment().getAddress(),
+                    fieldOfStudy -> fieldOfStudy.getDepartment().getTelNumber()
+                ).containsExactlyInAnyOrder(
+                    tuple(fieldOfStudy1.getId(), fieldOfStudy1.getName(), fieldOfStudy1.getMode(),
+                        fieldOfStudy1.getTitle(), fieldOfStudy1.getLevelOfEducation(),
+                        expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()),
+                    tuple(fieldOfStudy2.getId(), fieldOfStudy2.getName(), fieldOfStudy2.getMode(),
+                        fieldOfStudy2.getTitle(), fieldOfStudy2.getLevelOfEducation(),
+                        expected.getId(), expected.getName(), expected.getAddress(), expected.getTelNumber()));
         }
 
         @Test
@@ -215,8 +224,8 @@ class DepartmentServiceTest {
             Throwable thrown = catchThrowable(() -> service.update(dto));
             //then
             assertThat(thrown)
-                    .isExactlyInstanceOf(DepartmentNotFoundException.class)
-                    .hasMessage("Invalid Department '" + dto.getName() + "' with ID: " + dto.getId());
+                .isExactlyInstanceOf(DepartmentNotFoundException.class)
+                .hasMessage("Invalid Department '" + dto.getName() + "' with ID: " + dto.getId());
         }
     }
 
@@ -243,36 +252,36 @@ class DepartmentServiceTest {
             DepartmentDto actualDepartment1 = actual.get(0);
             DepartmentDto actualDepartment2 = actual.get(1);
             assertAll("expectedDepartment1 properties",
-                    () -> assertThat(actualDepartment1.getId())
-                            .as("Check %s %s", "expectedDepartment1", "ID").isEqualTo(expectedDepartment1.getId()),
-                    () -> assertThat(actualDepartment1.getName())
-                            .as("Check %s %s", "expectedDepartment1", "Name").isEqualTo(expectedDepartment1.getName()),
-                    () -> assertThat(actualDepartment1.getAddress())
-                            .as("Check %s %s", "expectedDepartment1", "Address").isEqualTo(expectedDepartment1.getAddress()),
-                    () -> assertThat(actualDepartment1.getTelNumber())
-                            .as("Check %s %s", "expectedDepartment1", "Telephone Number").isEqualTo(expectedDepartment1.getTelNumber()),
-                    () -> assertThat(actualDepartment1.getDean())
-                            .as("Check %s's %s", "Department", "Dean").isEqualTo(dean1),
-                    () -> assertThat(actualDepartment1.getFieldsOfStudy())
-                            .as("Check if %s contains %s", "expectedDepartment1", "fieldOfStudy1").contains(fieldOfStudy1),
-                    () -> assertThat(actualDepartment1.getFieldsOfStudy())
-                            .as("Check if %s does not contain %s", "expectedDepartment1", "fieldOfStudy2").doesNotContain(fieldOfStudy2)
+                () -> assertThat(actualDepartment1.getId())
+                    .as("Check %s %s", "expectedDepartment1", "ID").isEqualTo(expectedDepartment1.getId()),
+                () -> assertThat(actualDepartment1.getName())
+                    .as("Check %s %s", "expectedDepartment1", "Name").isEqualTo(expectedDepartment1.getName()),
+                () -> assertThat(actualDepartment1.getAddress())
+                    .as("Check %s %s", "expectedDepartment1", "Address").isEqualTo(expectedDepartment1.getAddress()),
+                () -> assertThat(actualDepartment1.getTelNumber())
+                    .as("Check %s %s", "expectedDepartment1", "Telephone Number").isEqualTo(expectedDepartment1.getTelNumber()),
+                () -> assertThat(actualDepartment1.getDean())
+                    .as("Check %s's %s", "Department", "Dean").isEqualTo(dean1),
+                () -> assertThat(actualDepartment1.getFieldsOfStudy())
+                    .as("Check if %s contains %s", "expectedDepartment1", "fieldOfStudy1").contains(fieldOfStudy1),
+                () -> assertThat(actualDepartment1.getFieldsOfStudy())
+                    .as("Check if %s does not contain %s", "expectedDepartment1", "fieldOfStudy2").doesNotContain(fieldOfStudy2)
             );
             assertAll("expectedDepartment2 properties",
-                    () -> assertThat(actualDepartment2.getId())
-                            .as("Check %s %s", "expectedDepartment2", "ID").isEqualTo(expectedDepartment2.getId()),
-                    () -> assertThat(actualDepartment2.getName())
-                            .as("Check %s %s", "expectedDepartment2", "Name").isEqualTo(expectedDepartment2.getName()),
-                    () -> assertThat(actualDepartment2.getAddress())
-                            .as("Check %s %s", "expectedDepartment2", "Address").isEqualTo(expectedDepartment2.getAddress()),
-                    () -> assertThat(actualDepartment2.getTelNumber())
-                            .as("Check %s %s", "expectedDepartment2", "Telephone Number").isEqualTo(expectedDepartment2.getTelNumber()),
-                    () -> assertThat(actualDepartment2.getDean())
-                            .as("Check %s's %s", "Department", "Dean").isEqualTo(dean2),
-                    () -> assertThat(actualDepartment2.getFieldsOfStudy())
-                            .as("Check if %s contains %s", "expectedDepartment2", "fieldOfStudy1").contains(fieldOfStudy2),
-                    () -> assertThat(actualDepartment2.getFieldsOfStudy())
-                            .as("Check if %s does not contain %s", "expectedDepartment2", "fieldOfStudy2").doesNotContain(fieldOfStudy1)
+                () -> assertThat(actualDepartment2.getId())
+                    .as("Check %s %s", "expectedDepartment2", "ID").isEqualTo(expectedDepartment2.getId()),
+                () -> assertThat(actualDepartment2.getName())
+                    .as("Check %s %s", "expectedDepartment2", "Name").isEqualTo(expectedDepartment2.getName()),
+                () -> assertThat(actualDepartment2.getAddress())
+                    .as("Check %s %s", "expectedDepartment2", "Address").isEqualTo(expectedDepartment2.getAddress()),
+                () -> assertThat(actualDepartment2.getTelNumber())
+                    .as("Check %s %s", "expectedDepartment2", "Telephone Number").isEqualTo(expectedDepartment2.getTelNumber()),
+                () -> assertThat(actualDepartment2.getDean())
+                    .as("Check %s's %s", "Department", "Dean").isEqualTo(dean2),
+                () -> assertThat(actualDepartment2.getFieldsOfStudy())
+                    .as("Check if %s contains %s", "expectedDepartment2", "fieldOfStudy1").contains(fieldOfStudy2),
+                () -> assertThat(actualDepartment2.getFieldsOfStudy())
+                    .as("Check if %s does not contain %s", "expectedDepartment2", "fieldOfStudy2").doesNotContain(fieldOfStudy1)
             );
         }
 
@@ -305,19 +314,19 @@ class DepartmentServiceTest {
             assertThat(actualContent).as("Check %s's list size", "departments").hasSize(1);
             DepartmentDto actualDepartment = actualContent.get(0);
             assertAll("Resulting department properties",
-                    () -> assertThat(actualDepartment.getId())
-                            .as("Check %s %s", "department3", "ID").isEqualTo(expectedDepartment3.getId()),
-                    () -> assertThat(actualDepartment.getName())
-                            .as("Check %s %s", "department3", "Name").isEqualTo(expectedDepartment3.getName()),
-                    () -> assertThat(actualDepartment.getAddress())
-                            .as("Check %s %s", "department3", "Address").isEqualTo(expectedDepartment3.getAddress()),
-                    () -> assertThat(actualDepartment.getTelNumber())
-                            .as("Check %s %s", "department3", "Telephone Number").isEqualTo(expectedDepartment3.getTelNumber()),
-                    () -> assertThat(actualDepartment.getDean())
-                            .as("Check %s's %s", "Department", "Dean").isEqualTo(dean3),
-                    () -> assertThat(actualDepartment.getFieldsOfStudy())
-                            .as("Check if %s contains %s", "department3", "fieldOfStudy1")
-                            .contains(fieldOfStudy3).doesNotContain(fieldOfStudy1, fieldOfStudy2)
+                () -> assertThat(actualDepartment.getId())
+                    .as("Check %s %s", "department3", "ID").isEqualTo(expectedDepartment3.getId()),
+                () -> assertThat(actualDepartment.getName())
+                    .as("Check %s %s", "department3", "Name").isEqualTo(expectedDepartment3.getName()),
+                () -> assertThat(actualDepartment.getAddress())
+                    .as("Check %s %s", "department3", "Address").isEqualTo(expectedDepartment3.getAddress()),
+                () -> assertThat(actualDepartment.getTelNumber())
+                    .as("Check %s %s", "department3", "Telephone Number").isEqualTo(expectedDepartment3.getTelNumber()),
+                () -> assertThat(actualDepartment.getDean())
+                    .as("Check %s's %s", "Department", "Dean").isEqualTo(dean3),
+                () -> assertThat(actualDepartment.getFieldsOfStudy())
+                    .as("Check if %s contains %s", "department3", "fieldOfStudy1")
+                    .contains(fieldOfStudy3).doesNotContain(fieldOfStudy1, fieldOfStudy2)
             );
         }
     }
@@ -343,19 +352,19 @@ class DepartmentServiceTest {
 
             assertThat(actual).as("Check if %s is not null", "Department").isNotNull();
             assertAll("Department properties",
-                    () -> assertThat(actualId)
-                            .as("Check %s %s", "department3", "ID").isEqualTo(expected.getId()),
-                    () -> assertThat(actual.getName())
-                            .as("Check %s %s", "department3", "Name").isEqualTo(expected.getName()),
-                    () -> assertThat(actual.getAddress())
-                            .as("Check %s %s", "department3", "Address").isEqualTo(expected.getAddress()),
-                    () -> assertThat(actual.getTelNumber())
-                            .as("Check %s %s", "department3", "Telephone Number").isEqualTo(expected.getTelNumber()),
-                    () -> assertThat(actual.getDean())
-                            .as("Check %s's %s", "Department", "Dean").isEqualTo(dean),
-                    () -> assertThat(actual.getFieldsOfStudy())
-                            .as("Check if %s contains %s", "department3", "fieldOfStudy1")
-                            .contains(fieldOfStudy1, fieldOfStudy2)
+                () -> assertThat(actualId)
+                    .as("Check %s %s", "department3", "ID").isEqualTo(expected.getId()),
+                () -> assertThat(actual.getName())
+                    .as("Check %s %s", "department3", "Name").isEqualTo(expected.getName()),
+                () -> assertThat(actual.getAddress())
+                    .as("Check %s %s", "department3", "Address").isEqualTo(expected.getAddress()),
+                () -> assertThat(actual.getTelNumber())
+                    .as("Check %s %s", "department3", "Telephone Number").isEqualTo(expected.getTelNumber()),
+                () -> assertThat(actual.getDean())
+                    .as("Check %s's %s", "Department", "Dean").isEqualTo(dean),
+                () -> assertThat(actual.getFieldsOfStudy())
+                    .as("Check if %s contains %s", "department3", "fieldOfStudy1")
+                    .contains(fieldOfStudy1, fieldOfStudy2)
             );
         }
 
@@ -367,8 +376,8 @@ class DepartmentServiceTest {
             Throwable thrown = catchThrowable(() -> service.fetchById(id));
             //then
             assertThat(thrown)
-                    .isExactlyInstanceOf(DepartmentNotFoundException.class)
-                    .hasMessage("Invalid Department id: " + id);
+                .isExactlyInstanceOf(DepartmentNotFoundException.class)
+                .hasMessage("Invalid Department id: " + id);
         }
     }
 
@@ -395,8 +404,8 @@ class DepartmentServiceTest {
             Throwable thrown = catchThrowable(() -> service.remove(id));
             //then
             assertThat(thrown)
-                    .isExactlyInstanceOf(DepartmentNotFoundException.class)
-                    .hasMessage("Invalid Department id: " + id);
+                .isExactlyInstanceOf(DepartmentNotFoundException.class)
+                .hasMessage("Invalid Department id: " + id);
         }
 
         @Test
@@ -436,7 +445,8 @@ class DepartmentServiceTest {
             List<Department> departments = List.of(expectedDepartment2, expectedDepartment3);
             given(repository.findAllByNameContainingIgnoreCase(anyString())).willReturn(departments);
             //when
-            List<DepartmentDto> actualContent = service.findByName(name);
+            final List<DepartmentDto> actualContent = (List<DepartmentDto>) service.findByName(name);
+
             //then
             then(repository).should().findAllByNameContainingIgnoreCase(anyString());
             then(repository).shouldHaveNoMoreInteractions();
@@ -446,45 +456,47 @@ class DepartmentServiceTest {
             DepartmentDto actualDepartment2 = actualContent.get(1);
 
             assertAll("department1 properties",
-                    () -> assertThat(actualDepartment1.getId())
-                            .as("Check %s %s", "department1", "ID").isEqualTo(expectedDepartment2.getId()),
-                    () -> assertThat(actualDepartment1.getName())
-                            .as("Check %s %s", "department1", "Name").isEqualTo(expectedDepartment2.getName()),
-                    () -> assertThat(actualDepartment1.getAddress())
-                            .as("Check %s %s", "department1", "Address").isEqualTo(expectedDepartment2.getAddress()),
-                    () -> assertThat(actualDepartment1.getTelNumber())
-                            .as("Check %s %s", "department1", "Telephone Number").isEqualTo(expectedDepartment2.getTelNumber()),
-                    () -> assertThat(actualDepartment1.getDean())
-                            .as("Check %s's %s", "Department", "Dean").isEqualTo(dean2),
-                    () -> assertThat(actualDepartment1.getFieldsOfStudy())
-                            .as("Check if %s contains %s", "department1", "fieldOfStudy1")
-                            .contains(fieldOfStudy2).doesNotContain(fieldOfStudy1, fieldOfStudy3)
+                () -> assertThat(actualDepartment1.getId())
+                    .as("Check %s %s", "department1", "ID").isEqualTo(expectedDepartment2.getId()),
+                () -> assertThat(actualDepartment1.getName())
+                    .as("Check %s %s", "department1", "Name").isEqualTo(expectedDepartment2.getName()),
+                () -> assertThat(actualDepartment1.getAddress())
+                    .as("Check %s %s", "department1", "Address").isEqualTo(expectedDepartment2.getAddress()),
+                () -> assertThat(actualDepartment1.getTelNumber())
+                    .as("Check %s %s", "department1", "Telephone Number").isEqualTo(expectedDepartment2.getTelNumber()),
+                () -> assertThat(actualDepartment1.getDean())
+                    .as("Check %s's %s", "Department", "Dean").isEqualTo(dean2),
+                () -> assertThat(actualDepartment1.getFieldsOfStudy())
+                    .as("Check if %s contains %s", "department1", "fieldOfStudy1")
+                    .contains(fieldOfStudy2).doesNotContain(fieldOfStudy1, fieldOfStudy3)
             );
             assertAll("department2 properties",
-                    () -> assertThat(actualDepartment2.getId())
-                            .as("Check %s %s", "department2", "ID").isEqualTo(expectedDepartment3.getId()),
-                    () -> assertThat(actualDepartment2.getName())
-                            .as("Check %s %s", "department2", "Name").isEqualTo(expectedDepartment3.getName()),
-                    () -> assertThat(actualDepartment2.getAddress())
-                            .as("Check %s %s", "department2", "Address").isEqualTo(expectedDepartment3.getAddress()),
-                    () -> assertThat(actualDepartment2.getTelNumber())
-                            .as("Check %s %s", "department2", "Telephone Number").isEqualTo(expectedDepartment3.getTelNumber()),
-                    () -> assertThat(actualDepartment2.getDean())
-                            .as("Check %s's %s", "Department", "Dean").isEqualTo(dean3),
-                    () -> assertThat(actualDepartment2.getFieldsOfStudy())
-                            .as("Check if %s contains %s", "department2", "fieldOfStudy1")
-                            .contains(fieldOfStudy3).doesNotContain(fieldOfStudy1, fieldOfStudy2)
+                () -> assertThat(actualDepartment2.getId())
+                    .as("Check %s %s", "department2", "ID").isEqualTo(expectedDepartment3.getId()),
+                () -> assertThat(actualDepartment2.getName())
+                    .as("Check %s %s", "department2", "Name").isEqualTo(expectedDepartment3.getName()),
+                () -> assertThat(actualDepartment2.getAddress())
+                    .as("Check %s %s", "department2", "Address").isEqualTo(expectedDepartment3.getAddress()),
+                () -> assertThat(actualDepartment2.getTelNumber())
+                    .as("Check %s %s", "department2", "Telephone Number").isEqualTo(expectedDepartment3.getTelNumber()),
+                () -> assertThat(actualDepartment2.getDean())
+                    .as("Check %s's %s", "Department", "Dean").isEqualTo(dean3),
+                () -> assertThat(actualDepartment2.getFieldsOfStudy())
+                    .as("Check if %s contains %s", "department2", "fieldOfStudy1")
+                    .contains(fieldOfStudy3).doesNotContain(fieldOfStudy1, fieldOfStudy2)
             );
         }
 
         @Test
         void findByNamePaginated_shouldReturnDepartmentsSearcherByNamePaginated_givenName_pageNo_pageSize_sortDir() {
             //given
-            int pageNo = 2;
-            int pageSize = 2;
-            String sortField = "name";
-            String sortDirection = Sort.Direction.DESC.name();
-            String name = "ch";
+            final var pageableRequest = PageableRequest.builder()
+                .searched("ch")
+                .pageNumber(2)
+                .pageSize(2)
+                .sortField("searched")
+                .sortDirection(Sort.Direction.DESC.name())
+                .build();
 
             Teacher dean1 = initData.createTeacherOne(null, List.of(), List.of());
             Teacher dean2 = initData.createTeacherTwo(null, List.of(), List.of());
@@ -498,8 +510,10 @@ class DepartmentServiceTest {
             Department expectedDepartment3 = initData.createDepartmentThree(dean3, List.of(fieldOfStudy3));
             Page<Department> departments = new PageImpl<>(List.of(expectedDepartment2, expectedDepartment3));
             given(repository.findAllByNameContainingIgnoreCase(anyString(), any(Pageable.class))).willReturn(departments);
+
             //when
-            Page<DepartmentDto> actualPage = service.findByNamePaginated(pageNo, pageSize, sortField, sortDirection, name);
+            Page<DepartmentDto> actualPage = service.findByNamePaginated(pageableRequest);
+
             //then
             then(repository).should().findAllByNameContainingIgnoreCase(anyString(), any(Pageable.class));
             then(repository).shouldHaveNoMoreInteractions();
@@ -509,34 +523,34 @@ class DepartmentServiceTest {
             DepartmentDto actualDepartment2 = actualContent.get(1);
 
             assertAll("department1 properties",
-                    () -> assertThat(actualDepartment1.getId())
-                            .as("Check %s %s", "department1", "ID").isEqualTo(expectedDepartment2.getId()),
-                    () -> assertThat(actualDepartment1.getName())
-                            .as("Check %s %s", "department1", "Name").isEqualTo(expectedDepartment2.getName()),
-                    () -> assertThat(actualDepartment1.getAddress())
-                            .as("Check %s %s", "department1", "Address").isEqualTo(expectedDepartment2.getAddress()),
-                    () -> assertThat(actualDepartment1.getTelNumber())
-                            .as("Check %s %s", "department1", "Telephone Number").isEqualTo(expectedDepartment2.getTelNumber()),
-                    () -> assertThat(actualDepartment1.getDean())
-                            .as("Check %s's %s", "Department", "Dean").isEqualTo(dean2),
-                    () -> assertThat(actualDepartment1.getFieldsOfStudy())
-                            .as("Check if %s contains %s", "department1", "fieldOfStudy1")
-                            .contains(fieldOfStudy2).doesNotContain(fieldOfStudy1, fieldOfStudy3)
+                () -> assertThat(actualDepartment1.getId())
+                    .as("Check %s %s", "department1", "ID").isEqualTo(expectedDepartment2.getId()),
+                () -> assertThat(actualDepartment1.getName())
+                    .as("Check %s %s", "department1", "Name").isEqualTo(expectedDepartment2.getName()),
+                () -> assertThat(actualDepartment1.getAddress())
+                    .as("Check %s %s", "department1", "Address").isEqualTo(expectedDepartment2.getAddress()),
+                () -> assertThat(actualDepartment1.getTelNumber())
+                    .as("Check %s %s", "department1", "Telephone Number").isEqualTo(expectedDepartment2.getTelNumber()),
+                () -> assertThat(actualDepartment1.getDean())
+                    .as("Check %s's %s", "Department", "Dean").isEqualTo(dean2),
+                () -> assertThat(actualDepartment1.getFieldsOfStudy())
+                    .as("Check if %s contains %s", "department1", "fieldOfStudy1")
+                    .contains(fieldOfStudy2).doesNotContain(fieldOfStudy1, fieldOfStudy3)
             );
             assertAll("department2 properties",
-                    () -> assertThat(actualDepartment2.getId())
-                            .as("Check %s %s", "department2", "ID").isEqualTo(expectedDepartment3.getId()),
-                    () -> assertThat(actualDepartment2.getName())
-                            .as("Check %s %s", "department2", "Name").isEqualTo(expectedDepartment3.getName()),
-                    () -> assertThat(actualDepartment2.getAddress())
-                            .as("Check %s %s", "department2", "Address").isEqualTo(expectedDepartment3.getAddress()),
-                    () -> assertThat(actualDepartment2.getTelNumber())
-                            .as("Check %s %s", "department2", "Telephone Number").isEqualTo(expectedDepartment3.getTelNumber()),
-                    () -> assertThat(actualDepartment2.getDean())
-                            .as("Check %s's %s", "Department", "Dean").isEqualTo(dean3),
-                    () -> assertThat(actualDepartment2.getFieldsOfStudy())
-                            .as("Check if %s contains %s", "department2", "fieldOfStudy1")
-                            .contains(fieldOfStudy3).doesNotContain(fieldOfStudy1, fieldOfStudy2)
+                () -> assertThat(actualDepartment2.getId())
+                    .as("Check %s %s", "department2", "ID").isEqualTo(expectedDepartment3.getId()),
+                () -> assertThat(actualDepartment2.getName())
+                    .as("Check %s %s", "department2", "Name").isEqualTo(expectedDepartment3.getName()),
+                () -> assertThat(actualDepartment2.getAddress())
+                    .as("Check %s %s", "department2", "Address").isEqualTo(expectedDepartment3.getAddress()),
+                () -> assertThat(actualDepartment2.getTelNumber())
+                    .as("Check %s %s", "department2", "Telephone Number").isEqualTo(expectedDepartment3.getTelNumber()),
+                () -> assertThat(actualDepartment2.getDean())
+                    .as("Check %s's %s", "Department", "Dean").isEqualTo(dean3),
+                () -> assertThat(actualDepartment2.getFieldsOfStudy())
+                    .as("Check if %s contains %s", "department2", "fieldOfStudy1")
+                    .contains(fieldOfStudy3).doesNotContain(fieldOfStudy1, fieldOfStudy2)
             );
         }
     }

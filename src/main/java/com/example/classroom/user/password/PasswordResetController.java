@@ -7,7 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -20,10 +24,10 @@ public class PasswordResetController {
     private final PasswordResetService service;
 
     @PostMapping("reset")
-    String sendResetPasswordEmail(@RequestParam("email") String userEmail,
-                                  HttpServletRequest request,
-                                  RedirectAttributes redirectAttributes) {
-        boolean emailSent = service.sendEmailWithResetPasswordInstructions(request, userEmail);
+    String sendResetPasswordEmail(@RequestParam("email") final String userEmail,
+                                  final HttpServletRequest request,
+                                  final RedirectAttributes redirectAttributes) {
+        final var emailSent = service.sendEmailWithResetPasswordInstructions(request, userEmail);
         redirectAttributes.addFlashAttribute("resetPassword", userEmail);
         redirectAttributes.addFlashAttribute("resetPasswordResult", emailSent);
         return REDIRECT_TO_SIGN_IN_PAGE;
@@ -31,8 +35,8 @@ public class PasswordResetController {
 
     @GetMapping("change")
     String showPasswordChangeForm(@RequestParam("token") final String token,
-                                  Model model,
-                                  RedirectAttributes redirectAttributes) {
+                                  final Model model,
+                                  final RedirectAttributes redirectAttributes) {
         try {
             service.validatePasswordResetToken(token);
         } catch (InvalidTokenException e) {
@@ -47,10 +51,10 @@ public class PasswordResetController {
 
     @PostMapping("update")
     String changePassword(@Valid @ModelAttribute("passwordReset") final PasswordRequest passwordRequest,
-                          BindingResult result,
+                          final BindingResult result,
                           @ModelAttribute("token") final String token,
-                          HttpServletRequest request,
-                          RedirectAttributes redirectAttributes) {
+                          final HttpServletRequest request,
+                          final RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return PASSWORD_CHANGE_TEMPLATE;
         }

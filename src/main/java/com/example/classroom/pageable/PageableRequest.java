@@ -1,13 +1,16 @@
 package com.example.classroom.pageable;
 
 import lombok.Builder;
+import org.springframework.boot.context.properties.bind.Name;
 
 @Builder
 public record PageableRequest(
-        String name,
-        int pageNumber,
-        int pageSize,
-        String sortField,
-        String sortDir
+    @Name("name")
+    String searched,
+    int pageNumber,
+    int pageSize,
+    String sortField,
+    @Name("sortDir")
+    String sortDirection
 ) {
 }

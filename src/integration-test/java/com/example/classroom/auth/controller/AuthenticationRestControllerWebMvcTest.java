@@ -5,6 +5,7 @@ import com.example.classroom.auth.model.AuthenticationResponse;
 import com.example.classroom.auth.service.AuthenticationService;
 import com.example.classroom.config.jwt.JwtAuthenticationFilter;
 import com.example.classroom.test.util.UnitTestsInitData;
+import com.example.classroom.user.UserRole;
 import com.example.classroom.user.register.RegisterRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Nested;
@@ -44,7 +45,7 @@ class AuthenticationRestControllerWebMvcTest {
         @Test
         void returnsToken_givenValidRegisterRequest() throws Exception {
             // Given
-            RegisterRequest request = initData.createRegisterRequest();
+            RegisterRequest request = initData.createRegisterRequest(UserRole.ROLE_STUDENT);
             AuthenticationResponse expectedResponse = new AuthenticationResponse("Bearer token");
             // When
             when(service.register(request)).thenReturn(expectedResponse);
@@ -61,7 +62,7 @@ class AuthenticationRestControllerWebMvcTest {
             // Then
             assertThat(content).as("Check for presence of request's response content").isNotNull().isNotEmpty();
             AuthenticationResponse response = objectMapper.readValue(content, AuthenticationResponse.class);
-            String token = response.getToken();
+            String token = response.token();
 
         }
     }
@@ -89,7 +90,7 @@ class AuthenticationRestControllerWebMvcTest {
             // Then
             assertThat(content).as("Check for presence of request's response content").isNotNull().isNotEmpty();
             AuthenticationResponse response = objectMapper.readValue(content, AuthenticationResponse.class);
-            String token = response.getToken();
+            String token = response.token();
         }
     }
 }

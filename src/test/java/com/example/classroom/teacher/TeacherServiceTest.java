@@ -10,7 +10,11 @@ import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -24,7 +28,9 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -336,10 +342,12 @@ class TeacherServiceTest {
         @Test
         void fetchAllPaginated_shouldReturnAllTeachersPaginated_givenPageNo_pageSize_sortDir() {
             //given
-            int pageNo = 2;
-            int pageSize = 2;
-            String sortField = "firstName";
-            String sortDirection = Sort.Direction.DESC.name();
+            final var pageableRequest = PageableRequest.builder()
+                .pageNumber(2)
+                .pageSize(2)
+                .sortDirection(Sort.Direction.DESC.name())
+                .sortField("firstName")
+                .build();
 
             Subject subject1 = initData.createSubjectOne(null, List.of());
             Subject subject2 = initData.createSubjectTwo(null, List.of());
@@ -357,12 +365,7 @@ class TeacherServiceTest {
             Page<Teacher> teachers = new PageImpl<>(List.of(expectedTeacher3));
             //when
             when(repository.findAll(any(Pageable.class))).thenReturn(teachers);
-            PageableRequest pageableRequest = PageableRequest.builder()
-                    .pageNumber(pageNo)
-                    .pageSize(pageSize)
-                    .sortDir(sortDirection)
-                    .sortField(sortField)
-                    .build();
+
             Page<TeacherDto> actual = service.fetchAllPaginated(pageableRequest);
             //then
             verify(repository).findAll(any(Pageable.class));
@@ -592,10 +595,10 @@ class TeacherServiceTest {
             when(repository.findAll(any(Pageable.class)))
                     .thenReturn(teachers);
             PageableRequest pageableRequest = PageableRequest.builder()
-                    .name(name)
+                    .searched(name)
                     .pageNumber(pageNo)
                     .pageSize(pageSize)
-                    .sortDir(sortDirection)
+                    .sortDirection(sortDirection)
                     .sortField(sortField)
                     .build();
             Page<TeacherDto> actual = service.fetchAllPaginated(pageableRequest);

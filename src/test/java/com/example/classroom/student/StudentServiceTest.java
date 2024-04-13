@@ -9,7 +9,11 @@ import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -23,7 +27,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -318,7 +325,7 @@ class StudentServiceTest {
             PageableRequest pageableRequest = PageableRequest.builder()
                     .pageNumber(pageNo)
                     .pageSize(pageSize)
-                    .sortDir(sortDirection)
+                    .sortDirection(sortDirection)
                     .sortField(sortField)
                     .build();
             //when
@@ -529,10 +536,10 @@ class StudentServiceTest {
             Student expectedStudent3 = initData.createStudentThree(fieldOfStudy3, List.of(teacher1, teacher2, teacher3));
             Page<Student> students = new PageImpl<>(List.of(expectedStudent3));
             PageableRequest pageableRequest = PageableRequest.builder()
-                    .name(name)
+                    .searched(name)
                     .pageNumber(pageNo)
                     .pageSize(pageSize)
-                    .sortDir(sortDirection)
+                    .sortDirection(sortDirection)
                     .sortField(sortField)
                     .build();
             //when
@@ -593,10 +600,10 @@ class StudentServiceTest {
             teacher1.addStudent(student2);
 
             PageableRequest pageableRequest = PageableRequest.builder()
-                    .name(name)
+                    .searched(name)
                     .pageNumber(pageNo)
                     .pageSize(pageSize)
-                    .sortDir(sortDirection)
+                    .sortDirection(sortDirection)
                     .sortField(sortField)
                     .build();
 
@@ -644,10 +651,10 @@ class StudentServiceTest {
             teacher1.addStudent(student2);
 
             PageableRequest pageableRequest = PageableRequest.builder()
-                    .name(name)
+                    .searched(name)
                     .pageNumber(pageNo)
                     .pageSize(pageSize)
-                    .sortDir(sortDirection)
+                    .sortDirection(sortDirection)
                     .sortField(sortField)
                     .build();
 
@@ -700,7 +707,7 @@ class StudentServiceTest {
             PageableRequest pageableRequest = PageableRequest.builder()
                     .pageNumber(pageNo)
                     .pageSize(pageSize)
-                    .sortDir(sortDirection)
+                    .sortDirection(sortDirection)
                     .sortField(sortField)
                     .build();
 

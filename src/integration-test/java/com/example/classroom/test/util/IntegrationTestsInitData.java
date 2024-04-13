@@ -42,6 +42,11 @@ public class IntegrationTestsInitData {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
 
+    private static void addReferencingObjectsToSubject(FieldOfStudy fieldOfStudy, List<Teacher> teachers, Subject subject) {
+        subject.setFieldOfStudy(fieldOfStudy);
+        teachers.forEach(subject::addTeacher);
+    }
+
     @Transactional
     public void cleanUp() {
         studentRepository.findAll().forEach(this::removeReferencingObjectsFromStudent);
@@ -206,11 +211,6 @@ public class IntegrationTestsInitData {
         return subject;
     }
 
-    private static void addReferencingObjectsToSubject(FieldOfStudy fieldOfStudy, List<Teacher> teachers, Subject subject) {
-        subject.setFieldOfStudy(fieldOfStudy);
-        teachers.forEach(subject::addTeacher);
-    }
-
     private void removeReferencingObjectsFromSubject(Subject subject) {
         Set<Teacher> teachers = new HashSet<>(subject.getTeachers());
         subject.setFieldOfStudy(null);
@@ -318,39 +318,39 @@ public class IntegrationTestsInitData {
 
     public User createUser() {
         return userRepository.save(User.builder()
-                .firstName("Andrzej")
-                .lastName("Nowak")
-                .password("$2a$10$XYfYrJJffuaU2IZGm6Wp.uy4A3V.8vKXFghrBruUU9XcRYV1f3eb.")
-                .email("andrzej.nowak@gmail.com")
-                .role(UserRole.ROLE_STUDENT)
-                .build());
+            .firstName("Andrzej")
+            .lastName("Nowak")
+            .password("$2a$10$XYfYrJJffuaU2IZGm6Wp.uy4A3V.8vKXFghrBruUU9XcRYV1f3eb.")
+            .email("andrzej.nowak@gmail.com")
+            .role(UserRole.ROLE_STUDENT)
+            .build());
     }
 
-    public RegisterRequest createRegisterRequest() {
+    public RegisterRequest createRegisterRequest(final UserRole role) {
         return RegisterRequest.builder()
-                .firstName("Andrzej")
-                .lastName("Nowak")
-                .email("andrzej.nowak@gmail.com")
-                .passwordRequest(
-                        new PasswordRequest("123", "123")
-                )
-                .role(UserRole.ROLE_STUDENT)
-                .build();
+            .firstName("Andrzej")
+            .lastName("Nowak")
+            .email("andrzej.nowak@gmail.com")
+            .passwordRequest(
+                new PasswordRequest("ACbc10932!@", "ACbc10932!@®")
+            )
+            .role(role)
+            .build();
     }
 
     public AuthenticationRequest createAuthenticationRequest() {
         return AuthenticationRequest.builder()
-                .email("andrzej.nowak@gmail.com")
-                .password("encodedPassword")
-                .build();
+            .email("andrzej.nowak@gmail.com")
+            .password("encodedPassword")
+            .build();
     }
 
     public UpdateRequest createUpdateRequest() {
         return UpdateRequest.builder()
-                .firstName("Joanna")
-                .lastName("Kowalczyk")
-                .email("andrzej.nowak@gmail.com")
-                .password("newEncodedpassword")
-                .build();
+            .firstName("Joanna")
+            .lastName("Kowalczyk")
+            .email("andrzej.nowak@gmail.com")
+            .password("newEncodedpassword")
+            .build();
     }
 }

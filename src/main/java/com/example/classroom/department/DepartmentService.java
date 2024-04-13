@@ -2,6 +2,7 @@ package com.example.classroom.department;
 
 import com.example.classroom.exception.DepartmentNotFoundException;
 import com.example.classroom.fieldofstudy.FieldOfStudy;
+import com.example.classroom.pageable.PageableRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -11,9 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -23,18 +24,18 @@ public class DepartmentService {
     private final ModelMapper mapper;
 
     @Transactional
-    DepartmentDto create(DepartmentDto dto) {
-        Department department = mapper.map(dto, Department.class);
+    DepartmentDto create(final DepartmentDto dto) {
+        final var department = mapper.map(dto, Department.class);
         addReferencingObjects(department);
-        Department saved = repository.save(department);
+        final var saved = repository.save(department);
         return mapper.map(saved, DepartmentDto.class);
     }
 
     @Transactional
-    DepartmentDto update(DepartmentDto dto) {
-        Department department = repository.findById(dto.getId())
-                .orElseThrow(() -> new DepartmentNotFoundException(
-                        "Invalid Department '" + dto.getName() + "' with ID: " + dto.getId()));
+    DepartmentDto update(final DepartmentDto dto) {
+        final var department = repository.findById(dto.getId())
+            .orElseThrow(() -> new DepartmentNotFoundException(
+                "Invalid Department '" + dto.getName() + "' with ID: " + dto.getId()));
         removeReferencingObjects(department);
         mapper.map(dto, department);
         addReferencingObjects(department);
@@ -42,33 +43,33 @@ public class DepartmentService {
     }
 
     public List<DepartmentDto> fetchAll() {
-        List<Department> departments = repository.findAll();
+        final var departments = repository.findAll();
         return departments.stream().map(
-                department -> mapper.map(department, DepartmentDto.class)).toList();
+            department -> mapper.map(department, DepartmentDto.class)).toList();
     }
 
-    Page<DepartmentDto> fetchAllPaginated(int pageNo,
-                                          int pageSize,
-                                          String sortField,
-                                          String sortDirection) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Department> all = repository.findAll(pageable);
+    Page<DepartmentDto> fetchAllPaginated(final int pageNo,
+                                          final int pageSize,
+                                          final String sortField,
+                                          final String sortDirection) {
+        final var sort = getSortOrder(sortField, sortDirection);
+        final Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        final var all = repository.findAll(pageable);
         return all.map(department -> mapper.map(department, DepartmentDto.class));
     }
 
-    DepartmentDto fetchById(Long id) {
-        Optional<Department> byId = repository.findById(id);
+    DepartmentDto fetchById(final Long id) {
+        final var byId = repository.findById(id);
         return byId.map(department -> mapper.map(department, DepartmentDto.class))
-                .orElseThrow(() -> new DepartmentNotFoundException(
-                        "Invalid Department id: " + id));
+            .orElseThrow(() -> new DepartmentNotFoundException(
+                "Invalid Department id: " + id));
     }
 
     @Transactional
-    void remove(Long id) {
-        Department department = repository.findById(id)
-                .orElseThrow(() -> new DepartmentNotFoundException(
-                        "Invalid Department id: " + id));
+    void remove(final Long id) {
+        final var department = repository.findById(id)
+            .orElseThrow(() -> new DepartmentNotFoundException(
+                "Invalid Department id: " + id));
         removeReferencingObjects(department);
         repository.delete(department);
     }
@@ -79,37 +80,34 @@ public class DepartmentService {
         repository.deleteAll();
     }
 
-    List<DepartmentDto> findByName(String searched) {
-        List<Department> found = repository.findAllByNameContainingIgnoreCase(searched);
+    Collection<DepartmentDto> findByName(final String searched) {
+        final var found = repository.findAllByNameContainingIgnoreCase(searched);
         return found.stream().map(s -> mapper.map(s, DepartmentDto.class)).toList();
     }
 
-    Page<DepartmentDto> findByNamePaginated(int pageNo,
-                                            int pageSize,
-                                            String sortField,
-                                            String sortDirection,
-                                            String searched) {
-        Sort sort = getSortOrder(sortField, sortDirection);
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Department> all = repository.findAllByNameContainingIgnoreCase(searched, pageable);
+    Page<DepartmentDto> findByNamePaginated(final PageableRequest request) {
+        final var sort = getSortOrder(request.sortField(), request.sortDirection());
+        final Pageable pageable = PageRequest.of(request.pageNumber() - 1, request.pageSize(), sort);
+        final var all = repository.findAllByNameContainingIgnoreCase(request.searched(), pageable);
         return all.map(department -> mapper.map(department, DepartmentDto.class));
     }
 
-    private void addReferencingObjects(Department department) {
-        Set<FieldOfStudy> fieldsOfStudy = new HashSet<>(department.getFieldsOfStudy());
+    private void addReferencingObjects(final Department department) {
+        final Set<FieldOfStudy> fieldsOfStudy = new HashSet<>(department.getFieldsOfStudy());
         department.setDean(department.getDean());
         fieldsOfStudy.forEach(department::addFieldOfStudy);
     }
 
-    private void removeReferencingObjects(Department department) {
-        Set<FieldOfStudy> fieldsOfStudy = new HashSet<>(department.getFieldsOfStudy());
+    private void removeReferencingObjects(final Department department) {
+        final Set<FieldOfStudy> fieldsOfStudy = new HashSet<>(department.getFieldsOfStudy());
         department.setDean(null);
         fieldsOfStudy.forEach(department::removeFieldOfStudy);
     }
 
-    private Sort getSortOrder(String sortField, String sortDirection) {
+    private Sort getSortOrder(final String sortField,
+                              final String sortDirection) {
         return sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-                Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
+            Sort.by(sortField).ascending() :
+            Sort.by(sortField).descending();
     }
 }

@@ -20,7 +20,10 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -49,7 +52,7 @@ class PasswordResetServiceTest {
             final var PASSWORD_RESET_TEMPLATE_LOCATION = "mail/password-reset.html";
             final var PASSWORD_RESET_EMAIL_SUBJECT = "Password Reset";
 
-            final var user = initData.createUser();
+            final var user = initData.createUser(null);
             final var passwordResetToken = initData.createPasswordResetToken(user);
             final var userEmail = user.getEmail();
 
@@ -74,7 +77,7 @@ class PasswordResetServiceTest {
         @Test
         void returnsFalse_givenInvalidUserEmail() {
             // Given
-            final var user = initData.createUser();
+            final var user = initData.createUser(null);
             final var userEmail = user.getEmail();
             given(userService.loadUserByUsername(userEmail))
                     .willThrow(new UsernameNotFoundException("User with email " + userEmail + " does not exist in database."));
@@ -93,7 +96,7 @@ class PasswordResetServiceTest {
         @Test
         void doesNothing_givenValidToken() {
             // Given
-            final var user = initData.createUser();
+            final var user = initData.createUser(null);
             final var passwordResetToken = initData.createPasswordResetToken(user);
             final var token = passwordResetToken.getToken();
             given(passwordTokenRepository.findByToken(anyString())).willReturn(Optional.of(passwordResetToken));
@@ -123,7 +126,7 @@ class PasswordResetServiceTest {
         @Test
         void throwsInvalidTokenException_givenRevokedToken() {
             // Given
-            final var user = initData.createUser();
+            final var user = initData.createUser(null);
             final var passwordResetToken = initData.createPasswordResetToken(user);
             passwordResetToken.setRevoked();
             final var token = passwordResetToken.getToken();
@@ -141,7 +144,7 @@ class PasswordResetServiceTest {
         @Test
         void throwsInvalidTokenException_givenExpiredToken() {
             // Given
-            final var user = initData.createUser();
+            final var user = initData.createUser(null);
             final var passwordResetToken = initData.createPasswordResetToken(user);
             final var token = passwordResetToken.getToken();
 
@@ -163,7 +166,7 @@ class PasswordResetServiceTest {
         @Test
         void resetsPassword_andRevokesToken_givenValidParameters() {
             // Given
-            final var user = initData.createUser();
+            final var user = initData.createUser(null);
             final var userEmail = user.getEmail();
             final var passwordResetToken = initData.createPasswordResetToken(user);
             final var token = passwordResetToken.getToken();

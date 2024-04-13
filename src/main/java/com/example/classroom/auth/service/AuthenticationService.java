@@ -31,51 +31,48 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     @Transactional
-    public AuthenticationResponse register(RegisterRequest request) {
-        User userDetails = new User();
-        mapper.map(request, userDetails);
-        userDetails.setPassword(passwordEncoder.encode(request.getPasswordRequest().getPassword()));
-        if (userDetails.getRole() == null) {
-            userDetails.setRole(UserRole.ROLE_STUDENT);
+    public AuthenticationResponse register(final RegisterRequest request) {
+        final var user = new User();
+        mapper.map(request, user);
+        user.setPassword(passwordEncoder.encode(request.passwordRequest().getPassword()));
+        if (user.getRole() == null) {
+            user.setRole(UserRole.ROLE_STUDENT);
         }
-        var savedUser = repository.save(userDetails);
-        var jwtToken = jwtService.generateToken(savedUser);
+        final var savedUser = repository.save(user);
+        final var jwtToken = jwtService.generateToken(savedUser);
         saveUserToken(savedUser, jwtToken);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new AuthenticationResponse(jwtToken);
     }
 
     @Transactional
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(final AuthenticationRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                ));
-        User user = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + request.getEmail() + " does not exist in database."));
-        var jwtToken = jwtService.generateToken(user);
+            new UsernamePasswordAuthenticationToken(
+                request.email(),
+                request.password()
+            ));
+        final var user = repository.findByEmail(request.email())
+            .orElseThrow(() -> new UsernameNotFoundException("User with email " + request.email() + " does not exist in database."));
+        final var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new AuthenticationResponse(jwtToken);
     }
 
-    private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
-                .user(user)
-                .token(jwtToken)
-                .tokenType(TokenType.BEARER)
-                .expired(false)
-                .revoked(false)
-                .build();
+    private void saveUserToken(final User user,
+                               final String jwtToken) {
+        final var token = Token.builder()
+            .user(user)
+            .token(jwtToken)
+            .tokenType(TokenType.BEARER)
+            .expired(false)
+            .revoked(false)
+            .build();
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+    private void revokeAllUserTokens(final User user) {
+        final var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {

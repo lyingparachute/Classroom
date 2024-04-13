@@ -3,15 +3,17 @@ package com.example.classroom.user.password;
 import com.example.classroom.auth.validation.PasswordMatches;
 import com.example.classroom.auth.validation.ValidPassword;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@PasswordMatches
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@PasswordMatches
 public class PasswordRequest {
-        @ValidPassword
-        String password;
-        String matchingPassword;
+    @ValidPassword
+    private String password;
+    private String matchingPassword;
 }

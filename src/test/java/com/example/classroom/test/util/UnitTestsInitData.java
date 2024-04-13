@@ -21,6 +21,11 @@ import java.util.List;
 
 public class UnitTestsInitData {
 
+    private static void addReferencingObjectsToSubject(FieldOfStudy fieldOfStudy, List<Teacher> teachers, Subject subject) {
+        subject.setFieldOfStudy(fieldOfStudy);
+        teachers.forEach(subject::addTeacher);
+    }
+
     // *** Create Students *** //
     public Student createStudentOne(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Student student = new Student();
@@ -55,12 +60,12 @@ public class UnitTestsInitData {
         return student;
     }
 
+    // *** Create Teachers *** //
+
     private void addReferencingObjectsToStudent(FieldOfStudy fieldOfStudy, List<Teacher> teachers, Student student) {
         student.setFieldOfStudy(fieldOfStudy);
         teachers.forEach(student::addTeacher);
     }
-
-    // *** Create Teachers *** //
 
     public Teacher createTeacherOne(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
@@ -73,7 +78,6 @@ public class UnitTestsInitData {
         return teacher;
     }
 
-
     public Teacher createTeacherTwo(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
         teacher.setId(2L);
@@ -84,7 +88,6 @@ public class UnitTestsInitData {
         addReferencingObjectsToTeacher(department, subjects, students, teacher);
         return teacher;
     }
-
 
     public Teacher createTeacherThree(Department department, List<Subject> subjects, List<Student> students) {
         Teacher teacher = new Teacher();
@@ -97,13 +100,13 @@ public class UnitTestsInitData {
         return teacher;
     }
 
+    // *** Create Subjects *** //
+
     private void addReferencingObjectsToTeacher(Department department, List<Subject> subjects, List<Student> students, Teacher teacher) {
         teacher.setDepartment(department);
         students.forEach(teacher::addStudent);
         subjects.forEach(teacher::addSubject);
     }
-
-    // *** Create Subjects *** //
 
     public Subject createSubjectOne(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
@@ -117,7 +120,6 @@ public class UnitTestsInitData {
         return subject;
     }
 
-
     public Subject createSubjectTwo(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
         subject.setId(2L);
@@ -129,7 +131,6 @@ public class UnitTestsInitData {
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         return subject;
     }
-
 
     public Subject createSubjectThree(FieldOfStudy fieldOfStudy, List<Teacher> teachers) {
         Subject subject = new Subject();
@@ -153,11 +154,6 @@ public class UnitTestsInitData {
         subject.setEctsPoints(5);
         addReferencingObjectsToSubject(fieldOfStudy, teachers, subject);
         return subject;
-    }
-
-    private static void addReferencingObjectsToSubject(FieldOfStudy fieldOfStudy, List<Teacher> teachers, Subject subject) {
-        subject.setFieldOfStudy(fieldOfStudy);
-        teachers.forEach(subject::addTeacher);
     }
 
     // *** Create Fields Of Study *** //
@@ -251,85 +247,88 @@ public class UnitTestsInitData {
         fieldsOfStudy.forEach(department::addFieldOfStudy);
     }
 
-    public User createUser() {
+    public User createUser(final UserRole role) {
         return User.builder()
-                .id(1L)
-                .firstName("Andrzej")
-                .lastName("Nowak")
-                .password("encodedPassword")
-                .email("andrzej.nowak@gmail.com")
-                .enabled(true)
-                .build();
+            .id(1L)
+            .firstName("Andrzej")
+            .lastName("Nowak")
+            .role(role)
+            .password("encodedPassword")
+            .email("andrzej.nowak@gmail.com")
+            .enabled(true)
+            .build();
     }
 
     public User createUserWithTeacherRole(Teacher teacher) {
         return User.builder()
-                .id(1L)
-                .firstName("Andrzej")
-                .lastName("Nowak")
-                .password("encodedPassword")
-                .email("andrzej.nowak@gmail.com")
-                .role(UserRole.ROLE_TEACHER)
-                .teacher(teacher)
-                .enabled(true)
-                .build();
+            .id(1L)
+            .firstName("Andrzej")
+            .lastName("Nowak")
+            .password("encodedPassword")
+            .email("andrzej.nowak@gmail.com")
+            .role(UserRole.ROLE_TEACHER)
+            .teacher(teacher)
+            .enabled(true)
+            .build();
     }
 
     public User createUserWithStudentRole(Student student) {
         return User.builder()
-                .id(1L)
-                .firstName("Andrzej")
-                .lastName("Nowak")
-                .password("encodedPassword")
-                .email("andrzej.nowak@gmail.com")
-                .role(UserRole.ROLE_STUDENT)
-                .student(student)
-                .enabled(true)
-                .build();
+            .id(1L)
+            .firstName("Andrzej")
+            .lastName("Nowak")
+            .password("encodedPassword")
+            .email("andrzej.nowak@gmail.com")
+            .role(UserRole.ROLE_STUDENT)
+            .student(student)
+            .enabled(true)
+            .build();
     }
 
     public User createUnverifiedUser() {
         return User.builder()
-                .id(1L)
-                .firstName("Andrzej")
-                .lastName("Nowak")
-                .password("encodedPassword")
-                .email("andrzej.nowak@gmail.com")
-                .enabled(false)
-                .build();
+            .id(1L)
+            .firstName("Andrzej")
+            .lastName("Nowak")
+            .password("encodedPassword")
+            .email("andrzej.nowak@gmail.com")
+            .enabled(false)
+            .build();
     }
 
-    public RegisterRequest createRegisterRequest() {
+    public RegisterRequest createRegisterRequest(final UserRole role) {
         return RegisterRequest.builder()
-                .firstName("Andrzej")
-                .lastName("Nowak")
-                .email("andrzej.nowak@gmail.com")
-                .passwordRequest(
-                        new PasswordRequest("123", "123")
-                )
-                .build();
+            .firstName("Andrzej")
+            .lastName("Nowak")
+            .role(role)
+            .email("andrzej.nowak@gmail.com")
+            .passwordRequest(
+                new PasswordRequest("123", "123")
+            )
+            .build();
     }
 
     public AuthenticationRequest createAuthenticationRequest() {
         return AuthenticationRequest.builder()
-                .email("andrzej.nowak@gmail.com")
-                .password("encodedPassword")
-                .build();
+            .email("andrzej.nowak@gmail.com")
+            .password("encodedPassword")
+            .build();
     }
 
     public UpdateRequest createUpdateRequest() {
         return UpdateRequest.builder()
-                .firstName("Joanna")
-                .lastName("Kowalczyk")
-                .email("andrzej.nowak@gmail.com")
-                .password("newEncodedpassword")
-                .build();
+            .firstName("Joanna")
+            .lastName("Kowalczyk")
+            .email("andrzej.nowak@gmail.com")
+            // FIXME - remove commented code
+//                .password("newEncodedpassword")
+            .build();
     }
 
     public PasswordResetToken createPasswordResetToken(User user) {
         return new PasswordResetToken(
-                user,
-                "test-token"
+            user,
+            "test-token"
         );
     }
 
