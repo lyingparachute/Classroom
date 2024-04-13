@@ -34,11 +34,12 @@ public class UserManagementService implements UserDetailsService {
 
     @Transactional
     public User register(final RegisterRequest request) throws UserAlreadyExistException {
-        if (emailExists(request.email()))
-            throw new UserAlreadyExistException("There is already an account with email address: " + request.email());
+        final var email = request.getEmail();
+        if (emailExists(email))
+            throw new UserAlreadyExistException("There is already an account with email address: " + email);
         final var user = new User();
         mapper.map(request, user);
-        user.setPassword(passwordEncoder.encode(request.passwordRequest().getPassword()));
+        user.setPassword(passwordEncoder.encode(request.getPasswordRequest().getPassword()));
         final var savedUser = repository.save(user);
         createUniversityAttendeeAccount(request, savedUser);
         savedUser.getAttendee();
@@ -47,7 +48,7 @@ public class UserManagementService implements UserDetailsService {
 
     private void createUniversityAttendeeAccount(final RegisterRequest request,
                                                  final User user) {
-        final var requestRole = request.role();
+        final var requestRole = request.getRole();
         if (requestRole == UserRole.ROLE_STUDENT) {
             final var studentDto = mapper.map(request, StudentDto.class);
             studentDto.setUserDetails(user);

@@ -64,7 +64,7 @@ class AuthenticationRestControllerIntegrationTest {
 
             // Then
             assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.OK);
-            assertThat(userRepository.findByEmail(request.email())).isPresent();
+            assertThat(userRepository.findByEmail(request.getEmail())).isPresent();
             AuthenticationResponse actual = response.getBody();
             assertThat(actual).isNotNull();
             assertThat(actual.token()).isNotNull().isNotEmpty();
@@ -89,7 +89,7 @@ class AuthenticationRestControllerIntegrationTest {
 
             // Then
             assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.BAD_REQUEST);
-            assertThat(userRepository.findByEmail(request.email())).isNotPresent();
+            assertThat(userRepository.findByEmail(request.getEmail())).isNotPresent();
         }
 
         @Disabled("Disabled because @ValidPassword annotation is commented out for demonstration purposes")
@@ -112,7 +112,7 @@ class AuthenticationRestControllerIntegrationTest {
 
             // Then
             assertThat(response.getStatusCode()).as("Check response status code").isEqualTo(HttpStatus.BAD_REQUEST);
-            assertThat(userRepository.findByEmail(request.email())).isNotPresent();
+            assertThat(userRepository.findByEmail(request.getEmail())).isNotPresent();
         }
     }
 

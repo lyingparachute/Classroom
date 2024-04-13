@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/*
+ This class needs to be mutable due to its usage by Thymeleaf
+ */
 @Getter
 @Setter
 @NoArgsConstructor
