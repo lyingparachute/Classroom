@@ -1,6 +1,6 @@
 package com.example.classroom.auth.model;
 
-import com.example.classroom.auth.validation.ValidPassword;
+import com.example.classroom.auth.validation.password.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

@@ -1,7 +1,7 @@
 package com.example.classroom.user.password;
 
-import com.example.classroom.auth.validation.PasswordMatches;
-import com.example.classroom.auth.validation.ValidPassword;
+import com.example.classroom.auth.validation.password.PasswordMatches;
+import com.example.classroom.auth.validation.password.ValidPassword;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
