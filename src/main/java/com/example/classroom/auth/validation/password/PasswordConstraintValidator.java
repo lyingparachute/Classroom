@@ -1,4 +1,4 @@
-package com.example.classroom.auth.validation;
+package com.example.classroom.auth.validation.password;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
