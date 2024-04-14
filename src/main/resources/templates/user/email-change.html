@@ -51,9 +51,8 @@
                                                    required/>
                                             <label class="form-label" for="email"
                                                    th:text="#{email.change.new.email}"></label>
-                                            <div class="invalid-feedback"
-                                                 th:if="${#fields.hasErrors('email')}">
-                                                <span th:text="#{input.helper.email}"></span>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}">
+                                                <span class="mr-1" th:each="error: ${#fields.errors('email')}" th:text="${error}"></span>
                                             </div>
                                         </div>
 
@@ -66,11 +65,9 @@
                                                    class="form-control"
                                                    required/>
                                             <label class="form-label" for="matchingEmail"
-                                                   th:text="#{email.change.password.confirm}"></label>
+                                                   th:text="#{email.change.confirm}"></label>
                                             <div class="invalid-feedback">
-                                                <span class="mr-1"
-                                                      th:each="error: ${#fields.errors('matchingEmail')}"
-                                                      th:text="${error}"></span>
+                                                <span class="mr-1" th:each="error: ${#fields.errors('matchingEmail')}" th:text="${error}"></span>
                                             </div>
                                         </div>
 
@@ -87,6 +84,11 @@
                                                     <span th:text="#{button.cancel}"></span>
                                                 </a>
                                             </div>
+
+                                            <div class="mt-3 text-secondary">
+                                                <span th:text="#{email.change.note}"></span>
+                                            </div>
+
                                         </div>
                                     </form>
 
