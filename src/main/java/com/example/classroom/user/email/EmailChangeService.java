@@ -30,8 +30,6 @@ public class EmailChangeService {
         return verificationCode;
     }
 
-
-
     private String createEmailVerificationCode() {
         final var min = (int) Math.pow(10, VERIFICATION_CODE_LENGTH - 1);
         final var max = (int) Math.pow(10, VERIFICATION_CODE_LENGTH) - 1;
