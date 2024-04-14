@@ -94,6 +94,12 @@ public class UserManagementService implements UserDetailsService {
         repository.save(user);
     }
 
+    public void updateUserEmail(final User user,
+                                final String newEmail) {
+        user.setEmail(newEmail);
+        repository.save(user);
+    }
+
     private boolean emailExists(final String email) {
         return repository.findByEmail(email).isPresent();
     }

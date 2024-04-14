@@ -19,4 +19,6 @@ public class EmailChangeRequest {
     @Email(message = "{message.email.valid}")
     private String email;
     private String matchingEmail;
+    private String expectedVerificationCode;
+    private String verificationCode;
 }

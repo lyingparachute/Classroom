@@ -1,8 +1,6 @@
 package com.example.classroom.user.email;
 
 import com.example.classroom.mail_sender.MailSenderService;
-import com.example.classroom.user.User;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,17 +17,20 @@ public class EmailChangeService {
     private static final Random RANDOM = new Random();
     private final MailSenderService mailService;
 
-    void sendEmailVerificationCode(final HttpServletRequest request,
-                                   final User user) {
+    String sendEmailVerificationCode(final String email,
+                                     final String firstName) {
         final var verificationCode = createEmailVerificationCode();
-        mailService.sendEmail(user.getEmail(),
-            "Verification code",
+        mailService.sendEmail(email,
+            "Email verification code",
             "mail/change-email-verification.html",
             ofEntries(
-                entry("firstName", user.getFirstName()),
+                entry("firstName", firstName),
                 entry("verificationCode", verificationCode))
         );
+        return verificationCode;
     }
+
+
 
     private String createEmailVerificationCode() {
         final var min = (int) Math.pow(10, VERIFICATION_CODE_LENGTH - 1);

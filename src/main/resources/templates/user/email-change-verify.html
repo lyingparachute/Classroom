@@ -25,51 +25,39 @@
                         <div class="col-lg-8">
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <form class="form-email-change" th:action="@{/dashboard/profile/email}"
+                                    <form class="form-email-change" th:action="@{/dashboard/profile/email/update}"
                                           method="post" th:object="${emailChange}"
                                           novalidate>
                                         <div th:if="${param.error}" th:text="#{email.change.invalid}"
                                              class="alert alert-danger">
                                         </div>
 
+                                        <input hidden id="expectedVerificationCode" th:field="*{expectedVerificationCode}" type="text">
+                                        <input hidden id="email" th:field="*{email}" type="email">
+                                        <input hidden id="matchingEmail" th:field="*{matchingEmail}" type="email">
+
                                         <div class="form-outline mb-4">
-                                            <input th:field="${user.email}" type="email"
-                                                   id="currentEmail"
+                                            <input th:field="${emailChange.email}" type="email"
+                                                   id="currentEmailPlaceholder"
                                                    class="form-control"
                                                    disabled/>
-                                            <label class="form-label" for="currentEmail"
-                                                   th:text="#{email.change.current.email}"></label>
-                                        </div>
-
-                                        <div class="form-outline mb-4"
-                                             th:classappend="${#fields.hasErrors('email')} ? 'mb-5'">
-                                            <input th:field="*{email}" type="email"
-                                                   id="email"
-                                                   th:classappend="${#fields.hasErrors('email') ||
-                                                   #fields.hasErrors('matchingEmail')} ? 'is-invalid'"
-                                                   class="form-control"
-                                                   required/>
-                                            <label class="form-label" for="email"
+                                            <label class="form-label" for="currentEmailPlaceholder"
                                                    th:text="#{email.change.new.email}"></label>
-                                            <div class="invalid-feedback"
-                                                 th:if="${#fields.hasErrors('email')}">
-                                                <span th:text="#{input.helper.email}"></span>
-                                            </div>
                                         </div>
 
                                         <div class="form-outline mb-4"
-                                             th:classappend="${#fields.hasErrors('matchingEmail')} ? 'mb-5'">
-                                            <input th:field="*{matchingEmail}" type="email"
-                                                   id="matchingEmail"
-                                                   th:classappend="${#fields.hasErrors('matchingEmail') ||
-                                                   #fields.hasErrors('email')} ? 'is-invalid'"
+                                             th:classappend="${#fields.hasErrors('verificationCode')} ? 'mb-4'">
+                                            <input th:field="*{verificationCode}" type="text"
+                                                   id="verificationCode"
+                                                   th:classappend="${#fields.hasErrors('verificationCode') ||
+                                                   #fields.hasErrors('verificationCode')} ? 'is-invalid'"
                                                    class="form-control"
                                                    required/>
-                                            <label class="form-label" for="matchingEmail"
-                                                   th:text="#{email.change.password.confirm}"></label>
+                                            <label class="form-label" for="verificationCode"
+                                                   th:text="#{email.change.password.verification.code}"></label>
                                             <div class="invalid-feedback">
                                                 <span class="mr-1"
-                                                      th:each="error: ${#fields.errors('matchingEmail')}"
+                                                      th:each="error: ${#fields.errors('verificationCode')}"
                                                       th:text="${error}"></span>
                                             </div>
                                         </div>
@@ -78,16 +66,11 @@
                                             <div class="col-auto">
                                                 <button class="btn btn-primary" type="submit">
                                                     <i class="fas fa-check mr-1"></i>
-                                                    <span th:text="#{button.submit}"></span>
+                                                    <span th:text="#{button.verify.email}"></span>
                                                 </button>
                                             </div>
-                                            <div class="col-auto">
-                                                <a class="btn btn-secondary" th:href="@{/dashboard/profile}">
-                                                    <i class="fa fa-times-circle mr-1"></i>
-                                                    <span th:text="#{button.cancel}"></span>
-                                                </a>
-                                            </div>
                                         </div>
+
                                     </form>
 
                                 </div>
