@@ -14,7 +14,11 @@ import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
@@ -23,11 +27,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.atIndex;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FieldOfStudyServiceTest {
@@ -525,7 +536,7 @@ class FieldOfStudyServiceTest {
             fieldOfStudy.setDescription(description);
             //when
             when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
-            List<String> actual = service.splitDescription(id);
+            List<String> actual = (List<String>) service.splitDescription(id);
             //then
             verify(repository).findById(anyLong());
             verifyNoMoreInteractions(repository);
@@ -543,7 +554,7 @@ class FieldOfStudyServiceTest {
             fieldOfStudy.setDescription(null);
             //when
             when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
-            List<String> actual = service.splitDescription(id);
+            List<String> actual = (List<String>) service.splitDescription(id);
             //then
             verify(repository).findById(anyLong());
             verifyNoMoreInteractions(repository);
@@ -588,54 +599,6 @@ class FieldOfStudyServiceTest {
             Integer actual = service.getSumOfEctsPointsFromAllSemesters(id);
             //then
             verify(repository).findAllSubjectsFromFieldOfStudy(anyLong());
-            verifyNoMoreInteractions(repository);
-            assertThat(actual).as("Check return value").isEqualTo(expected);
-        }
-    }
-
-    @Nested
-    class GetNumberOfSemestersTest {
-        @Test
-        void returnsSix_givenFieldOfStudyWithBachTitle() {
-            //given
-            int expected = 6;
-            Long id = 1L;
-            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyTwo(null, List.of(), List.of());
-            //when
-            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
-            int actual = service.getNumberOfSemesters(id);
-            //then
-            verify(repository).findById(anyLong());
-            verifyNoMoreInteractions(repository);
-            assertThat(actual).as("Check return value").isEqualTo(expected);
-        }
-
-        @Test
-        void returnsSeven_givenFieldOfStudyWithEngTitle() {
-            //given
-            int expected = 7;
-            Long id = 1L;
-            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyOne(null, List.of(), List.of());
-            //when
-            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
-            int actual = service.getNumberOfSemesters(id);
-            //then
-            verify(repository).findById(anyLong());
-            verifyNoMoreInteractions(repository);
-            assertThat(actual).as("Check return value").isEqualTo(expected);
-        }
-
-        @Test
-        void returnsDefault_givenFieldOfStudyWithOtherTitle() {
-            //given
-            int expected = 3;
-            Long id = 1L;
-            FieldOfStudy fieldOfStudy = initData.createFieldOfStudyThree(null, List.of(), List.of());
-            //when
-            when(repository.findById(anyLong())).thenReturn(Optional.of(fieldOfStudy));
-            int actual = service.getNumberOfSemesters(id);
-            //then
-            verify(repository).findById(anyLong());
             verifyNoMoreInteractions(repository);
             assertThat(actual).as("Check return value").isEqualTo(expected);
         }
@@ -691,7 +654,7 @@ class FieldOfStudyServiceTest {
             //when
             when(repository.findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class)))
                     .thenReturn(resultOfRepositorySearch);
-            List<FieldOfStudyDto> actual = service.fetchAllByLevelOfEducationSortedByName(levelOfEducation);
+            List<FieldOfStudyDto> actual = (List<FieldOfStudyDto>) service.fetchAllByLevelOfEducationSortedByName(levelOfEducation);
             //then
             verify(repository).findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class));
             verifyNoMoreInteractions(repository);
@@ -712,7 +675,7 @@ class FieldOfStudyServiceTest {
             //when
             when(repository.findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class)))
                     .thenReturn(resultOfRepositorySearch);
-            List<FieldOfStudyDto> actual = service.fetchAllByLevelOfEducationSortedByName(levelOfEducation);
+            List<FieldOfStudyDto> actual = (List<FieldOfStudyDto>) service.fetchAllByLevelOfEducationSortedByName(levelOfEducation);
             //then
             verify(repository).findAllByLevelOfEducation(any(LevelOfEducation.class), any(Sort.class));
             verifyNoMoreInteractions(repository);
@@ -801,7 +764,7 @@ class FieldOfStudyServiceTest {
                     List.of(fieldOfStudy1, fieldOfStudy2, fieldOfStudy3, fieldOfStudy4);
             //when
             when(repository.findAll()).thenReturn(resultOfRepositoryFindAll);
-            List<FieldOfStudyDto> actual = service.fetchAllWithGivenDepartmentDtoOrNoDepartment(departmentDto1);
+            List<FieldOfStudyDto> actual = (List<FieldOfStudyDto>) service.fetchAllWithGivenDepartmentDtoOrNoDepartment(departmentDto1);
             //then
             verify(repository, times(2)).findAll();
             verifyNoMoreInteractions(repository);

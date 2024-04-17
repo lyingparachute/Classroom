@@ -54,7 +54,7 @@ class FieldOfStudyController {
                            final HttpServletRequest request,
                            final Model model) {
         addAttributeBreadcrumb(model, request);
-        addAttributeFieldOfStudyFetchById(id, model);
+        addAttributeFieldOfStudyAndNumberOfSemesters(id, model);
         addAttributes(id, model);
         return "field-of-study/fieldOfStudy-view";
     }
@@ -64,8 +64,7 @@ class FieldOfStudyController {
                                    final HttpServletRequest request,
                                    final Model model) {
         addAttributeBreadcrumb(model, request);
-        addAttributeFieldOfStudyFetchById(id, model);
-        addAttributeNumberOfSemesters(id, model);
+        addAttributeFieldOfStudyAndNumberOfSemesters(id, model);
         addAttributeEctsPointsForEachSemester(id, model);
         addAttributeSubjectsMapGroupedBySemesters(id, model);
         model.addAttribute("hoursInSemester", service.calculateHoursInEachSemesterFromFieldOfStudy(id));
@@ -111,7 +110,7 @@ class FieldOfStudyController {
                                    final HttpServletRequest request,
                                    final Model model) {
         addAttributeBreadcrumb(model, request);
-        addAttributeFieldOfStudyFetchById(id, model);
+        addAttributeFieldOfStudyAndNumberOfSemesters(id, model);
         addAttributeDepartments(model);
         return "field-of-study/fieldOfStudy-edit-form";
     }
@@ -144,9 +143,8 @@ class FieldOfStudyController {
                            final HttpServletRequest request,
                            final Model model) {
         addAttributeBreadcrumb(model, request);
-        addAttributeFieldOfStudyFetchById(id, model);
+        addAttributeFieldOfStudyAndNumberOfSemesters(id, model);
         addAttributeAllSubjectsMapGroupedBySemesters(model);
-        addAttributeNumberOfSemesters(id, model);
         return "field-of-study/fieldOfStudy-subjects-edit-form";
     }
 
@@ -177,16 +175,11 @@ class FieldOfStudyController {
     private void addAttributes(final Long id, final Model model) {
         addAttributeDescriptionList(id, model);
         addAttributeTotalEctsPoints(id, model);
-        addAttributeNumberOfSemesters(id, model);
         addAttributeImagePath(id, model);
     }
 
     private void addAttributeImagePath(final Long id, final Model model) {
         model.addAttribute("imagePath", service.getImagePath(id));
-    }
-
-    private void addAttributeNumberOfSemesters(final Long id, final Model model) {
-        model.addAttribute("numberOfSemesters", service.getNumberOfSemesters(id));
     }
 
     private void addAttributeTotalEctsPoints(final Long id, final Model model) {
@@ -205,8 +198,10 @@ class FieldOfStudyController {
         model.addAttribute("departments", departmentService.fetchAll());
     }
 
-    private void addAttributeFieldOfStudyFetchById(final Long id, final Model model) {
-        model.addAttribute("fieldOfStudy", service.fetchById(id));
+    private void addAttributeFieldOfStudyAndNumberOfSemesters(final Long id, final Model model) {
+        final var fieldOfStudyDto = service.fetchById(id);
+        model.addAttribute("fieldOfStudy", fieldOfStudyDto);
+        model.addAttribute("numberOfSemesters", fieldOfStudyDto.getTitle().getNumberOfSemesters());
     }
 
     private void addAttributeAllSubjectsMapGroupedBySemesters(final Model model) {
