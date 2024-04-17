@@ -83,7 +83,7 @@ public class UserManagementService implements UserDetailsService {
     public void removeById(final Long id) {
         final var byId = repository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(
-                User.class, "User with given ID does not exist in database."));
+                User.class, "ID", id.toString()));
         removeUniversityAttendeeAccount(byId);
         repository.delete(byId);
     }
@@ -100,7 +100,7 @@ public class UserManagementService implements UserDetailsService {
         repository.save(user);
     }
 
-    private boolean emailExists(final String email) {
+    public boolean emailExists(final String email) {
         return repository.findByEmail(email).isPresent();
     }
 
@@ -121,9 +121,9 @@ public class UserManagementService implements UserDetailsService {
         }
     }
 
-    public void validateOldPassword(final String oldPasswordInput,
-                                    final String userPassword) {
-        if (!passwordEncoder.matches(oldPasswordInput, userPassword))
+    public void validateOldInputPassword(final String inputPassword,
+                                         final String actualEncodedPassword) {
+        if (!passwordEncoder.matches(inputPassword, actualEncodedPassword))
             throw new InvalidOldPasswordException("Invalid old password!");
     }
 }

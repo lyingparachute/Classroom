@@ -49,7 +49,7 @@ class PasswordChangeServiceTest {
 
         // Then
         then(userService).should().loadUserByUsername(userEmail);
-        then(userService).should().validateOldPassword(anyString(), anyString());
+        then(userService).should().validateOldInputPassword(anyString(), anyString());
         then(userService).should().updateUserPassword(user, newPassword);
     }
 

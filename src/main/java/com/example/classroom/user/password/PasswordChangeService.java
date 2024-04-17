@@ -23,7 +23,7 @@ public class PasswordChangeService {
     void changeUserPassword(final PasswordChangeRequest passwordChangeRequest,
                             final String userEmail) {
         final var user = userService.loadUserByUsername(userEmail);
-        userService.validateOldPassword(passwordChangeRequest.getOldPassword(), user.getPassword());
+        userService.validateOldInputPassword(passwordChangeRequest.getOldPassword(), user.getPassword());
         userService.updateUserPassword(user, passwordChangeRequest.getPasswordRequest().getPassword());
     }
 

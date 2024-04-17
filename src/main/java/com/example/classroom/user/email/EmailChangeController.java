@@ -23,6 +23,7 @@ public class EmailChangeController {
 
     private static final String EMAIL_CHANGE_TEMPLATE = "user/email-change";
     private static final String EMAIL_VERIFY_TEMPLATE = "user/email-change-verify";
+    private static final String EMAIL_CHANGE_ATTRIBUTE = "emailChange";
     private final UserManagementService userService;
     private final EmailChangeService emailChangeService;
 
@@ -32,20 +33,20 @@ public class EmailChangeController {
                                  final Principal principal) {
         final var user = userService.loadUserByUsername(principal.getName());
         addAttributesBreadcrumbAndUser(user, model, request);
-        model.addAttribute("emailChange", new EmailChangeRequest());
+        model.addAttribute(EMAIL_CHANGE_ATTRIBUTE, new EmailChangeRequest());
         return EMAIL_CHANGE_TEMPLATE;
     }
 
     @PostMapping("/dashboard/profile/email")
-    String sendVerificationCode(@Valid @ModelAttribute("emailChange") final EmailChangeRequest emailChangeRequest,
+    String sendVerificationCode(@Valid @ModelAttribute(EMAIL_CHANGE_ATTRIBUTE) final EmailChangeRequest emailChangeRequest,
                                 final BindingResult result,
                                 final Principal principal,
                                 final Model model,
-                                final HttpServletRequest request,
-                                final RedirectAttributes redirectAttributes) {
+                                final HttpServletRequest request) {
         final var user = userService.loadUserByUsername(principal.getName());
         addAttributesBreadcrumbAndUser(user, model, request);
-        model.addAttribute("emailChange", emailChangeRequest);
+        model.addAttribute(EMAIL_CHANGE_ATTRIBUTE, emailChangeRequest);
+        validateInputAndAddErrors(user.getEmail(), emailChangeRequest.getEmail(), result);
         if (result.hasErrors()) {
             return EMAIL_CHANGE_TEMPLATE;
         }
@@ -55,7 +56,7 @@ public class EmailChangeController {
     }
 
     @PostMapping("/dashboard/profile/email/update")
-    String changeEmail(@ModelAttribute("emailChange") final EmailChangeRequest emailChangeRequest,
+    String changeEmail(@ModelAttribute(EMAIL_CHANGE_ATTRIBUTE) final EmailChangeRequest emailChangeRequest,
                        final BindingResult result,
                        final Principal principal,
                        final Model model,
@@ -63,14 +64,31 @@ public class EmailChangeController {
                        final RedirectAttributes redirectAttributes) {
         final var user = userService.loadUserByUsername(principal.getName());
 
-        if (!emailChangeRequest.getVerificationCode().equals(emailChangeRequest.getExpectedVerificationCode())) {
-            result.addError(new FieldError("emailChange", "verificationCode", "Invalid verification code!"));
+        if (verificationCodeNotValid(emailChangeRequest)) {
+            result.addError(new FieldError(EMAIL_CHANGE_ATTRIBUTE, "verificationCode", "Invalid verification code!"));
             addAttributesBreadcrumbAndUser(user, model, request);
-            model.addAttribute("emailChange", emailChangeRequest);
+            model.addAttribute(EMAIL_CHANGE_ATTRIBUTE, emailChangeRequest);
             return EMAIL_VERIFY_TEMPLATE;
         }
         userService.updateUserEmail(user, emailChangeRequest.getEmail());
-        return "redirect:/dashboard/profile";
+        redirectAttributes.addFlashAttribute("emailChangeSuccess", "");
+        return "redirect:/sign-in";
+    }
+
+    private boolean verificationCodeNotValid(final EmailChangeRequest emailChangeRequest) {
+        return !emailChangeRequest.getVerificationCode().equals(emailChangeRequest.getExpectedVerificationCode());
+    }
+
+    private void validateInputAndAddErrors(final String currentEmail,
+                                           final String newEmail,
+                                           final BindingResult result) {
+        if (currentEmail.equals(newEmail)) {
+            result.addError(new FieldError(EMAIL_CHANGE_ATTRIBUTE, "email", "New email is the same as your current email."));
+            return;
+        }
+        if (userService.emailExists(newEmail)) {
+            result.addError(new FieldError(EMAIL_CHANGE_ATTRIBUTE, "email", "Account with this email already exists."));
+        }
     }
 
     private void addAttributesBreadcrumbAndUser(final User user,
