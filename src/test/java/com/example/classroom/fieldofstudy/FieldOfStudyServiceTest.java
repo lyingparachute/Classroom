@@ -330,7 +330,7 @@ class FieldOfStudyServiceTest {
             List<FieldOfStudy> fieldsOfStudy = List.of(expectedFieldOfStudy1, expectedFieldOfStudy2);
             //when
             when(repository.findAll()).thenReturn(fieldsOfStudy);
-            List<FieldOfStudyDto> actual = service.fetchAll();
+            List<FieldOfStudyDto> actual = (List<FieldOfStudyDto>) service.fetchAll();
             //then
             verify(repository).findAll();
             assertThat(actual).as("Check %s's list size", "fieldsOfStudy").hasSize(2);

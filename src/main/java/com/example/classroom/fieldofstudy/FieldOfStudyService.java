@@ -32,7 +32,7 @@ public class FieldOfStudyService {
 
     @Transactional
     FieldOfStudyDto create(final FieldOfStudyDto dto) {
-        final FieldOfStudy fieldOfStudy = mapper.map(dto, FieldOfStudy.class);
+        final var fieldOfStudy = mapper.map(dto, FieldOfStudy.class);
         addReferencingObjects(fieldOfStudy);
         final FieldOfStudy saved = repository.save(fieldOfStudy);
         return mapper.map(saved, FieldOfStudyDto.class);
@@ -40,8 +40,8 @@ public class FieldOfStudyService {
 
     @Transactional
     FieldOfStudyDto update(final FieldOfStudyDto dto) {
-        final FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
+        final var fieldOfStudy = repository.findById(dto.getId())
+            .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
         removeDepartment(fieldOfStudy);
         mapper.map(dto, fieldOfStudy);
         addReferencingObjects(fieldOfStudy);
@@ -49,31 +49,30 @@ public class FieldOfStudyService {
     }
 
     @Transactional
-    FieldOfStudyDto updateSubjects(final FieldOfStudyDto dto) {
+    void updateSubjects(final FieldOfStudyDto dto) {
         final FieldOfStudy fieldOfStudy = repository.findById(dto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
+            .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study '" + dto + "' with ID: " + dto.getId()));
         removeSubjects(fieldOfStudy);
         mapper.map(dto, fieldOfStudy);
         addReferencingObjects(fieldOfStudy);
-        final FieldOfStudy saved = repository.save(fieldOfStudy);
-        return mapper.map(saved, FieldOfStudyDto.class);
+        repository.save(fieldOfStudy);
     }
 
-    public List<FieldOfStudyDto> fetchAll() {
-        final List<FieldOfStudy> all = repository.findAll();
+    public Collection<FieldOfStudyDto> fetchAll() {
+        final var all = repository.findAll();
         return all.stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).toList();
     }
 
     FieldOfStudyDto fetchById(final Long id) {
         final var byId = repository.findById(id);
         return byId.map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study ID: " + id));
+            .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study ID: " + id));
     }
 
     @Transactional
     void remove(final Long id) {
         final var fieldOfStudy = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study ID: " + id));
+            .orElseThrow(() -> new IllegalArgumentException("Invalid Field Of Study ID: " + id));
         removeReferencingObjects(fieldOfStudy);
         repository.delete(fieldOfStudy);
     }
@@ -85,23 +84,24 @@ public class FieldOfStudyService {
     }
 
     Map<Semester, List<Subject>> fetchAllSubjectsFromFieldOfStudyGroupedBySemesters(final Long fieldOfStudyId) {
-        final List<Subject> subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
+        final var subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
         return Arrays.stream(Semester.values()).collect(Collectors.toMap(
-                Function.identity(),
-                s -> filterSubjectsBySemester(subjects, s).toList()
+            Function.identity(),
+            s -> filterSubjectsBySemester(subjects, s).toList()
         ));
     }
 
     Map<Semester, Integer> calculateHoursInEachSemesterFromFieldOfStudy(final Long fieldOfStudyId) {
         final var subjects = repository.findAllSubjectsFromFieldOfStudy(fieldOfStudyId);
         return Arrays.stream(Semester.values()).collect(Collectors.toMap(
-                Function.identity(),
-                s -> filterSubjectsBySemester(subjects, s).mapToInt(Subject::getHoursInSemester).sum()
+            Function.identity(),
+            s -> filterSubjectsBySemester(subjects, s).mapToInt(Subject::getHoursInSemester).sum()
         ));
     }
 
-    private Stream<Subject> filterSubjectsBySemester(final List<Subject> subjects, final Semester semester) {
-        return subjects.stream().filter(s -> s.getSemester().equals(semester));
+    private Stream<Subject> filterSubjectsBySemester(final Collection<Subject> subjects,
+                                                     final Semester semester) {
+        return subjects.stream().filter(s -> s.getSemester() == semester);
     }
 
     Collection<String> splitDescription(final Long id) {
@@ -115,22 +115,22 @@ public class FieldOfStudyService {
     Map<Semester, Integer> calculateEctsPointsForEachSemester(final Long id) {
         final var subjects = repository.findAllSubjectsFromFieldOfStudy(id);
         return Arrays.stream(Semester.values()).collect(Collectors.toMap(
-                Function.identity(),
-                s -> getSumOfEctsPointsForSemester(subjects, s)
+            Function.identity(),
+            s -> getSumOfEctsPointsForSemester(subjects, s)
         ));
     }
 
     private Integer getSumOfEctsPointsForSemester(final Collection<Subject> subjects,
                                                   final Semester semester) {
-        return subjects.stream().filter(subject -> subject.getSemester().equals(semester))
-                .mapToInt(Subject::getEctsPoints)
-                .sum();
+        return subjects.stream().filter(subject -> subject.getSemester() == semester)
+            .mapToInt(Subject::getEctsPoints)
+            .sum();
     }
 
     Integer getSumOfEctsPointsFromAllSemesters(final Long id) {
         return calculateEctsPointsForEachSemester(id).values()
-                .stream().mapToInt(Integer::intValue)
-                .sum();
+            .stream().mapToInt(Integer::intValue)
+            .sum();
     }
 
     String getImagePath(final Long id) {
@@ -141,35 +141,35 @@ public class FieldOfStudyService {
 
     Collection<FieldOfStudyDto> fetchAllByLevelOfEducationSortedByName(final LevelOfEducation levelOfEducation) {
         return repository.findAllByLevelOfEducation(levelOfEducation, Sort.by(Sort.Direction.ASC, "name"))
-                .stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).toList();
+            .stream().map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class)).toList();
     }
 
     Map<String, List<FieldOfStudyDto>> fetchAllGroupedByNameAndSortedByName() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name"))
-                .stream().map(FieldOfStudy::getName).distinct()
-                .collect(Collectors.toMap(
-                        Function.identity(),
-                        name -> repository.findAllByNameContainingIgnoreCase(name)
-                                .stream().map(f -> mapper.map(f, FieldOfStudyDto.class)).toList(),
-                        (key1, key2) -> key1,
-                        LinkedHashMap::new
-                ));
+            .stream().map(FieldOfStudy::getName).distinct()
+            .collect(Collectors.toMap(
+                Function.identity(),
+                name -> repository.findAllByNameContainingIgnoreCase(name)
+                    .stream().map(f -> mapper.map(f, FieldOfStudyDto.class)).toList(),
+                (key1, key2) -> key1,
+                LinkedHashMap::new
+            ));
     }
 
     public List<FieldOfStudyDto> fetchAllWithNoDepartment() {
         return repository.findAll().stream()
-                .filter(fieldOfStudy -> fieldOfStudy.getDepartment() == null)
-                .map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
-                .toList();
+            .filter(fieldOfStudy -> fieldOfStudy.getDepartment() == null)
+            .map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
+            .toList();
     }
 
     public Collection<FieldOfStudyDto> fetchAllWithGivenDepartmentDtoOrNoDepartment(final DepartmentDto dto) {
         return Stream.concat(
-                fetchAllWithNoDepartment().stream(),
-                repository.findAll().stream()
-                        .filter(fieldOfStudy -> fieldOfStudy.getDepartment() != null)
-                        .filter(fieldOfStudy -> Objects.equals(fieldOfStudy.getDepartment().getId(), dto.getId()))
-                        .map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
+            fetchAllWithNoDepartment().stream(),
+            repository.findAll().stream()
+                .filter(fieldOfStudy -> fieldOfStudy.getDepartment() != null)
+                .filter(fieldOfStudy -> Objects.equals(fieldOfStudy.getDepartment().getId(), dto.getId()))
+                .map(fieldOfStudy -> mapper.map(fieldOfStudy, FieldOfStudyDto.class))
         ).toList();
     }
 
