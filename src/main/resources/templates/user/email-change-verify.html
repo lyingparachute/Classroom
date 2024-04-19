@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="~{fragments/header :: header}"></header>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="~{dashboard/fragments/navigation :: #navigation}"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header py-4 title-bar">
+                    <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+                    <div class="page-title"
+                         th:text="#{email.change.header}">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div th:replace="~{user/elements :: profile-details-picture}"></div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <form class="form-email-change" th:action="@{/dashboard/profile/email/update}"
+                                          method="post" th:object="${emailChange}"
+                                          novalidate>
+
+                                        <div class="alert alert-success">
+                                            <span th:text="#{email.change.verification.code.sent1}"></span>
+                                            <span class="fw-bold" th:text="${emailChange.email}"></span>
+                                            <span th:text="#{email.change.verification.code.sent2}"></span>
+                                            <span>
+                                                <span th:text="#{email.change.verification.code.sent3}"></span>
+                                                <a class="fw-bold text-success"
+                                                   th:text="#{email.change.verification.code.sent4}"
+                                                   th:href="@{/dashboard/profile/email}"></a>
+                                            </span>
+                                        </div>
+
+                                        <input hidden id="expectedVerificationCode"
+                                               th:field="*{expectedVerificationCode}" type="text">
+                                        <input hidden id="email" th:field="*{email}" type="email">
+                                        <input hidden id="matchingEmail" th:field="*{matchingEmail}" type="email">
+
+                                        <div class="form-outline mb-4"
+                                             th:classappend="${#fields.hasErrors('verificationCode')} ? 'mb-4'">
+                                            <input th:field="*{verificationCode}" type="text"
+                                                   id="verificationCode"
+                                                   th:classappend="${#fields.hasErrors('verificationCode') ||
+                                                   #fields.hasErrors('verificationCode')} ? 'is-invalid'"
+                                                   class="form-control"
+                                                   required/>
+                                            <label class="form-label" for="verificationCode"
+                                                   th:text="#{email.change.verification.code}"></label>
+                                            <div class="invalid-feedback">
+                                                <span class="mr-1"
+                                                      th:each="error: ${#fields.errors('verificationCode')}"
+                                                      th:text="${error}"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row justify-content-start">
+                                            <div class="col-auto">
+                                                <button class="btn btn-primary" type="submit">
+                                                    <i class="fas fa-check mr-1"></i>
+                                                    <span th:text="#{button.verify.email}"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-3 text-secondary">
+                                            <span class="text-decoration-underline" th:text="#{email.change.verification.code.note1}"></span>
+                                            <span th:text="#{email.change.verification.code.note2}"></span>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="~{fragments/scripts :: scripts}"></div>
+</body>
+</html>

@@ -175,7 +175,7 @@
                                                sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
                                                class="col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                data-mdb-ripple-color="dark"
-                                               th:href="@{/dashboard/students/edit/{id}(id=${student.id})}"
+                                               th:href="@{/dashboard/students/{id}/edit(id=${student.id})}"
                                                th:text="#{button.edit}">
                                             </a>
                                         </div>
@@ -185,7 +185,7 @@
                                                class="delBtn col-auto btn btn-link btn-rounded btn-sm fw-bold"
                                                data-mdb-ripple-color="dark"
                                                th:text="#{button.delete}"
-                                               th:href="@{/dashboard/students/delete/{id}(id=${student.id})}"
+                                               th:href="@{/dashboard/students/{id}/delete(id=${student.id})}"
                                                th:name="${student.firstName + '&nbsp;' + student.lastName}"
                                                data-bs-toggle="modal" data-bs-target="#deleteModal">
                                             </a>

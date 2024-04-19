@@ -38,17 +38,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthenticationControllerIntegrationTest {
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Autowired
     UserRepository userRepository;
-
     @Autowired
     StudentRepository studentRepository;
-
     @Autowired
     TeacherRepository teacherRepository;
-
+    @Autowired
+    private WebApplicationContext webApplicationContext;
     @Autowired
     private IntegrationTestsInitData initData;
 
@@ -65,10 +61,10 @@ class AuthenticationControllerIntegrationTest {
         @Test
         void getsSignInPageView() throws Exception {
             mockMvc.perform(get("/sign-in"))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                    .andExpect(view().name("auth/sign-in"));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                .andExpect(view().name("auth/sign-in"));
         }
     }
 
@@ -77,10 +73,10 @@ class AuthenticationControllerIntegrationTest {
         @Test
         void getsSignUpPageView() throws Exception {
             mockMvc.perform(get("/sign-up"))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
-                    .andExpect(view().name("auth/sign-up"));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                .andExpect(view().name("auth/sign-up"));
         }
 
         @Test
@@ -90,21 +86,21 @@ class AuthenticationControllerIntegrationTest {
 
             // When
             mockMvc.perform(post("/sign-up")
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.firstName() +
-                                    "&lastName=" + request.lastName() +
-                                    "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().getPassword() +
-                                    "&role=" + request.role()
-                            )
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                    .content("firstName=" + request.getFirstName() +
+                        "&lastName=" + request.getLastName() +
+                        "&email=" + request.getEmail() +
+                        "&password=" + request.getPasswordRequest().getPassword() +
+                        "&role=" + request.getRole()
                     )
-                    .andDo(print())
-                    .andExpect(status().is3xxRedirection());
+                )
+                .andDo(print())
+                .andExpect(status().is3xxRedirection());
 
             // Then
-            Optional<User> userByEmail = userRepository.findByEmail(request.email());
-            Optional<Student> studentByEmail = studentRepository.findByEmail(request.email());
-            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.email());
+            Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
+            Optional<Student> studentByEmail = studentRepository.findByEmail(request.getEmail());
+            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.getEmail());
 
             assertThat(userByEmail).isPresent();
             assertThat(studentByEmail).isPresent();
@@ -113,10 +109,10 @@ class AuthenticationControllerIntegrationTest {
             User user = userByEmail.get();
             Student student = studentByEmail.get();
 
-            assertThat(user.getFirstName()).isEqualTo(student.getFirstName()).isEqualTo(request.firstName());
-            assertThat(user.getLastName()).isEqualTo(student.getLastName()).isEqualTo(request.lastName());
-            assertThat(user.getEmail()).isEqualTo(student.getEmail()).isEqualTo(request.email());
-            assertThat(user.getRole()).isEqualTo(request.role());
+            assertThat(user.getFirstName()).isEqualTo(student.getFirstName()).isEqualTo(request.getFirstName());
+            assertThat(user.getLastName()).isEqualTo(student.getLastName()).isEqualTo(request.getLastName());
+            assertThat(user.getEmail()).isEqualTo(student.getEmail()).isEqualTo(request.getEmail());
+            assertThat(user.getRole()).isEqualTo(request.getRole());
             assertThat(user.getStudent()).isNotNull().isEqualTo(student);
             assertThat(user.getTeacher()).isNull();
         }
@@ -128,21 +124,21 @@ class AuthenticationControllerIntegrationTest {
 
             // When
             mockMvc.perform(post("/sign-up")
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.firstName() +
-                                    "&lastName=" + request.lastName() +
-                                    "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().getPassword() +
-                                    "&role=" + request.role()
-                            )
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                    .content("firstName=" + request.getFirstName() +
+                        "&lastName=" + request.getLastName() +
+                        "&email=" + request.getEmail() +
+                        "&password=" + request.getPasswordRequest().getPassword() +
+                        "&role=" + request.getRole()
                     )
-                    .andDo(print())
-                    .andExpect(status().is3xxRedirection());
+                )
+                .andDo(print())
+                .andExpect(status().is3xxRedirection());
 
             // Then
-            Optional<User> userByEmail = userRepository.findByEmail(request.email());
-            Optional<Student> studentByEmail = studentRepository.findByEmail(request.email());
-            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.email());
+            Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
+            Optional<Student> studentByEmail = studentRepository.findByEmail(request.getEmail());
+            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.getEmail());
 
             assertThat(userByEmail).isPresent();
             assertThat(studentByEmail).isNotPresent();
@@ -151,10 +147,10 @@ class AuthenticationControllerIntegrationTest {
             User user = userByEmail.get();
             Teacher teacher = teacherByEmail.get();
 
-            assertThat(user.getFirstName()).isEqualTo(teacher.getFirstName()).isEqualTo(request.firstName());
-            assertThat(user.getLastName()).isEqualTo(teacher.getLastName()).isEqualTo(request.lastName());
-            assertThat(user.getEmail()).isEqualTo(teacher.getEmail()).isEqualTo(request.email());
-            assertThat(user.getRole()).isEqualTo(request.role());
+            assertThat(user.getFirstName()).isEqualTo(teacher.getFirstName()).isEqualTo(request.getFirstName());
+            assertThat(user.getLastName()).isEqualTo(teacher.getLastName()).isEqualTo(request.getLastName());
+            assertThat(user.getEmail()).isEqualTo(teacher.getEmail()).isEqualTo(request.getEmail());
+            assertThat(user.getRole()).isEqualTo(request.getRole());
             assertThat(user.getStudent()).isNull();
             assertThat(user.getTeacher()).isNotNull().isEqualTo(teacher);
         }
@@ -166,21 +162,21 @@ class AuthenticationControllerIntegrationTest {
 
             // When
             mockMvc.perform(post("/sign-up")
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.firstName() +
-                                    "&lastName=" + request.lastName() +
-                                    "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().getPassword() +
-                                    "&role=" + request.role()
-                            )
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                    .content("firstName=" + request.getFirstName() +
+                        "&lastName=" + request.getLastName() +
+                        "&email=" + request.getEmail() +
+                        "&password=" + request.getPasswordRequest().getPassword() +
+                        "&role=" + request.getRole()
                     )
-                    .andDo(print())
-                    .andExpect(status().is3xxRedirection());
+                )
+                .andDo(print())
+                .andExpect(status().is3xxRedirection());
 
             // Then
-            Optional<User> userByEmail = userRepository.findByEmail(request.email());
-            Optional<Student> studentByEmail = studentRepository.findByEmail(request.email());
-            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.email());
+            Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
+            Optional<Student> studentByEmail = studentRepository.findByEmail(request.getEmail());
+            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.getEmail());
 
             assertThat(userByEmail).isPresent();
             assertThat(studentByEmail).isNotPresent();
@@ -189,10 +185,10 @@ class AuthenticationControllerIntegrationTest {
             User user = userByEmail.get();
             Teacher teacher = teacherByEmail.get();
 
-            assertThat(user.getFirstName()).isEqualTo(teacher.getFirstName()).isEqualTo(request.firstName());
-            assertThat(user.getLastName()).isEqualTo(teacher.getLastName()).isEqualTo(request.lastName());
-            assertThat(user.getEmail()).isEqualTo(teacher.getEmail()).isEqualTo(request.email());
-            assertThat(user.getRole()).isEqualTo(request.role());
+            assertThat(user.getFirstName()).isEqualTo(teacher.getFirstName()).isEqualTo(request.getFirstName());
+            assertThat(user.getLastName()).isEqualTo(teacher.getLastName()).isEqualTo(request.getLastName());
+            assertThat(user.getEmail()).isEqualTo(teacher.getEmail()).isEqualTo(request.getEmail());
+            assertThat(user.getRole()).isEqualTo(request.getRole());
             assertThat(user.getStudent()).isNull();
             assertThat(user.getTeacher()).isNotNull().isEqualTo(teacher);
         }
@@ -204,21 +200,21 @@ class AuthenticationControllerIntegrationTest {
 
             // When
             mockMvc.perform(post("/sign-up")
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.firstName() +
-                                    "&lastName=" + request.lastName() +
-                                    "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().getPassword() +
-                                    "&role=" + request.role()
-                            )
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                    .content("firstName=" + request.getFirstName() +
+                        "&lastName=" + request.getLastName() +
+                        "&email=" + request.getEmail() +
+                        "&password=" + request.getPasswordRequest().getPassword() +
+                        "&role=" + request.getRole()
                     )
-                    .andDo(print())
-                    .andExpect(status().is3xxRedirection());
+                )
+                .andDo(print())
+                .andExpect(status().is3xxRedirection());
 
             // Then
-            Optional<User> userByEmail = userRepository.findByEmail(request.email());
-            Optional<Student> studentByEmail = studentRepository.findByEmail(request.email());
-            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.email());
+            Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
+            Optional<Student> studentByEmail = studentRepository.findByEmail(request.getEmail());
+            Optional<Teacher> teacherByEmail = teacherRepository.findByEmail(request.getEmail());
 
             assertThat(userByEmail).isPresent();
             assertThat(studentByEmail).isNotPresent();
@@ -226,10 +222,10 @@ class AuthenticationControllerIntegrationTest {
 
             User user = userByEmail.get();
 
-            assertThat(user.getFirstName()).isEqualTo(request.firstName());
-            assertThat(user.getLastName()).isEqualTo(request.lastName());
-            assertThat(user.getEmail()).isEqualTo(request.email());
-            assertThat(user.getRole()).isEqualTo(request.role());
+            assertThat(user.getFirstName()).isEqualTo(request.getFirstName());
+            assertThat(user.getLastName()).isEqualTo(request.getLastName());
+            assertThat(user.getEmail()).isEqualTo(request.getEmail());
+            assertThat(user.getRole()).isEqualTo(request.getRole());
             assertThat(user.getStudent()).isNull();
             assertThat(user.getTeacher()).isNull();
         }
@@ -243,34 +239,34 @@ class AuthenticationControllerIntegrationTest {
             String expectedErrorMsgForRole = "Role must be chosen when creating new account.";
 
             final var request = RegisterRequest.builder()
-                    .firstName("s")
-                    .lastName("a")
-                    .email("a")
-                    .passwordRequest(
-                            new PasswordRequest("123", "123")
-                    )
-                    .build();
+                .firstName("s")
+                .lastName("a")
+                .email("a")
+                .passwordRequest(
+                    new PasswordRequest("123", "123")
+                )
+                .build();
 
             // When
             MvcResult mvcResult = mockMvc.perform(post("/sign-up")
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.firstName() +
-                                    "&lastName=" + request.lastName() +
-                                    "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().getPassword()
-                            )
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                    .content("firstName=" + request.getFirstName() +
+                        "&lastName=" + request.getLastName() +
+                        "&email=" + request.getEmail() +
+                        "&password=" + request.getPasswordRequest().getPassword()
                     )
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andReturn();
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
 
             // Then
             String actualResponseBody = mvcResult.getResponse().getContentAsString();
             assertThat(actualResponseBody).as("Check error message")
-                    .contains(expectedErrorMsgForFirstName,
-                            expectedErrorMsgForLastName,
-                            expectedErrorMsgForEmail,
-                            expectedErrorMsgForRole);
+                .contains(expectedErrorMsgForFirstName,
+                    expectedErrorMsgForLastName,
+                    expectedErrorMsgForEmail,
+                    expectedErrorMsgForRole);
         }
 
         @Test
@@ -289,22 +285,22 @@ class AuthenticationControllerIntegrationTest {
 
             // When
             MvcResult mvcResult = mockMvc.perform(post("/sign-up")
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.firstName() +
-                                    "&lastName=" + request.lastName() +
-                                    "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().getPassword() +
-                                    "&role=" + request.role()
-                            )
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                    .content("firstName=" + request.getFirstName() +
+                        "&lastName=" + request.getLastName() +
+                        "&email=" + request.getEmail() +
+                        "&password=" + request.getPasswordRequest().getPassword() +
+                        "&role=" + request.getRole()
                     )
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andReturn();
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
 
             // Then
             String actualResponseBody = mvcResult.getResponse().getContentAsString();
             assertThat(actualResponseBody).as("Check error message")
-                    .contains(expectedErrorMsgForEmail);
+                .contains(expectedErrorMsgForEmail);
         }
 
         @Disabled("Disabled due to commented password validation for testing purposes.")
@@ -324,22 +320,22 @@ class AuthenticationControllerIntegrationTest {
 
             // When
             MvcResult mvcResult = mockMvc.perform(post("/sign-up")
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                            .content("firstName=" + request.firstName() +
-                                    "&lastName=" + request.lastName() +
-                                    "&email=" + request.email() +
-                                    "&password=" + request.passwordRequest().getPassword() +
-                                    "&role=" + request.role()
-                            )
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                    .content("firstName=" + request.getFirstName() +
+                        "&lastName=" + request.getLastName() +
+                        "&email=" + request.getEmail() +
+                        "&password=" + request.getPasswordRequest().getPassword() +
+                        "&role=" + request.getRole()
                     )
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andReturn();
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
 
             // Then
             String actualResponseBody = mvcResult.getResponse().getContentAsString();
             assertThat(actualResponseBody).as("Check error message")
-                    .contains(expectedErrorMsgForPassword);
+                .contains(expectedErrorMsgForPassword);
         }
     }
 

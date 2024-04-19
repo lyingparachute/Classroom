@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <header th:replace="~{fragments/header :: header}"></header>
+</head>
+<body>
+<!-- ======= Navigation ======= -->
+<div th:replace="~{dashboard/fragments/navigation :: #navigation}"></div>
+
+<main>
+    <div class="container pt-4">
+        <section class="mb-4">
+            <div id="itemCard" class="card">
+                <div class="card-header py-4 title-bar">
+                    <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+                    <div class="page-title"
+                         th:text="#{email.change.header}">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div th:replace="~{user/elements :: profile-details-picture}"></div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <form class="form-email-change" th:action="@{/dashboard/profile/email}"
+                                          method="post" th:object="${emailChange}"
+                                          novalidate>
+                                        <div th:if="${param.error}" th:text="#{email.change.invalid}"
+                                             class="alert alert-danger">
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <input th:field="${user.email}" type="email"
+                                                   id="currentEmail"
+                                                   class="form-control"
+                                                   disabled/>
+                                            <label class="form-label" for="currentEmail"
+                                                   th:text="#{email.change.current.email}"></label>
+                                        </div>
+
+                                        <div class="form-outline mb-4"
+                                             th:classappend="${#fields.hasErrors('email')} ? 'mb-5'">
+                                            <input th:field="*{email}" type="email"
+                                                   id="email"
+                                                   th:classappend="${#fields.hasErrors('email') ||
+                                                   #fields.hasErrors('matchingEmail')} ? 'is-invalid'"
+                                                   class="form-control"
+                                                   required/>
+                                            <label class="form-label" for="email"
+                                                   th:text="#{email.change.new.email}"></label>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}">
+                                                <span class="mr-1" th:each="error: ${#fields.errors('email')}" th:text="${error}"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-outline mb-4"
+                                             th:classappend="${#fields.hasErrors('matchingEmail')} ? 'mb-5'">
+                                            <input th:field="*{matchingEmail}" type="email"
+                                                   id="matchingEmail"
+                                                   th:classappend="${#fields.hasErrors('matchingEmail') ||
+                                                   #fields.hasErrors('email')} ? 'is-invalid'"
+                                                   class="form-control"
+                                                   required/>
+                                            <label class="form-label" for="matchingEmail"
+                                                   th:text="#{email.change.confirm}"></label>
+                                            <div class="invalid-feedback">
+                                                <span class="mr-1" th:each="error: ${#fields.errors('matchingEmail')}" th:text="${error}"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row justify-content-start">
+                                            <div class="col-auto">
+                                                <button class="btn btn-primary" type="submit">
+                                                    <i class="fas fa-check mr-1"></i>
+                                                    <span th:text="#{button.submit}"></span>
+                                                </button>
+                                            </div>
+                                            <div class="col-auto">
+                                                <a class="btn btn-secondary" th:href="@{/dashboard/profile}">
+                                                    <i class="fa fa-times-circle mr-1"></i>
+                                                    <span th:text="#{button.cancel}"></span>
+                                                </a>
+                                            </div>
+
+                                            <div class="mt-3 text-secondary">
+                                                <span th:text="#{email.change.note}"></span>
+                                            </div>
+
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- JS Scripts -->
+<div th:replace="~{fragments/scripts :: scripts}"></div>
+</body>
+</html>

@@ -30,10 +30,10 @@ public final class SignUpUtils {
     public static String getTokenForRegister(RegisterRequest request, MockMvc mockMvc) throws Exception {
         byte[] content = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"firstName\": \"" + request.firstName() + "\",  " +
-                                "\"lastName\": \"" + request.lastName() + "\"," +
-                                "\"email\": \"" + request.email() + "\", " +
-                                "\"password\": \"" + request.passwordRequest().getPassword() +
+                        .content("{ \"firstName\": \"" + request.getFirstName() + "\",  " +
+                                "\"lastName\": \"" + request.getLastName() + "\"," +
+                                "\"email\": \"" + request.getEmail() + "\", " +
+                                "\"password\": \"" + request.getPasswordRequest().getPassword() +
                                 "\"}"))
                 .andReturn()
                 .getResponse()

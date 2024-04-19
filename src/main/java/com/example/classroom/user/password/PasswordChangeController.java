@@ -25,7 +25,6 @@ public class PasswordChangeController {
     private static final String PASSWORD_CHANGE_TEMPLATE = "user/password-change";
     private final UserManagementService userService;
     private final PasswordChangeService passwordService;
-    private final BreadcrumbService crumb;
 
     @GetMapping("password")
     String getPasswordChangePage(final Model model,
@@ -64,7 +63,7 @@ public class PasswordChangeController {
     private void addAttributesBreadcrumbAndUser(final Principal principal,
                                                 final Model model,
                                                 final HttpServletRequest request) {
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        model.addAttribute("crumbs", BreadcrumbService.getBreadcrumbs(request.getRequestURI()));
         model.addAttribute("user", userService.loadUserByUsername(principal.getName()));
     }
 }

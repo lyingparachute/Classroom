@@ -1,4 +1,4 @@
-package com.example.classroom.fieldOfStudy;
+package com.example.classroom.fieldofstudy;
 
 import com.example.classroom.department.Department;
 import com.example.classroom.security.WithMockCustomUser;

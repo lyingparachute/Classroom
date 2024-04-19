@@ -73,7 +73,7 @@
 <a sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
    class="btn btn-outline-primary btn-rounded"
    th:fragment="btn-edit"
-   th:href="@{/dashboard/departments/edit/{id}(id=${department.id})}">
+   th:href="@{/dashboard/departments/{id}/edit(id=${department.id})}">
     <i class="fas fa-pen mr-1"></i>
     <span th:text="#{button.edit}"></span>
 </a>
@@ -82,7 +82,7 @@
 <a sec:authorize="hasAnyRole('ROLE_DEAN', 'ROLE_ADMIN')"
    class="btn btn-outline-danger btn-rounded delBtn"
    th:fragment="btn-delete"
-   th:href="@{/dashboard/departments/delete/{id}(id=${department.id})}">
+   th:href="@{/dashboard/departments/{id}/delete(id=${department.id})}">
     <i class="fa fa-trash-can fa-lg mr-1"></i>
     <span th:text="#{button.delete}"></span>
 </a>

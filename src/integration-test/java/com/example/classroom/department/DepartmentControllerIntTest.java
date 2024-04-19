@@ -1,7 +1,7 @@
 package com.example.classroom.department;
 
-import com.example.classroom.fieldOfStudy.FieldOfStudy;
-import com.example.classroom.fieldOfStudy.FieldOfStudyRepository;
+import com.example.classroom.fieldofstudy.FieldOfStudy;
+import com.example.classroom.fieldofstudy.FieldOfStudyRepository;
 import com.example.classroom.security.WithMockCustomUser;
 import com.example.classroom.teacher.Teacher;
 import com.example.classroom.teacher.TeacherRepository;

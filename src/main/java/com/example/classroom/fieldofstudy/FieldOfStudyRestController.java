@@ -1,13 +1,20 @@
-package com.example.classroom.fieldOfStudy;
+package com.example.classroom.fieldofstudy;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("api/fields-of-study")
@@ -25,8 +32,8 @@ class FieldOfStudyRestController {
     }
 
     @GetMapping
-    ResponseEntity<List<FieldOfStudyDto>> getFieldsOfStudy() {
-        List<FieldOfStudyDto> fieldsOfStudy = service.fetchAll();
+    ResponseEntity<Collection<FieldOfStudyDto>> getFieldsOfStudy() {
+        final var fieldsOfStudy = service.fetchAll();
         return fieldsOfStudy.isEmpty() ?
                 ResponseEntity.notFound().build() :
                 ResponseEntity.ok(fieldsOfStudy);

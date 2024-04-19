@@ -2,7 +2,7 @@ package com.example.classroom.subject;
 
 
 import com.example.classroom.breadcrumb.BreadcrumbService;
-import com.example.classroom.fieldOfStudy.FieldOfStudyService;
+import com.example.classroom.fieldofstudy.FieldOfStudyService;
 import com.example.classroom.pageable.PageableRequest;
 import com.example.classroom.teacher.TeacherService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +31,6 @@ class SubjectController {
     private final SubjectService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
-    private final BreadcrumbService crumb;
 
     @GetMapping
     String getSubjects(@RequestParam(required = false) final String name,
@@ -122,7 +121,7 @@ class SubjectController {
         return REDIRECT_DASHBOARD_SUBJECTS;
     }
 
-    @GetMapping("edit/{id}")
+    @GetMapping("{id}/edit")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
     String editSubjectForm(@PathVariable final Long id,
                            final HttpServletRequest request,
@@ -151,7 +150,7 @@ class SubjectController {
         return REDIRECT_DASHBOARD_SUBJECTS;
     }
 
-    @GetMapping("delete/{id}")
+    @GetMapping("{id}/delete")
     @Secured({"ROLE_ADMIN"})
     String deleteSubject(@PathVariable final Long id,
                          final RedirectAttributes redirectAttributes) {
@@ -176,6 +175,6 @@ class SubjectController {
     }
 
     private void addAttributeBreadcrumb(final Model model, final HttpServletRequest request) {
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+        model.addAttribute("crumbs", BreadcrumbService.getBreadcrumbs(request.getRequestURI()));
     }
 }

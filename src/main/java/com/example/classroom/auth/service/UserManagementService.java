@@ -34,11 +34,12 @@ public class UserManagementService implements UserDetailsService {
 
     @Transactional
     public User register(final RegisterRequest request) throws UserAlreadyExistException {
-        if (emailExists(request.email()))
-            throw new UserAlreadyExistException("There is already an account with email address: " + request.email());
+        final var email = request.getEmail();
+        if (emailExists(email))
+            throw new UserAlreadyExistException("There is already an account with email address: " + email);
         final var user = new User();
         mapper.map(request, user);
-        user.setPassword(passwordEncoder.encode(request.passwordRequest().getPassword()));
+        user.setPassword(passwordEncoder.encode(request.getPasswordRequest().getPassword()));
         final var savedUser = repository.save(user);
         createUniversityAttendeeAccount(request, savedUser);
         savedUser.getAttendee();
@@ -47,7 +48,7 @@ public class UserManagementService implements UserDetailsService {
 
     private void createUniversityAttendeeAccount(final RegisterRequest request,
                                                  final User user) {
-        final var requestRole = request.role();
+        final var requestRole = request.getRole();
         if (requestRole == UserRole.ROLE_STUDENT) {
             final var studentDto = mapper.map(request, StudentDto.class);
             studentDto.setUserDetails(user);
@@ -61,10 +62,10 @@ public class UserManagementService implements UserDetailsService {
     }
 
     @Transactional
-    public User update(UpdateRequest request) {
-        User userLogin = loadUserByUsername(request.getEmail());
-        mapper.map(request, userLogin);
-        return repository.save(userLogin);
+    public User update(final UpdateRequest request) {
+        final var user = loadUserByUsername(request.email());
+        mapper.map(request, user);
+        return repository.save(user);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class UserManagementService implements UserDetailsService {
     public void removeById(final Long id) {
         final var byId = repository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(
-                User.class, "User with given ID does not exist in database."));
+                User.class, "ID", id.toString()));
         removeUniversityAttendeeAccount(byId);
         repository.delete(byId);
     }
@@ -93,7 +94,13 @@ public class UserManagementService implements UserDetailsService {
         repository.save(user);
     }
 
-    private boolean emailExists(final String email) {
+    public void updateUserEmail(final User user,
+                                final String newEmail) {
+        user.setEmail(newEmail);
+        repository.save(user);
+    }
+
+    public boolean emailExists(final String email) {
         return repository.findByEmail(email).isPresent();
     }
 
@@ -114,9 +121,9 @@ public class UserManagementService implements UserDetailsService {
         }
     }
 
-    public void validateOldPassword(final String oldPasswordInput,
-                                    final String userPassword) {
-        if (!passwordEncoder.matches(oldPasswordInput, userPassword))
+    public void validateOldInputPassword(final String inputPassword,
+                                         final String actualEncodedPassword) {
+        if (!passwordEncoder.matches(inputPassword, actualEncodedPassword))
             throw new InvalidOldPasswordException("Invalid old password!");
     }
 }

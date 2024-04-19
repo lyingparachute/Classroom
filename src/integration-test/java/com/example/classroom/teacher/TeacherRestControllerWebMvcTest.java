@@ -3,7 +3,7 @@ package com.example.classroom.teacher;
 import com.example.classroom.auth.model.AuthenticationResponse;
 import com.example.classroom.config.jwt.JwtAuthenticationFilter;
 import com.example.classroom.department.Department;
-import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldofstudy.FieldOfStudy;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.test.util.UnitTestsInitData;
@@ -103,10 +103,10 @@ class TeacherRestControllerWebMvcTest {
             RegisterRequest request = initData.createRegisterRequest(UserRole.ROLE_STUDENT);
             final byte[] content = mockMvc.perform(post("/api/auth/register")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{ \"firstName\": \"" + request.firstName() + "\",  " +
-                                    "\"lastName\": \"" + request.lastName() + "\"," +
-                                    "\"email\": \"" + request.email() + "\", " +
-                                    "\"password\": \"" + request.passwordRequest().getPassword() +
+                            .content("{ \"firstName\": \"" + request.getFirstName() + "\",  " +
+                                    "\"lastName\": \"" + request.getLastName() + "\"," +
+                                    "\"email\": \"" + request.getEmail() + "\", " +
+                                    "\"password\": \"" + request.getPasswordRequest().getPassword() +
                                     "\"}"))
                     .andReturn()
                     .getResponse()

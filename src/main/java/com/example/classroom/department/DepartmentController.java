@@ -1,7 +1,7 @@
 package com.example.classroom.department;
 
 import com.example.classroom.breadcrumb.BreadcrumbService;
-import com.example.classroom.fieldOfStudy.FieldOfStudyService;
+import com.example.classroom.fieldofstudy.FieldOfStudyService;
 import com.example.classroom.teacher.TeacherService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -10,7 +10,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.file.Path;
@@ -24,10 +28,10 @@ class DepartmentController {
     private final DepartmentService service;
     private final TeacherService teacherService;
     private final FieldOfStudyService fieldOfStudyService;
-    private final BreadcrumbService crumb;
 
-    @GetMapping()
-    String getAllDepartments(Model model, HttpServletRequest request) {
+    @GetMapping
+    String getAllDepartments(final Model model,
+                             final HttpServletRequest request) {
         model.addAttribute("departments", service.fetchAll());
         addAttributeImagesPath(model, "departments");
         addAttributeBreadcrumbs(model, request);
@@ -35,9 +39,9 @@ class DepartmentController {
     }
 
     @GetMapping("{id}")
-    String getDepartment(@PathVariable Long id,
-                         HttpServletRequest request,
-                         Model model) {
+    String getDepartment(@PathVariable final Long id,
+                         final HttpServletRequest request,
+                         final Model model) {
         addAttributeDepartmentFetchById(id, model);
         addAttributeImagesPath(model, "fields-of-study");
         addAttributeBreadcrumbs(model, request);
@@ -55,27 +59,27 @@ class DepartmentController {
 
     @PostMapping("new")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    String createDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
-                            BindingResult result,
-                            RedirectAttributes redirectAttributes,
-                            HttpServletRequest request,
-                            Model model) {
+    String createDepartment(@Valid @ModelAttribute("department") final DepartmentDto dto,
+                            final BindingResult result,
+                            final RedirectAttributes redirectAttributes,
+                            final HttpServletRequest request,
+                            final Model model) {
         if (result.hasErrors()) {
             addAttributesForCreateDepartment(model);
             addAttributeBreadcrumbs(model, request);
             return "department/department-create-form";
         }
-        DepartmentDto saved = service.create(dto);
+        final var saved = service.create(dto);
         addFlashAttributeSuccess(redirectAttributes, saved);
         redirectAttributes.addFlashAttribute("createSuccess", "saved");
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
 
-    @GetMapping("edit/{id}")
+    @GetMapping("{id}/edit")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    String getEditDepartmentForm(@PathVariable Long id,
-                                 Model model,
-                                 HttpServletRequest request) {
+    String getEditDepartmentForm(@PathVariable final Long id,
+                                 final Model model,
+                                 final HttpServletRequest request) {
         addAttributeDepartmentFetchById(id, model);
         addAttributesForUpdateDepartment(id, model);
         addAttributeBreadcrumbs(model, request);
@@ -84,56 +88,56 @@ class DepartmentController {
 
     @PostMapping(value = "update")
     @Secured({"ROLE_DEAN", "ROLE_ADMIN"})
-    String editDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
-                          BindingResult result,
-                          RedirectAttributes redirectAttributes,
-                          HttpServletRequest request,
-                          Model model) {
+    String editDepartment(@Valid @ModelAttribute("department") final DepartmentDto dto,
+                          final BindingResult result,
+                          final RedirectAttributes redirectAttributes,
+                          final HttpServletRequest request,
+                          final Model model) {
         if (result.hasErrors()) {
             addAttributesForUpdateDepartment(dto.getId(), model);
             addAttributeBreadcrumbs(model, request);
             return "department/department-edit-form";
         }
-        DepartmentDto updated = service.update(dto);
+        final var updated = service.update(dto);
         addFlashAttributeSuccess(redirectAttributes, updated);
         redirectAttributes.addFlashAttribute("updateSuccess", "updated");
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
 
-    @GetMapping("delete/{id}")
+    @GetMapping("{id}/delete")
     @Secured({"ROLE_ADMIN"})
-    String deleteDepartment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        DepartmentDto dto = service.fetchById(id);
+    String deleteDepartment(@PathVariable final Long id, final RedirectAttributes redirectAttributes) {
+        final var dto = service.fetchById(id);
         service.remove(id);
         addFlashAttributeSuccess(redirectAttributes, dto);
         redirectAttributes.addFlashAttribute("deleteSuccess", "deleted");
         return REDIRECT_DASHBOARD_DEPARTMENTS;
     }
 
-    private void addAttributeBreadcrumbs(Model model, HttpServletRequest request) {
-        model.addAttribute("crumbs", crumb.getBreadcrumbs(request.getRequestURI()));
+    private void addAttributeBreadcrumbs(final Model model, final HttpServletRequest request) {
+        model.addAttribute("crumbs", BreadcrumbService.getBreadcrumbs(request.getRequestURI()));
     }
 
-    private void addAttributesForCreateDepartment(Model model) {
+    private void addAttributesForCreateDepartment(final Model model) {
         model.addAttribute("teachers", teacherService.fetchAll());
         model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAllWithNoDepartment());
         addAttributeImagesPath(model, "fields-of-study");
     }
 
-    private static void addAttributeImagesPath(Model model, String directory) {
+    private static void addAttributeImagesPath(final Model model, final String directory) {
         model.addAttribute("imagesPath", Path.of("/img").resolve(directory));
     }
 
-    private static void addFlashAttributeSuccess(RedirectAttributes redirectAttributes, DepartmentDto saved) {
+    private static void addFlashAttributeSuccess(final RedirectAttributes redirectAttributes, final DepartmentDto saved) {
         redirectAttributes.addFlashAttribute("success", saved);
     }
 
-    private void addAttributeDepartmentFetchById(Long id, Model model) {
+    private void addAttributeDepartmentFetchById(final Long id, final Model model) {
         model.addAttribute("department", service.fetchById(id));
     }
 
-    private void addAttributesForUpdateDepartment(Long id, Model model) {
-        DepartmentDto dto = service.fetchById(id);
+    private void addAttributesForUpdateDepartment(final Long id, final Model model) {
+        final var dto = service.fetchById(id);
         model.addAttribute("teachers", teacherService.fetchAll());
         model.addAttribute("fieldsOfStudy", fieldOfStudyService.fetchAllWithGivenDepartmentDtoOrNoDepartment(dto));
         addAttributeImagesPath(model, "fields-of-study");

@@ -3,10 +3,9 @@ package com.example.classroom.breadcrumb;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -14,9 +13,6 @@ import static org.assertj.core.groups.Tuple.tuple;
 
 @ExtendWith(MockitoExtension.class)
 class BreadcrumbServiceTest {
-
-    @InjectMocks
-    private BreadcrumbService service;
 
     @Nested
     class getBreadcrumbs {
@@ -27,13 +23,13 @@ class BreadcrumbServiceTest {
             String endpoint = "dashboard/students/12/subjects";
 
             // When
-            List<Breadcrumb> actualBreadcrumbs = service.getBreadcrumbs(endpoint);
+            Collection<Breadcrumb> actualBreadcrumbs = BreadcrumbService.getBreadcrumbs(endpoint);
 
             // Then
             assertThat(actualBreadcrumbs).extracting(
-                    Breadcrumb::getLabel,
-                    Breadcrumb::getUrl,
-                    Breadcrumb::isLast
+                    Breadcrumb::label,
+                    Breadcrumb::url,
+                    Breadcrumb::last
             ).contains(
                     tuple("Classroom", "/", false),
                     tuple("Dashboard", "dashboard", false),
@@ -46,21 +42,21 @@ class BreadcrumbServiceTest {
         @Test
         void returnsListOfBreadcrumbs_givenEndpointWithEdit() {
             // Given
-            String endpoint = "dashboard/students/edit/12";
+            String endpoint = "dashboard/students/12/edit";
 
             // When
-            List<Breadcrumb> actualBreadcrumbs = service.getBreadcrumbs(endpoint);
+            Collection<Breadcrumb> actualBreadcrumbs = BreadcrumbService.getBreadcrumbs(endpoint);
 
             // Then
             assertThat(actualBreadcrumbs).extracting(
-                    Breadcrumb::getLabel,
-                    Breadcrumb::getUrl,
-                    Breadcrumb::isLast
+                    Breadcrumb::label,
+                    Breadcrumb::url,
+                    Breadcrumb::last
             ).contains(
                     tuple("Classroom", "/", false),
                     tuple("Dashboard", "dashboard", false),
                     tuple("Students", "dashboard/students", false),
-                    tuple("Edit  /  12", "dashboard/students/edit/12", true)
+                    tuple("Edit", "dashboard/students/12/edit", true)
             );
         }
 
@@ -70,7 +66,7 @@ class BreadcrumbServiceTest {
             String endpoint = null;
 
             // When
-            Throwable thrown = catchThrowable(() -> service.getBreadcrumbs(endpoint));
+            Throwable thrown = catchThrowable(() -> BreadcrumbService.getBreadcrumbs(endpoint));
 
             //Then
             assertThat(thrown)
@@ -84,7 +80,7 @@ class BreadcrumbServiceTest {
             String endpoint = "";
 
             // When
-            Throwable thrown = catchThrowable(() -> service.getBreadcrumbs(endpoint));
+            Throwable thrown = catchThrowable(() -> BreadcrumbService.getBreadcrumbs(endpoint));
 
             //Then
             assertThat(thrown)

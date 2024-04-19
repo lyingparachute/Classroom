@@ -233,7 +233,20 @@
         </div>
     </section>
     <!-- End Too Many Login Attempts Alert Section -->
+
+    <!-- Email Changed Success Alert Section -->
+    <section th:fragment="email-change-success" th:if="${emailChangeSuccess}">
+        <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+            <i class="fas fa-check-circle mr-2" role="img" aria-label="Success:"></i>
+            <div>
+                <strong th:text="#{msg.success}">&nbsp;</strong>
+                <span th:text="#{email.change.success.msg}"></span>
+            </div>
+            <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+        </div>
+    </section>
 </div>
+<!-- End Email Changed Success Alert Section -->
 
 <div th:fragment="user-profile-view-alerts">
     <!-- Password Change Success Alert Section -->

@@ -45,7 +45,7 @@ class RegisterController {
             registerService.sendAccountVerificationEmail(request, registered);
             redirectAttributes.addFlashAttribute("createSuccess", registered);
         } catch (UserAlreadyExistException e) {
-            model.addAttribute("emailExists", registerRequest.email());
+            model.addAttribute("emailExists", registerRequest.getEmail());
             return SIGN_UP_TEMPLATE;
         }
         return REDIRECT_TO_SIGN_IN_PAGE;

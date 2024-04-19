@@ -85,13 +85,13 @@
 <div class="row my-2 justify-content-end" th:fragment="edit-delete-buttons">
     <div class="col-auto">
         <a class="btn btn-outline-primary btn-rounded"
-           th:href="@{/dashboard/fields-of-study/edit/{id}(id=${fieldOfStudy.id})}">
+           th:href="@{/dashboard/fields-of-study/{id}/edit(id=${fieldOfStudy.id})}">
             <i class="fas fa-pen mr-1"></i><span th:text="#{button.edit}"></span>
         </a>
     </div>
     <div class="col-auto">
         <a class="btn btn-outline-danger btn-rounded delBtn"
-           th:href="@{/dashboard/fields-of-study/delete/{id}(id=${fieldOfStudy.id})}">
+           th:href="@{/dashboard/fields-of-study/{id}/delete(id=${fieldOfStudy.id})}">
             <i class="fa fa-trash-can fa-lg mr-1"></i><span th:text="#{button.delete}"></span>
         </a>
     </div>
@@ -100,7 +100,7 @@
 <!-- ======= Edit FieldOfStudy Button ======= -->
 <a class="btn btn-outline-primary btn-rounded"
    th:fragment="btn-edit-fieldOfStudy"
-   th:href="@{/dashboard/fields-of-study/edit/{id}(id=${fieldOfStudy.id})}">
+   th:href="@{/dashboard/fields-of-study/{id}/edit(id=${fieldOfStudy.id})}">
     <i class="fas fa-pen mr-1"></i>
     <span th:text="#{button.edit}"></span>
 </a>
@@ -108,7 +108,7 @@
 <!-- ======= Delete FieldOfStudy Button ======= -->
 <a class="btn btn-outline-danger btn-rounded delBtn"
    th:fragment="btn-delete-fieldOfStudy"
-   th:href="@{/dashboard/fields-of-study/delete/{id}(id=${fieldOfStudy.id})}">
+   th:href="@{/dashboard/fields-of-study/{id}/delete(id=${fieldOfStudy.id})}">
     <i class="fa fa-trash-can fa-lg mr-1"></i>
     <span th:text="#{button.delete}"></span>
 </a>
@@ -124,7 +124,7 @@
 <!-- ======= Edit subjects Button ======= -->
 <a class="btn btn-outline-primary btn-rounded"
    th:fragment="btn-edit-subjects"
-   th:href="@{/dashboard/fields-of-study/edit/{id}/subjects(id=${fieldOfStudy.id})}">
+   th:href="@{/dashboard/fields-of-study/{id}/subjects/edit(id=${fieldOfStudy.id})}">
     <i class="fas fa-pen mr-1"></i>
     <span th:text="#{button.edit}"></span>
 </a>

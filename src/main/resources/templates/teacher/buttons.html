@@ -25,7 +25,7 @@
 <!-- ======= Edit teacher Button ======= -->
 <a class="btn btn-outline-primary btn-rounded"
    th:fragment="btn-edit"
-   th:href="@{/dashboard/teachers/edit/{id}(id=${teacher.id})}">
+   th:href="@{/dashboard/teachers/{id}/edit(id=${teacher.id})}">
     <i class="fas fa-pen mr-1"></i>
     <span th:text="#{button.edit}"></span>
 </a>
@@ -41,7 +41,7 @@
 <!-- ======= Delete teacher Button ======= -->
 <a class="btn btn-outline-danger btn-rounded delBtn"
    th:fragment="btn-delete"
-   th:href="@{/dashboard/teachers/delete/{id}(id=${teacher.id})}">
+   th:href="@{/dashboard/teachers/{id}/delete(id=${teacher.id})}">
     <i class="fa fa-trash-can fa-lg mr-1"></i>
     <span th:text="#{button.delete}"></span>
 </a>

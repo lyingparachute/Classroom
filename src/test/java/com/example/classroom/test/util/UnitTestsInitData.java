@@ -7,7 +7,7 @@ import com.example.classroom.enums.AcademicTitle;
 import com.example.classroom.enums.LevelOfEducation;
 import com.example.classroom.enums.ModeOfStudy;
 import com.example.classroom.enums.Semester;
-import com.example.classroom.fieldOfStudy.FieldOfStudy;
+import com.example.classroom.fieldofstudy.FieldOfStudy;
 import com.example.classroom.student.Student;
 import com.example.classroom.subject.Subject;
 import com.example.classroom.teacher.Teacher;
